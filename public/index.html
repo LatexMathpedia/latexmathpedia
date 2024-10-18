@@ -1,139 +1,106 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>The Maths Texpedia</title>
-    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661" type="image/x-icon">
-    <meta name="description" content="Página web de apuntes latex">
-    <meta name="robots" content="index, nofollow">
+    <link
+      rel="icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
+      type="image/x-icon"
+    />
+    <meta name="description" content="Página web de apuntes latex" />
+    <meta name="robots" content="index, nofollow" />
+    <link rel="stylesheet" href="../css/main_styles.css" />
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/10.14.1/firebase-app-compat.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/10.14.1/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/10.14.1/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/10.14.1/firebase-firestore-compat.js"></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-database-compat.js"
+    ></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-firestore-compat.js"
+    ></script>
     <!-- <script defer src="/__/firebase/10.14.1/firebase-functions-compat.js"></script> -->
     <!-- <script defer src="/__/firebase/10.14.1/firebase-functions-compat.js"></script> -->
-    <script defer src="/__/firebase/10.14.1/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/10.14.1/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/10.14.1/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/10.14.1/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/10.14.1/firebase-performance-compat.js"></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-messaging-compat.js"
+    ></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-storage-compat.js"
+    ></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-analytics-compat.js"
+    ></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-remote-config-compat.js"
+    ></script>
+    <script
+      defer
+      src="/__/firebase/10.14.1/firebase-performance-compat.js"
+    ></script>
     <!-- 
       initialize the SDK after all desired features are loaded, set useEmulator to false
       to avoid connecting the SDK to running emulators.
     -->
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-    <style>
-      body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 100vh;
-      }
-      header {
-          background-color: #007bff;
-          color: white;
-          padding: 1rem;
-          text-align: center;
-          width: 100%;
-          position: absolute;
-          top: 0;
-      }
-      h1 {
-          margin: 0;
-      }
-      .container {
-          margin-top: 5rem;
-          padding: 2rem;
-          background-color: white;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          width: 300px;
-          text-align: center;
-          border-radius: 8px;
-      }
-      input[type="text"],
-      input[type="password"] {
-          width: 100%;
-          padding: 0.5rem;
-          margin: 0.5rem 0;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-      }
-      button {
-          background-color: #007bff;
-          color: white;
-          border: none;
-          padding: 0.75rem;
-          cursor: pointer;
-          border-radius: 5px;
-          width: 100%;
-      }
-      button:hover {
-          background-color: #0056b3;
-      }
-      .pdf-list {
-          margin-top: 2rem;
-          display: none; /* Ocultamos inicialmente */
-      }
-      .file-item {
-          background-color: #f1f1f1;
-          padding: 10px;
-          margin: 5px 0;
-          border-radius: 5px;
-      }
-      .file-item a {
-          color: #007bff;
-          text-decoration: none;
-      }
-  </style>
+
+    <script src="https://github.com/mozilla/pdf.js.git"></script>
   </head>
   <body>
-
     <header>
-        <h1>Bienvenido</h1>
+      <h1>Bienvenido</h1>
     </header>
-    
+
     <div class="container">
-        <h2>Iniciar Sesión</h2>
-        <input type="text" id="username" placeholder="Usuario" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <button id="loginButton">Iniciar Sesión</button>
-    
-        <div class="pdf-list" id="pdf-list">
-            <h3>Archivos PDF Disponibles:</h3>
-            <div class="file-item"><a href="ruta/del/pdf1.pdf" target="_blank">Archivo PDF 1</a></div>
-            <div class="file-item"><a href="ruta/del/pdf2.pdf" target="_blank">Archivo PDF 2</a></div>
-            <div class="file-item"><a href="ruta/del/pdf3.pdf" target="_blank">Archivo PDF 3</a></div>
-            <!-- Agrega más archivos según sea necesario -->
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <button id="loginButton">Iniciar Sesión</button>
+
+      <div class="pdf-list" id="pdf-list">
+        <h3>Archivos PDF Disponibles:</h3>
+        <div class="file-item">
+          <a href="ruta/del/pdf1.pdf" target="_blank">Archivo PDF 1</a>
         </div>
+        <div class="file-item">
+          <a href="ruta/del/pdf2.pdf" target="_blank">Archivo PDF 2</a>
+        </div>
+        <div class="file-item">
+          <a href="ruta/del/pdf3.pdf" target="_blank">Archivo PDF 3</a>
+        </div>
+        <!-- Agrega más archivos según sea necesario -->
+      </div>
     </div>
-    
+
     <script>
-        const loginButton = document.getElementById('loginButton');
-        const pdfList = document.getElementById('pdf-list');
-    
-        // Simulamos un proceso de inicio de sesión
-        loginButton.addEventListener('click', () => {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-    
-            // Aquí podrías agregar lógica para autenticar al usuario
-            if (username && password) {
-                alert('Inicio de sesión exitoso');
-                // Muestra la lista de PDFs después del inicio de sesión
-                pdfList.style.display = 'block';
-            } else {
-                alert('Por favor, ingresa tu usuario y contraseña');
-            }
-        });
+      const loginButton = document.getElementById("loginButton");
+      const pdfList = document.getElementById("pdf-list");
+
+      // Simulamos un proceso de inicio de sesión
+      loginButton.addEventListener("click", () => {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // Aquí podrías agregar lógica para autenticar al usuario
+        if (username && password) {
+          alert("Inicio de sesión exitoso");
+          // Muestra la lista de PDFs después del inicio de sesión
+          pdfList.style.display = "block";
+        } else {
+          alert("Por favor, ingresa tu usuario y contraseña");
+        }
+      });
     </script>
-    
-    </body>
+    <p>MIedra ramdom para separar</p>
+    <a href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/Apuntes_TOPOLOGIA1_tema_1.pdf?alt=media&token=677592d7-38f6-4cde-a4d8-fa9e1139af8e#toolbar=0">Enlace de texto u objeto</a>.
+    <iframe src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/Apuntes_TOPOLOGIA1_tema_1.pdf?alt=media&token=677592d7-38f6-4cde-a4d8-fa9e1139af8e#toolbar=0" width="900vw" height="10000000vh"></iframe>
+  </body>
 </html>
