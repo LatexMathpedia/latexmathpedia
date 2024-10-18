@@ -18,6 +18,9 @@ document.getElementById('create_account').addEventListener('click', function (ev
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       alert("Cuenta creada con éxito");
+      firebase.auth().currentUser.sendEmailVerification()
+        .then(() => {
+         });
     })
     .catch((error) => {
       alert("Hubo un error: " + error.message);
