@@ -30,6 +30,19 @@ h1 {
     text-align: center;
     border-radius: 8px;
 }
+.container p{
+    padding-top: 1.5rem;
+    font-size: smaller;
+}
+.container a:link{
+    color: blue;
+    text-decoration: none;
+    transition: color 0.5s;
+}
+.container a:hover{
+    color: gold;
+    text-decoration: none;
+}
 input[type="email"],
 input[type="password"] {
     width: 100%;
@@ -49,18 +62,4 @@ button {
 }
 button:hover {
     background-color: #0056b3;
-}
-.pdf-list {
-    margin-top: 2rem;
-    display: none; /* Ocultamos inicialmente */
-}
-.file-item {
-    background-color: #f1f1f1;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-}
-.file-item a {
-    color: #007bff;
-    text-decoration: none;
 }
