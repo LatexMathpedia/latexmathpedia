@@ -1,75 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>The Maths Texpedia</title>
-    <link
-      rel="icon"
-      href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
-      type="image/x-icon"
-    />
+    <link rel="icon"
+        href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
+        type="image/x-icon" />
     <meta name="description" content="Página web de apuntes latex" />
     <meta name="robots" content="index, nofollow" />
     <link rel="stylesheet" href="styles/main_styles.css" />
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/10.14.1/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/10.14.1/firebase-auth-compat.js"></script>
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-database-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-firestore-compat.js"
-    ></script>
-    <!-- <script defer src="/__/firebase/10.14.1/firebase-functions-compat.js"></script> -->
-    <!-- <script defer src="/__/firebase/10.14.1/firebase-functions-compat.js"></script> -->
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-messaging-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-storage-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-analytics-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-remote-config-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/10.14.1/firebase-performance-compat.js"
-    ></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-app-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-auth-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-database-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-firestore-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-messaging-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-storage-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-analytics-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-remote-config-compat.js"></script>
+    <script defer="defer" src="/__/firebase/10.14.1/firebase-performance-compat.js"></script>
+    <script src="bundle.js" defer></script>
+</head>
 
-    <script src="https://github.com/mozilla/pdf.js.git"></script>
-    <script type = "module" src = "src/index.js" defer></script>
-    <script type = "module" src = "src/create_account.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>
-  </head>
-  <body>
+<body>
     <header>
-      <h1>Bienvenido</h1>
+        <h1>Bienvenido</h1>
     </header>
-
     <div class="container">
-      <h2>Crear una cuenta</h2>
-      <input type="email" id="email" placeholder="Correo electrónico" required />
-      <input type="password" id="password" placeholder="Contraseña" required />
-      <button id="create_account" type = "create_account">CREAR CUENTA</button>
-      <p>Si ya tienes una cuenta, inicia sesión <a href="">aquí</a></p>
-      </div>
+        <h2>Crear una cuenta</h2><input type="email" id="email" placeholder="Correo electrónico" required /> <input
+            type="password" id="password" placeholder="Contraseña" required /> <button id="create_account"
+            type="create_account">CREAR CUENTA</button>
+        <p>Si ya tienes una cuenta, inicia sesión <a href="">aquí</a></p>
     </div>
     <p>Miedra ramdom para separar</p>
-  </body>
+</body>
+
 </html>
