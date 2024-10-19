@@ -1,6 +1,5 @@
 const auth = firebase.auth();
 
-
 //Script para crear cuenta en el sitio web
 document.getElementById('create_account').addEventListener('click', function (event) {
   event.preventDefault();
