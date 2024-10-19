@@ -1,4 +1,4 @@
-import { auth } from "./firebase"; // Asegúrate de que la ruta sea correcta
+import { auth, createUserWithEmailAndPassword, sendEmailVerification } from "./firebase"; // Asegúrate de que la ruta sea correcta
 
 // Script para crear cuenta en el sitio web
 document.getElementById('create_account').addEventListener('click', function (event) {
@@ -19,10 +19,11 @@ document.getElementById('create_account').addEventListener('click', function (ev
     return;
   }
 
-  auth.createUserWithEmailAndPassword(email, password)
+  // Pasando auth a createUserWithEmailAndPassword
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       alert("Cuenta creada con éxito");
-      return userCredential.user.sendEmailVerification();
+      return sendEmailVerification(userCredential.user); // Enviar correo de verificación
     })
     .then(() => {
       alert("Se ha enviado un correo de verificación.");
