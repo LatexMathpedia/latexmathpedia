@@ -1,0 +1,118 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --drak-blue: #1e3e62;
+  --light-blue: #a3acbd;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--light-blue);
+}
+
+/* Estilos del header*/
+.header {
+  width: 100vw;
+  height: 50px;
+  background-color: var(--drak-blue);
+  color: white;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+/*Estilos del nav*/
+nav {
+  width: 100vw;
+  padding-top: 10px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
+.nav__menu {
+  height: 20px;
+  align-self: center;
+}
+
+.nav__search__icon {
+  width: 25px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 65vw;
+  height: 25px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.input {
+  box-sizing: border-box;
+  color: #191919;
+  padding: 5px;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.input.password {
+  padding: 15px 35px 15px 15px;
+}
+
+.input-icon {
+  color: #191919;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 4px;
+}
+
+.input-icon.password {
+  left: unset;
+  right: 12px;
+}
+
+/* Estilos main */
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.main__title{
+    padding-top: 10px;
+    width: 80vw;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main__section {
+    width: 85vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section__container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.section__item{
+    width: 80px;
+    height: 80px;
+    background-color: red;
+    margin: 10px;
+}
