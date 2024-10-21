@@ -10,7 +10,7 @@ import {
 
 document.getElementById('sign_in').addEventListener('click', function (event) {
   event.preventDefault();
-  const email = document.getElementById('email').value;
+  const email = document.getElementById('email').value.toLowerCase();
   const password = document.getElementById('password').value;
   const firestoreDb = getFirestore();
 
@@ -35,7 +35,7 @@ document.getElementById('sign_in').addEventListener('click', function (event) {
         .catch((error) => {
           alert("Hubo un error: " + error.message);
         });
-    } else {  
+    } else {
       alert("No hay un usuario registrado con ese correo")
     }
   });

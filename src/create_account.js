@@ -14,7 +14,7 @@ import {
 document.getElementById('create_account').addEventListener('click', function (event) {
   event.preventDefault();
 
-  const email = document.getElementById('email').value;
+  const email = document.getElementById('email').value.toLowerCase();
   const password = document.getElementById('password').value;
   const firestoreDb = getFirestore();
 
