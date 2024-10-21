@@ -6,6 +6,7 @@
 :root {
   --drak-blue: #1e3e62;
   --light-blue: #a3acbd;
+  --kk-brown: #f9f871;
 }
 
 html,
@@ -107,12 +108,23 @@ main{
     display: flex;
     flex-direction: row;
     overflow: auto;
+    overflow-x: scroll;
     white-space: nowrap;
 }
 
 .section__item{
-    width: 80px;
-    height: 80px;
-    background-color: red;
+    min-width: 100px;
+    max-width: 100px;
+    height: 100px;
+    background-color: var(--kk-brown);
     margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.section__item__img{
+  width: 60px;
 }
