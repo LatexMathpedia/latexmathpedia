@@ -27,9 +27,9 @@ document.getElementById('sign_in').addEventListener('click', function (event) {
   const emailQuery = query(usersCollection, where("email", "==", email));
   getDocs(emailQuery).then((querySnapshot) => {
     if (!querySnapshot.empty) {
-      alert("Email ya registrado, no se puede crear cuenta");
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+          alert("Has iniciado sesión con exito");
           const user = userCredential.user;
         })
         .catch((error) => {
