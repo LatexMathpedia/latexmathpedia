@@ -1,0 +1,270 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Estilos del header */
+
+header .header_div_superior {
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+header .header_img_logo {
+  height: 75px;
+  padding-right: 5px;
+}
+
+header .header_title {
+  font-size: 3.2rem;
+  padding-bottom: 5px;
+  padding-right: 0px;
+}
+
+/* Diseño del nav con flex wrap, en caso de usarse hay que comentar los dos siguientes estilos
+
+header .nav_right_section {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+*/
+
+header .header_div_inferior{
+  flex-direction: column;
+}
+
+header .container_login{
+  width: 100%;
+  padding-top: 10px;
+  margin-bottom: 5px;
+  justify-content: center;
+}
+
+header .header_nav_container {
+  width: 350px;
+}
+
+header .header_nav {
+  width: 80vw;
+  overflow-x: scroll;
+  overscroll-behavior-x: contain;
+}
+
+header .nav_right_section {
+  width: 100%;
+}
+
+ul li .section {
+  font-size: 2.2rem;
+  font-weight: 500;
+}
+
+header #last_item_section {
+  padding-right: 0px;
+}
+
+header .header_div_inferior {
+  padding-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+header .header_relleno {
+  width: 0%;
+}
+
+header .nav_login_section {
+  padding-left: 0px;
+}
+
+header .login_section {
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+/*Estilos body*/
+main .main_container {
+  overflow-x: scroll;
+  overscroll-behavior-x: contain;
+  width: 100%;
+  align-items: center;
+  flex-direction: column-reverse;
+  padding-right: 0px;
+
+}
+
+main .main_section_info {
+  width: 90%;
+  flex-direction: row;
+  align-items: flex-start;
+  border-right: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  padding-top: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 15px;
+}
+
+main .info_add {
+  display: none;
+}
+
+main .info_hr {
+  display: none;
+}
+
+main .info_articles--future {
+  width: 50%;
+  padding-right: 5px;
+}
+
+main .info_future--title {
+  width: 100%;
+  font-size: 2.6rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+main .info_future--matchup {
+  margin-top: 10px;
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+main .info_future--data {
+  font-size: 1.6rem;
+  text-align: center;
+  padding-left: 0px;
+}
+
+main #info_hr_vertical {
+  display: inline;
+  width: 3px;
+  height: 100%;
+  background-color: #d75c1f;
+  border-style: none;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+main .info_articles--past {
+  width: 50%;
+  padding-left: 5px;
+}
+
+main .info_past_title {
+  width: 100%;
+  font-size: 2.6rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+main .info_past--article {
+  margin-top: 10px;
+}
+
+main .info_past--matchup {
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+main .info_past--result {
+  font-size: 1.8rem;
+  text-align: center;
+  padding-left: 0px;
+}
+
+main .info_past--data {
+  font-size: 1.6rem;
+  text-align: center;
+  padding-left: 0px;
+}
+
+main .main_section_feed {
+  width: 90%;
+  padding-top: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-right: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-top: none;
+}
+
+main .article--img {
+  max-width: 500px;
+  align-self: center;
+}
+
+main .article--img2 {
+  width: 75%;
+  max-width: 225px;
+  align-self: center;
+  margin-left: 0px;
+}
+
+main .article--title {
+  font-size: 2.8rem;
+  line-height: 35px;
+  padding-bottom: 7px;
+}
+
+main .article--subtitle {
+  font-size: 2rem;
+  line-height: 30px;
+}
+
+main .article--text {
+  font-size: 1.6rem;
+  line-height: 24px;
+}
+
+main .article--date {
+  font-size: 1.5rem;
+}
+
+/*Estilos del footer*/
+
+footer {
+  height: auto;
+}
+
+footer .footer_main_container {
+  flex-direction: column;
+}
+
+footer .footer_left_section {
+  font-size: 2.6rem;
+}
+
+footer .footer_middle_section{
+  padding-bottom: 15px;
+}
+
+footer .footer_middle_section a {
+  font-size: 2.2rem;
+}
+
+footer .footer_right_section {
+  padding-bottom: 5px;
+}
+
+footer img {
+  height: 30px;
+}
+
+footer #footer_last_img {
+  padding-right: 0px;
+}

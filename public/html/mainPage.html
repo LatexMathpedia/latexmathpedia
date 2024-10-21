@@ -2,63 +2,59 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Maths Texpedia</title>
-    <link rel="icon"
-        href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
-        type="image/x-icon"/>
-    <meta name="description" content="Página web de apuntes latex" />
-    <meta name="robots" content="index, follow"/>
-    <link rel="stylesheet" href="../styles/main_style.css">
-    <link rel="stylesheet" href="../styles/main_phone_style.css" media="(max-width: 1114px)">
+    <meta name="robots" content="index,follow"/> <!--facilita el rastreo de la página por el motor de búsquedas de google-->
+    <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b" />
+    <meta name="description" content="Página web de apuntes latex">
+    <meta name="author" content="Diego Díaz Mendaña"/>
+    <title>The Math Texpedia</title>
+    <link rel="stylesheet" href="../styles/main_styles.css">
+    <link rel="stylesheet" href="../styles/main_phone_styles.css" media="(max-width: 1114px)"> <!--cambio de hoja de estilos al reducir el tamaño del dispositivo a menos de 1114px-->
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="header">
-        <h1 class="header__title">The Maths Texpedia</h1>
-    </header>
-    <nav class="nav">
-        <img class="nav__menu" src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fmenu-logo.svg?alt=media&token=965c0692-8d27-4661-af20-df4fe392d7d2" alt="Logo menú">
-        <div class="input-wrapper">
-          <input type="search" class="input" placeholder="Ingrese su búsqueda">
-        
-          <svg xmlns="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsearch_icon.svg?alt=media&token=48fc9376-ee48-44fd-8c5d-56cc2cbd71d4" class="input-icon password" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-          </svg>
+    <header>
+        <div class="header_div_superior"> <!--rectángulo superior del header en negro-->
+            <div class="header_div_logo">
+                <img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b" alt="Logo mathsTexPedia" class="header_img_logo">
+                <a href="" class="header_title">The Math Texpedia</a>
+            </div>
         </div>
-        <img class="nav_profile" src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fprofile_icon.svg?alt=media&token=649a1710-0d36-4cf8-ad1c-96b4d551ce0f" alt="Perfil icono">
-    </nav>
+        <div class="header_div_inferior"> <!--rectángulo inferior del header en verde-->
+            <div id="wrapper-container">
+            <div class="input-wrapper">
+                <input type="search" class="input" placeholder="Ingrese su búsqueda">
+              
+                <svg xmlns="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsearch_icon.svg?alt=media&token=48fc9376-ee48-44fd-8c5d-56cc2cbd71d4" class="input-icon password" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+            <div class="container_login">
+                <ul class="nav_login_section">
+                    <li><a href="#" class="login_section">Iniciar sesión</a></li>
+                    <li class="login_section">|</li>
+                    <li><a href="#" class="login_section">Registrarse</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
     <main>
-        <h2 class="main__title">Bienvenido al respositorio libre de apuntes en Latex</h2>
-        <section class="main__section">
-            <h3 class="section__title">Asignatura</h3>
-            <div class="section__container">
-                <div class="section__item">
-                    <img class="section__item__img" src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsimbolo_reales.svg?alt=media&token=f97bbce2-e6ec-4f46-bddf-b2718396dd1b" alt="Logo reales">
-                    <h4 class="section__item__txt">Algebra I</h4>
-                </div>
-                <div class="section__item">
-                    <img class="section__item__img" src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c" alt="Logo integral">
-                    <h4 class="section__item__txt">Análisis 1</h4>
-                </div>
-                <div class="section__item">
-                    <img class="section__item__img" src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c" alt="Logo integral">
-                    <h4 class="section__item__txt">Análisis 1</h4>
-                </div>
-                <div class="section__item">
-                    <img class="section__item__img" src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c" alt="Logo integral">
-                    <h4 class="section__item__txt">Análisis 1</h4>
-                </div>
-            </div>
-        </section>
-        <section class="main__section">
-            <h3 class="section__title">Últimos subidos</h3>
-            <div class="section__container">
-                <p class="section__item"></p>
-                <p class="section__item"></p>
-                <p class="section__item"></p>
-            </div>
-        </section>
-        
+        <div>a</div>
     </main>
+    <footer>
+        <div class="footer_main_container">
+            <div class="footer_left_section">©The Math Texpedia</div>
+            <div class="footer_middle_section"><a href=""></a></div>
+            <div class="footer_right_section"> <!--lista de items de navegación-->
+                <ul class="footer_list">
+                    <li><a href="mailto:latexmathpedia@gmail.com"><img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fmail_logo.svg?alt=media&token=083ad807-4fef-4efb-9180-58f87e40d592" alt="Logo gmail"></a></li>
+                    <li><a href="https://x.com/MathsTexpedia"  target="_blank" ><img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Flogo_twitter.svg?alt=media&token=5a9b14c2-eafc-42cd-ac66-ca453e9edb76" alt="Logo Twitter"></a></li>
+                    <li><a href="https://www.instagram.com/mathtexpedia.ofisial/" target="_blank" rel="noopener"><img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Finstagram_logo.svg?alt=media&token=0521c65b-2ea5-402e-b1de-ff590847a857" alt="Logo Instagram" id="footer_last_img"></a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

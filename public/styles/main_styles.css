@@ -1,65 +1,207 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* Orden para generar los estilos, no es obligatorio pero es buena práctica.
+1. Posicionamiento
+2. Modelo de caja (box model)
+3. Tipografía
+4. Visuales
+5. Otros
+*/
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Oswald';
+}
+
+:root{
+    --main-blue: #687887;
+    --light-blue: #3daaeb;
+}
+
+/*Estilos del Header*/
+
+header .header_div_superior{
+    position: relative;
+    width: 100%;
+    height: 110px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    background-color: var(--light-blue);
+}
+
+header .header_div_logo {
+    display: flex;
     justify-content: center;
-    height: 100vh;
-}
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 1rem;
-    text-align: center;
     width: 100%;
+}
+
+.header_img_logo {
+    height: 100px;
+    padding-right: 5px;
+}
+
+.header_title {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    font-size: 4.5rem;
+    font-style: normal;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+#wrapper-container{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.input-wrapper {
+    position: relative;
+    min-width: 300px;
+    max-width: 400px;
+    height: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  
+  .input {
+    box-sizing: border-box;
+    color: #191919;
+    padding: 5px;
+    width: 100%;
+    border-radius: 15px;
+  }
+  
+  .input.password {
+    padding: 15px 35px 15px 15px;
+  }
+  
+  .input-icon {
+    color: #191919;
     position: absolute;
-    top: 0;
-}
-h1 {
-    margin: 0;
-}
-.container {
-    margin-top: 5rem;
-    padding: 2rem;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-    border-radius: 8px;
-}
-.container p{
-    padding-top: 1.5rem;
-    font-size: smaller;
-}
-.container a:link{
-    color: blue;
-    text-decoration: none;
-    transition: color 0.5s;
-}
-.container a:hover{
-    color: gold;
+    width: 20px;
+    height: 20px;
+    top: 4px;
+  }
+  
+  .input-icon.password {
+    left: unset;
+    right: 12px;
+  }
+
+ul li .section {
+    padding-right: 15px;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: #FFFFFF;
     text-decoration: none;
 }
-input[type="email"],
-input[type="password"] {
+
+header .header_div_inferior {
+    height: auto;
     width: 100%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    background-color: var(--main-blue);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    cursor: pointer;
-    border-radius: 5px;
+
+header .container_login {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+}
+
+header .nav_login_section {
+    list-style: none;
+    display: flex;
+}
+
+header .login_section {
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding-right: 10px;
+}
+
+/*Estilos del main*/
+
+
+
+/*Estilos del footer*/
+
+footer {
     width: 100%;
+    background-color: var(--light-blue);
+    height: 50px;
+    display: flex;
+    align-items: center;
 }
-button:hover {
-    background-color: #0056b3;
+
+footer .footer_main_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+footer .footer_left_section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #000000;
+}
+
+footer .footer_middle_section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+footer .footer_middle_section a{
+    text-decoration: none;
+    font-size: 2.6rem;
+    font-weight: 400;
+    color: #000000;
+}
+
+footer .footer_right_section {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer .footer_list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+}
+
+footer img {
+    height: 35px;
+    padding-right: 15px;
+}
+
+main {
+    min-height: calc(100vh - 110px - 47px - 50px);
 }
