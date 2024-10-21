@@ -37,8 +37,6 @@ document.getElementById('create_account').addEventListener('click', function (ev
     if (!querySnapshot.empty) {
       alert("Email ya registrado, no se puede crear cuenta");
     } else {
-      console.log("Email no registrado, puedes crear la cuenta.");
-
       createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
           const userData = {
