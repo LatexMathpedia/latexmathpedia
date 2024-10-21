@@ -1,6 +1,6 @@
 import {
   auth,
-  signInUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   getFirestore,
   query,
   where,
@@ -8,12 +8,11 @@ import {
   getDocs
 } from './firebase.js';
 
-//Script para crear cuenta en el sitio web
-document.getElementById('singIn').addEventListener('click', function (event) {
+document.getElementById('sign_in').addEventListener('click', function (event) {
   event.preventDefault();
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
-  const firebaseDb = getFirestore();
+  const firestoreDb = getFirestore();
 
   if (!email) {
     alert("Por favor ingresa tu correo");
@@ -29,7 +28,7 @@ document.getElementById('singIn').addEventListener('click', function (event) {
   getDocs(emailQuery).then((querySnapshot) => {
     if (!querySnapshot.empty) {
       alert("Email ya registrado, no se puede crear cuenta");
-      signInUserWithEmailAndPassword(auth, email, password)
+      signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
         })

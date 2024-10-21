@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getFirestore, setDoc, doc, query, where, collection, getDocs } from "firebase/firestore";
 
@@ -32,5 +32,7 @@ export {
   where,
   collection,
   getDocs,
-  signInUserWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 };
