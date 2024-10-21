@@ -9,6 +9,7 @@ body {
     justify-content: center;
     height: 100vh;
 }
+
 header {
     background-color: #007bff;
     color: white;
@@ -18,9 +19,11 @@ header {
     position: absolute;
     top: 0;
 }
+
 h1 {
     margin: 0;
 }
+
 .container {
     margin-top: 5rem;
     padding: 2rem;
@@ -30,19 +33,23 @@ h1 {
     text-align: center;
     border-radius: 8px;
 }
-.container p{
+
+.container p {
     padding-top: 1.5rem;
     font-size: smaller;
 }
-.container a:link{
+
+.container a:link {
     color: blue;
     text-decoration: none;
     transition: color 0.5s;
 }
-.container a:hover{
+
+.container a:hover {
     color: gold;
     text-decoration: none;
 }
+
 input[type="email"],
 input[type="password"] {
     width: 100%;
@@ -51,6 +58,7 @@ input[type="password"] {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 button {
     background-color: #007bff;
     color: white;
@@ -60,6 +68,7 @@ button {
     border-radius: 5px;
     width: 100%;
 }
+
 button:hover {
     background-color: #0056b3;
 }
