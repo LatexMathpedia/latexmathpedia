@@ -5,7 +5,8 @@ import {
   query,
   where,
   collection,
-  getDocs
+  getDocs,
+  onAuthStateChanged
 } from './firebase.js';
 
 document.getElementById('sign_in').addEventListener('click', function (event) {
@@ -40,3 +41,17 @@ document.getElementById('sign_in').addEventListener('click', function (event) {
     }
   });
 });
+
+onAuthStateChanged(auth, async (user) => {
+  console.log("onAuthStateChanged detectado"); // Verifica si se detecta un cambio en la autenticación
+  if (user) {
+    await user.reload();
+    if (user.emailVerified) {
+      window.location.href = './index.html';
+    } else {
+      window.location.href = './verificar_email.html';
+    }
+  }
+});
+
+
