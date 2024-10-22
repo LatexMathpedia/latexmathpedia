@@ -47,9 +47,9 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
     if (user.emailVerified) {
-      window.location.href = './index.html';
+      window.location.href = 'index.html';
     } else {
-      window.location.href = './verificar_email.html';
+      window.location.href = 'verificar_email.html';
     }
   }
 });

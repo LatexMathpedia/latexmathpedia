@@ -8,7 +8,8 @@ import {
   query,
   where,
   collection,
-  getDocs
+  getDocs,
+  onAuthStateChanged
 } from "./firebase.js";
 
 document.getElementById('create_account').addEventListener('click', function (event) {
@@ -64,9 +65,9 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
     if (user.emailVerified) {
-      window.location.href = './index.html';
+      window.location.href = 'index.html';
     } else {
-      window.location.href = './verificar_email.html';
+      window.location.href = 'verificar_email.html';
     }
   }
 });
