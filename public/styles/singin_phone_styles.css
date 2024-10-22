@@ -1,0 +1,97 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+/* Estilos del header */
+
+header .header_div_superior {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+header .header_img_logo {
+    height: 75px;
+    padding-right: 5px;
+}
+
+header .header_title {
+    font-size: 3.2rem;
+    padding-bottom: 5px;
+    padding-right: 0px;
+}
+
+/* Diseño del nav con flex wrap, en caso de usarse hay que comentar los dos siguientes estilos
+  
+  header .nav_right_section {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  */
+
+.container{
+    max-width: 85vw;
+}
+
+.login_title{
+    font-size: 1.2rem;
+}
+
+input {
+    font-size: 1.3rem;
+}
+
+#sing_in{
+    font-size:1.2rem
+}
+
+
+
+/*Estilos del footer*/
+
+footer {
+    height: auto;
+}
+
+footer .footer_main_container {
+    flex-direction: column;
+}
+
+footer .footer_left_section {
+    font-size: 2.6rem;
+}
+
+footer .footer_middle_section {
+    padding-bottom: 15px;
+}
+
+footer .footer_middle_section a {
+    font-size: 2.2rem;
+}
+
+footer .footer_right_section {
+    padding-bottom: 5px;
+}
+
+footer img {
+    height: 30px;
+}
+
+footer #footer_last_img {
+    padding-right: 0px;
+}
+
+  main {
+    min-height: calc(100vh - 85px - 99px);
+}
