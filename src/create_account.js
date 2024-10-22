@@ -60,7 +60,7 @@ document.getElementById('create_account').addEventListener('click', function (ev
           setTimeout(() => {
             console.log("Todo listo, redirigiendo a verificar_email.html");
             window.location.href = 'verificar_email.html';
-          }, 3000);
+          }, 1500);
         })
         .catch((error) => {
           alert("Hubo un error: " + error.message);
