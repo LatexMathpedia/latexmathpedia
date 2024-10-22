@@ -46,29 +46,24 @@ document.getElementById('create_account').addEventListener('click', function (ev
 
           alert("Cuenta creada con éxito. Se ha enviado correo de verificación.");
 
-          await sendEmailVerification(userCredential.user);
+          try {
+            const docRef = doc(firestoreDb, 'users', userCredential.user.uid);
+            await setDoc(docRef, userData);
+            console.log("Usuario registrado y datos guardados en Firestore.");
+          } catch (error) {
+            console.error("Error guardando datos en Firestore: ", error);
+            alert("Hubo un error al guardar los datos: " + error.message);
+            return;
+          }
 
-          const docRef = doc(firestoreDb, 'users', userCredential.user.uid);
-          await setDoc(docRef, userData);
+          await sendEmailVerification(userCredential.user);
         })
         .catch((error) => {
           alert("Hubo un error: " + error.message);
         });
+
     }
   }).catch((error) => {
     console.error("Error verificando el correo: ", error);
   });
 });
-
-onAuthStateChanged(auth, async (user) => {
-  console.log("onAuthStateChanged detectado"); // Verifica si se detecta un cambio en la autenticación
-  if (user) {
-    await user.reload();
-    if (user.emailVerified) {
-      window.location.href = 'index.html';
-    } else {
-      window.location.href = 'verificar_email.html';
-    }
-  }
-});
-
