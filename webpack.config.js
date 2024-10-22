@@ -8,7 +8,8 @@ module.exports = {
     firebase: './src/firebase.js',
     create_account: './src/create_account.js',
     sign_out: './src/sign_out.js',
-    sign_in: './src/sign_in.js'
+    sign_in: './src/sign_in.js',
+    check_auth: './src/check_auth.js',
   },
   output: {
     path: path.resolve(__dirname, 'public'),

@@ -9,7 +9,6 @@ import {
   where,
   collection,
   getDocs,
-  onAuthStateChanged
 } from "./firebase.js";
 
 document.getElementById('create_account').addEventListener('click', function (event) {
@@ -57,11 +56,15 @@ document.getElementById('create_account').addEventListener('click', function (ev
           }
 
           await sendEmailVerification(userCredential.user);
+
+          setTimeout(() => {
+            console.log("Todo listo, redirigiendo a verificar_email.html");
+            window.location.href = 'verificar_email.html';
+          }, 3000);
         })
         .catch((error) => {
           alert("Hubo un error: " + error.message);
         });
-
     }
   }).catch((error) => {
     console.error("Error verificando el correo: ", error);
