@@ -17,7 +17,7 @@ module.exports = {
   },
   mode: 'development',
   plugins: [
-    new Dotenv(), // Asegúrate de que esto esté aquí
+    new Dotenv(),
   ],
   devServer: {
     static: {
