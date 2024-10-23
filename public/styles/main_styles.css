@@ -142,8 +142,16 @@ header .login_section {
 
 /*Estilos del main*/
 
-main{
+main {
     background-color: f8f1e1;
+}
+
+#pdf {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
 }
 
 

@@ -58,6 +58,49 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = 'index.html';
                 } else if (currentPage === 'index.html') {
                     actualizarEnlace(true, true);
+                    const url = process.env.TOPOLOGIA_1;
+
+                    const pdfContainer = document.getElementById('pdfCanvas');
+
+                    const loadingTask = pdfjsLib.getDocument(url);
+                    loadingTask.promise.then(function (pdf) {
+                        const numPages = pdf.numPages;
+                        console.log('Número total de páginas: ' + numPages);
+
+                        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                            pdf.getPage(pageNum).then(function (page) {
+                                const viewport = page.getViewport({ scale: 1.5 });
+
+                                const canvas = document.createElement('canvas');
+                                const context = canvas.getContext('2d');
+                                canvas.className = 'page';
+                                canvas.height = viewport.height;
+                                canvas.width = viewport.width;
+
+                                const renderContext = {
+                                    canvasContext: context,
+                                    viewport: viewport
+                                };
+                                page.render(renderContext);
+
+                                pdfContainer.appendChild(canvas);
+                            });
+                        }
+                    }).catch(function (error) {
+                        console.error('Error al cargar el PDF:', error);
+                    });
+
+                    // Prevenir clic derecho en el contenedor del PDF
+                    pdfContainer.addEventListener('contextmenu', function (event) {
+                        event.preventDefault();
+                    });
+
+                    // Prevenir combinaciones de teclas como Ctrl + S o Ctrl + P
+                    document.addEventListener('keydown', function (e) {
+                        if (e.ctrlKey && (e.key === 's' || e.key === 'p')) {
+                            e.preventDefault();
+                        }
+                    });
                 }
             } else {
                 console.log("Email no verificado");

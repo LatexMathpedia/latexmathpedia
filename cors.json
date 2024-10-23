@@ -1,0 +1,16 @@
+[
+    {
+        "origin": [
+            "https://mathtexpedia.web.app"
+        ],
+        "method": [
+            "GET",
+            "HEAD",
+            "POST"
+        ],
+        "responseHeader": [
+            "Content-Type"
+        ],
+        "maxAgeSeconds": 3600
+    }
+]
