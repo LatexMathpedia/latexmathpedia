@@ -26,6 +26,7 @@ function actualizarEnlace(authenticated, isVerified) {
         enlace.id = 'sign_out';
         enlace.innerText = 'Cerrar sesión';
         enlace.href = '#';
+        enlace.ariaLabel = 'Link que te permite cerrar la sesión';
         enlace.replaceWith(enlace.cloneNode(true));
         enlace = document.getElementById('sign_out');
         enlace.addEventListener('click', function (event) {
@@ -40,6 +41,7 @@ function actualizarEnlace(authenticated, isVerified) {
         enlace.id = 'create_account';
         enlace.innerText = 'Registrarse';
         enlace.href = 'create_account.html';
+        enlace.ariaLabel = 'Link que te lleva a la página para registrarse';
     }
 }
 
