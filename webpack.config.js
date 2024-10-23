@@ -7,7 +7,6 @@ module.exports = {
     index: './src/index.js',
     firebase: './src/firebase.js',
     create_account: './src/create_account.js',
-    sign_out: './src/sign_out.js',
     sign_in: './src/sign_in.js',
     check_auth: './src/check_auth.js',
     resend_email: './src/resend_email.js',

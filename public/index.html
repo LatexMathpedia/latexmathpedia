@@ -27,9 +27,7 @@
     <script defer="defer" src="/__/firebase/10.14.1/firebase-analytics-compat.js"></script>
     <script defer="defer" src="/__/firebase/10.14.1/firebase-remote-config-compat.js"></script>
     <script defer="defer" src="/__/firebase/10.14.1/firebase-performance-compat.js"></script>
-    <script src="index.bundle.js" defer></script>
-    <script src="sign_out.bundle.js" defer></script>
-    <script src="check_auth.bundle.js" defer></script>
+
 </head>
 
 <header>
@@ -57,13 +55,12 @@
             <ul class="nav_login_section">
                 <li><a href="sign_in.html" class="login_section">Iniciar sesión</a></li>
                 <li class="login_section">|</li>
-                <li><a href="create_account.html" class="login_section">Registrarse</a></li>
+                <li><a href="create_account.html" class="login_section" id="create_account">Registrarse</a></li>
             </ul>
         </div>
     </div>
 </header>
 <main>
-    <div><button id="sign_out" type="submit">CERRAR SESION TEMPORAL</div>
 </main>
 <footer>
     <div class="footer_main_container">
@@ -84,6 +81,8 @@
         </div>
     </div>
 </footer>
+<script src="index.bundle.js" defer></script>
+<script src="check_auth.bundle.js" defer></script>
 </body>
 
 </html>
