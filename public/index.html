@@ -27,9 +27,7 @@
     <script defer="defer" src="/__/firebase/10.14.1/firebase-analytics-compat.js"></script>
     <script defer="defer" src="/__/firebase/10.14.1/firebase-remote-config-compat.js"></script>
     <script defer="defer" src="/__/firebase/10.14.1/firebase-performance-compat.js"></script>
-    <script src="index.bundle.js" defer></script>
-    <script src="sign_out.bundle.js" defer></script>
-    <script src="check_auth.bundle.js" defer></script>
+
 </head>
 
 <header>
@@ -37,7 +35,7 @@
         <div class="header_div_logo">
             <img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b"
                 alt="Logo mathsTexPedia" class="header_img_logo">
-            <a href="" class="header_title">The Math Texpedia</a>
+            <a href="" class="header_title" aria-label="Link que te lleva a la pagina principal">The Math Texpedia</a>
         </div>
     </div>
     <div class="header_div_inferior"> <!--rectángulo inferior del header en verde-->
@@ -55,17 +53,14 @@
         </div>
         <div class="container_login">
             <ul class="nav_login_section">
-                <li><a href="sign_in.html" class="login_section">Iniciar sesión</a></li>
+                <li><a href="sign_in.html" class="login_section" aria-label="Link que te lleva a la página de iniciar sesión">Iniciar sesión</a></li>
                 <li class="login_section">|</li>
-                <li><a href="create_account.html" class="login_section">Registrarse</a></li>
+                <li><a href="create_account.html" class="login_section" id="create_account" aria-label="Link que te lleva a la página para registrarse">Registrarse</a></li>
             </ul>
         </div>
     </div>
 </header>
 <main>
-    <div>
-        <button id="sign_out" type="submit">CERRAR SESION TEMPORAL</button>
-    </div>
 </main>
 <footer>
     <div class="footer_main_container">
@@ -86,5 +81,7 @@
         </div>
     </div>
 </footer>
+<script src="index.bundle.js" defer></script>
+<script src="check_auth.bundle.js" defer></script>
 </body>
 </html>
