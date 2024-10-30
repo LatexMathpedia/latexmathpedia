@@ -95,35 +95,48 @@ header .login_section {
 
 /*Estilos body*/
 
-    .scrollable {
-      gap: 30px;
-      justify-content: center;
-    }
-  
-    .subject-item, .course-item {
-      width: 400px;
-    }
-  
-    h2 {
-      font-size: 2rem;
-      text-align: center;
-    }
-  
-    .content {
-      width: 85vw;
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      align-items: center;
-    }
+/**/
+ .main_nav {
+  width: 80vw;
+  overflow-x: scroll;
+  overscroll-behavior-x: contain;
+}
 
-    .subject-item img, .course-item img {
-      max-height: 70%;
-      max-width: 70%;
-      border-radius: 8px;
-      margin-bottom: 0px;
-    }
+ .nav_section {
+  width: 100%;
+}
 
+ #last_item_section {
+  margin-right: 0px;
+}
+/**/
+
+.section{
+  min-width: 150px;
+}
+
+/* .scrollable {
+  gap: 30px;
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.subject-item, .course-item {
+  min-width: 150px;
+  height: 120px;
+}
+
+h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.content {
+  width: 100vw;
+  gap: 40px;
+  align-items: center;
+} */
   
 
 /*Estilos del footer*/

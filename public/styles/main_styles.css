@@ -15,6 +15,7 @@ html {
   font-size: 62.5%;
   font-family: "Oswald";
   background-color: #f8f1e1;
+  overflow-x: hidden;
 }
 
 :root {
@@ -141,85 +142,95 @@ header .login_section {
 }
 
 /*Estilos del main*/
-main {
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  width: 100vw;
+  padding: 20px;
 }
 
-.content {
-    padding: 20px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 85vw;
-  }
-  
-  .container-title {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    text-align: center;
-  }
+.container-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
 
-  .subject-container {
-    margin-bottom: 20px;
-  }
-  
-  .scrollable {
-    width: 80vw;
-    display: flex;
-    overflow-x: scroll;
-    overscroll-behavior-x: contain;
-    gap: 15px;
-    justify-content: center;
-  }
-  
-  .subject-item, .course-item {
-    height: 150px;
-    text-align: center;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .subject-item img, .course-item img {
-    max-height: 80%;
-    max-width: 80%;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .subject-item p, .course-item p {
-    margin-top: 10px;
-    font-size: 1.8rem;
-    color: #333;
-    text-align: center;
-  }
-  
-  .scrollable {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f0f0f0;
-  }
-  
-  .scrollable::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .scrollable::-webkit-scrollbar-track {
-    background: #f0f0f0;
-  }
-  
-  .scrollable::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 10px;
-  }
+/* Prueba */
+ .main_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.nav_section {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+
+ul li .section {
+  padding-right: 15px;
+  font-weight: 700;
+  font-size: 2.8rem;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+/**/
+
+.section {
+  width: 150px;
+  height: 150px;
+  margin-right: 15px;
+}
+
+#last_item_section
+
+/* 
+.scrollable {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.scrollable::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.subject-item, .course-item {
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subject-item img, .course-item img {
+  max-height: 80%;
+  max-width: 80%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+} */
+
 
 /* main {
     background-color: f8f1e1;
