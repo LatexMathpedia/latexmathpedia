@@ -12,8 +12,8 @@
     <meta name="description" content="Página web de apuntes latex" />
     <meta name="robots" content="index,follow" />
     <meta name="author" content="Diego Díaz Mendaña" />
-    <link rel="stylesheet" href="styles/main_styles.css">
-    <link rel="stylesheet" href="styles/main_phone_styles.css" media="(max-width: 1114px)">
+    <link rel="stylesheet" href="styles/subject_styles.css">
+    <link rel="stylesheet" href="styles/subject_phone_styles.css" media="(max-width: 1114px)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap"
@@ -63,38 +63,8 @@
     </div>
 </header>
 <main>
-    <main class="content">
-        <section class="subject-container">
-          <h2 class="container-title">Asignaturas</h2>
-          <div class="scrollable">
-            <button class="subject-item" onclick="window.location.href='subject.html'">
-              <img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c" alt="Matemáticas">
-              <p class="item-title">Análisis 1</p>
-            </button>
-            <div class="subject-item">
-              <img src="ruta-imagen.jpg" alt="Física">
-              <p class="item-title">Física</p>
-            </div>
-            <!-- Añadir más asignaturas aquí -->
-          </div>
-        </section>
-      
-        <section class="subject-container">
-          <h2 class="container-title">Cursos</h2>
-          <div class="scrollable">
-            <div class="course-item">
-              <img src="ruta-imagen.jpg" alt="1er Año">
-              <p class="item-title">1er Año</p>
-            </div>
-            <div class="course-item">
-              <img src="ruta-imagen.jpg" alt="2do Año">
-              <p class="item-title">2do Año</p>
-            </div>
-            <!-- Añadir más cursos aquí -->
-          </div>
-        </section>
-      </main>      
-</main>
+  <ul id="pdfsList"></ul>
+</main>      
 <footer>
     <div class="footer_main_container">
         <div class="footer_left_section">©The Math Texpedia</div>
