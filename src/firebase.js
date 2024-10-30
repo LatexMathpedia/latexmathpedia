@@ -35,5 +35,6 @@ export {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  listAll
+  listAll,
+  initializeApp
 };

@@ -1,8 +1,13 @@
-import { collection, getDocs, getFirestore, query, where } from "firebase/firestore";
-
-const firestoreDb = getFirestore();
+import {
+    getFirestore,
+    query,
+    where,
+    collection,
+    getDocs,
+  } from "./firebase.js";
 
 async function loadPdfSubject(subject) {
+    const firestoreDb = getFirestore();
     const pdfsCollection = collection(firestoreDb, "pdfs");
     const subjectQuery = query(pdfsCollection, where("subject", "==", subject));
     
@@ -11,10 +16,9 @@ async function loadPdfSubject(subject) {
         const pdfs = [];
         
         querySnapshot.forEach((doc) => {
-            
-                pdfs.push({
-                    ...doc.data(),
-                });
+            pdfs.push({
+                ...doc.data(),
+            });
         });
 
         return pdfs;
@@ -35,7 +39,7 @@ async function createPdfList(subject) {
         const link = document.createElement("a");
         
         link.href = pdf.href; 
-        link.textContent = '${pdf.name}';
+        link.textContent = pdf.name;
         link.target = "_blank";
         
         listItem.appendChild(link);
@@ -43,6 +47,7 @@ async function createPdfList(subject) {
     });
 }
 
-window.onload = () =>{
+window.onload = () => {
     createPdfList("Análisis 1");
-}
+};
+
