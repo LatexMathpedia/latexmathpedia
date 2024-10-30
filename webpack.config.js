@@ -10,6 +10,7 @@ module.exports = {
     sign_in: './src/sign_in.js',
     check_auth: './src/check_auth.js',
     resend_email: './src/resend_email.js',
+    load_pdfs: './src/load_pdfs.js',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
