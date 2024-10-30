@@ -22,6 +22,7 @@ function handleSignOut() {
 function actualizarEnlace(authenticated, isVerified) {
     let enlace = document.getElementById('create_account');
 
+
     if (authenticated && isVerified) {
         enlace.id = 'sign_out';
         enlace.innerText = 'Cerrar sesión';
@@ -48,15 +49,18 @@ function actualizarEnlace(authenticated, isVerified) {
 document.addEventListener('DOMContentLoaded', function () {
     onAuthStateChanged(auth, (user) => {
         console.log("onAuthStateChanged detectado");
+        const mainContainer = document.getElementById('main_container');
         if (user) {
             const currentPage = window.location.pathname.split('/').pop();
+            
 
             if (user.emailVerified) {
                 console.log("Email verificado");
 
                 if (currentPage === 'verificar_email.html') {
                     window.location.href = 'index.html';
-                } else if (currentPage === 'index.html') {
+                } else {
+                    if(mainContainer) mainContainer.style.display = 'flex';
                     actualizarEnlace(true, true);
                     // const url = process.env.TOPOLOGIA_1;
 
@@ -104,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } else {
                 console.log("Email no verificado");
+                if(mainContainer) mainContainer.style.display = 'none';
                 if (currentPage !== 'verificar_email.html') {
                     window.location.href = 'verificar_email.html';
                 } else {
@@ -113,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         } else {
+            if(mainContainer) mainContainer.style.display = 'none';
             actualizarEnlace(false, false);
         }
     });
