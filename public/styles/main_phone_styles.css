@@ -101,7 +101,7 @@ header .login_section {
     }
   
     .subject-item, .course-item {
-      flex: 0 0 200px;
+      width: 400px;
     }
   
     h2 {

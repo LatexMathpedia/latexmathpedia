@@ -168,7 +168,7 @@ main {
   }
   
   .scrollable {
-    width: 85vw;
+    width: 80vw;
     display: flex;
     overflow-x: scroll;
     overscroll-behavior-x: contain;
@@ -178,7 +178,6 @@ main {
   
   .subject-item, .course-item {
     height: 150px;
-    flex: 0 0 150px;
     text-align: center;
     background-color: #f0f0f0;
     border-radius: 10px;
