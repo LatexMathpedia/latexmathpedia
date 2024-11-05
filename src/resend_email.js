@@ -2,9 +2,7 @@ import { auth, sendEmailVerification } from "./firebase";
 
 document.getElementById('resend_verification').addEventListener('click', function (event) {
     event.preventDefault();
-
     const user = auth.currentUser;
-
     if (user) {
         if (!user.emailVerified) {
             sendEmailVerification(user)
@@ -12,7 +10,6 @@ document.getElementById('resend_verification').addEventListener('click', functio
                     alert('Correo de verificación reenviado. Por favor revisa tu bandeja de entrada.');
                 })
                 .catch((error) => {
-                    console.error("Error al enviar el correo de verificación: ", error);
                     alert('Hubo un error al intentar reenviar el correo: ' + error.message);
                 });
         } else {
