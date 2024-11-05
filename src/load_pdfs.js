@@ -48,6 +48,14 @@ async function createPdfList(subject) {
 }
 
 window.onload = () => {
-    createPdfList("Análisis 1");
+    const urlParams = new URLSearchParams(window.location.search);
+    const subject = urlParams.get("subject");
+
+    if (!subject) {
+        alert("Página vacía\nDe momento no hay nada aquí oh");
+        return; 
+    }
+
+    createPdfList(subject);
 };
 
