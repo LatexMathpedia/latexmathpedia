@@ -179,6 +179,23 @@ ul li .section {
   color: #FFFFFF;
   text-decoration: none;
 }
+
+.section-img {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.item-title{
+  margin-top: 10px;
+  font-family: fantasy;
+}
+
+
+.item-number{
+  font-family: fantasy;
+  font-size: 5em;
+}
+
 /**/
 
 .section {
@@ -186,63 +203,6 @@ ul li .section {
   height: 150px;
   margin-right: 15px;
 }
-
-#last_item_section
-
-/* 
-.scrollable {
-  display: flex;
-  overflow-x: auto;
-  gap: 15px;
-  padding: 10px 0;
-  width: 100%;
-}
-
-.scrollable::-webkit-scrollbar {
-  height: 8px;
-}
-
-.scrollable::-webkit-scrollbar-track {
-  background: #f0f0f0;
-}
-
-.scrollable::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 10px;
-}
-
-.subject-item, .course-item {
-  width: 150px;
-  height: 150px;
-  text-align: center;
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.subject-item img, .course-item img {
-  max-height: 80%;
-  max-width: 80%;
-  border-radius: 8px;
-  margin-bottom: 10px;
-} */
-
-
-/* main {
-    background-color: f8f1e1;
-}
-
-#pdf {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-} */
 
 /*Estilos del footer*/
 
