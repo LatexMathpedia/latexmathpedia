@@ -16,6 +16,7 @@ document.getElementById('create_account').addEventListener('click', function (ev
 
   const email = document.getElementById('email').value.toLowerCase();
   const password = document.getElementById('password').value;
+  const rePassword = document.getElementById('repassword').value;
   const firestoreDb = getFirestore();
 
   if (!email) {
@@ -28,6 +29,14 @@ document.getElementById('create_account').addEventListener('click', function (ev
   }
   if (!password) {
     alert("Por favor ingresa tu contraseña");
+    return;
+  }
+  if (!repassword) {
+    alert("Por favor ingresa de nuevo tu contraseña");
+    return;
+  }
+  if (password !== repassword) {
+    alert("Las contraseñas no coinciden");
     return;
   }
   const usersCollection = collection(firestoreDb, "users");
