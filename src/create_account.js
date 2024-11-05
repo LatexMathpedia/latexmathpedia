@@ -15,6 +15,8 @@ document.getElementById('create_account').addEventListener('click', function (ev
   event.preventDefault();
 
   const email = document.getElementById('email').value.toLowerCase();
+  const name = document.getElementById('name').value;
+  const surname = document.getElementById('surname').value;
   const password = document.getElementById('password').value;
   const rePassword = document.getElementById('repassword').value;
   const firestoreDb = getFirestore();
@@ -31,11 +33,19 @@ document.getElementById('create_account').addEventListener('click', function (ev
     alert("Por favor ingresa tu contraseña");
     return;
   }
-  if (!repassword) {
+  if (!rePassword) {
     alert("Por favor ingresa de nuevo tu contraseña");
     return;
   }
-  if (password !== repassword) {
+  if (!name) {
+    alert("Por favor ingresa tu nombre");
+    return;
+  }
+  if (!surname) {
+    alert("Por favor ingresa tus apellidos");
+    return;
+  }
+  if (password !== rePassword) {
     alert("Las contraseñas no coinciden");
     return;
   }
@@ -49,7 +59,9 @@ document.getElementById('create_account').addEventListener('click', function (ev
       createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
           const userData = {
-            email: email
+            email: email,
+            nombre: name,
+            apellidos: surname
           };
 
           alert("Cuenta creada con éxito. Se ha enviado correo de verificación.");
@@ -57,9 +69,7 @@ document.getElementById('create_account').addEventListener('click', function (ev
           try {
             const docRef = doc(firestoreDb, 'users', userCredential.user.uid);
             await setDoc(docRef, userData);
-            console.log("Usuario registrado y datos guardados en Firestore.");
           } catch (error) {
-            console.error("Error guardando datos en Firestore: ", error);
             alert("Hubo un error al guardar los datos: " + error.message);
             return;
           }
@@ -67,7 +77,6 @@ document.getElementById('create_account').addEventListener('click', function (ev
           await sendEmailVerification(userCredential.user);
 
           setTimeout(() => {
-            console.log("Todo listo, redirigiendo a verificar_email.html");
             window.location.href = 'verificar_email.html';
           }, 1500);
         })
@@ -76,6 +85,5 @@ document.getElementById('create_account').addEventListener('click', function (ev
         });
     }
   }).catch((error) => {
-    console.error("Error verificando el correo: ", error);
   });
 });
