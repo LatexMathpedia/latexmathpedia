@@ -4,6 +4,8 @@ import {
     where,
     collection,
     getDocs,
+    auth,
+    onAuthStateChanged
 } from "./firebase.js";
 
 async function loadPdfSubject(subject) {
@@ -45,6 +47,13 @@ window.onload = () => {
         alert("Página vacía\nDe momento no hay nada aquí oh");
         return;
     }
-    createPdfList(subject);
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            createPdfList(subject);
+        } else {
+            alert("Debes iniciar sesión para ver esta página.");
+            window.location.href = "sign_in.html";
+        }
+    });
 };
 

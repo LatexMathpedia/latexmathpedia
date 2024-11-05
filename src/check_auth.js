@@ -18,8 +18,6 @@ function handleSignOut() {
 
 function actualizarEnlace(authenticated, isVerified) {
     let enlace = document.getElementById('create_account');
-
-
     if (authenticated && isVerified) {
         enlace.id = 'sign_out';
         enlace.innerText = 'Cerrar sesión';
