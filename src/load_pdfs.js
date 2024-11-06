@@ -30,11 +30,12 @@ async function createPdfList(subject) {
     const listContainer = document.getElementById("pdfsList");
     listContainer.innerHTML = "";
     pdfs.forEach((pdf) => {
-        const listItem = document.createElement("li");
+        const listItem = document.createElement("p");
         const link = document.createElement("a");
         link.href = pdf.href;
         link.textContent = pdf.name;
         link.target = "_blank";
+        link.className = "pItem";
         listItem.appendChild(link);
         listContainer.appendChild(listItem);
     });

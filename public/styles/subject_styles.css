@@ -142,98 +142,29 @@ header .login_section {
 }
 
 /*Estilos del main*/
-main {
+main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#main_title{
+  margin-top: 25px;
+  font-size: 3em;
+}
+
+#main_container {
+  margin-top: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.content {
-    padding: 20px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 85vw;
-  }
-  
-  .container-title {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
-  .subject-container {
-    margin-bottom: 20px;
-  }
-  
-  .scrollable {
-    width: 85vw;
-    display: flex;
-    overflow-x: scroll;
-    overscroll-behavior-x: contain;
-    gap: 15px;
-    justify-content: center;
-  }
-  
-  .subject-item, .course-item {
-    height: 150px;
-    flex: 0 0 150px;
-    text-align: center;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .subject-item img, .course-item img {
-    max-height: 80%;
-    max-width: 80%;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .subject-item p, .course-item p {
-    margin-top: 10px;
-    font-size: 1.8rem;
-    color: #333;
-    text-align: center;
-  }
-  
-  .scrollable {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f0f0f0;
-  }
-  
-  .scrollable::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .scrollable::-webkit-scrollbar-track {
-    background: #f0f0f0;
-  }
-  
-  .scrollable::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 10px;
-  }
-
-/* main {
-    background-color: f8f1e1;
+.pItem{
+  font-size: 1.8rem;
+  margin-top: 10px;
 }
-
-#pdf {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-} */
 
 /*Estilos del footer*/
 
