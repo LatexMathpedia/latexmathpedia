@@ -154,16 +154,27 @@ main{
 }
 
 #main_container {
-  margin-top: 25px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-
+#pdfsList{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .pItem{
   font-size: 1.8rem;
-  margin-top: 10px;
+  margin-top: 20px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+}
+.pItem:hover{
+  color: var(--light-blue);
 }
 
 /*Estilos del footer*/
