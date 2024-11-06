@@ -187,12 +187,11 @@ ul li .section {
 
 .item-title{
   margin-top: 10px;
-  font-family: fantasy;
 }
 
 
 .item-number{
-  font-family: fantasy;
+  font-weight: bolder;
   font-size: 5em;
 }
 
@@ -202,6 +201,13 @@ ul li .section {
   width: 150px;
   height: 150px;
   margin-right: 15px;
+  border-radius: 25px;
+}
+.section:hover{
+  background-color: var(--light-blue);
+}
+.main_nav{
+  margin-top: 30px;
 }
 
 /*Estilos del footer*/
@@ -258,5 +264,5 @@ footer img {
 }
 
 main {
-  min-height: calc(100vh - 110px - 47px - 50px);
+  min-height: calc(100vh - 207.8px);
 }
