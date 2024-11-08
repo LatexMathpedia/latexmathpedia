@@ -40,6 +40,10 @@ async function createPdfList(subject, year) {
     const pdfs = await loadPdfs(subject, year);
     const listContainer = document.getElementById("pdfsList");
     listContainer.innerHTML = "";
+    if (pdfs.length === 0) {
+        alert("Página vacía\nDe momento no hay nada aquí oh");
+        return;
+    }
     pdfs.forEach((pdf) => {
         const listItem = document.createElement("p");
         const link = document.createElement("a");
