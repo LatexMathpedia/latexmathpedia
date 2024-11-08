@@ -61,7 +61,8 @@ document.getElementById('create_account').addEventListener('click', function (ev
           const userData = {
             email: email,
             nombre: name,
-            apellidos: surname
+            apellidos: surname,
+            admin: false,
           };
 
           alert("Cuenta creada con éxito. Se ha enviado correo de verificación.");
