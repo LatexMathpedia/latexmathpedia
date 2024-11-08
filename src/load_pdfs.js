@@ -8,12 +8,22 @@ import {
     onAuthStateChanged
 } from "./firebase.js";
 
-async function loadPdfSubject(subject) {
+async function loadPdfs(subject, year) {
     const firestoreDb = getFirestore();
     const pdfsCollection = collection(firestoreDb, "pdfs");
-    const subjectQuery = query(pdfsCollection, where("subject", "==", subject));
+        let pdfQuery;
+    if (subject && year) {
+        pdfQuery = query(pdfsCollection, where("subject", "==", subject), where("year", "==", year));
+    } else if (subject) {
+        pdfQuery = query(pdfsCollection, where("subject", "==", subject));
+    } else if (year) {
+        pdfQuery = query(pdfsCollection, where("year", "==", year));
+    } else {
+        return [];
+    }
+    
     try {
-        const querySnapshot = await getDocs(subjectQuery);
+        const querySnapshot = await getDocs(pdfQuery);
         const pdfs = [];
         querySnapshot.forEach((doc) => {
             pdfs.push({
@@ -22,11 +32,12 @@ async function loadPdfSubject(subject) {
         });
         return pdfs;
     } catch (error) {
+        return [];
     }
 }
 
-async function createPdfList(subject) {
-    const pdfs = await loadPdfSubject(subject);
+async function createPdfList(subject, year) {
+    const pdfs = await loadPdfs(subject, year);
     const listContainer = document.getElementById("pdfsList");
     listContainer.innerHTML = "";
     pdfs.forEach((pdf) => {
@@ -44,17 +55,19 @@ async function createPdfList(subject) {
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const subject = urlParams.get("subject");
-    if (!subject) {
+    const year = parseInt(urlParams.get("year"), 10);
+
+    if (!subject && isNaN(year)) {
         alert("Página vacía\nDe momento no hay nada aquí oh");
         return;
     }
+
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            createPdfList(subject);
+            await createPdfList(subject, !isNaN(year) ? year : null);
         } else {
             alert("Debes iniciar sesión para ver esta página.");
             window.location.href = "sign_in.html";
         }
     });
 };
-
