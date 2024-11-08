@@ -44,6 +44,7 @@ async function createPdfList(subject, year) {
         alert("Página vacía\nDe momento no hay nada aquí oh");
         return;
     }
+    pdfs.sort((a, b) => a.name.localeCompare(b.name));
     pdfs.forEach((pdf) => {
         const listItem = document.createElement("p");
         const link = document.createElement("a");
