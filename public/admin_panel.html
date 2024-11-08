@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - MathTexpedia</title>
+  <link rel="stylesheet" href="styles/panel_styles.css">
+  <link rel="stylesheet" href="styles/panel_styles_phone.css" media="(max-width: 1114px)">
+  <script defer src="/__/firebase/10.14.1/firebase-app-compat.js"></script>
+  <script defer src="/__/firebase/10.14.1/firebase-auth-compat.js"></script>
+  <script defer src="/__/firebase/10.14.1/firebase-firestore-compat.js"></script>
+  <script defer src="admin_panel.bundle.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Panel de Administración</h1>
+  </header>
+  <main class="content">
+    <form id="pdfForm" class="form">
+      <label for="href">URL del PDF en Drive:</label>
+      <input type="url" id="href" name="href" required>
+      
+      <label for="name">Nombre del PDF:</label>
+      <input type="text" id="name" name="name" required>
+      
+      <label for="subject">Asignatura:</label>
+      <input type="text" id="subject" name="subject" required>
+      
+      <label for="year">Año:</label>
+      <input type="text" id="year" name="year" required>
+      
+      <button type="submit" id = "button_añadir">Agregar PDF</button>
+    </form>
+    <div id="successMessage" style="display: none;">PDF agregado exitosamente.</div>
+  </main>
+</body>
+</html>

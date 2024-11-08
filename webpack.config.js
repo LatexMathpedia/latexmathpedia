@@ -11,6 +11,7 @@ module.exports = {
     check_auth: './src/check_auth.js',
     resend_email: './src/resend_email.js',
     load_pdfs: './src/load_pdfs.js',
+    admin_panel: './src/admin_panel.js',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
