@@ -43,12 +43,14 @@
     <main>
         <div class="container">
             <h2>Crear una cuenta</h2>
-            <input type="text" id="name" placeholder="Nombre" required />
-            <input type="text" id="surname" placeholder="Apellidos" required />
-            <input type="email" id="email" placeholder="Correo electrónico" required />
-            <input type="password" id="password" placeholder="Contraseña" required />
-            <input type="password" id="repassword" placeholder="Repetir la contraseña" required />
-            <button id="create_account" type="submit">CREA UNA CUENTA</button>
+            <form id="create_account_form">
+                <input type="text" id="name" placeholder="Nombre" required />
+                <input type="text" id="surname" placeholder="Apellidos" required />
+                <input type="email" id="email" placeholder="Correo electrónico" required />
+                <input type="password" id="password" placeholder="Contraseña" required />
+                <input type="password" id="repassword" placeholder="Repetir la contraseña" required />
+                <button id="create_account" type="submit">CREA UNA CUENTA</button>
+            </form>
             <p>Si ya tienes una cuenta, inicia sesión <a href="sign_in.html">aquí</a></p>
     </main>
     <footer>
@@ -71,5 +73,13 @@
         </div>
     </footer>
 </body>
+<script>
+    document.getElementById('create_account_form').addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById('create_account').click();
+        }
+    })
+</script>
 
 </html>

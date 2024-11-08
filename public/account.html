@@ -12,8 +12,8 @@
     <meta name="description" content="Página web de apuntes latex" />
     <meta name="robots" content="index,follow" />
     <meta name="author" content="Diego Díaz Mendaña" />
-    <link rel="stylesheet" href="styles/singin_styles.css">
-    <link rel="stylesheet" href="styles/singin_phone_styles.css" media="(max-width: 1114px)">
+    <link rel="stylesheet" href="styles/main_styles.css">
+    <link rel="stylesheet" href="styles/main_phone_styles.css" media="(max-width: 1114px)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap"
@@ -27,7 +27,7 @@
     <script defer="defer" src="/__/firebase/10.14.1/firebase-analytics-compat.js"></script>
     <script defer="defer" src="/__/firebase/10.14.1/firebase-remote-config-compat.js"></script>
     <script defer="defer" src="/__/firebase/10.14.1/firebase-performance-compat.js"></script>
-    <script src="sign_in.bundle.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 
 <body>
@@ -36,19 +36,39 @@
             <div class="header_div_logo">
                 <img src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b"
                     alt="Logo mathsTexPedia" class="header_img_logo">
-                <a href="index.html" class="header_title">The Math Texpedia</a>
+                <a href="" class="header_title" aria-label="Link que te lleva a la pagina principal">The Math
+                    Texpedia</a>
+            </div>
+        </div>
+        <div class="header_div_inferior"> <!--rectángulo inferior del header en verde-->
+            <div id="wrapper-container">
+                <div class="input-wrapper">
+                    <input type="search" class="input" placeholder="Ingrese su búsqueda">
+
+                    <svg xmlns="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsearch_icon.svg?alt=media&token=48fc9376-ee48-44fd-8c5d-56cc2cbd71d4"
+                        class="input-icon password" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+            <div class="container_login">
+                <ul class="nav_login_section">
+                    <li><a href="sign_in.html" class="login_section" id="sign_in"
+                            aria-label="Link que te lleva a la página de iniciar sesión">Iniciar sesión</a></li>
+                    <li class="login_section">|</li>
+                    <li><a href="create_account.html" class="login_section" id="create_account"
+                            aria-label="Link que te lleva a la página para registrarse">Registrarse</a></li>
+                </ul>
             </div>
         </div>
     </header>
-    <main>
-        <div class="container">
-            <h2 id="login_title">Iniciar sesión</h2>
-            <form id="login_form">
-                <input type="email" id="email" placeholder="Correo electrónico" required />
-                <input type="password" id="password" placeholder="Contraseña" required />
-                <button id="sign_in" type="submit">INICIAR SESION</button>
-            </form>
-            <p>Si todavía no tienes una cuenta, creala <a href="create_account.html">aquí</a></p>
+    <main class="content">
+        <div class="main_container" id="main_container" style="display: none;">
+            <h1>TODAVÍA NO HAY NADA AQUÍ</h1>
+            <h2>"Al mal tiempo, buena cara… y al hambre, ¡mucha panza!"</h2>
+        </div>
     </main>
     <footer>
         <div class="footer_main_container">
@@ -69,14 +89,7 @@
             </div>
         </div>
     </footer>
+    <script src="check_auth.bundle.js" defer></script>
 </body>
-<script>
-    document.getElementById('login_form').addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            document.getElementById('sign_in').click();
-        }
-    })
-</script>
 
 </html>
