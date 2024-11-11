@@ -6,7 +6,6 @@ async function checkEmailVerification(user) {
     await user.reload();
     if (user.emailVerified) {
         window.location.href = 'index.html';
-    } else {
     }
 }
 
@@ -20,7 +19,7 @@ function handleSignOut() {
 
 function actualizarEnlace(authenticated, isVerified, displayName) {
     let enlace = document.getElementById('create_account');
-    let cuenta = document.getElementById('sign_in')
+    let cuenta = document.getElementById('sign_in');
     if (authenticated && isVerified) {
         if (displayName) {
             cuenta.id = 'account';
@@ -68,31 +67,43 @@ async function getUsername(uid) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    const currentPage = window.location.pathname.split('/').pop();
+
     onAuthStateChanged(auth, async (user) => {
-        const mainContainer = document.getElementById('main_container');
-        if (user) {
-            const currentPage = window.location.pathname.split('/').pop();
-            if (user.emailVerified) {
-                if (currentPage === 'verificar_email.html') {
-                    window.location.href = 'index.html';
+        if (currentPage === 'index.html') {
+            // En index.html, solo actualizamos el estado del enlace (login/cuenta)
+            if (user) {
+                const displayName = user.emailVerified ? await getUsername(user.uid) : "Cuenta";
+                actualizarEnlace(true, user.emailVerified, displayName);
+            } else {
+                actualizarEnlace(false, false);
+            }
+        } else {
+            // Para otras páginas, aplicamos toda la lógica de redirección y visualización
+            const mainContainer = document.getElementById('main_container');
+            if (user) {
+                if (user.emailVerified) {
+                    if (currentPage === 'verificar_email.html') {
+                        window.location.href = 'index.html';
+                    } else {
+                        if (mainContainer) mainContainer.style.display = 'flex';
+                        const displayName = await getUsername(user.uid);
+                        actualizarEnlace(true, true, displayName);
+                    }
                 } else {
-                    if (mainContainer) mainContainer.style.display = 'flex';
-                    const displayName = await getUsername(user.uid);
-                    actualizarEnlace(true, true, displayName);
+                    if (mainContainer) mainContainer.style.display = 'none';
+                    if (currentPage !== 'verificar_email.html') {
+                        window.location.href = 'verificar_email.html';
+                    } else {
+                        let interval = setInterval(async () => {
+                            await checkEmailVerification(user);
+                        }, 3000);
+                    }
                 }
             } else {
                 if (mainContainer) mainContainer.style.display = 'none';
-                if (currentPage !== 'verificar_email.html') {
-                    window.location.href = 'verificar_email.html';
-                } else {
-                    let interval = setInterval(async () => {
-                        await checkEmailVerification(user);
-                    }, 3000);
-                }
+                actualizarEnlace(false, false);
             }
-        } else {
-            if (mainContainer) mainContainer.style.display = 'none';
-            actualizarEnlace(false, false);
         }
     });
 });
