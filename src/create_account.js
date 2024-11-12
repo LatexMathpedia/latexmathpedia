@@ -62,6 +62,7 @@ document.getElementById('create_account').addEventListener('click', function (ev
   getDocs(emailQuery).then((querySnapshot) => {
     if (!querySnapshot.empty) {
       alert("Email ya registrado, no se puede crear cuenta");
+      window.location.href = 'sign_in.html';
     } else {
       createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
