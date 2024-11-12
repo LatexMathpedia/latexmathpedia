@@ -9,6 +9,11 @@ import {
   onAuthStateChanged
 } from './firebase.js';
 
+/**
+ * Evento del boton sign in.
+ * Alerta al usuario si no rellena email o contraseña.
+ * Cuando se inicia sesión con éxito, se envia a index.html.
+ */
 document.getElementById('sign_in').addEventListener('click', function (event) {
   event.preventDefault();
   const email = document.getElementById('email').value.toLowerCase();

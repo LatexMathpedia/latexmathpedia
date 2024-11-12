@@ -1,5 +1,8 @@
 import { auth, sendEmailVerification } from "./firebase";
 
+/**
+ * Evento del botón para reenviar el correo de verificación.
+ */
 document.getElementById('resend_verification').addEventListener('click', function (event) {
     event.preventDefault();
     const user = auth.currentUser;

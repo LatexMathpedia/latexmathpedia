@@ -11,6 +11,13 @@ import {
   getDocs,
 } from "./firebase.js";
 
+/**
+ * Evento del botón create account, que intenta crear un nuevo usuario con la información
+ * que el usuario proporciono.
+ * Si no rellenó algún campo, se le avisa al usuario.
+ * Si las contraseñas no coinciden, se le avisa al usuario.
+ * Si el email ya está registrado, se le avisa al usuario.
+ */
 document.getElementById('create_account').addEventListener('click', function (event) {
   event.preventDefault();
 

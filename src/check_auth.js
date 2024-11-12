@@ -1,7 +1,12 @@
 import { auth, onAuthStateChanged, signOut, getFirestore, doc, getDoc } from "./firebase.js";
 
-const db = getFirestore();
+const db = getFirestore(); //Inicializa la database de firestore
 
+/**
+ * Funcion para chequear si el usuaria está verificado por mail.
+ * 
+ * @param {User} user
+ */
 async function checkEmailVerification(user) {
     await user.reload();
     if (user.emailVerified) {
@@ -9,6 +14,9 @@ async function checkEmailVerification(user) {
     }
 }
 
+/**
+ * Funcion que desloguea al usuario y le avisa si no hubo problemas en el proceso
+ */
 function handleSignOut() {
     signOut(auth).then(() => {
         alert("Has deslogueado con éxito");
@@ -17,10 +25,19 @@ function handleSignOut() {
     });
 }
 
+/**
+ * Función que actualiza los enlaces del header.
+ * Cambia el crear cuenta por cerrar sesión.
+ * Cambia el iniciar sesión por el perfil del usuario.
+ * 
+ * @param {boolean} authenticated 
+ * @param {boolean} isVerified 
+ * @param {String} displayName 
+ */
 function actualizarEnlace(authenticated, isVerified, displayName) {
-    let enlace = document.getElementById('create_account');
-    let cuenta = document.getElementById('sign_in');
-    if (authenticated && isVerified) {
+    let enlace = document.getElementById('create_account'); //Obitiene la etiqueta enlace del hmtl
+    let cuenta = document.getElementById('sign_in'); //Obitiene la etiquieta cuenta del html
+    if (authenticated && isVerified) { //Si está verificado y tiene iniciada la sesión, hace el cambio
         if (displayName) {
             cuenta.id = 'account';
             cuenta.innerText = displayName;
@@ -53,6 +70,12 @@ function actualizarEnlace(authenticated, isVerified, displayName) {
     }
 }
 
+/**
+ * Obtiene el nombre del usuario
+ * 
+ * @param {String} uid 
+ * @returns {String} nombre del usuario loggeado
+ */
 async function getUsername(uid) {
     try {
         const userDoc = await getDoc(doc(db, "users", uid));
@@ -66,12 +89,13 @@ async function getUsername(uid) {
     }
 }
 
+/**
+ * Hace los cambios pertinentes cuando se entra en cualquier página que tenga este script
+ */
 document.addEventListener('DOMContentLoaded', function () {
     const currentPage = window.location.pathname.split('/').pop();
-
     onAuthStateChanged(auth, async (user) => {
         if (currentPage === 'index.html') {
-            // En index.html, solo actualizamos el estado del enlace (login/cuenta)
             if (user) {
                 const displayName = user.emailVerified ? await getUsername(user.uid) : "Cuenta";
                 actualizarEnlace(true, user.emailVerified, displayName);
@@ -79,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 actualizarEnlace(false, false);
             }
         } else {
-            // Para otras páginas, aplicamos toda la lógica de redirección y visualización
             const mainContainer = document.getElementById('main_container');
             if (user) {
                 if (user.emailVerified) {

@@ -8,10 +8,17 @@ import {
     onAuthStateChanged
 } from "./firebase.js";
 
+/**
+ * Método que obtiene los pdfs en la base de datos por su año, materia o ambos.
+ * 
+ * @param {String} subject 
+ * @param {Number} year 
+ * @returns {String[]} pdfsList
+ */
 async function loadPdfs(subject, year) {
     const firestoreDb = getFirestore();
     const pdfsCollection = collection(firestoreDb, "pdfs");
-        let pdfQuery;
+    let pdfQuery;
     if (subject && year) {
         pdfQuery = query(pdfsCollection, where("subject", "==", subject), where("year", "==", year));
     } else if (subject) {
@@ -21,7 +28,6 @@ async function loadPdfs(subject, year) {
     } else {
         return [];
     }
-    
     try {
         const querySnapshot = await getDocs(pdfQuery);
         const pdfs = [];
@@ -36,6 +42,13 @@ async function loadPdfs(subject, year) {
     }
 }
 
+
+/**
+ * Crea la lista con los links de los pdfs sacados anteriormente
+ * 
+ * @param {String} subject 
+ * @param {Number} year 
+ */
 async function createPdfList(subject, year) {
     const pdfs = await loadPdfs(subject, year);
     const listContainer = document.getElementById("pdfsList");
@@ -57,6 +70,10 @@ async function createPdfList(subject, year) {
     });
 }
 
+/**
+ * Evento de la página cuando se carga, que crea una lista con los links de los pdfs.
+ * Si el usuario no tiene la sesión iniciada, no hace nada.
+ */
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const subject = urlParams.get("subject");
