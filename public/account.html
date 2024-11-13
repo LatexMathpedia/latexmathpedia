@@ -65,9 +65,20 @@
         </div>
     </header>
     <main class="content">
-        <div class="main_container" id="main_container" style="display: none;">
+        <div class="main_container" id="main_container">
             <h1>TODAVÍA NO HAY NADA AQUÍ</h1>
             <h2>"Al mal tiempo, buena cara… y al hambre, ¡mucha panza!"</h2>
+            <div id = "cambiar_password">
+                <form id="change_password_form">
+                    <input type="password" id="password" placeholder="Nueva contraseña" required />
+                    <input type="password" id="repassword" placeholder="Repetir la contraseña" required />
+                    <button id="change_password" type="submit">CAMBIA LA CONTRASEÑA</button>
+                </form>
+                <form id="change_name_form">
+                    <input type="text" id="name" placeholder="Nuevo nombre" required />
+                    <button id="change_name" type="submit">CAMBIA EL NOMBRE</button>
+                </form>
+            </div>
         </div>
     </main>
     <footer>

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword } from "firebase/auth";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 import { getFirestore, setDoc, doc, query, where, collection, getDocs, getDoc,addDoc } from "firebase/firestore";
 
@@ -38,5 +38,6 @@ export {
   listAll,
   initializeApp,
   getDoc,
-  addDoc
+  addDoc,
+  updatePassword
 };
