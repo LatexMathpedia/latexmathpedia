@@ -103,18 +103,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 actualizarEnlace(false, false);
             }
         } else {
-            const mainContainer = document.getElementById('main_container');
             if (user) {
                 if (user.emailVerified) {
                     if (currentPage === 'verificar_email.html') {
                         window.location.href = 'index.html';
                     } else {
-                        if (mainContainer) mainContainer.style.display = 'flex';
                         const displayName = await getUsername(user.uid);
                         actualizarEnlace(true, true, displayName);
                     }
                 } else {
-                    if (mainContainer) mainContainer.style.display = 'none';
                     if (currentPage !== 'verificar_email.html') {
                         window.location.href = 'verificar_email.html';
                     } else {
@@ -124,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             } else {
-                if (mainContainer) mainContainer.style.display = 'none';
                 actualizarEnlace(false, false);
             }
         }
