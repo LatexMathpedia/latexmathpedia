@@ -12,7 +12,6 @@ module.exports = {
     resend_email: './src/resend_email.js',
     load_pdfs: './src/load_pdfs.js',
     admin_panel: './src/admin_panel.js',
-    account: './src/account.js',
     account_change_password: './src/account_change_password.js',
     change_name: './src/change_name.js',
   },
