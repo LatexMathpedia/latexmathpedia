@@ -20,7 +20,7 @@ document.getElementById('change_password').addEventListener('click', function (e
         alert("Las contraseñas no coinciden");
         return;
     }
-    updatePassword(user, newPassword).then(() => {
+    updatePassword(user, password).then(() => {
         alert("Has cambiado la contraseña con éxito");
     }).catch((error) => {
         alert("Algo ha salido mal.\nIntenta contactarnos por nuestras redes sociales o por el correo.");

@@ -1,4 +1,4 @@
-import { auth,onAuthStateChanged } from "firebase.js";
+import { auth,onAuthStateChanged } from "./firebase.js";
 
 /**
  * Hace los cambios pertinentes cuando se entra en cualquier página que tenga este script
