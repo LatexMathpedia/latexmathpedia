@@ -1,14 +1,9 @@
-import { auth, getFirestore, doc, updateDoc } from "./firebase.js";
+import { auth, getFirestore, doc, setDoc, onAuthStateChanged } from "./firebase.js";
 
 // Inicializar Firestore
 const firestoreDb = getFirestore();
 
-/**
- * Modifica en la base de datos el nombre del usuario
- * @param {String} id del usuario
- * @returns 
- */
-async function actualizarDocumento(id) {
+async function actualizarDocumento(userId) {
     try {
         const name = document.getElementById('name').value;
 
@@ -16,32 +11,27 @@ async function actualizarDocumento(id) {
             alert("Por favor, ingrese un nombre válido.");
             return;
         }
-        const docRef = doc(firestoreDb, 'users', id);
-        await updateDoc(docRef, { nombre: name });
+
+        const docRef = doc(firestoreDb, 'users', userId);
+        console.log("Referencia del documento:", docRef);
+        console.log("Datos a actualizar:", { nombre: name });
+
+        await setDoc(docRef, { nombre: name }, { merge: true });
         alert("Nombre cambiado con éxito");
 
     } catch (error) {
-        alert("Hubo un error al actualizar el nombre: " + error.message + "\nPor favor contactnos por privado para intentar solucionar el problema");
-
-        if (error.code === "permission-denied") {
-            alert("No tienes permisos para actualizar este documento.");
-        }
+        console.error("Error actualizando el documento:", error.message);
+        alert("Hubo un error al actualizar el nombre: " + error.message);
     }
 }
 
-/**
- * Evento del botón cambiar nombre
- */
-document.getElementById('change_name').addEventListener('click', async function (event) {
-    const user = auth.currentUser;
-    if (user) {
-        const id = user.uid;
-        console.log("Usuario autenticado con ID:", id);
-
-        await actualizarDocumento(id);
-    } else {
-        alert("Ha habido un error con la autenticación");
-        console.error("Usuario no autenticado.");
-    }
+document.getElementById('change_name').addEventListener('click', function () {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Usuario autenticado con UID:", user.uid);
+            actualizarDocumento(user.uid);
+        } else {
+            alert("El usuario no está autenticado.");
+        }
+    });
 });
-
