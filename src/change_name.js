@@ -3,6 +3,11 @@ import { auth, getFirestore, doc, updateDoc } from "./firebase.js";
 // Inicializar Firestore
 const firestoreDb = getFirestore();
 
+/**
+ * Modifica en la base de datos el nombre del usuario
+ * @param {String} id del usuario
+ * @returns 
+ */
 async function actualizarDocumento(id) {
     try {
         const name = document.getElementById('name').value;
@@ -13,18 +18,13 @@ async function actualizarDocumento(id) {
         }
 
         console.log("Nombre a actualizar:", name);
-        
-        const docRef = doc(firestoreDb, 'users', id);
-        console.log("Referencia del documento obtenida:", docRef);
 
+        const docRef = doc(firestoreDb, 'users', id);
         await updateDoc(docRef, { nombre: name });
-        console.log("Documento actualizado en Firestore");
-        
         alert("Nombre cambiado con éxito");
 
     } catch (error) {
-        console.error("Error actualizando el documento:", error.message);
-        alert("Hubo un error al actualizar el nombre: " + error.message);
+        alert("Hubo un error al actualizar el nombre: " + error.message + "\nPor favor contactnos por privado para intentar solucionar el problema");
 
         if (error.code === "permission-denied") {
             alert("No tienes permisos para actualizar este documento.");
@@ -32,7 +32,10 @@ async function actualizarDocumento(id) {
     }
 }
 
-document.getElementById('change_name').addEventListener('click', async function(event) {
+/**
+ * Evento del botón cambiar nombre
+ */
+document.getElementById('change_name').addEventListener('click', async function (event) {
     const user = auth.currentUser;
     if (user) {
         const id = user.uid;
