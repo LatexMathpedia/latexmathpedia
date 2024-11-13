@@ -16,9 +16,6 @@ async function actualizarDocumento(id) {
             alert("Por favor, ingrese un nombre válido.");
             return;
         }
-
-        console.log("Nombre a actualizar:", name);
-
         const docRef = doc(firestoreDb, 'users', id);
         await updateDoc(docRef, { nombre: name });
         alert("Nombre cambiado con éxito");
