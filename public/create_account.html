@@ -44,11 +44,11 @@
         <div class="container">
             <h2>Crear una cuenta</h2>
             <form id="create_account_form">
-                <input type="text" id="name" placeholder="Nombre" required />
-                <input type="text" id="surname" placeholder="Apellidos" required />
-                <input type="email" id="email" placeholder="Correo electrónico" required />
-                <input type="password" id="password" placeholder="Contraseña" required />
-                <input type="password" id="repassword" placeholder="Repetir la contraseña" required />
+                <input type="text" id="name" placeholder="Nombre" autocomplete="name" required />
+                <input type="text" id="surname" placeholder="Apellidos" autocomplete="family-name" required />
+                <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email" required />
+                <input type="password" id="password" placeholder="Contraseña" autocomplete="new-password" required />
+                <input type="password" id="repassword" placeholder="new-password" required />
                 <button id="create_account" type="submit">CREA UNA CUENTA</button>
             </form>
             <p>Si ya tienes una cuenta, inicia sesión <a href="sign_in.html">aquí</a></p>

@@ -106,6 +106,7 @@ header .header_div_inferior {
     width: 100%;
     background-color: var(--main-blue);
     display: flex;
+    justify-content: flex-end;
     flex-direction: row;
     align-items: center;
     padding-top: 5px;
@@ -136,12 +137,19 @@ header .login_section {
 /* Estilos generales */
 main {
     font-family: 'Oswald', sans-serif;
-    background-color: #f8f1e1; /* Color de fondo suave */
+    background-color: #f8f1e1;
+    /* Color de fondo suave */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.main_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 .container {
     background-color: #fff;
     padding: 2rem;
@@ -151,7 +159,8 @@ main {
 }
 
 h2 {
-    color: var(--light-blue); /* Color azul principal de la web */
+    color: var(--light-blue);
+    /* Color azul principal de la web */
     text-align: center;
     font-size: 3rem;
     font-weight: 600;
@@ -185,8 +194,23 @@ button {
     cursor: pointer;
 }
 
+.div_form {
+    width: 60%;
+    background-color: #e8dbc2;
+    justify-content: center;
+    margin-bottom: 5rem;
+    margin-top: 5rem;
+    border-radius: 63px 63px 63px 63px;
+    -webkit-box-shadow: 9px 6px 12px 3px var(--main-blue);
+    -moz-box-shadow: 9px 6px 12px 3px var(--main-blue);
+    box-shadow: 9px 6px 12px 3px var(--main-blue);
+    padding:5rem;
+    padding-top:3rem;
+}
+
 button:hover {
-    background-color: var(--main-blue); /* Color secundario más oscuro */
+    background-color: var(--main-blue);
+    /* Color secundario más oscuro */
 }
 
 p {

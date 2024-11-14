@@ -12,8 +12,8 @@
     <meta name="description" content="Página web de apuntes latex" />
     <meta name="robots" content="index,follow" />
     <meta name="author" content="Diego Díaz Mendaña" />
-    <link rel="stylesheet" href="styles/main_styles.css">
-    <link rel="stylesheet" href="styles/main_phone_styles.css" media="(max-width: 1114px)">
+    <link rel="stylesheet" href="styles/singin_styles.css">
+    <link rel="stylesheet" href="styles/singin_phone_styles.css" media="(max-width: 1114px)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap"
@@ -41,18 +41,6 @@
             </div>
         </div>
         <div class="header_div_inferior"> <!--rectángulo inferior del header en verde-->
-            <div id="wrapper-container">
-                <div class="input-wrapper">
-                    <input type="search" class="input" placeholder="Ingrese su búsqueda">
-
-                    <svg xmlns="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsearch_icon.svg?alt=media&token=48fc9376-ee48-44fd-8c5d-56cc2cbd71d4"
-                        class="input-icon password" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </div>
-            </div>
             <div class="container_login">
                 <ul class="nav_login_section">
                     <li><a href="sign_in.html" class="login_section" id="sign_in"
@@ -66,17 +54,20 @@
     </header>
     <main class="content">
         <div class="main_container" id="main_container">
-            <h1>TODAVÍA NO HAY NADA AQUÍ</h1>
-            <h2>"Al mal tiempo, buena cara… y al hambre, ¡mucha panza!"</h2>
-            <div id="cambiar_password">
+            <div class="div_form">
+                <h2>CAMBIA AQUÍ TU CONTRASEÑA</h2>
                 <form id="change_password_form">
-                    <input type="password" id="current_password" placeholder="Contraseña actual" required />
-                    <input type="password" id="password" placeholder="Nueva contraseña" required />
-                    <input type="password" id="repassword" placeholder="Repetir la contraseña" required />
+                    <input type="password" id="current_password" placeholder="Contraseña actual" autocomplete="current-password" required />
+                    <input type="password" id="password" placeholder="Nueva contraseña" autocomplete="new-password" required />
+                    <input type="password" id="repassword" placeholder="Repetir la contraseña" autocomplete="new-password" required />
                     <button id="change_password" type="submit">CAMBIA LA CONTRASEÑA</button>
                 </form>
+
+            </div>
+            <div class="div_form">
+                <h2>CAMBIA AQUÍ TU NOMBRE DE USUARIO</h2>
                 <form id="change_name_form">
-                    <input type="text" id="name" placeholder="Nuevo nombre" required />
+                    <input type="text" id="name" placeholder="Nuevo nombre" autocomplete="name" required />
                     <button id="change_name" type="submit">CAMBIA EL NOMBRE</button>
                 </form>
             </div>

@@ -6,10 +6,8 @@ let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        console.log("Usuario autenticado con UID:", user.uid);
         currentUser = user;
     } else {
-        console.warn("El usuario no está autenticado.");
         currentUser = null;
     }
 });
@@ -42,7 +40,6 @@ async function actualizarDocumento(event) {
         window.location.reload();
 
     } catch (error) {
-        console.error("Error actualizando el documento:", error.message);
         alert("Hubo un error al actualizar el nombre: " + error.message);
     }
 }
