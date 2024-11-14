@@ -1,9 +1,27 @@
 import { auth, getFirestore, doc, setDoc, onAuthStateChanged } from "./firebase.js";
 
-// Inicializar Firestore
-const firestoreDb = getFirestore();
 
-async function actualizarDocumento(userId) {
+const firestoreDb = getFirestore();
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("Usuario autenticado con UID:", user.uid);
+        currentUser = user;
+    } else {
+        console.warn("El usuario no está autenticado.");
+        currentUser = null;
+    }
+});
+
+async function actualizarDocumento(event) {
+    event.preventDefault();
+
+    if (!currentUser) {
+        alert("El usuario no está autenticado.");
+        return;
+    }
+
     try {
         const name = document.getElementById('name').value;
 
@@ -12,12 +30,11 @@ async function actualizarDocumento(userId) {
             return;
         }
 
-        const docRef = doc(firestoreDb, 'users', userId);
-        console.log("Referencia del documento:", docRef);
-        console.log("Datos a actualizar:", { nombre: name });
+        const docRef = doc(firestoreDb, 'users', currentUser.uid);
 
         await setDoc(docRef, { nombre: name }, { merge: true });
         alert("Nombre cambiado con éxito");
+        window.location.reload();
 
     } catch (error) {
         console.error("Error actualizando el documento:", error.message);
@@ -25,13 +42,9 @@ async function actualizarDocumento(userId) {
     }
 }
 
-document.getElementById('change_name').addEventListener('click', function () {
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("Usuario autenticado con UID:", user.uid);
-            actualizarDocumento(user.uid);
-        } else {
-            alert("El usuario no está autenticado.");
-        }
-    });
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('change_name').addEventListener('click', actualizarDocumento);
 });
+
+

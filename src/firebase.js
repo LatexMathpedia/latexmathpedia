@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, EmailAuthCredential, reauthenticateWithCredential } from "firebase/auth";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
-import { getFirestore, setDoc, doc, query, where, collection, getDocs, getDoc,addDoc,updateDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, query, where, collection, getDocs, getDoc, addDoc, updateDoc } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -14,12 +14,10 @@ const firebaseConfig = {
   measurementId: process.env.MEASUREMENT_ID,
 }
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 
 export {
-  app,
-  auth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getStorage,
@@ -40,5 +38,7 @@ export {
   getDoc,
   addDoc,
   updatePassword,
-  updateDoc
+  updateDoc,
+  EmailAuthCredential,
+  reauthenticateWithCredential
 };
