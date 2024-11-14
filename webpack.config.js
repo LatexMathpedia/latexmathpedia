@@ -14,6 +14,7 @@ module.exports = {
     admin_panel: './src/admin_panel.js',
     account_change_password: './src/account_change_password.js',
     change_name: './src/change_name.js',
+    reset_password: './src/reset_password.js',
   },
   output: {
     path: path.resolve(__dirname, 'public'),

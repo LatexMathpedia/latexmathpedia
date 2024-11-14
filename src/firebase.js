@@ -1,8 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword,EmailAuthProvider,reauthenticateWithCredential } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential, sendPasswordResetEmail, RecaptchaVerifier } from "firebase/auth";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 import { getFirestore, setDoc, doc, query, where, collection, getDocs, getDoc, addDoc, updateDoc } from "firebase/firestore";
-
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -40,5 +39,7 @@ export {
   updatePassword,
   updateDoc,
   EmailAuthProvider,
-  reauthenticateWithCredential
+  reauthenticateWithCredential,
+  sendPasswordResetEmail,
+  RecaptchaVerifier
 };
