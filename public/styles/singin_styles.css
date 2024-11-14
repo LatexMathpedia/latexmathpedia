@@ -140,22 +140,30 @@ main {
     background-color: #f8f1e1;
     /* Color de fondo suave */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.main_container{
+.main_container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
 .container {
     background-color: #fff;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 h2 {
@@ -204,8 +212,21 @@ button {
     -webkit-box-shadow: 9px 6px 12px 3px var(--main-blue);
     -moz-box-shadow: 9px 6px 12px 3px var(--main-blue);
     box-shadow: 9px 6px 12px 3px var(--main-blue);
-    padding:5rem;
-    padding-top:3rem;
+    padding: 5rem;
+    padding-top: 3rem;
+}
+
+/* Form styles */
+#reset_form {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* reCAPTCHA container */
+#recaptcha-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
 }
 
 button:hover {
