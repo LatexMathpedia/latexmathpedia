@@ -17,6 +17,10 @@ document.getElementById('change_password').addEventListener('click', function (e
         alert("Por favor, ingrese todos los campos requeridos.");
         return;
     }
+    if(newPassword.length < 6){
+        alert("La contraseña debe ser de al menos 6 caracteres");
+        return;
+    }
 
     if (newPassword !== confirmPassword) {
         alert("Las contraseñas no coinciden.");

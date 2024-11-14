@@ -30,6 +30,11 @@ async function actualizarDocumento(event) {
             return;
         }
 
+        if(name.length > 150){
+            alert("El nombre no puede tener más de 150 carácteres.\nIngrese uno más corto por favor.");
+            return;
+        }
+
         const docRef = doc(firestoreDb, 'users', currentUser.uid);
 
         await setDoc(docRef, { nombre: name }, { merge: true });

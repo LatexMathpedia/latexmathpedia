@@ -45,15 +45,27 @@ document.getElementById('create_account').addEventListener('click', function (ev
     return;
   }
   if (!name) {
-    alert("Por favor ingresa tu nombre");
+    alert("Por favor ingresa un nombre");
+    return;
+  }
+  if(name.length > 150){
+    alert("El nombre no puede tener más de 150 carácteres");
     return;
   }
   if (!surname) {
     alert("Por favor ingresa tus apellidos");
     return;
   }
+  if(surname.length > 255){
+    alert("El apellido es demasiado largo");
+    return;
+  }
   if (password !== rePassword) {
     alert("Las contraseñas no coinciden");
+    return;
+  }
+  if(password.lenght < 6){
+    alert("La contraseña tiene que tener al menos 6 carácteres");
     return;
   }
   const usersCollection = collection(firestoreDb, "users");
