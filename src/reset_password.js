@@ -1,7 +1,3 @@
-/**
- * Firebase authentication imports for password reset functionality
- * @module reset_password
- */
 import { auth, sendPasswordResetEmail, RecaptchaVerifier } from "./firebase.js";
 
 /**
@@ -35,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param {string} email - The email address to validate
      * @returns {boolean} True if email is valid, false otherwise
      */
-    function validateEmail(email) {
+    const validateEmail = (email) => {
         return email && email.match(/^[^\s@]+@uniovi\.es$/);
     }
 
@@ -45,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
      * @throws {Error} If email is invalid or reset process fails
      * @returns {Promise<void>} 
      */
-    async function handlePasswordReset(email) {
+    const handlePasswordReset = async (email) => {
         if (!validateEmail(email)) {
             throw new Error('Email inválido');
         }

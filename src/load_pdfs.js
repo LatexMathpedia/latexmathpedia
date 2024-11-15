@@ -11,9 +11,12 @@ import {
 /**
  * Método que obtiene los pdfs en la base de datos por su año, materia o ambos.
  * 
- * @param {String} subject 
- * @param {Number} year 
- * @returns {String[]} pdfsList
+ * @param {String} [subject]
+ * @param {Number} [year]
+ * @returns {Promise<String[]>} pdfsList
+ * 
+ * @async
+ * @function loadPdfs
  */
 async function loadPdfs(subject, year) {
     const firestoreDb = getFirestore();
@@ -47,9 +50,14 @@ async function loadPdfs(subject, year) {
  * Crea la lista con los links de los pdfs sacados anteriormente
  * 
  * @param {String} subject 
- * @param {Number} year 
+ * @param {Number} year
+ * 
+ * @returns {Promise<void>}
+ * 
+ * @async
+ * @function createPdfList 
  */
-async function createPdfList(subject, year) {
+const createPdfList = async (subject, year) => {
     const pdfs = await loadPdfs(subject, year);
     const listContainer = document.getElementById("pdfsList");
     listContainer.innerHTML = "";
@@ -73,6 +81,8 @@ async function createPdfList(subject, year) {
 /**
  * Evento de la página cuando se carga, que crea una lista con los links de los pdfs.
  * Si el usuario no tiene la sesión iniciada, no hace nada.
+ * 
+ * @event window.onload
  */
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -80,7 +90,7 @@ window.onload = () => {
     const year = parseInt(urlParams.get("year"), 10);
 
     if (!subject && isNaN(year)) {
-        alert("Página vacía\nDe momento no hay nada aquí oh");
+        alert("Página vacía\nDe momento no hay nada aquí oh"); // Avisar al usuario que no hay nada en la página
         return;
     }
 
@@ -88,7 +98,7 @@ window.onload = () => {
         if (user) {
             await createPdfList(subject, !isNaN(year) ? year : null);
         } else {
-            alert("Debes iniciar sesión para ver esta página.");
+            alert("Debes iniciar sesión para ver esta página."); // Avisar al usuario que debe iniciar sesión
             window.location.href = "sign_in.html";
         }
     });

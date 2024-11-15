@@ -28,11 +28,14 @@ document.getElementById('create_account').addEventListener('click', function (ev
   const rePassword = document.getElementById('repassword').value;
   const firestoreDb = getFirestore();
 
+  const emailPattern = new RegExp('^[a-zA-Z0-9._%+-]+@uniovi.es$');
+  const nameRegex = new RegExp('^[^\s]{1,150}$');
+
   if (!email) {
     alert("Por favor ingresa tu correo");
     return;
   }
-  if (!email.endsWith('@uniovi.es')) {
+  if (!email.match(emailPattern)) {
     alert("Por favor ingresa un correo de UNIOVI válido");
     return;
   }
@@ -48,15 +51,15 @@ document.getElementById('create_account').addEventListener('click', function (ev
     alert("Por favor ingresa un nombre");
     return;
   }
-  if(name.length > 150){
-    alert("El nombre no puede tener más de 150 carácteres");
+  if (!name.match(nameRegex)) {
+    alert("Por favor, ingrese un nombre válido sin espacios y con una longitud entre 1 y 150 caracteres.");
     return;
   }
   if (!surname) {
     alert("Por favor ingresa tus apellidos");
     return;
   }
-  if(surname.length > 255){
+  if (surname.length > 255) {
     alert("El apellido es demasiado largo");
     return;
   }
@@ -64,13 +67,12 @@ document.getElementById('create_account').addEventListener('click', function (ev
     alert("Las contraseñas no coinciden");
     return;
   }
-  if(password.lenght < 6){
+  if (password.length < 6) {
     alert("La contraseña tiene que tener al menos 6 carácteres");
     return;
   }
   const usersCollection = collection(firestoreDb, "users");
   const emailQuery = query(usersCollection, where("email", "==", email));
-
   getDocs(emailQuery).then((querySnapshot) => {
     if (!querySnapshot.empty) {
       alert("Email ya registrado, no se puede crear cuenta");
@@ -99,12 +101,13 @@ document.getElementById('create_account').addEventListener('click', function (ev
 
           setTimeout(() => {
             window.location.href = 'verificar_email.html';
-          }, 1500);
+          }, 1000);
         })
         .catch((error) => {
           alert("Hubo un error: " + error.message);
         });
     }
   }).catch((error) => {
+    alert("Hubo un error: " + error.message);
   });
 });

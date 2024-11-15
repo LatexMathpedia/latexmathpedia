@@ -13,6 +13,8 @@ import {
  * Evento del boton sign in.
  * Alerta al usuario si no rellena email o contraseña.
  * Cuando se inicia sesión con éxito, se envia a index.html.
+ * 
+ * @listens click
  */
 document.getElementById('sign_in').addEventListener('click', function (event) {
   event.preventDefault();

@@ -16,9 +16,12 @@ onAuthStateChanged(auth, (user) => {
 /**
  * Función asincrónica para actualizar el documento del usuario
  * @param {Event} event - El evento que desencadena la función
- * @returns {void}
+ * @returns {Promise<void>}
+ * 
+ * @async
+ * @function actualizarDocumento
  */
-async function actualizarDocumento(event) {
+const actualizarDocumento = async (event) => {
     event.preventDefault(); // Previene el comportamiento por defecto del evento
 
     // Verifica si el usuario está autenticado
@@ -34,7 +37,7 @@ async function actualizarDocumento(event) {
         const nameRegex = /^[^\s]{1,150}$/;
 
         // Verifica si el nombre cumple con la expresión regular
-        if (!nameRegex.test(name)) {
+        if (!name.match(nameRegex)) {
             alert("Por favor, ingrese un nombre válido sin espacios y con una longitud entre 1 y 150 caracteres.");
             return;
         }
@@ -55,7 +58,8 @@ async function actualizarDocumento(event) {
 
 /**
  * Añade un event listener para ejecutar la función actualizarDocumento cuando el DOM esté cargado
- * @returns {void}
+ * 
+ * @listens DOMContentLoaded
  */
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('change_name').addEventListener('click', actualizarDocumento);

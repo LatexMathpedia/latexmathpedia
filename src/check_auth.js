@@ -3,25 +3,36 @@ import { auth, onAuthStateChanged, signOut, getFirestore, doc, getDoc } from "./
 const db = getFirestore(); //Inicializa la database de firestore
 
 /**
- * Funcion para chequear si el usuaria está verificado por mail.
+ * Función que comprueba si el email del usuario ha sido verificado o no.
+ * Si ha sido verificado, redirige al usuario a la página principal.
  * 
- * @param {User} user
+ * @param {Object} user
+ * @returns {Promise<void>}
+ * 
+ * @async
+ * @function checkEmailVerification
  */
-async function checkEmailVerification(user) {
+const checkEmailVerification = async (user) => {
     await user.reload();
     if (user.emailVerified) {
         window.location.href = 'index.html';
     }
 }
 
+
 /**
  * Funcion que desloguea al usuario y le avisa si no hubo problemas en el proceso
+ * 
+ * @returns {void}
+ * 
+ * @function handleSignOut
  */
-function handleSignOut() {
+const handleSignOut = () => {
     signOut(auth).then(() => {
         alert("Has deslogueado con éxito");
         window.location.href = 'sign_in.html';
     }).catch((error) => {
+        alert("Ha habido un error al desloguear: " + error.message);
     });
 }
 
@@ -32,13 +43,18 @@ function handleSignOut() {
  * 
  * @param {boolean} authenticated 
  * @param {boolean} isVerified 
- * @param {String} displayName 
+ * @param {String} [displayName]
+ * 
+ * @returns {Promise<void>}
+ * 
+ * @function actualizarEnlace
  */
-function actualizarEnlace(authenticated, isVerified, displayName) {
+const actualizarEnlace = (authenticated, isVerified, displayName) => {
     let enlace = document.getElementById('create_account'); //Obitiene la etiqueta enlace del hmtl
     let cuenta = document.getElementById('sign_in'); //Obitiene la etiquieta cuenta del html
     if (authenticated && isVerified) { //Si está verificado y tiene iniciada la sesión, hace el cambio
         if (displayName) {
+            //Cambia el enlace de crear cuenta por cerrar sesión y el de iniciar sesión por el perfil del usuario
             cuenta.id = 'account';
             cuenta.innerText = displayName;
             cuenta.href = 'account.html';
@@ -49,7 +65,7 @@ function actualizarEnlace(authenticated, isVerified, displayName) {
             enlace.ariaLabel = 'Link que te permite cerrar la sesión';
             enlace.replaceWith(enlace.cloneNode(true));
             enlace = document.getElementById('sign_out');
-            enlace.addEventListener('click', function (event) {
+            enlace.addEventListener('click', (event) => {
                 event.preventDefault();
                 if (auth.currentUser) {
                     handleSignOut();
@@ -59,6 +75,7 @@ function actualizarEnlace(authenticated, isVerified, displayName) {
             });
         }
     } else {
+        //Si no está verificado o no tiene iniciada la sesión, cambia el enlace de cerrar sesión por crear cuenta y el de perfil por iniciar sesión
         enlace.id = 'create_account';
         enlace.innerText = 'Registrarse';
         enlace.href = 'create_account.html';
@@ -71,12 +88,16 @@ function actualizarEnlace(authenticated, isVerified, displayName) {
 }
 
 /**
- * Obtiene el nombre del usuario
+ * Función que obtiene el nombre del usuario loggeado
  * 
  * @param {String} uid 
- * @returns {String} nombre del usuario loggeado
+ * 
+ * @returns {Promise<String>} nombre del usuario loggeado
+ * 
+ * @async
+ * @function getUsername
  */
-async function getUsername(uid) {
+const getUsername = async (uid) => {
     try {
         const userDoc = await getDoc(doc(db, "users", uid));
         if (userDoc.exists()) {
@@ -91,6 +112,8 @@ async function getUsername(uid) {
 
 /**
  * Hace los cambios pertinentes cuando se entra en cualquier página que tenga este script
+ *
+ * @listens DOMContentLoaded
  */
 document.addEventListener('DOMContentLoaded', function () {
     const currentPage = window.location.pathname.split('/').pop();
@@ -117,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else {
                         let interval = setInterval(async () => {
                             await checkEmailVerification(user);
-                        }, 3000);
+                        }, 1500);
                     }
                 }
             } else {
