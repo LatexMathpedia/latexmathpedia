@@ -205,8 +205,23 @@ ul li .section {
   border-radius: 25px;
 }
 
+.year-section {
+  width: 150px;
+  height: 150px;
+  margin-right: 15px;
+  border-radius: 25px;
+}
+
+.year-section:hover {
+  background-color: var(--light-blue);
+}
+
 .section:hover {
   background-color: var(--light-blue);
+}
+
+.selected {
+  background-color: var(--main-blue);
 }
 
 .main_nav {

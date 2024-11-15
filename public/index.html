@@ -72,43 +72,43 @@
       <h2 class="container-title">Asignaturas</h2>
       <nav class="main_nav">
         <ul class="nav_section">
-          <button class="section" onclick="window.location.href='subject.html?subject=Analisis'">
+          <button class="section" onclick="selectSubject('Analisis')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c"
               alt="Matemáticas" class="section-img">
             <p class="item-title">ANÁLSIS</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?subject=Estructuras'">
+          <button class="section" onclick="selectSubject('Estructuras')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fgrafo_logo.svg?alt=media&token=5885b88d-5e0f-4c1f-9c3d-306ac47e9322"
               alt="Matemáticas" class="section-img">
             <p class="item-title">ESTRUCTURAS</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?Estadistica'">
+          <button class="section" onclick="selectSubject('Estadistica')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fpye_logo.svg?alt=media&token=d522140a-5799-45ca-9689-2714a0f1b89b"
               alt="Matemáticas" class="section-img">
             <p class="item-title">ESTADÍSTICA</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?subject=Topologia'">
+          <button class="section" onclick="selectSubject('Topologia')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Ftau_logo.svg?alt=media&token=5264c68b-fe77-47ae-b469-301d06328dfd"
               alt="Matemáticas" class="section-img">
             <p class="item-title">TOPOLOGÍA</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?subject=Java'">
+          <button class="section" onclick="selectSubject('Java')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fjava_logo.svg?alt=media&token=ad8cd984-e822-46bb-8bdd-3786270fb6bf"
               alt="Matemáticas" class="section-img">
             <p class="item-title">JAVA</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?subject=Algebra'">
+          <button class="section" onclick="selectSubject('Algebra')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2FALGEBRA_LOGO.svg?alt=media&token=a9e6faad-fc81-4d76-a37d-01a7c3c65d38"
               alt="Matemáticas" class="section-img">
             <p class="item-title">ALGEBRA</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?subject=Logica'" id="last_item_section">
+          <button class="section" onclick="selectSubject('Logica')" id="last_item_section">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Flogica.svg?alt=media&token=3f8c8e2d-a4d8-4f13-8139-012a901ef1ac"
               alt="Matemáticas" class="section-img">
@@ -119,16 +119,16 @@
       <h2 class="container-title">Cursos</h2>
       <nav class="main_nav">
         <ul class="nav_section">
-          <button class="section" onclick="window.location.href='subject.html?year=1'">
+          <button class="year-section" onclick="selectYear(this,1)">
             <p class="item-number">1º</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?year=2'">
+          <button class="year-section" onclick="selectYear(this,2)">
             <p class="item-number">2º</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?year=3'">
+          <button class="year-section" onclick="selectYear(this,3)">
             <p class="item-number">3º</p>
           </button>
-          <button class="section" onclick="window.location.href='subject.html?year=4'">
+          <button class="year-section" onclick="selectYear(this,4)">
             <p class="item-number">4º</p>
           </button>
         </ul>
@@ -154,6 +154,49 @@
       </div>
     </div>
   </footer>
+  <script>
+    /*
+    * Función que selecciona el año de la carrera
+    * @param {HTMLElement} button - Botón que se ha seleccionado
+    * @param {number} year - Año de la carrera
+    * @returns {void}
+    * 
+    * @function selectYear
+    */
+    const selectYear = (button, year) => {
+      if (button.classList.contains('selected')) {
+        button.classList.remove('selected');
+        localStorage.removeItem('selectedYear');
+        return;
+      } else {
+        const yearButtons = document.querySelectorAll('.year-section');
+        yearButtons.forEach(button => button.classList.remove('selected'));
+        button.classList.add('selected');
+        localStorage.setItem('selectedYear', year);
+      }
+    }
+
+    /*
+    * Función que selecciona la asignatura
+    * 
+    * @param {string} subject - Asignatura seleccionada
+    * @returns {void}
+    * 
+    * @function selectSubject
+    */
+    const selectSubject = (subject) => {
+      const year = localStorage.getItem('selectedYear');
+      if (year) {
+        window.location.href = `subject.html?year=${year}&subject=${subject}`;
+      } else {
+        window.location.href = `subject.html?subject=${subject}`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      localStorage.removeItem('selectedYear');
+    });
+  </script>
   <script src="index.bundle.js" defer></script>
   <script src="check_auth.bundle.js" defer></script>
 </body>
