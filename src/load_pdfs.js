@@ -51,13 +51,14 @@ async function loadPdfs(subject, year) {
  * 
  * @param {String} subject 
  * @param {Number} year
+ * @param {String} [searchTerm]
  * 
  * @returns {Promise<void>}
  * 
  * @async
  * @function createPdfList 
  */
-const createPdfList = async (subject, year) => {
+const createPdfList = async (subject, year, searchTerm = "") => {
     const pdfs = await loadPdfs(subject, year);
     const listContainer = document.getElementById("pdfsList");
     listContainer.innerHTML = "";
@@ -67,16 +68,33 @@ const createPdfList = async (subject, year) => {
     }
     pdfs.sort((a, b) => a.name.localeCompare(b.name));
     pdfs.forEach((pdf) => {
-        const listItem = document.createElement("p");
-        const link = document.createElement("a");
-        link.href = pdf.href;
-        link.textContent = pdf.name;
-        link.target = "_blank";
-        link.className = "pItem";
-        listItem.appendChild(link);
-        listContainer.appendChild(listItem);
+        if (pdf.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            const listItem = document.createElement("p");
+            const link = document.createElement("a");
+            link.href = pdf.href;
+            link.textContent = pdf.name;
+            link.target = "_blank";
+            link.className = "pItem";
+            listItem.appendChild(link);
+            listContainer.appendChild(listItem);
+        }
     });
 }
+
+
+/**
+ * Evento que se activa cuando el usuario escribe en el input de búsqueda.
+ * 
+ * @listens input
+ */
+document.getElementById("search").addEventListener("input", async (event) => {
+    const searchTerm = event.target.value;
+    const urlParams = new URLSearchParams(window.location.search);
+    const subject = urlParams.get("subject");
+    const year = parseInt(urlParams.get("year"), 10);
+
+    createPdfList(subject, year, searchTerm);
+});
 
 /**
  * Evento de la página cuando se carga, que crea una lista con los links de los pdfs.
