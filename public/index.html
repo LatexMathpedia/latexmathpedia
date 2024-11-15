@@ -36,16 +36,19 @@
   <header>
     <div class="header_div_superior"> <!--rectángulo superior del header en negro-->
       <div class="header_div_logo">
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b"
-          alt="Logo mathsTexPedia" class="header_img_logo">
-        <a href="" class="header_title" aria-label="Link que te lleva a la pagina principal">The Math Texpedia</a>
+        <a href="index.html" aria-label="Link que te lleva a la página principal">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b"
+            alt="Logo mathsTexPedia" class="header_img_logo">
+        </a>
+        <a href="index.html" class="header_title" aria-label="Link que te lleva a la pagina principal">The Math
+          Texpedia</a>
       </div>
     </div>
     <div class="header_div_inferior"> <!--rectángulo inferior del header en verde-->
       <div id="wrapper-container">
         <div class="input-wrapper">
-          <input type="search" class="input" placeholder="Ingrese su búsqueda">
+          <input type="search" id="search" class="input" placeholder="Ingrese su búsqueda">
 
           <!-- <svg
             xmlns="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsearch_icon.svg?alt=media&token=48fc9376-ee48-44fd-8c5d-56cc2cbd71d4"
@@ -69,6 +72,23 @@
   </header>
   <main class="content">
     <div class="main_container" id="main_container" style="display: flex;">
+      <h2 class="container-title">Cursos</h2>
+      <nav class="main_nav">
+        <ul class="nav_section">
+          <button class="year-section" onclick="selectYear(this,1)">
+            <p class="item-number">1º</p>
+          </button>
+          <button class="year-section" onclick="selectYear(this,2)">
+            <p class="item-number">2º</p>
+          </button>
+          <button class="year-section" onclick="selectYear(this,3)">
+            <p class="item-number">3º</p>
+          </button>
+          <button class="year-section" onclick="selectYear(this,4)">
+            <p class="item-number">4º</p>
+          </button>
+        </ul>
+      </nav>
       <h2 class="container-title">Asignaturas</h2>
       <nav class="main_nav">
         <ul class="nav_section">
@@ -76,7 +96,7 @@
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c"
               alt="Matemáticas" class="section-img">
-            <p class="item-title">ANÁLSIS</p>
+            <p class="item-title">ANÁLISIS</p>
           </button>
           <button class="section" onclick="selectSubject('Estructuras')">
             <img
@@ -113,23 +133,6 @@
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Flogica.svg?alt=media&token=3f8c8e2d-a4d8-4f13-8139-012a901ef1ac"
               alt="Matemáticas" class="section-img">
             <p class="item-title">LÓGICA</p>
-          </button>
-        </ul>
-      </nav>
-      <h2 class="container-title">Cursos</h2>
-      <nav class="main_nav">
-        <ul class="nav_section">
-          <button class="year-section" onclick="selectYear(this,1)">
-            <p class="item-number">1º</p>
-          </button>
-          <button class="year-section" onclick="selectYear(this,2)">
-            <p class="item-number">2º</p>
-          </button>
-          <button class="year-section" onclick="selectYear(this,3)">
-            <p class="item-number">3º</p>
-          </button>
-          <button class="year-section" onclick="selectYear(this,4)">
-            <p class="item-number">4º</p>
           </button>
         </ul>
       </nav>
@@ -195,6 +198,30 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('selectedYear');
+    });
+
+    const removeAccents = (text) => {
+      return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    const removeSpaces = (text) => {
+      return removeAccents(text).replace(/\s/g, '');
+    }
+
+    const searchSubjects = (searchTerm) => {
+      const subjects = document.querySelectorAll('.section');
+      subjects.forEach(subject => {
+        const title = subject.querySelector('.item-title').textContent.toLowerCase().trim();
+        if (removeSpaces(title).includes(removeSpaces(searchTerm.toLowerCase().trim()))) {
+          subject.style.display = 'block';
+        } else {
+          subject.style.display = 'none';
+        }
+      })
+    }
+
+    document.getElementById('search').addEventListener('input', (event) => {
+      searchSubjects(event.target.value);
     });
   </script>
   <script src="index.bundle.js" defer></script>

@@ -68,7 +68,9 @@ const createPdfList = async (subject, year, searchTerm = "") => {
     }
     pdfs.sort((a, b) => a.name.localeCompare(b.name));
     pdfs.forEach((pdf) => {
-        if (pdf.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        const name = removeSpaces(pdf.name.toLowerCase().trim());
+        const search = removeSpaces(searchTerm.toLowerCase().trim());
+        if (name.includes(search)) {
             const listItem = document.createElement("p");
             const link = document.createElement("a");
             link.href = pdf.href;
@@ -81,43 +83,75 @@ const createPdfList = async (subject, year, searchTerm = "") => {
     });
 }
 
+/**
+ * Método que elimina los espacios de un texto.
+ * 
+ * @param {String} text 
+ * @returns {String} text sin espacios
+ * 
+ * @function removeSpaces
+ */
+const removeSpaces = (text) => {
+    if (typeof text !== 'string') {
+        return '';
+    }
+    return removesAccents(text).replace(/[\s_\/-]+/g, '');
+}
 
 /**
- * Evento que se activa cuando el usuario escribe en el input de búsqueda.
+ * Método que elimina los acentos de un texto.
  * 
- * @listens input
+ * @param {String} text 
+ * @returns {String} text sin acentos
  */
-document.getElementById("search").addEventListener("input", async (event) => {
-    const searchTerm = event.target.value;
-    const urlParams = new URLSearchParams(window.location.search);
-    const subject = urlParams.get("subject");
-    const year = parseInt(urlParams.get("year"), 10);
+const removesAccents = (text) => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
-    createPdfList(subject, year, searchTerm);
+/**
+ * Eventos de la página
+ * 
+ * @listens DOMContentLoaded
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    /**
+     * Evento que se activa cuando el usuario escribe en el input de búsqueda.
+     * 
+     * @listens input
+     */
+    document.getElementById('search').addEventListener('input', async (event) => {
+        const searchTerm = event.target.value;
+        const urlParams = new URLSearchParams(window.location.search);
+        const subject = urlParams.get('subject');
+        const year = parseInt(urlParams.get('year'), 10);
+
+        createPdfList(subject, year, searchTerm);
+    });
+
+    /**
+     * Evento de la página cuando se carga, que crea una lista con los links de los pdfs.
+     * Si el usuario no tiene la sesión iniciada, no hace nada.
+     * 
+     * @event window.onload
+     */
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const subject = urlParams.get("subject");
+        const year = parseInt(urlParams.get("year"), 10);
+
+        if (!subject && isNaN(year)) {
+            alert("Página vacía\nDe momento no hay nada aquí oh"); // Avisar al usuario que no hay nada en la página
+            return;
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await createPdfList(subject, !isNaN(year) ? year : null);
+            } else {
+                alert("Debes iniciar sesión para ver esta página."); // Avisar al usuario que debe iniciar sesión
+                window.location.href = "sign_in.html";
+            }
+        });
+    };
 });
 
-/**
- * Evento de la página cuando se carga, que crea una lista con los links de los pdfs.
- * Si el usuario no tiene la sesión iniciada, no hace nada.
- * 
- * @event window.onload
- */
-window.onload = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const subject = urlParams.get("subject");
-    const year = parseInt(urlParams.get("year"), 10);
-
-    if (!subject && isNaN(year)) {
-        alert("Página vacía\nDe momento no hay nada aquí oh"); // Avisar al usuario que no hay nada en la página
-        return;
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            await createPdfList(subject, !isNaN(year) ? year : null);
-        } else {
-            alert("Debes iniciar sesión para ver esta página."); // Avisar al usuario que debe iniciar sesión
-            window.location.href = "sign_in.html";
-        }
-    });
-};
