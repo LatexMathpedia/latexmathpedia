@@ -1,8 +1,9 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
     index: './src/index.js',
     firebase: './src/firebase.js',
@@ -20,7 +21,10 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
     filename: '[name].bundle.js',
   },
-  mode: 'development',
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   plugins: [
     new Dotenv(safe = true),
   ],
@@ -33,6 +37,11 @@ module.exports = {
   },
   module: {
     rules: [],
+  },
+  performance: {
+    hints: 'warning',
+    maxEntrypointSize: 512000, // 500 KiB
+    maxAssetSize: 512000, // 500 KiB
   },
 };
 
