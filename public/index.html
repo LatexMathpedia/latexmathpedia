@@ -2,16 +2,33 @@
 <html lang="es">
 
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-KS34LQT7');</script>
+  <!-- End Google Tag Manager -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta property="og:site_name" content="The Math Texpedia" />
+  <meta property="og:title" content="The Math Texpedia - Apuntes de Matemáticas en LaTeX" />
   <title>The Math Texpedia</title>
   <link rel="icon"
     href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
     type="image/x-icon" />
-  <meta name="description" content="Página web de apuntes latex" />
+  <meta name="description" content="Biblioteca de apuntes matemáticos en formato LaTeX" />
   <meta name="robots" content="index,follow" />
   <meta name="author" content="Diego Díaz Mendaña" />
+  <meta name="keywords" content="latex, matemáticas, apuntes, universidad, educación" />
+  <meta name="og:title" content="The Math Texpedia - Apuntes de Matemáticas en LaTeX" />
+  <meta name="og:description" content="Biblioteca de apuntes matemáticos en formato LaTeX" />
+  <meta name="og:image"
+    content="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661" />
   <link rel="stylesheet" href="styles/main_styles.css">
   <link rel="stylesheet" href="styles/main_phone_styles.css" media="(max-width: 1114px)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +50,10 @@
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KS34LQT7" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
   <header>
     <div class="header_div_superior"> <!--rectángulo superior del header en negro-->
       <div class="header_div_logo">
@@ -89,7 +110,7 @@
           </button>
         </ul>
       </nav>
-      <h2 class="container-title">Asignaturas</h2>
+      <h2 class="container-title" id="subject-title">Asignaturas</h2>
       <nav class="main_nav">
         <ul class="nav_section">
           <button class="section" onclick="selectSubject('Analisis')">
@@ -157,7 +178,7 @@
       </div>
     </div>
   </footer>
-  <script type = "module" src="div_dinamic.bundle.js" defer></script>
+  <script type="module" src="div_dinamic.bundle.js" defer></script>
   <script src="index.bundle.js" defer></script>
   <script src="check_auth.bundle.js" defer></script>
 </body>

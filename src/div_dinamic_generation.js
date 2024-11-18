@@ -6,6 +6,10 @@ const firestoreDb = getFirestore();
  * Función que selecciona el año de la carrera
  * @param {HTMLElement} button - Botón que se ha seleccionado
  * @param {number} year - Año de la carrera
+ * 
+ * @returns {Promise<void>}
+ * @async
+ * @function selectYear
  */
 const selectYear = async (button, year) => {
     // Manejar deselección
@@ -52,6 +56,16 @@ const selectYear = async (button, year) => {
             const subjectName = section.querySelector('.item-title').textContent;
             const normalizedName = removeAccents(subjectName);
             section.style.display = subjectsWithPdfs.has(normalizedName) ? 'block' : 'none';
+            const subjectTitle = document.getElementById('subject-title');
+            if (subjectTitle) {
+                const yearNames = {
+                    1: 'Asignaturas de primero',
+                    2: 'Asignaturas de segundo',
+                    3: 'Asignaturas de tercero',
+                    4: 'Asignaturas de cuarto'
+                };
+                subjectTitle.textContent = yearNames[year] || 'Asignaturas';
+            }
         });
     } catch (error) {
         console.error('Error al cargar asignaturas:', error);
@@ -60,19 +74,25 @@ const selectYear = async (button, year) => {
 }
 
 /**
- * Muestra todas las asignaturas
+ * Muestra todas las asignaturas y actualiza el título
  */
-function showAllSubjects() {
+const showAllSubjects = ()=> {
     document.querySelectorAll('.section').forEach(section => {
         section.style.display = 'block';
     });
+    
+    // Actualizar el título cuando no hay año seleccionado
+    const subjectTitle = document.getElementById('subject-title');
+    if (subjectTitle) {
+        subjectTitle.textContent = 'Asignaturas';
+    }
 }
 
 /**
  * Función que selecciona la asignatura
  * @param {string} subject - Asignatura seleccionada
  */
-export function selectSubject(subject) {
+export const selectSubject = (subject)=> {
     const year = localStorage.getItem('selectedYear');
     if (year) {
         window.location.href = `subject.html?year=${year}&subject=${subject}`;
@@ -90,6 +110,12 @@ export const searchSubjects = (searchTerm)=> {
     const yearButtons = document.querySelectorAll('.year-section');
     yearButtons.forEach(btn => btn.classList.remove('selected'));
     localStorage.removeItem('selectedYear');
+
+    // Actualizar el título cuando se realiza una búsqueda
+    const subjectTitle = document.getElementById('subject-title');
+    if (subjectTitle) {
+        subjectTitle.textContent = 'Asignaturas';
+    }
 
     // Realizar búsqueda
     const subjects = document.querySelectorAll('.section');
