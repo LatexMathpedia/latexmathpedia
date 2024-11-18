@@ -16,6 +16,7 @@ module.exports = {
     account_change_password: './src/account_change_password.js',
     change_name: './src/change_name.js',
     reset_password: './src/reset_password.js',
+    div_dinamic: './src/div_dinamic_generation.js',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
