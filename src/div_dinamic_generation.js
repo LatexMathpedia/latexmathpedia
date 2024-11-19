@@ -95,9 +95,9 @@ const showAllSubjects = ()=> {
 export const selectSubject = (subject)=> {
     const year = localStorage.getItem('selectedYear');
     if (year) {
-        window.location.href = `subject.html?year=${year}&subject=${subject}`;
+        window.location.href = `/subject/${year}/${subject}`;
     } else {
-        window.location.href = `subject.html?subject=${subject}`;
+        window.location.href = `/subject/${subject}`;
     }
 }
 
