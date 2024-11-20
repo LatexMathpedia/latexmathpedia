@@ -23,16 +23,6 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "/subject/:year/:subject",
-        "destination": "/subject.html?year=:year&subject=:subject"
-      },
-      {
-        "source": "/subject/:subject",
-        "destination": "/subject.html?subject=:subject"
-      }
-    ],
     "cleanUrls": true,
     "trailingSlash": false,
     "headers": [

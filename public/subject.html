@@ -71,6 +71,47 @@
         <div id="pdfsList"></div>
     </div>
 </main>
+<div id="disqus_thread"></div>
+<script>
+    function loadDisqus() {
+        try {
+            var disqus_config = function () {
+                // Get URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const subject = urlParams.get('subject');
+                const year = urlParams.get('year');
+
+                // Set unique identifier based on parameters
+                this.page.url = window.location.href;
+                this.page.identifier = subject + (year ? `-${year}` : '');
+                this.page.title = `${subject}${year ? ` - Año ${year}` : ''}`;
+            };
+
+            // Load Disqus
+            const script = document.createElement('script');
+            script.src = 'https://mathtexpedia.disqus.com/embed.js';
+            script.setAttribute('data-timestamp', +new Date());
+            
+            script.onerror = function() {
+                console.error('Failed to load Disqus comments');
+                document.getElementById('disqus_thread').innerHTML = 
+                    '<p>Lo sentimos, los comentarios no están disponibles en este momento.</p>';
+            };
+
+            (document.head || document.body).appendChild(script);
+        } catch (error) {
+            console.error('Error loading Disqus:', error);
+        }
+    }
+
+    // Load when DOM is ready
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        loadDisqus();
+    } else {
+        document.addEventListener('DOMContentLoaded', loadDisqus);
+    }
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <footer>
     <div class="footer_main_container">
         <div class="footer_left_section">©The Math Texpedia</div>

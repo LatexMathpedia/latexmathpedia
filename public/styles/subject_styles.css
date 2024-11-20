@@ -176,6 +176,26 @@ main{
 .pItem:hover{
   color: var(--light-blue);
 }
+#disqus_thread {
+  width: 100%;
+  max-width: 1200px;
+  max-height: 600px; /* Add fixed height */
+  overflow-y: auto; /* Enable vertical scroll */
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #disqus_thread {
+      margin: 1rem;
+      padding: 0.5rem;
+      max-height: 400px; /* Smaller height for mobile */
+  }
+}
 
 /*Estilos del footer*/
 

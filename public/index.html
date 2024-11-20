@@ -158,6 +158,42 @@
         </ul>
       </nav>
     </div>
+    <div id="disqus_thread"></div>
+<script>
+    // Disqus Configuration with error handling
+    function loadDisqus() {
+        try {
+            var disqus_config = function () {
+                this.page.url = window.location.origin + window.location.pathname;
+                this.page.identifier = window.location.pathname.replace(/\//g, '-');
+                this.page.title = document.title;
+            };
+
+            // Load Disqus
+            const script = document.createElement('script');
+            script.src = 'https://mathtexpedia.disqus.com/embed.js';
+            script.setAttribute('data-timestamp', +new Date());
+            
+            script.onerror = function() {
+                console.error('Failed to load Disqus comments');
+                document.getElementById('disqus_thread').innerHTML = 
+                    '<p>Lo sentimos, los comentarios no están disponibles en este momento.</p>';
+            };
+
+            (document.head || document.body).appendChild(script);
+        } catch (error) {
+            console.error('Error loading Disqus:', error);
+        }
+    }
+
+    // Load when DOM is ready
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        loadDisqus();
+    } else {
+        document.addEventListener('DOMContentLoaded', loadDisqus);
+    }
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </main>
   <footer>
     <div class="footer_main_container">
@@ -182,5 +218,4 @@
   <script src="index.bundle.js" defer></script>
   <script src="check_auth.bundle.js" defer></script>
 </body>
-
 </html>
