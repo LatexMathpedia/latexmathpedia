@@ -1,3 +1,9 @@
+/* Añadir al inicio de main_styles.css */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 /* Orden para generar los estilos, no es obligatorio pero es buena práctica.
 1. Posicionamiento
 2. Modelo de caja (box model)
@@ -304,4 +310,25 @@ footer img {
 
 main {
   min-height: calc(100vh - 207.8px);
+}
+
+.section, .year-section {
+    font-family: "Oswald", sans-serif;
+    color: inherit; /* o el color específico que quieras */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.item-title, .item-number {
+    font-family: "Oswald", sans-serif;
+    color: inherit;
+}
+
+/* Asegurar que la fuente se carga correctamente */
+@font-face {
+    font-family: "Oswald";
+    font-display: swap;
+    src: url("path-to-your-font/Oswald-Regular.woff2") format("woff2"),
+         url("path-to-your-font/Oswald-Regular.woff") format("woff");
 }
