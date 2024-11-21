@@ -95,21 +95,65 @@ header .login_section {
 
 /*Estilos body*/
 
-/**/
- .main_nav {
+.main_nav {
   width: 80vw;
   overflow-x: scroll;
   overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
 }
 
- .nav_section {
+.nav_section {
   width: 100%;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  list-style: none;
 }
 
- #last_item_section {
+.year-section, .section {
+  min-width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 25px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.year-section:hover, .section:hover {
+  background-color: var(--light-blue);
+}
+
+.selected {
+  background-color: var(--main-blue);
+}
+
+.item-number {
+  font-size: 4em;
+  font-weight: bold;
+}
+
+.section-img {
+  max-width: 60%;
+  max-height: 60%;
+}
+
+.item-title {
+  margin-top: 10px;
+  font-size: 2.2rem;
+}
+
+#last_item_section {
   margin-right: 0px;
 }
-/**/
+
+/* Hide scrollbar but keep functionality */
+.main_nav::-webkit-scrollbar {
+  display: none;
+}
 
 .section{
   min-width: 150px;
