@@ -1,19 +1,26 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
   <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KS34LQT7');</script>
+  <script>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({
+        "gtm.start": new Date().getTime(),
+        event: "gtm.js",
+      });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != "dataLayer" ? "&l=" + l : "";
+      j.async = true;
+      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", "GTM-KS34LQT7");
+  </script>
   <!-- End Google Tag Manager -->
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta property="og:site_name" content="The Math Texpedia" />
   <meta property="og:title" content="The Math Texpedia - Apuntes de Matemáticas en LaTeX" />
@@ -21,20 +28,24 @@
   <link rel="icon"
     href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
     type="image/x-icon" />
-  <meta name="description" content="Biblioteca de apuntes matemáticos en formato LaTeX" />
+  <link rel="shortcut icon"
+    href="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661"
+    type="image/x-icon" />
+  <meta name="description"
+    content="Accede a apuntes y recursos educativos en análisis, estructuras, estadística, topología, Java, álgebra y lógica. Mejora tu comprensión matemática con The Math Texpedia.">
   <meta name="robots" content="index,follow" />
   <meta name="author" content="Diego Díaz Mendaña" />
-  <meta name="keywords" content="latex, matemáticas, apuntes, universidad, educación" />
-  <meta name="og:title" content="The Math Texpedia - Apuntes de Matemáticas en LaTeX" />
-  <meta name="og:description" content="Biblioteca de apuntes matemáticos en formato LaTeX" />
-  <meta name="og:image"
+  <meta name="keywords" content="Mathtexpedia, Math Texpedia, Math and Text encyclopedia, Math resources, uniovi, Matemáticas uniovi, Ciencias uniovi, Ciencias, Latex uniovi"/>
+  <meta property="og:title" content="The Math Texpedia - Apuntes de Matemáticas en LaTeX" />
+  <meta property="og:description" content="Biblioteca de apuntes matemáticos en formato LaTeX" />
+  <meta property="og:image"
     content="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia.jpg?alt=media&token=953166c6-8667-4b96-a3d9-9a89603a9661" />
-  <link rel="stylesheet" href="styles/main_styles.css">
-  <link rel="stylesheet" href="styles/main_phone_styles.css" media="(max-width: 1114px)">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles/main_styles.css" />
+  <link rel="stylesheet" href="styles/main_phone_styles.css" media="(max-width: 1114px)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" />
   <script defer="defer" src="/__/firebase/10.14.1/firebase-app-compat.js"></script>
   <script defer="defer" src="/__/firebase/10.14.1/firebase-auth-compat.js"></script>
   <script defer="defer" src="/__/firebase/10.14.1/firebase-database-compat.js"></script>
@@ -52,24 +63,26 @@
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KS34LQT7" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
+      style="display: none; visibility: hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <header>
-    <div class="header_div_superior"> <!--rectángulo superior del header en negro-->
+    <div class="header_div_superior">
+      <!--rectángulo superior del header en negro-->
       <div class="header_div_logo">
         <a href="index.html" aria-label="Link que te lleva a la página principal">
           <img
             src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/iconoMathTexPedia-removebg-preview%20(1).png?alt=media&token=b1801172-1b00-4f15-8a85-89decd79742b"
-            alt="Logo mathsTexPedia" class="header_img_logo">
+            alt="Logo mathsTexPedia" class="header_img_logo" />
         </a>
         <a href="index.html" class="header_title" aria-label="Link que te lleva a la pagina principal">The Math
           Texpedia</a>
       </div>
     </div>
-    <div class="header_div_inferior"> <!--rectángulo inferior del header en verde-->
+    <div class="header_div_inferior">
+      <!--rectángulo inferior del header en verde-->
       <div id="wrapper-container">
         <div class="input-wrapper">
-          <input type="search" id="search" class="input" placeholder="Ingrese su búsqueda">
+          <input type="search" id="search" class="input" placeholder="Ingrese su búsqueda" />
 
           <!-- <svg
             xmlns="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fsearch_icon.svg?alt=media&token=48fc9376-ee48-44fd-8c5d-56cc2cbd71d4"
@@ -82,33 +95,34 @@
       </div>
       <div class="container_login">
         <ul class="nav_login_section">
-          <li><a href="sign_in.html" class="login_section" id="sign_in"
-              aria-label="Link que te lleva a la página de iniciar sesión">Iniciar sesión</a></li>
+          <li>
+            <a href="sign_in.html" class="login_section" id="sign_in"
+              aria-label="Link que te lleva a la página de iniciar sesión">Iniciar sesión</a>
+          </li>
           <li class="login_section">|</li>
-          <li><a href="create_account.html" class="login_section" id="create_account"
-              aria-label="Link que te lleva a la página para registrarse">Registrarse</a></li>
+          <li>
+            <a href="create_account.html" class="login_section" id="create_account"
+              aria-label="Link que te lleva a la página para registrarse">Registrarse</a>
+          </li>
         </ul>
       </div>
     </div>
   </header>
   <main class="content">
-    <div class="main_container" id="main_container" style="display: flex;">
+    <div class="main_container" id="main_container" style="display: flex">
       <h2 class="container-title">Cursos</h2>
       <nav class="main_nav">
         <ul class="nav_section">
-          <button class="year-section" onclick="selectYear(this,1)", aria-label="Primer año">
+          <button class="year-section" onclick="selectYear(this,1)" , aria-label="Primer año">
             <p class="item-number">1º</p>
           </button>
-          <button class="year-section" onclick="selectYear(this,2)", 
-          aria-label = "Segundo año">
+          <button class="year-section" onclick="selectYear(this,2)" , aria-label="Segundo año">
             <p class="item-number">2º</p>
           </button>
-          <button class="year-section" onclick="selectYear(this,3)",
-          aria-label="Tercer año">
+          <button class="year-section" onclick="selectYear(this,3)" , aria-label="Tercer año">
             <p class="item-number">3º</p>
           </button>
-          <button class="year-section" onclick="selectYear(this,4)", 
-          aria-label = "Cuarto año">
+          <button class="year-section" onclick="selectYear(this,4)" , aria-label="Cuarto año">
             <p class="item-number">4º</p>
           </button>
         </ul>
@@ -119,100 +133,114 @@
           <button class="section" onclick="selectSubject('Analisis')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fintegral_logo.svg?alt=media&token=15c88abb-7758-4f83-a565-c663211db22c"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">ANÁLISIS</p>
           </button>
           <button class="section" onclick="selectSubject('Estructuras')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fgrafo_logo.svg?alt=media&token=5885b88d-5e0f-4c1f-9c3d-306ac47e9322"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">ESTRUCTURAS</p>
           </button>
           <button class="section" onclick="selectSubject('Estadistica')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fpye_logo.svg?alt=media&token=d522140a-5799-45ca-9689-2714a0f1b89b"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">ESTADÍSTICA</p>
           </button>
           <button class="section" onclick="selectSubject('Topologia')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Ftau_logo.svg?alt=media&token=5264c68b-fe77-47ae-b469-301d06328dfd"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">TOPOLOGÍA</p>
           </button>
           <button class="section" onclick="selectSubject('Java')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fjava_logo.svg?alt=media&token=ad8cd984-e822-46bb-8bdd-3786270fb6bf"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">JAVA</p>
           </button>
           <button class="section" onclick="selectSubject('Algebra')">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2FALGEBRA_LOGO.svg?alt=media&token=a9e6faad-fc81-4d76-a37d-01a7c3c65d38"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">ALGEBRA</p>
           </button>
           <button class="section" onclick="selectSubject('Logica')" id="last_item_section">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Flogica.svg?alt=media&token=3f8c8e2d-a4d8-4f13-8139-012a901ef1ac"
-              alt="Matemáticas" class="section-img">
+              alt="Matemáticas" class="section-img" />
             <p class="item-title">LÓGICA</p>
           </button>
         </ul>
       </nav>
     </div>
     <div id="disqus_thread"></div>
-<script>
-    // Disqus Configuration with error handling
-    function loadDisqus() {
+    <script>
+      // Disqus Configuration with error handling
+      function loadDisqus() {
         try {
-            var disqus_config = function () {
-                this.page.url = window.location.origin + window.location.pathname;
-                this.page.identifier = window.location.pathname.replace(/\//g, '-');
-                this.page.title = document.title;
-            };
+          var disqus_config = function () {
+            this.page.url = window.location.origin + window.location.pathname;
+            this.page.identifier = window.location.pathname.replace(
+              /\//g,
+              "-"
+            );
+            this.page.title = document.title;
+          };
 
-            // Load Disqus
-            const script = document.createElement('script');
-            script.src = 'https://mathtexpedia.disqus.com/embed.js';
-            script.setAttribute('data-timestamp', +new Date());
-            
-            script.onerror = function() {
-                console.error('Failed to load Disqus comments');
-                document.getElementById('disqus_thread').innerHTML = 
-                    '<p>Lo sentimos, los comentarios no están disponibles en este momento.</p>';
-            };
+          // Load Disqus
+          const script = document.createElement("script");
+          script.src = "https://mathtexpedia.disqus.com/embed.js";
+          script.setAttribute("data-timestamp", +new Date());
 
-            (document.head || document.body).appendChild(script);
+          script.onerror = function () {
+            console.error("Failed to load Disqus comments");
+            document.getElementById("disqus_thread").innerHTML =
+              "<p>Lo sentimos, los comentarios no están disponibles en este momento.</p>";
+          };
+
+          (document.head || document.body).appendChild(script);
         } catch (error) {
-            console.error('Error loading Disqus:', error);
+          console.error("Error loading Disqus:", error);
         }
-    }
+      }
 
-    // Load when DOM is ready
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      // Load when DOM is ready
+      if (
+        document.readyState === "complete" ||
+        document.readyState === "interactive"
+      ) {
         loadDisqus();
-    } else {
-        document.addEventListener('DOMContentLoaded', loadDisqus);
-    }
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      } else {
+        document.addEventListener("DOMContentLoaded", loadDisqus);
+      }
+    </script>
+    <noscript>Please enable JavaScript to view the
+      <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </main>
   <footer>
     <div class="footer_main_container">
       <div class="footer_left_section">©The Math Texpedia</div>
       <div class="footer_middle_section"><a href=""></a></div>
-      <div class="footer_right_section"> <!--lista de items de navegación-->
+      <div class="footer_right_section">
+        <!--lista de items de navegación-->
         <ul class="footer_list">
-          <li><a href="mailto:latexmathpedia@gmail.com"><img
+          <li>
+            <a href="mailto:latexmathpedia@gmail.com"><img
                 src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Fmail_logo.svg?alt=media&token=083ad807-4fef-4efb-9180-58f87e40d592"
-                alt="Logo gmail"></a></li>
-          <li><a href="https://x.com/MathsTexpedia" target="_blank"><img
+                alt="Logo gmail" /></a>
+          </li>
+          <li>
+            <a href="https://x.com/MathsTexpedia" target="_blank"><img
                 src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Flogo_twitter.svg?alt=media&token=5a9b14c2-eafc-42cd-ac66-ca453e9edb76"
-                alt="Logo Twitter"></a></li>
-          <li><a href="https://www.instagram.com/mathtexpedia.ofisial/" target="_blank" rel="noopener"><img
+                alt="Logo Twitter" /></a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/mathtexpedia.ofisial/" target="_blank" rel="noopener"><img
                 src="https://firebasestorage.googleapis.com/v0/b/mathtexpedia.appspot.com/o/img_pages%2Finstagram_logo.svg?alt=media&token=0521c65b-2ea5-402e-b1de-ff590847a857"
-                alt="Logo Instagram" id="footer_last_img"></a></li>
+                alt="Logo Instagram" id="footer_last_img" /></a>
+          </li>
         </ul>
       </div>
     </div>
@@ -221,4 +249,5 @@
   <script src="index.bundle.js" defer></script>
   <script src="check_auth.bundle.js" defer></script>
 </body>
+
 </html>
