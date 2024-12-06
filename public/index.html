@@ -219,6 +219,65 @@
     <noscript>Please enable JavaScript to view the
       <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </main>
+  <!-- Modal -->
+  <div id="tCModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2><strong>TERMINOS Y CONDICIONES</strong></h2>
+        <p>Fecha de última actualización: 05/12/2024</p>
+        <p><strong>1. Aceptación de los Términos</strong><br>
+        Al acceder y utilizar este sitio web, aceptas cumplir con estos Términos y Condiciones, todas las leyes y regulaciones aplicables, y reconoces que eres responsable de cumplir con las leyes locales aplicables. Si no estás de acuerdo con alguno de estos términos, se te prohíbe usar o acceder a este sitio.</p>
+        <p><strong>2. Propiedad Intelectual y Licencia</strong><br>
+        Todo el contenido disponible en este sitio web, incluyendo pero no limitado a documentos, textos, gráficos, imágenes, y cualquier otro material (en adelante, "el Contenido"), está protegido bajo la Licencia Creative Commons Atribución-NoComercial-CompartirIgual (CC BY-NC-SA). Esto implica que:</p>
+        <ul>
+            <li>Puedes compartir, copiar, distribuir y comunicar públicamente el Contenido, siempre que se cumplan las siguientes condiciones:</li>
+            <ul>
+                <li><strong>Atribución:</strong> Debes dar crédito al autor original de manera adecuada, proporcionar un enlace a la licencia e indicar si se realizaron cambios.</li>
+                <li><strong>NoComercial:</strong> No puedes utilizar el Contenido con fines comerciales.</li>
+                <li><strong>CompartirIgual:</strong> Si mezclas, transformas o creas a partir del Contenido, debes distribuir tus contribuciones bajo la misma licencia que el original.</li>
+            </ul>
+        </ul>
+        <p><strong>3. Documentos Descargables</strong><br>
+        Este sitio web ofrece ciertos documentos descargables que también están sujetos a la licencia CC BY-NC-SA. Esto significa que:</p>
+        <ul>
+            <li>Puedes descargarlos y compartirlos con terceros, pero únicamente bajo las condiciones de la licencia, garantizando que:</li>
+            <ul>
+                <li>Se mantenga la atribución al autor original.</li>
+                <li>No sean utilizados con fines comerciales.</li>
+                <li>Si realizas modificaciones, estas deben ser licenciadas bajo los mismos términos (CC BY-NC-SA).</li>
+            </ul>
+        </ul>
+        <p><strong>4. Restricciones</strong><br>
+        Queda estrictamente prohibido:</p>
+        <ul>
+            <li>Modificar el Contenido con el propósito de ocultar o alterar su atribución original.</li>
+            <li>Usar el Contenido en proyectos, negocios o actividades comerciales sin previa autorización escrita.</li>
+            <li>Redistribuir los documentos descargables bajo condiciones diferentes a las especificadas por la licencia CC BY-NC-SA.</li>
+            <li>Realizar actividades que puedan comprometer la integridad del sitio web, incluyendo intentos de hackeo, uso automatizado de bots, o cualquier otra acción que afecte su funcionamiento.</li>
+        </ul>
+        <p><strong>5. Medidas ante el Incumplimiento</strong><br>
+        En caso de detectar un uso indebido o una violación de los términos establecidos:</p>
+        <ul>
+            <li>El acceso general al sitio será bloqueado para el usuario responsable, de forma temporal o permanente, según la gravedad de la infracción.</li>
+            <li>Se podrán tomar medidas legales adicionales en caso de uso comercial no autorizado, incluyendo reclamaciones por daños y perjuicios.</li>
+            <li>En caso de infracciones graves o reiteradas que comprometan la integridad del contenido o la licencia de uso, nos reservamos el derecho de cerrar el acceso al sitio para todos los usuarios, de manera temporal o definitiva, con el fin de proteger los derechos de autor y el cumplimiento de la licencia.</li>
+        </ul>
+        <p><strong>6. Acceso al Sitio</strong><br>
+        Nos reservamos el derecho de:</p>
+        <ul>
+            <li>Restringir o bloquear el acceso a cualquier usuario que viole los Términos y Condiciones.</li>
+            <li>Realizar cambios en el contenido o estructura del sitio sin previo aviso.</li>
+            <li>Suspender el servicio en caso de detectar actividades que comprometan la licencia o el cumplimiento de las condiciones.</li>
+        </ul>
+        <p><strong>7. Exclusión de Responsabilidad</strong><br>
+        El Contenido se proporciona "tal cual", sin garantías de ningún tipo, expresas o implícitas. No garantizamos que el acceso al sitio será continuo o libre de errores.</p>
+        <p><strong>8. Modificaciones de los Términos</strong><br>
+        Nos reservamos el derecho de actualizar o modificar estos Términos y Condiciones en cualquier momento. Las modificaciones entrarán en vigor inmediatamente después de su publicación en esta página.</p>
+        <p><strong>9. Contacto</strong><br>
+        Si tienes dudas o necesitas más información sobre estos términos, puedes contactarnos a través de:</p>
+        <p>latexmathpedia@gmail.com</p>
+        <p>Al continuar navegando en el sitio, confirmas haber leído, comprendido y aceptado estos Términos y Condiciones. Si no estás de acuerdo, por favor, abandona este sitio inmediatamente.</p>
+    </div>
   <footer>
     <div class="footer_main_container">
       <div class="footer_left_section">©The Math Texpedia</div>
@@ -248,6 +307,29 @@
   <script type="module" src="div_dinamic.bundle.js" defer></script>
   <script src="index.bundle.js" defer></script>
   <script src="check_auth.bundle.js" defer></script>
+  <script>
+    // Get modal element
+    const modal = document.getElementById("tCModal");
+    // Get close button
+    const closeBtn = document.getElementsByClassName("close")[0];
+
+    // Listen for open click on anchor
+    document.addEventListener('DOMContentLoaded', () => {
+        modal.style.display = "block";
+    });
+
+    // Listen for close click
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    // Listen for outside click
+    window.addEventListener("click", (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
+  </script>
 </body>
 
 </html>

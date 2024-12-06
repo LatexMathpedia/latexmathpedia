@@ -1,4 +1,12 @@
-import { auth, getFirestore, collection, getDocs, query, where, addDoc } from "./firebase.js";
+import {
+  auth,
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+} from "./firebase.js";
 
 // Inicializar Firestore
 const firestoreDb = getFirestore();
@@ -8,9 +16,9 @@ const firestoreDb = getFirestore();
  * Si no es admin, se redirige a la página de inicio
  * Si es admin, se permite acceder a la página
  * Si no hay usuario autenticado, se redirige a la página de inicio de sesión
- * 
+ *
  * @param {Object} user - Objeto de usuario de Firebase
- * 
+ *
  * @returns {void}
  */
 auth.onAuthStateChanged(async (user) => {
@@ -42,7 +50,7 @@ auth.onAuthStateChanged(async (user) => {
 
 /**
  * Evento del botón para submitear el forumulario de subir el PDF
- * 
+ *
  * @listens submit
  */
 document.getElementById("pdfForm").addEventListener("submit", async (e) => {
@@ -81,9 +89,69 @@ document.getElementById("pdfForm").addEventListener("submit", async (e) => {
     setTimeout(() => {
       document.getElementById("successMessage").style.display = "none";
     }, 3000);
-
   } catch (error) {
     alert("Hubo un problema al subir el PDF."); // Si hay un error, se muestra un mensaje de alerta
   }
 });
 
+/**
+ * Funcion para obtener los emails de los usuarios en la database.
+ * Es importante cambiar esto para el backend. Eso ya lo haremos en el futuro.
+ *
+ * @returns {Promise<Array<String>>} - Array de emails
+ * @async
+ * @function
+ */
+const catchEmails = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(firestoreDb, "users"));
+    const emails = [];
+
+    querySnapshot.forEach((doc) => {
+      emails.push(doc.data().email);
+    });
+
+    return emails;
+  } catch (error) {
+    alert("Error al recolectar correos:", error);
+  }
+};
+
+/**
+ * Función para descargar los correos de los usuarios en un archivo CSV.
+ *
+ * @param {Array<String>} emails
+ * @returns {Promise<void>} void
+ */
+const downloadCsv = async (emails) => {
+  if (!emails || emails.length === 0) {
+    alert("No hay correos para descargar.");
+    return;
+  }
+
+  // Construir el contenido del CSV correctamente
+  const csvContent = [
+    ["Email"], // Header
+    ...emails.map((email) => [email]), // Cada email en una nueva línea
+  ]
+    .map((e) => e.join(","))
+    .join("\n");
+
+  // Crear un blob y descargarlo
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "emails.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+document
+  .getElementById("downloadEmails")
+  .addEventListener("click", async () => {
+    const emails = await catchEmails();
+    downloadCsv(emails);
+  });
