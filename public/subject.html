@@ -91,10 +91,10 @@
             const script = document.createElement('script');
             script.src = 'https://mathtexpedia.disqus.com/embed.js';
             script.setAttribute('data-timestamp', +new Date());
-            
-            script.onerror = function() {
+
+            script.onerror = function () {
                 console.error('Failed to load Disqus comments');
-                document.getElementById('disqus_thread').innerHTML = 
+                document.getElementById('disqus_thread').innerHTML =
                     '<p>Lo sentimos, los comentarios no están disponibles en este momento.</p>';
             };
 
@@ -111,7 +111,8 @@
         document.addEventListener('DOMContentLoaded', loadDisqus);
     }
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+        Disqus.</a></noscript>
 <footer>
     <div class="footer_main_container">
         <div class="footer_left_section">©The Math Texpedia</div>
@@ -131,9 +132,9 @@
         </div>
     </div>
 </footer>
-<script src="index.bundle.js" defer></script>
-<script src="check_auth.bundle.js" defer></script>
-<script src="load_pdfs.bundle.js" defer></script>
+<script src="app/index.bundle.js" defer></script>
+<script src="app/check_auth.bundle.js" defer></script>
+<script src="app/load_pdfs.bundle.js" defer></script>
 </body>
 
 </html>

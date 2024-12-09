@@ -19,7 +19,7 @@ module.exports = {
     div_dinamic: './src/div_dinamic_generation.js',
   },
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'public/app'),
     filename: '[name].bundle.js',
   },
   optimization: {
