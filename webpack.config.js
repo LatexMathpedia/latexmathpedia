@@ -17,6 +17,7 @@ module.exports = {
     change_name: './src/change_name.js',
     reset_password: './src/reset_password.js',
     div_dinamic: './src/div_dinamic_generation.js',
+    show_modal_tc: './src/show_modal_tc.js',
   },
   output: {
     path: path.resolve(__dirname, 'public/app'),
