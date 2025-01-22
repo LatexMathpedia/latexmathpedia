@@ -8,6 +8,7 @@ export const API_ROUTES = {
   updateUser: `${API_BASE_URL}/users/email=`,
   users: `${API_BASE_URL}/users`,
   pdfs: `${API_BASE_URL}/pdfs`,
+  subjects: `${API_BASE_URL}/subjects`,
 
 }
 

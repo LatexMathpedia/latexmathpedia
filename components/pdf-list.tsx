@@ -25,15 +25,22 @@ export function PDFList({ limit }: { limit?: number }) {
         const data = await response.json()
         setPDFs(data)
         setFilteredPDFs(data)
-
-        // Get unique subjects
-        const uniqueSubjects: string[] = Array.from(new Set(data.map((pdf: PDF) => pdf.subject)))
-        setSubjects(uniqueSubjects)
       } catch (error) {
         console.error("Error fetching PDFs:", error)
       }
     }
+
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch(API_ROUTES.subjects)
+        const data = await response.json()
+        setSubjects(data.subjects)
+      } catch (error) {
+        console.error("Error fetching subjects:", error)
+      }
+    }
     fetchPDFs()
+    fetchSubjects()
   }, [])
 
   useEffect(() => {
