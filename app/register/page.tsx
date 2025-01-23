@@ -13,12 +13,13 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [nombre, setNombre] = useState("")
   const [apellidos, setApellidos] = useState("")
-  const { register } = useAuth()
+  const { register, error } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await register(email, password, nombre, apellidos)
+      const message = await register(email, password, nombre, apellidos)
+      alert(message.success ? "Registro exitoso" : message.error)
     } catch (error) {
       console.error("Error durante el registro:", error)
       alert("Error al registrarse. Por favor, inténtalo de nuevo.")

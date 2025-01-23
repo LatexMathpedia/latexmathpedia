@@ -14,8 +14,9 @@ type User = {
 
 type AuthContextType = {
   user: User | null
-  login: (email: string, password: string) => Promise<Boolean>
-  register: (email: string, password: string, nombre: string, apellidos: string) => Promise<void>
+  error: string | null
+  login: (email: string, password: string) => Promise<{ success: boolean, error?: string }>
+  register: (email: string, password: string, nombre: string, apellidos: string) => Promise<{ success: boolean, error?: string }>
   logout: () => Promise<void>
   updateUser: (updates: Partial<User>) => Promise<void>
 }
@@ -24,15 +25,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await fetch(API_ROUTES.checkSession)
-        if (res.ok) {
-          const userData = await res.json()
-          setUser(userData)
+        const storedUser = localStorage.getItem('user')
+        if (storedUser && JSON.parse(storedUser).expiry > new Date().toISOString()) {
+          setUser(JSON.parse(storedUser))
+          console.log(JSON.parse(storedUser).admin)
         }
       } catch (error) {
         console.error("Error checking session:", error)
@@ -41,7 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkSession()
   }, [])
 
-  const login = async (email: string, password: string): Promise<Boolean> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean, error?: string }> => {
     try {
       const res = await fetch(API_ROUTES.login, {
         method: "POST",
@@ -50,19 +52,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       })
       if (res.ok) {
         const userData = await res.json()
-        setUser(userData)
-        router.push("/")
-        return true
+        if (userData.user) {
+          setUser(userData)
+          const expiry = new Date()
+          expiry.setDate(expiry.getDate() + 7)
+          localStorage.setItem('user', JSON.stringify({ ...userData, expiry: expiry.toISOString() }))
+          router.push("/")
+          return { success: true }
+        } else {
+          return { success: false, error: userData.error || "Error desconocido" }
+        }
       } else {
-        return false
+        const errorData = await res.json()
+        return { success: false, error: errorData.error || "Error desconocido" }
       }
     } catch (error) {
       console.error("Error during login:", error)
-      return false
+      return { success: false, error: "Error de red" }
     }
   }
 
-  const register = async (email: string, password: string, nombre: string, apellidos: string) => {
+  const register = async (email: string, password: string, nombre: string, apellidos: string): Promise<{ success: boolean, error?: string }> => {
     try {
       const res = await fetch(API_ROUTES.register, {
         method: "POST",
@@ -71,21 +81,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       })
       if (res.ok) {
         const userData = await res.json()
-        setUser(userData)
-        router.push("/")
+        if (userData.user) {
+          setUser(userData.user)
+          const expiry = new Date()
+          expiry.setDate(expiry.getDate() + 7)
+          localStorage.setItem('user', JSON.stringify({ ...userData.user, expiry: expiry.toISOString() }))
+          logout()
+          router.push("/login")
+          return { success: true }
+        } else {
+          return { success: false, error: userData.error || "Error desconocido" }
+        }
       } else {
-        throw new Error("Error en el registro")
+        const errorData = await res.json()
+        return { success: false, error: errorData.error || "Error desconocido" }
       }
     } catch (error) {
       console.error("Error during registration:", error)
-      throw error
+      return { success: false, error: "Error de red" }
     }
   }
 
   const logout = async () => {
     try {
-      await fetch(API_ROUTES.logout, { method: "POST" })
+      await fetch(API_ROUTES.logout, { method: "POST", body: JSON.stringify({user}) })
       setUser(null)
+      localStorage.removeItem("user")
       router.push("/")
     } catch (error) {
       console.error("Error during logout:", error)
@@ -111,7 +132,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  return <AuthContext.Provider value={{ user, login, register, logout, updateUser }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, error, login, register, logout, updateUser }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {
@@ -121,4 +142,3 @@ export const useAuth = () => {
   }
   return context
 }
-

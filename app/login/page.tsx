@@ -11,15 +11,16 @@ import Link from "next/link"
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const { login } = useAuth()
+  const { login, error } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await login(email, password)
+      const message = await login(email, password)
+      alert(message.success ? "Inicio de sesión exitoso" : message.error)
     } catch (error) {
       console.error("Error durante el inicio de sesión:", error)
-      alert("Error al iniciar sesión. Por favor, verifica tus credenciales.")
+      alert("Error al iniciar sesión. Por favor, inténtalo de nuevo.")
     }
   }
 

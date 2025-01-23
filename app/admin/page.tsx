@@ -14,8 +14,6 @@ export default function AdminPage() {
         <Tabs defaultValue="pdfs" className="w-full">
           <TabsList className="mb-4">
             <TabsTrigger value="pdfs">Gestión de PDFs</TabsTrigger>
-            <TabsTrigger value="users">Gestión de Usuarios</TabsTrigger>
-            <TabsTrigger value="events">Gestión de Eventos</TabsTrigger>
           </TabsList>
           <TabsContent value="pdfs">
             <AdminPDFManager />

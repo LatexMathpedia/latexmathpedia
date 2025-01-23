@@ -7,6 +7,7 @@ import { useAuth } from "@/components/auth-context"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 
+
 export function Header() {
   const { user, logout } = useAuth()
   const router = useRouter()
@@ -38,9 +39,9 @@ export function Header() {
                 <Link href="/profile" className="text-white hover:text-blue-100">
                   Perfil
                 </Link>
-                <Link href="/admin" className="text-white hover:text-blue-100">
+                {user.admin && <Link href="/admin" className="text-white hover:text-blue-100">
                   Panel de Administración
-                </Link>
+                </Link>}
                 <Button onClick={handleLogout}>
                   Cerrar sesión
                 </Button>
@@ -81,12 +82,12 @@ export function Header() {
                 >
                   Perfil
                 </Link>
-                <Link
+                {user.admin && <Link
                   href="/admin"
                   className="text-white hover:text-blue-100 text-center py-2 bg-blue-500 dark:bg-gray-600 rounded-md"
                 >
                   Panel de Administración
-                </Link>
+                </Link>}
                 <Button onClick={handleLogout} className="w-full">
                   Cerrar sesión
                 </Button>

@@ -58,14 +58,6 @@ export default function ProfilePage() {
                   className="border-blue-200 focus:border-blue-500"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Correo electrónico</Label>
-                <Input id="email" type="email" value={user.email} disabled className="bg-gray-100" />
-              </div>
-              <div className="space-y-2">
-                <Label>Rol</Label>
-                <Input value={user.admin ? "Administrador" : "Usuario"} disabled className="bg-gray-100" />
-              </div>
               <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
                 Actualizar Perfil
               </Button>
