@@ -13,7 +13,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [nombre, setNombre] = useState("")
   const [apellidos, setApellidos] = useState("")
-  const { register, error } = useAuth()
+  const { register } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
