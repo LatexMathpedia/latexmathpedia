@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FileText, Eye } from "lucide-react"
 import type { PDF } from "@/types/pdf"
 import { API_ROUTES } from "@/lib/api-config"
+import { useAuth } from "@/components/auth-context"
+import { useRouter } from "next/navigation"
 
 export function PDFList({ limit }: { limit?: number }) {
   const [pdfs, setPDFs] = useState<PDF[]>([])
@@ -17,8 +19,15 @@ export function PDFList({ limit }: { limit?: number }) {
   const [selectedSubject, setSelectedSubject] = useState<string>("all")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedYear, setSelectedYear] = useState<string>("all")
+  const { user } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
+    if (!user) {
+      alert("Debes iniciar sesión para ver esta página")
+      router.push('/login')
+      return
+    }
     const fetchPDFs = async () => {
       try {
         const response = await fetch(API_ROUTES.pdfs)
@@ -75,7 +84,7 @@ export function PDFList({ limit }: { limit?: number }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 mb-4">
         <Input
           placeholder="Buscar PDFs..."
           value={searchTerm}
@@ -83,7 +92,7 @@ export function PDFList({ limit }: { limit?: number }) {
           className="flex-grow"
         />
         <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Seleccionar asignatura" />
           </SelectTrigger>
           <SelectContent>
@@ -96,7 +105,7 @@ export function PDFList({ limit }: { limit?: number }) {
           </SelectContent>
         </Select>
         <Select value={selectedYear} onValueChange={setSelectedYear}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Seleccionar año" />
           </SelectTrigger>
           <SelectContent>
@@ -109,7 +118,7 @@ export function PDFList({ limit }: { limit?: number }) {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filteredPDFs.map((pdf) => (
           <Card key={pdf.href} className="hover:shadow-lg transition-shadow">
             <CardContent className="p-4">

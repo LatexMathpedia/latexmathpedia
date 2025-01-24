@@ -9,6 +9,8 @@ export const API_ROUTES = {
   users: `${API_BASE_URL}/users`,
   pdfs: `${API_BASE_URL}/pdfs`,
   subjects: `${API_BASE_URL}/subjects`,
+  create: `${API_BASE_URL}/pdfs/create`,
+  delete: `${API_BASE_URL}/pdfs/`,
 
 }
 

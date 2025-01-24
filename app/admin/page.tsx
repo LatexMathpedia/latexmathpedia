@@ -4,8 +4,21 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { AdminPDFManager } from "@/components/admin-pdf-manager"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useAuth } from "@/components/auth-context"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function AdminPage() {
+  const router = useRouter()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (!user || !user.admin) {
+      alert("A donde vas pillastre, que no eres admin")
+      router.push('/')
+    }
+  }, [user, router])
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-900">
       <Header />
