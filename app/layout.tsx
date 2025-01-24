@@ -9,6 +9,8 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Math Texpedia',
   description: 'Aprende matemáticas de manera interactiva',
+  keywords: ['Mathtexpedia', 'Math Texpedia', 'Math and Text encyclopedia', 'Math resources', 'uniovi', 'Matemáticas uniovi', 'Ciencias uniovi', 'Ciencias', 'Latex uniovi', 'Latex', 'Matemáticas', 'Matemáticas interactivas', 'Matemáticas y texto', 'Matemáticas y texto interactivo']
+
 }
 
 export default function RootLayout({

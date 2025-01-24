@@ -14,7 +14,6 @@ type User = {
 
 type AuthContextType = {
   user: User | null
-  error: string | null
   login: (email: string, password: string) => Promise<{ success: boolean, error?: string }>
   register: (email: string, password: string, nombre: string, apellidos: string) => Promise<{ success: boolean, error?: string }>
   logout: () => Promise<void>
@@ -25,7 +24,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -132,7 +130,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  return <AuthContext.Provider value={{ user, error, login, register, logout, updateUser }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user , login, register, logout, updateUser }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {
