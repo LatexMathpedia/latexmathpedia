@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PdfCreateForm } from "@/components/pdf-create-form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { API_ROUTES } from '@/lib/api-config'
 
@@ -15,7 +16,6 @@ type PDF = {
   href: string,
 }
 
-const ITEMS_PER_PAGE = 10
 
 export function AdminPDFManager() {
   const [pdfs, setPdfs] = useState<PDF[]>([])
@@ -94,47 +94,9 @@ export function AdminPDFManager() {
     <div className="space-y-6">
       <Card>
         <CardContent className="p-4">
-          <form className="space-y-4" onSubmit={submitPdf}>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Nombre del PDF</Label>
-                <Input
-                  id="name"
-                  value={newPDF.name}
-                  onChange={(e) => setNewPDF({ ...newPDF, name: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="subject">Asignatura</Label>
-                <Input
-                  id="subject"
-                  value={newPDF.subject}
-                  onChange={(e) => setNewPDF({ ...newPDF, subject: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="year">Curso</Label>
-                <Input
-                  id="year"
-                  value={newPDF.year}
-                  type='number'
-                  onChange={(e) => setNewPDF({ ...newPDF, year: parseInt(e.target.value) })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="href">Link de Google Drive</Label>
-                <Input
-                  id="href"
-                  value={newPDF.href}
-                  onChange={(e) => setNewPDF({ ...newPDF, href: e.target.value })}
-                />
-              </div>
-            </div>
-            <Button type="submit">Agregar PDF</Button>
-          </form>
+          <PdfCreateForm submitPdf={submitPdf} newPDF={newPDF} setNewPDF={setNewPDF} />
         </CardContent>
       </Card>
-      { }
       <div className="flex space-x-4">
         <div className="flex-1">
           <Label htmlFor="search">Buscar PDFs</Label>

@@ -6,7 +6,7 @@ import { FileText, Lock, Share2, UserCheck } from 'lucide-react'
 export default function PrivacyPage() {
   const privacyPoints = [
     {
-      title: "Información queInformación que Recopilamos",
+      title: "Información que Recopilamos",
       content: "Recopilamos información que proporcionas al registrarte, como tu nombre, dirección de correo electrónico y datos de perfil. También podemos recopilar información sobre tu uso del sitio.",
       icon: FileText
     },

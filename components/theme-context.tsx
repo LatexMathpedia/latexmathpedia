@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react'
 
-type Theme = 'light' | 'dark'
+type Theme = 'claro' | 'oscuro'
 
 type ThemeContextType = {
   theme: Theme
@@ -12,7 +12,7 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('light')
+  const [theme, setTheme] = useState<Theme>('claro')
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as Theme | null
@@ -23,11 +23,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     localStorage.setItem('theme', theme)
-    document.documentElement.classList.toggle('dark', theme === 'dark')
+    document.documentElement.classList.toggle('oscuro', theme === 'oscuro')
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+    setTheme(prevTheme => prevTheme === 'claro' ? 'oscuro' : 'claro')
   }
 
   return (

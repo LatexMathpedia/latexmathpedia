@@ -1,4 +1,4 @@
-export interface PDF {
+export type PDF {
   href: string
   name: string
   subject: string
