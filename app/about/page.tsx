@@ -51,10 +51,10 @@ export default function AboutPage() {
           <CardContent>
             <div className="grid gap-6 md:grid-cols-2">
               {[
-                { name: "Dra. Ana Rodríguez", role: "Fundadora y Directora de Contenido" },
-                { name: "Prof. Carlos Méndez", role: "Jefe de Desarrollo Curricular" },
-                { name: "Ing. Laura Sánchez", role: "Directora de Tecnología" },
-                { name: "Lic. Miguel Torres", role: "Coordinador de Comunidad y Soporte Estudiantil" },
+                { name: "Pablo García Pernas", role: "CoCEO, multimillonario y filántropo" },
+                { name: "Diego Díaz Mendaña", role: "CoCEO y bautista de 1er grado" },
+                { name: "Mateo Rama García", role: "Putero de renombre en Avilés" },
+                { name: "Sierense Suarez Siero", role: "Mención especial por vivir en la jungla" },
               ].map(({ name, role }, index) => (
                 <div key={index} className="p-4 bg-blue-50 dark:bg-gray-700 rounded-lg">
                   <h3 className="font-semibold text-lg text-blue-600 dark:text-blue-400">{name}</h3>
