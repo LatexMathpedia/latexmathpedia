@@ -4,7 +4,7 @@ import { PDFList } from "@/components/pdf-list"
 
 export default function PDFsPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#f5f5f5]">
+    <div className="flex min-h-screen flex-col bg-[#f5f5f5] dark:bg-gray-900 dark:text-white">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Recursos PDF</h1>

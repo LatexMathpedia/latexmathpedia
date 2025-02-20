@@ -1,48 +1,62 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { useAuth } from "@/components/auth-context"
-import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
-
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { useAuth } from "@/components/auth-context";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { ToggleTheme } from "@/components/ui/toggle_theme";
 
 export function Header() {
-  const { user, logout } = useAuth()
-  const router = useRouter()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout()
-    router.push("/")
-    setIsMenuOpen(false)
-  }
+    logout();
+    router.push("/");
+    setIsMenuOpen(false);
+  };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <header className="bg-[#3498db] dark:bg-gray-800 py-4 shadow-md">
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-white">
-            Math Texpedia
-          </Link>
+          <div className="flex flex-row items-center space-x-6">
+            <Link href="/" className="text-2xl font-bold text-white">
+              Math Texpedia
+            </Link>
+            <ToggleTheme />
+          </div>
           <div className="hidden md:flex items-center space-x-6">
             <Link href="/pdfs" className="text-white hover:text-blue-100">
               PDFs
             </Link>
             {user ? (
               <>
-                <Link href="/profile" className="text-white hover:text-blue-100">
+                <Link
+                  href="/profile"
+                  className="text-white hover:text-blue-100"
+                >
                   Perfil
                 </Link>
-                {user.admin && <Link href="/admin" className="text-white hover:text-blue-100">
-                  Panel de Administración
-                </Link>}
-                <Button onClick={handleLogout}>
+                {user.admin && (
+                  <Link
+                    href="/admin"
+                    className="text-white hover:text-blue-100"
+                  >
+                    Panel de Administración
+                  </Link>
+                )}
+                <Button
+                  onClick={handleLogout}
+                  className="text-white bg-red-500 hover:bg-red-600"
+                >
                   Cerrar sesión
                 </Button>
               </>
@@ -82,12 +96,14 @@ export function Header() {
                 >
                   Perfil
                 </Link>
-                {user.admin && <Link
-                  href="/admin"
-                  className="text-white hover:text-blue-100 text-center py-2 bg-blue-500 dark:bg-gray-600 rounded-md"
-                >
-                  Panel de Administración
-                </Link>}
+                {user.admin && (
+                  <Link
+                    href="/admin"
+                    className="text-white hover:text-blue-100 text-center py-2 bg-blue-500 dark:bg-gray-600 rounded-md"
+                  >
+                    Panel de Administración
+                  </Link>
+                )}
                 <Button onClick={handleLogout} className="w-full">
                   Cerrar sesión
                 </Button>
@@ -112,6 +128,5 @@ export function Header() {
         </div>
       )}
     </header>
-  )
+  );
 }
-

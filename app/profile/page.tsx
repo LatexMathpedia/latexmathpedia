@@ -30,11 +30,11 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-blue-50 to-white">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-900">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">Mi Perfil</h1>
-        <Card className="max-w-md mx-auto">
+      <main className="flex-1 container mx-auto px-4 py-8 dark:text-white dark:bg-gray-900">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-800 dark:text-blue-400">Mi Perfil</h1>
+        <Card className="max-w-md mx-auto dark:bg-gray-950 dark:text-white">
           <CardHeader>
             <CardTitle>Información Personal</CardTitle>
           </CardHeader>

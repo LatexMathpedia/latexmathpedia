@@ -4,8 +4,8 @@ import { motion } from "framer-motion"
 
 export function Hero() {
   return (
-    <section className="relative bg-[#3498db] text-white py-16 overflow-hidden">
-      <div className="absolute inset-0 z-0">
+    <section className="relative bg-[#3498db] text-white py-16 overflow-hidden dark:bg-gray-800">
+      <div className="absolute inset-0 z-0 hidden lg:block">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <motion.path
             fill="#4aa3df"

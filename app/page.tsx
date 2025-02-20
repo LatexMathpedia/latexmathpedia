@@ -13,7 +13,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col bg-[#f5f5f5] dark:bg-gray-900">
       <Header />
       <Hero />
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-8 dark:text-white">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Algunos de nuestros PDFs</h2>
           <Link href="/pdfs">

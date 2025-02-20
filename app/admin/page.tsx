@@ -20,7 +20,7 @@ export default function AdminPage() {
   }, [user, router])
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-900 dark:text-white">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Panel de Administración</h1>

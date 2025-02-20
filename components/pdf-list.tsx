@@ -120,20 +120,20 @@ export function PDFList({ limit }: { limit?: number }) {
       </div>
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filteredPDFs.map((pdf) => (
-          <Card key={pdf.href} className="hover:shadow-lg transition-shadow">
+          <Card key={pdf.href} className="hover:shadow-lg transition-shadow dark:bg-gray-950 dark:text-white">
             <CardContent className="p-4">
               <div className="flex items-center space-x-4 mb-4">
                 <FileText className="h-8 w-8 text-blue-500" />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold truncate">{pdf.name}</h3>
-                  <p className="text-sm text-gray-500">
+                <div className="flex-1">
+                  <h3 className="font-semibold">{pdf.name}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-200">
                     {pdf.subject} - {pdf.year}º Año
                   </p>
                 </div>
               </div>
               <div className="flex justify-end">
                 <Link href={pdf.href} target="_blank" rel="noopener noreferrer">
-                  <Button>
+                  <Button className="dark:bg-gray-100 dark:text-gray-900">
                     <Eye className="h-4 w-4 mr-2" />
                     Ver PDF
                   </Button>
