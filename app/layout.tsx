@@ -9,7 +9,10 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Math Texpedia',
   description: 'Aprende matemáticas de manera interactiva',
-  keywords: ['Mathtexpedia', 'Math Texpedia', 'Math and Text encyclopedia', 'Math resources', 'uniovi', 'Matemáticas uniovi', 'Ciencias uniovi', 'Ciencias', 'Latex uniovi', 'Latex', 'Matemáticas', 'Matemáticas interactivas', 'Matemáticas y texto', 'Matemáticas y texto interactivo']
+  keywords: ['Mathtexpedia', 'Math Texpedia', 'Math and Text encyclopedia', 'Math resources', 'uniovi', 'Matemáticas uniovi', 'Ciencias uniovi', 'Ciencias', 'Latex uniovi', 'Latex', 'Matemáticas', 'Matemáticas interactivas', 'Matemáticas y texto', 'Matemáticas y texto interactivo'],
+  verification:{
+    google: 's8-A4d79I47KlP6pAL_7ibzhCa_MhZPJAhyiZbqUF1g',
+  }
 
 }
 
