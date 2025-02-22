@@ -18,6 +18,7 @@ type AuthContextType = {
   register: (email: string, password: string, nombre: string, apellidos: string) => Promise<{ success: boolean, error?: string }>
   logout: () => Promise<void>
   updateUser: (updates: Partial<User>) => Promise<void>
+  checkSession: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -27,19 +28,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter()
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const storedUser = localStorage.getItem('user')
-        if (storedUser && JSON.parse(storedUser).expiry > new Date().toISOString()) {
-          setUser(JSON.parse(storedUser))
-          console.log(JSON.parse(storedUser).admin)
-        }
-      } catch (error) {
-        console.error("Error checking session:", error)
-      }
-    }
     checkSession()
   }, [])
+
+  const checkSession = async () => {
+    try {
+      const storedUser = localStorage.getItem('user')
+      if (storedUser && JSON.parse(storedUser).expiry > new Date().toISOString()) {
+        setUser(JSON.parse(storedUser))
+        console.log(JSON.parse(storedUser).admin)
+      }
+    } catch (error) {
+      console.error("Error checking session:", error)
+    }
+  }
 
   const login = async (email: string, password: string): Promise<{ success: boolean, error?: string }> => {
     try {
@@ -130,7 +132,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  return <AuthContext.Provider value={{ user , login, register, logout, updateUser }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, login, register, logout, updateUser,checkSession }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {
