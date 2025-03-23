@@ -37,6 +37,12 @@ export default function LoginPage() {
                 Regístrate aquí
               </Link>
             </p>
+            <p>
+              ¿Olvidaste tu contraseña?{" "}
+              <Link href="/forgot-password" className="text-blue-600 hover:underline">
+                Recupérala aquí
+              </Link>
+            </p>
           </div>
         </CardContent>
       </Card>

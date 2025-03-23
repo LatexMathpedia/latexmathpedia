@@ -11,6 +11,7 @@ export const API_ROUTES = {
   subjects: `${API_BASE_URL}/subjects`,
   create: `${API_BASE_URL}/pdfs/create`,
   delete: `${API_BASE_URL}/pdfs/`,
+  reset: `${API_BASE_URL}/auth/reset-password`,
 
 }
 
