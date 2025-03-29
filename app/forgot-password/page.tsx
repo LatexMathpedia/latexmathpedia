@@ -18,6 +18,7 @@ export default function LoginPage() {
               body: JSON.stringify({ email }),
             })
         if(res.ok){
+            console.log(res)
             alert("Correo de recuperación de contraseña enviado. Por favor, revisa tu bandeja de entrada.");
         }
         else {

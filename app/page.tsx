@@ -7,17 +7,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/components/auth-context"
 
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-
 export default function Home() {
   const { user } = useAuth()
-  const router = useRouter()
-  useEffect(() => {
-      if(window.location.pathname !== "/"){
-        router.push(window.location.pathname)
-      }
-  })
+  
   return (
     <div className="flex min-h-screen flex-col bg-[#f5f5f5] dark:bg-gray-900">
       <Header />
