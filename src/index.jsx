@@ -29,25 +29,28 @@ const Register = lazy(() => import('./pages/Register'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 
 const AuthProvider = lazy(() => import('./contexts/AuthContext').then(module => ({ default: module.AuthProvider })))
+const ThemeProvider = lazy(() => import('./contexts/ThemeContext').then(module => ({ default: module.ThemeProvider })))
 
 render(() =>
     <Suspense fallback={<div>Loading...</div>}>
-        <AuthProvider>
-            <Router>
-                <Route path="/" component={Home} />
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={Register} />
-                <Route path="/dashboard" element={
-                    <AdminRoute>
-                        <Dashboard />
-                    </AdminRoute>
-                } />
-                <Route path="/pdfs" element={
-                    <PrivateRoute>
-                        <PDFs />
-                    </PrivateRoute>
-                } />
-            </Router>
-        </AuthProvider>
+        <ThemeProvider>
+            <AuthProvider>
+                <Router>
+                    <Route path="/" component={Home} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/register" component={Register} />
+                    <Route path="/dashboard" element={
+                        <AdminRoute>
+                            <Dashboard />
+                        </AdminRoute>
+                    } />
+                    <Route path="/pdfs" element={
+                        <PrivateRoute>
+                            <PDFs />
+                        </PrivateRoute>
+                    } />
+                </Router>
+            </AuthProvider>
+        </ThemeProvider>
     </Suspense>
     , root)
