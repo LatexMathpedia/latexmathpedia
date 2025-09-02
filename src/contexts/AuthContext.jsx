@@ -1,4 +1,4 @@
-import { createContext, useContext, createSignal, onMount, JSX } from "solid-js";
+import { createContext, useContext, createSignal, onMount} from "solid-js";
 
 const AuthContext = createContext()
 
@@ -12,7 +12,11 @@ export const AuthProvider = (props) => {
         try {
             const apiUrl = import.meta.env.VITE_API_URL || ''
             const res = await fetch(`${apiUrl}/auth/validate`, { credentials: 'include' })
-            res.ok ? setIsAuthenticated(true) : setIsAuthenticated(false)
+            if(res.ok){
+                setIsAuthenticated(true)
+                isAdminUser()
+            } else
+                setIsAuthenticated(false)
         } catch (error) {
             setIsAuthenticated(false)
         } finally {
@@ -35,6 +39,7 @@ export const AuthProvider = (props) => {
             throw new Error('Login failed')
         }
         setIsAuthenticated(true)
+        isAdminUser()
         return true
     }
 
