@@ -66,13 +66,31 @@ function selectBests(pdfs: PDFDocument[]): PDFDocument[] {
     const dateA = new Date(yearA, monthA - 1, dayA)
     const dateB = new Date(yearB, monthB - 1, dayB)
     return dateB.getTime() - dateA.getTime()
-  }).slice(0, 4) 
+  }).slice(0, 8) 
 }
 
 function WelcomePage() {
   const { categoryFilter, subCategoryFilter } = useFilter()
-  const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>(sampleData.recientes as PDFDocument[])
+  const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>(selectBests(sampleData.recientes as PDFDocument[]))
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
+
+  const getAllPDFs = (): PDFDocument[] => {
+    let allPDFs: PDFDocument[] = [...(sampleData.recientes as PDFDocument[])]
+    
+    Object.entries(sampleData).forEach(([key, value]) => {
+      if (key !== "recientes") {
+        if (Array.isArray(value)) {
+          allPDFs = [...allPDFs, ...value]
+        } else {
+          Object.values(value).forEach(subcategoryPDFs => {
+            allPDFs = [...allPDFs, ...subcategoryPDFs]
+          })
+        }
+      }
+    })
+    
+    return allPDFs
+  }
 
   useEffect(() => {
     if (categoryFilter) {
@@ -95,7 +113,7 @@ function WelcomePage() {
         setPageTitle(categoryFilter)
       }
     } else {
-      setDisplayedPDFs(sampleData.recientes as PDFDocument[])
+      setDisplayedPDFs(selectBests(sampleData.recientes as PDFDocument[]))
       setPageTitle("Últimos apuntes")
     }
   }, [categoryFilter, subCategoryFilter])
@@ -105,9 +123,11 @@ function WelcomePage() {
       <div className="p-8">
         <div className="bg-muted/50 rounded-xl w-full h-32" />
         <section className="mt-8">
-          <h2 className="text-2xl font-bold">{pageTitle}</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">{pageTitle}</h2>
+          </div>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {selectBests(displayedPDFs).map((pdf, index) => (
+            {displayedPDFs.map((pdf, index) => (
               <PDFCard
                 key={index}
                 title={pdf.title}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { EyeIcon, CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,24 +12,22 @@ type PDFCardProps = {
 }
 
 function PDFCard({ title, url, date, img }: PDFCardProps) {
+    const defaultImage = "/image.png";
+
     return (
         <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
-            {/* Imagen */}
             <div className="relative h-36 w-full overflow-hidden">
                 <Image 
-                    src={img}
+                    src={img || defaultImage}
                     alt={`Imagen de ${title}`}
                     fill
                     className="object-cover"
                 />
             </div>
             
-            {/* Contenido */}
             <div className="flex flex-1 flex-col p-4">
-                {/* Título */}
                 <h3 className="mb-2 line-clamp-2 text-lg font-medium">{title}</h3>
                 
-                {/* Fecha y Vistas */}
                 <div className="mb-4 flex items-center text-sm text-muted-foreground">
                     <div className="flex items-center gap-1.5 mr-4">
                         <CalendarIcon className="h-3.5 w-3.5" />
@@ -37,7 +35,6 @@ function PDFCard({ title, url, date, img }: PDFCardProps) {
                     </div>
                 </div>
                 
-                {/* Botón de acción */}
                 <div className="mt-auto">
                     <Button 
                         variant="default" 
