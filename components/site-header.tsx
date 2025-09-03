@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
-import { ModeToggle } from "./ModeToggle"
+import { ModeToggle } from "./mode-toggle"
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar()
