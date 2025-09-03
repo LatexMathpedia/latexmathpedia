@@ -31,7 +31,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   const tags = (data.tags as string[]) || ["Matemáticas"]
 
   return (
-    <div className="container max-w-4xl mx-auto py-6">
+    <div className="container max-w-[1200px] mx-auto py-6">
       <div className="mb-6">
         <Link href="/dashboard/blog">
           <Button variant="ghost" size="sm" className="mb-4">
