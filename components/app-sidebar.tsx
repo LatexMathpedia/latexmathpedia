@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import {
-  BookOpen,
   Bot,
   Command,
   Frame,
@@ -10,7 +9,6 @@ import {
   Map,
   PieChart,
   Send,
-  Settings2,
   SquareTerminal,
 } from "lucide-react"
 

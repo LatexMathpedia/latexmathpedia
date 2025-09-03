@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CalendarIcon } from "lucide-react";
 
@@ -17,10 +16,9 @@ function PDFCard({ title, url, date, img }: PDFCardProps) {
     return (
         <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
             <div className="relative h-36 w-full overflow-hidden">
-                <Image 
+                <img 
                     src={img || defaultImage}
                     alt={`Imagen de ${title}`}
-                    fill
                     className="object-cover"
                 />
             </div>
