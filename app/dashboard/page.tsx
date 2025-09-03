@@ -1,3 +1,12 @@
+const sampleData = {
+  pdfs: [
+    { title: "Topología Tema 1", url: "https://youtube.com/", date: "12/1/2025", views: 100, img: "/image.png" },
+    { title: "Topología Tema 2", url: "https://youtube.com/", date: "12/1/2025", views: 150, img: "/image.png" },
+    { title: "Topología Tema 3", url: "https://youtube.com/", date: "12/1/2025", views: 200, img: "/image.png" },
+    { title: "Topología Tema 4", url: "https://youtube.com/", date: "12/1/2025", views: 250, img: "/image.png" },
+  ],
+}
+
 function WelcomePage() {
   return (
     <>
