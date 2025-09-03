@@ -1,6 +1,6 @@
 import { Show } from "solid-js"
 import { Navigate } from "@solidjs/router"
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from "../contexts/AuthContext"
 
 const AdminRoute = (props) => {
     const { isAuthenticated, loading, isAdmin}= useAuth()
