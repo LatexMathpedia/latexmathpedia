@@ -19,16 +19,19 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
-  const filePath = path.join(process.cwd(), "content/posts", `${params.slug}.mdx`)
-  const file = fs.readFileSync(filePath, "utf-8")
-  const { content, data } = matter(file)
-  
+  // Asegurarse de que params sea manejado correctamente
+  const { slug } = await Promise.resolve(params);
+
+  const filePath = path.join(process.cwd(), "content/posts", `${slug}.mdx`);
+  const file = fs.readFileSync(filePath, "utf-8");
+  const { content, data } = matter(file);
+
   // Calcular tiempo estimado de lectura (promedio 200 palabras/minuto)
-  const wordCount = content.split(/\s+/).length
-  const estimatedReadTime = `${Math.ceil(wordCount / 200)} min`
-  
+  const wordCount = content.split(/\s+/).length;
+  const estimatedReadTime = `${Math.ceil(wordCount / 200)} min`;
+
   // Usar tags si están disponibles, o un valor predeterminado
-  const tags = (data.tags as string[]) || ["Matemáticas"]
+  const tags = (data.tags as string[]) || ["Matemáticas"];
 
   return (
     <div className="container max-w-[1200px] mx-auto py-6">
@@ -39,19 +42,19 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           </Button>
         </Link>
       </div>
-      
+
       <Card>
         <CardContent className="pt-6">
           <article className="space-y-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{data.title}</h1>
-              
+
               <div className="flex flex-wrap gap-2 mt-4">
                 {tags.map((tag) => (
                   <Badge key={tag} variant="secondary">{tag}</Badge>
                 ))}
               </div>
-              
+
               <div className="flex items-center gap-6 mt-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <CalendarIcon className="h-4 w-4" />
@@ -63,13 +66,13 @@ export default async function BlogPost({ params }: { params: { slug: string } })
                 </div>
               </div>
             </div>
-            
+
             <Separator className="my-4" />
-            
+
             <MDXContent source={content} className="prose-math" />
           </article>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

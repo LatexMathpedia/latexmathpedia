@@ -1,0 +1,27 @@
+---
+title: "Teorema de Pitágaoras"
+date: "2023-10-01"
+description: "Explicación y demostración del Teorema de Pitágoras."
+tags: ["Matemáticas", "Geometría", "Teoremas"]
+---
+
+## Introducción
+El Teorema de Darboux es un resultado fundamental en el análisis matemático que establece que la derivada de una función continua en un intervalo tiene la propiedad del valor intermedio. En otras palabras, si una función es continua en un intervalo y su derivada toma dos valores diferentes en los extremos del intervalo, entonces la derivada debe tomar todos los valores intermedios entre esos dos valores en algún punto del intervalo.
+Matemáticamente, el teorema se puede enunciar de la siguiente manera:
+Si $f: [a, b] \to \mathbb{R}$ es una función continua en $[a, b]$ y diferenciable en $(a, b)$, y si $f'(a) < f'(b)$, entonces para cualquier $L$ entre $f'(a)$ y $f'(b)$, existe al menos un punto $c \in (a, b)$ tal que $f'(c) = L$.
+## Demostración
+Supongamos que $f$ es continua en $[a, b]$ y diferenciable en $(a, b)$, y que $f'(a) < f'(b)$. Sea $L$ un valor tal que $f'(a) < L < f'(b)$.
+Definimos la función auxiliar $g(x) = f(x) - Lx$. Entonces, $g$ es continua en $[a, b]$ y diferenciable en $(a, b)$. Calculamos las derivadas en los extremos:
+$$
+g'(a) = f'(a) - L < 0
+$$
+$$
+g'(b) = f'(b) - L > 0
+$$
+Por el Teorema de Rolle, existe al menos un punto $c \in (a, b)$ tal que $g'(c) = 0$. Esto implica que:
+$$
+f'(c) - L = 0 \implies f'(c) = L
+$$
+Por lo tanto, hemos demostrado que para cualquier valor $L$ entre $f'(a)$ y $f'(b)$, existe un punto $c \in (a, b)$ tal que $f'(c) = L$. Esto completa la demostración del Teorema de Darboux.
+## Conclusión
+El Teorema de Darboux es una herramienta poderosa en el análisis matemático que garantiza la existencia de valores intermedios para las derivadas de funciones continuas. Este teorema tiene importantes aplicaciones en diversas áreas de las matemáticas y la física, y su comprensión es esencial para el estudio avanzado del cálculo y el análisis.

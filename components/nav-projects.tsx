@@ -24,6 +24,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
 
 export function NavProjects({
   projects,
@@ -80,7 +81,7 @@ export function NavProjects({
         <SidebarMenuItem>
           <SidebarMenuButton>
             <MoreHorizontal />
-            <span>Más</span>
+            <Link href="/dashboard/blog">Ver todos</Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
