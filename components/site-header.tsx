@@ -3,6 +3,7 @@
 import { SidebarIcon } from "lucide-react"
 
 import { SearchForm } from "@/components/search-form"
+import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,6 +19,11 @@ import { ModeToggle } from "./mode-toggle"
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar()
+  const { setSearchQuery } = useSearch() 
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
 
   return (
     <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
@@ -44,7 +50,7 @@ export function SiteHeader() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
+        <SearchForm className="w-full sm:ml-auto sm:w-auto" onSearch={handleSearch} />
         <ModeToggle />
       </div>
     </header>

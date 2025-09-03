@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import PDFCard from "@/components/pdf-card"
 import { useFilter } from "@/contexts/filter-context"
+import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
 
 type PDFDocument = {
   title: string
@@ -71,6 +72,7 @@ function selectBests(pdfs: PDFDocument[]): PDFDocument[] {
 
 function WelcomePage() {
   const { categoryFilter, subCategoryFilter } = useFilter()
+  const { searchQuery } = useSearch() // Usar el estado de búsqueda global
   const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>(selectBests(sampleData.recientes as PDFDocument[]))
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
 
@@ -92,7 +94,27 @@ function WelcomePage() {
     return allPDFs
   }
 
+  // Función para normalizar texto (eliminar tildes y acentos)
+  const normalizeText = (text: string): string => {
+    return text
+      .normalize('NFD')           
+      .replace(/[\u0300-\u036f]/g, '') 
+      .toLowerCase();
+  };
+
   useEffect(() => {
+    const allPDFs = getAllPDFs()
+    
+    if (searchQuery.trim() !== "") {
+      const normalizedSearch = normalizeText(searchQuery);
+      const filteredPDFs = allPDFs.filter(pdf =>
+        normalizeText(pdf.title).includes(normalizedSearch)
+      )
+      setDisplayedPDFs(filteredPDFs)
+      setPageTitle(`Resultados para: "${searchQuery}" (${filteredPDFs.length} encontrados)`)
+      return
+    }
+
     if (categoryFilter) {
       const category = sampleData[categoryFilter]
       if (!category) return
@@ -113,10 +135,10 @@ function WelcomePage() {
         setPageTitle(categoryFilter)
       }
     } else {
-      setDisplayedPDFs(selectBests(sampleData.recientes as PDFDocument[]))
+      setDisplayedPDFs(selectBests(allPDFs))
       setPageTitle("Últimos apuntes")
     }
-  }, [categoryFilter, subCategoryFilter])
+  }, [categoryFilter, subCategoryFilter, searchQuery])
 
   return (
     <>
