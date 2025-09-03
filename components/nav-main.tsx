@@ -18,6 +18,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { useFilter } from "@/contexts/filter-context"
 
 export function NavMain({
   items,
@@ -33,6 +34,13 @@ export function NavMain({
     }[]
   }[]
 }) {
+  const { categoryFilter, subCategoryFilter, setFilter } = useFilter()
+
+  // Determina si el elemento es filtrable (matemáticas o software)
+  const isFilterable = (title: string) => {
+    return title === "Matemáticas" || title === "Software"
+  }
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Apuntes</SidebarGroupLabel>
@@ -40,12 +48,24 @@ export function NavMain({
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+              {isFilterable(item.title) ? (
+                <SidebarMenuButton 
+                  tooltip={item.title}
+                  onClick={() => setFilter(item.title, null)}
+                  className={categoryFilter === item.title ? "text-primary" : ""}
+                >
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
+                </SidebarMenuButton>
+              ) : (
+                <SidebarMenuButton asChild tooltip={item.title}>
+                  <a href={item.url}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              )}
+              
               {item.items?.length ? (
                 <>
                   <CollapsibleTrigger asChild>
@@ -58,11 +78,20 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                          {isFilterable(item.title) ? (
+                            <SidebarMenuSubButton 
+                              onClick={() => setFilter(item.title, subItem.title)}
+                              className={categoryFilter === item.title && subCategoryFilter === subItem.title ? "text-primary" : ""}
+                            >
                               <span>{subItem.title}</span>
-                            </a>
-                          </SidebarMenuSubButton>
+                            </SidebarMenuSubButton>
+                          ) : (
+                            <SidebarMenuSubButton asChild>
+                              <a href={subItem.url}>
+                                <span>{subItem.title}</span>
+                              </a>
+                            </SidebarMenuSubButton>
+                          )}
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>

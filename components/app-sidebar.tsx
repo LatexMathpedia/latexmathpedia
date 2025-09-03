@@ -36,6 +36,12 @@ const data = {
   },
   navMain: [
     {
+      title: "Todos los apuntes",
+      url: "#",
+      icon: BookOpen,
+      isActive: true,
+    },
+    {
       title: "Matemáticas",
       url: "#",
       icon: SquareTerminal,

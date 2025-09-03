@@ -8,11 +8,10 @@ type PDFCardProps = {
     title: string;
     url: string;
     date: string;
-    views: number;
     img: string;
 }
 
-function PDFCard({ title, url, date, views, img }: PDFCardProps) {
+function PDFCard({ title, url, date, img }: PDFCardProps) {
     return (
         <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
             {/* Imagen */}
@@ -35,10 +34,6 @@ function PDFCard({ title, url, date, views, img }: PDFCardProps) {
                     <div className="flex items-center gap-1.5 mr-4">
                         <CalendarIcon className="h-3.5 w-3.5" />
                         <span>{date}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <EyeIcon className="h-3.5 w-3.5" />
-                        <span>{views}</span>
                     </div>
                 </div>
                 
