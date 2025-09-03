@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import PDFCard from "@/components/pdf-card"
 import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
+import { useAuth } from "@/contexts/auth-context"
 
 type PDFDocument = {
   title: string
@@ -75,6 +76,8 @@ function WelcomePage() {
   const { searchQuery } = useSearch() // Usar el estado de búsqueda global
   const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>(selectBests(sampleData.recientes as PDFDocument[]))
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
+
+  const { isAuthenticated, login, isAdmin } = useAuth()
 
   const getAllPDFs = (): PDFDocument[] => {
     let allPDFs: PDFDocument[] = [...(sampleData.recientes as PDFDocument[])]
@@ -166,6 +169,9 @@ function WelcomePage() {
           )}
         </section>
       </div>
+      <button onClick={() => login({ email: "pablovisiongp@gmail.com", password: "aaaaaa" })}>Login</button>
+      <p>{isAuthenticated ? "Logged in" : "Not logged in"}</p>
+      <p>{isAdmin? "Admin":"Not admin"}</p>
     </>
   )
 }
