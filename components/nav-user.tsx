@@ -28,6 +28,24 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
+function handleLogOut() {
+  // Aquí iría la lógica para cerrar sesión-> endpoint /auth/logout
+  const response = fetch(`${apiUrl}/auth/logout`, {
+    method: 'POST',
+    credentials: 'include', // Incluir cookies si es necesario
+    }).then(res => {
+      if (res.ok) {
+        window.location.href = '/'; // Redirigir al usuario a la página de inicio o login
+      } else {
+        console.error('Error al cerrar sesión');
+      }
+    }).catch(err => {
+      console.error('Error al cerrar sesión', err);
+    });
+}
+
 export function NavUser({
   user,
 }: {
@@ -90,7 +108,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer">
-              <LogOut />
+              <LogOut onClick={handleLogOut}/>
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

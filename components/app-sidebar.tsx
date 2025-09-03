@@ -25,6 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useAuth } from "@/contexts/auth-context"
 
 const data = {
   user: {
@@ -40,17 +41,29 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "Análisis",
+          title: "Análisis y Cálculo",
           url: "#",
         },
         {
-          title: "Álgebra",
+          title: "Álgebra y Geometría",
           url: "#",
         },
         {
-          title: "Geometría",
+          title: "Topología",
           url: "#",
         },
+        {
+          title: "Probabilidad y Estadística",
+          url: "#",
+        },
+        {
+          title: "Ecuaciones Diferenciales y Métodos Numéricos",
+          url: "#",
+        },
+        {
+          title: "Optimización y Programación Matemática",
+          url: "#",
+        }
       ],
     },
     {
@@ -59,17 +72,33 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "Frontend",
+          title: "Fundamentos y Algoritmos",
           url: "#",
         },
         {
-          title: "Backend",
+          title: "Estructuras, Computación y Lenguajes",
           url: "#",
         },
         {
-          title: "DevOps",
+          title: "Arquitectura y Sistemas",
           url: "#",
         },
+        {
+          title: "Ingeniería del Software",
+          url: "#",
+        },
+        {
+          title: "Bases de Datos",
+          url: "#",
+        },
+        {
+          title: "Web e interfaces",
+          url: "#",
+        },
+        {
+          title: "Seguridad e IA",
+          url: "#",
+        }
       ],
     },
   ],
@@ -105,6 +134,8 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { isAdmin } = useAuth()
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -131,6 +162,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
+        { isAdmin && (
+          <NavSecondary
+            items={[{ title: "Admin Panel", url: "/admin", icon: Bot }]}
+          />
+        )}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user}/>

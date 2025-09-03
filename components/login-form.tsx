@@ -54,7 +54,7 @@ export function LoginForm({
           </div>
           <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
         </div>
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full cursor-pointer">
           Iniciar sesión
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -62,7 +62,7 @@ export function LoginForm({
             O continúa con
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full cursor-pointer">
           <FaGoogle />
           Inicia sesión con Google
         </Button>

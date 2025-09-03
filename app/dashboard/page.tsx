@@ -154,11 +154,6 @@ function WelcomePage() {
   return (
     <>
       <div className="p-8 max-w-[1300px] mx-auto">
-        <div className="flex gap-10">
-          <button onClick={() => login({ email: "pablovisiongp@gmail.com", password: "aaaaaa" })}>Login</button>
-          <p>{isAuthenticated ? "Logged in" : "Not logged in"}</p>
-          <p>{isAdmin ? "Admin" : "Not admin"}</p>
-        </div>
         <div className="bg-muted/50 rounded-xl w-full h-32" />
         <section className="mt-8">
           <div className="flex items-center justify-between mb-4">

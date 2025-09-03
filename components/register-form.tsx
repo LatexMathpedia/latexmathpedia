@@ -61,7 +61,7 @@ export function RegisterForm({
           <Label htmlFor="password2">Repetir contraseña</Label>
           <Input id="password2" type="password" required value={password2} onChange={e => setPassword2(e.target.value)}/>
         </div>
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full cursor-pointer">
           Crear cuenta
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -69,7 +69,7 @@ export function RegisterForm({
             O continúa con
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full cursor-pointer">
           <FaGoogle />
           Inicia sesión con Google
         </Button>

@@ -1,0 +1,1 @@
+1. Añadir un error HTTP para el login si no hay verificación de email.
