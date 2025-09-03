@@ -1,0 +1,66 @@
+---
+title: "Resolución Examen Análisis 2025"
+date: "2025-09-01"
+description: "Resolución del examen de análisis de 2025 con explicaciones detalladas."
+tags: ["Análisis", "Exámenes", "Cálculo", "Integrales"]
+---
+
+## Ejercicio 1: Integración por partes
+
+Sabemos que la integración por partes se basa en la fórmula:
+
+$$
+\int u(x) \cdot v'(x) \, dx = u(x) \cdot v(x) - \int v(x) \cdot u'(x) \, dx
+$$
+
+Para resolver el ejercicio $\int x \cdot \ln(x) \, dx$, elegimos:
+- $u(x) = \ln(x)$
+- $v'(x) = x$
+
+Entonces:
+- $u'(x) = \frac{1}{x}$
+- $v(x) = \frac{x^2}{2}$
+
+Sustituyendo en la fórmula de integración por partes:
+
+$$
+\int x \cdot \ln(x) \, dx = \ln(x) \cdot \frac{x^2}{2} - \int \frac{x^2}{2} \cdot \frac{1}{x} \, dx
+$$
+
+Simplificando:
+
+$$
+\int x \cdot \ln(x) \, dx = \frac{x^2 \ln(x)}{2} - \int \frac{x}{2} \, dx
+$$
+
+$$
+\int x \cdot \ln(x) \, dx = \frac{x^2 \ln(x)}{2} - \frac{x^2}{4} + C
+$$
+
+## Ejercicio 2: Cálculo de límites
+
+Para calcular el límite $\lim_{x \to 0} \frac{\sin(3x)}{x}$, usamos la propiedad:
+
+$$
+\lim_{x \to 0} \frac{\sin(ax)}{x} = a \cdot \lim_{x \to 0} \frac{\sin(ax)}{ax} = a
+$$
+
+Por lo tanto:
+
+$$
+\lim_{x \to 0} \frac{\sin(3x)}{x} = 3 \cdot \lim_{x \to 0} \frac{\sin(3x)}{3x} = 3 \cdot 1 = 3
+$$
+
+## Ejercicio 3: Derivada de una función compuesta
+
+Recordando la regla de la cadena:
+
+$$
+\frac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)
+$$
+
+Si $f(x) = e^{x^2}$, calculamos:
+
+$$
+\frac{d}{dx}[e^{x^2}] = e^{x^2} \cdot \frac{d}{dx}[x^2] = e^{x^2} \cdot 2x = 2x \cdot e^{x^2}
+$$
