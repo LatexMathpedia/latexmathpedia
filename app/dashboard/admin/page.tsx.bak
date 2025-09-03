@@ -41,7 +41,7 @@ const categories = {
     ]
 }
 
-export default function WelcomePage() {
+function WelcomePage() {
   const [title, setTitle] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
   
@@ -209,3 +209,8 @@ export default function WelcomePage() {
     </div>
   )
 }
+
+export default WelcomePage
+}
+}
+export default WelcomePage
