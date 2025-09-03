@@ -28,12 +28,12 @@ export default function BlogIndex() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="p-8 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Blog de Matemáticas</h1>
       </div>
       
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
         {posts.map((post) => (
           <BlogCard 
             key={post.slug}
