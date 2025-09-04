@@ -4,22 +4,10 @@ import { useEffect, useState } from "react"
 import PDFCard from "@/components/pdf-card"
 import BlogCard from "@/components/blog-card"
 import { useFilter } from "@/contexts/filter-context"
-import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
-
-type PDFDocument = {
-  title: string
-  url: string
-  date: string
-  img: string
-}
-
-type SubCategories = {
-  [key: string]: PDFDocument[]
-}
-
-type Categories = {
-  [key: string]: SubCategories | PDFDocument[]
-}
+import { useSearch } from "@/contexts/search-context"
+import { useAuth } from "@/contexts/auth-context"
+import { fetchAllPDFs, organizePDFs, PDF, PDFCategoriesMap } from "@/lib/pdfs"
+import { getBlogPosts, BlogPost } from "@/lib/blog"
 
 const sampleData: Categories = {
   "Matemáticas": {
