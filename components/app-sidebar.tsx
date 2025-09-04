@@ -133,6 +133,23 @@ const data = {
   ],
 }
 
+const dataAdminPanel = {
+  adminPanel: [
+    {
+      title: "PDFs",
+      url: "/dashboard/admin/pdfs",
+      icon: Command,
+      isActive: false,
+    },
+    {
+      title: "Usuarios",
+      url: "/dashboard/admin/users",
+      icon: Bot,
+      isActive: false,
+    }
+  ],
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isAdmin } = useAuth()
 
@@ -159,13 +176,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} title="Apuntes"/>
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
         { isAdmin && (
-          <NavSecondary
-            items={[{ title: "Admin Panel", url: "/dashboard/admin", icon: Bot }]}
-          />
+          <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel"/>
         )}
       </SidebarContent>
       <SidebarFooter>

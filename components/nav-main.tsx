@@ -22,6 +22,7 @@ import { useFilter } from "@/contexts/filter-context"
 
 export function NavMain({
   items,
+  title
 }: {
   items: {
     title: string
@@ -32,7 +33,8 @@ export function NavMain({
       title: string
       url: string
     }[]
-  }[]
+  }[],
+  title: string
 }) {
   const { categoryFilter, subCategoryFilter, setFilter } = useFilter()
 
@@ -43,7 +45,7 @@ export function NavMain({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Apuntes</SidebarGroupLabel>
+      <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
