@@ -32,11 +32,11 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 // Tipos para los usuarios
 type User = {
   email: string;
-  role: "admin" | "user";
+  role: "admin" | "user" | "moderator";
 }
 
 // Posibles roles
-const roles = ["admin", "user"];
+const roles = ["admin", "user", "moderator"];
 
 async function fetchUsers() {
   try {
@@ -74,16 +74,7 @@ export default function UsersPage() {
   };
   
   useEffect(() => {
-    if (apiUrl === '') {
-      setUsers([
-        { email: 'maria@example.com', role: 'admin' },
-        { email: 'juan@example.com', role: 'user' },
-        { email: 'ana@example.com', role: 'user' },
-        { email: 'carlos@example.com', role: 'user' },
-      ]);
-    } else {
-      loadUsers();
-    }
+    loadUsers();
   }, []);
   
   const updateUserRole = async (userEmail: string, newRole: string) => {
@@ -103,7 +94,7 @@ export default function UsersPage() {
       if (response.ok) {
         setUsers(prevUsers => 
           prevUsers.map(user => 
-            user.email === userEmail ? { ...user, role: newRole as "admin" | "user" } : user
+            user.email === userEmail ? { ...user, role: newRole as "admin" | "user" | "moderator" } : user
           )
         );
         console.log(`Rol del usuario ${userEmail} actualizado a ${newRole}`);

@@ -19,6 +19,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { useFilter } from "@/contexts/filter-context"
+import Link from "next/link"
 
 export function NavMain({
   items,
@@ -57,7 +58,9 @@ export function NavMain({
                   className={categoryFilter === item.title ? "text-primary" : ""}
                 >
                   <item.icon />
-                  <span>{item.title}</span>
+                  <span>
+                    <Link href="/dashboard">{item.title}</Link>
+                  </span>
                 </SidebarMenuButton>
               ) : (
                 <SidebarMenuButton asChild tooltip={item.title}>
@@ -85,7 +88,9 @@ export function NavMain({
                               onClick={() => setFilter(item.title, subItem.title)}
                               className={categoryFilter === item.title && subCategoryFilter === subItem.title ? "text-primary" : ""}
                             >
-                              <span>{subItem.title}</span>
+                                <span>
+                                  <Link href="/dashboard">{subItem.title}</Link>
+                                </span>
                             </SidebarMenuSubButton>
                           ) : (
                             <SidebarMenuSubButton asChild>
