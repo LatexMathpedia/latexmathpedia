@@ -374,7 +374,7 @@ export default function WelcomePage() {
                   />
                 ))
               ) : (
-                <p>No hay PDFs existentes. Haz clic en "Ver PDFS" para cargar los documentos.</p>
+<p>No hay PDFs existentes. Haz clic en &quot;Ver PDFS&quot; para cargar los documentos.</p>
               )}
             </div>
           </div>
