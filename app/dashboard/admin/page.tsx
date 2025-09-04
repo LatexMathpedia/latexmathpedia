@@ -37,9 +37,43 @@ const categories = {
     "Estructuras, Computación y Lenguajes",
     "Arquitectura y Sistemas",
     "Ingeniería del Software",
+    "Web e Interfaces",
     "Bases de Datos",
     "Redes y Seguridad"
   ]
+}
+
+function renameCategory(category: string) {
+  switch (category) {
+    case "Análisis y Cálculo":
+      return "AC";
+    case "Álgebra y Geometría":
+      return "AG";
+    case "Topología":
+      return "TE";
+    case "Probabilidad y Estadística":
+      return "PE";
+    case "Ecuaciones Diferenciales y Métodos Numéricos":
+      return "EM";
+    case "Optimización y Programación Matemática":
+      return "OP";
+    case "Fundamentos y Algoritmos":
+      return "FA";
+    case "Estructuras, Computación y Lenguajes":
+      return "EL";
+    case "Arquitectura y Sistemas":
+      return "AS";
+    case "Ingeniería del Software":
+      return "IP";
+    case "Bases de Datos":
+      return "BD";
+    case "Redes y Seguridad":
+      return "RS";
+    case "Web e Interfaces":
+      return "WI";
+    default:
+      throw new Error("Categoría desconocida");
+  }
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
@@ -89,6 +123,7 @@ async function fetchExistingPDFs() {
 export default function WelcomePage() {
   const [title, setTitle] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
 
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -114,7 +149,6 @@ export default function WelcomePage() {
     e.preventDefault();
     
     try {
-      // Aquí enviarías los datos a la API
       const response = await fetch(`${apiUrl}/pdfs/create`, {
         method: 'POST',
         headers: {
@@ -122,24 +156,22 @@ export default function WelcomePage() {
         },
         credentials: 'include',
         body: JSON.stringify({
-          pdf_name: title,
-          pdf_link: pdfUrl,
-          pdf_category: selectedCategory,
-          pdf_subcategory: selectedSubcategory,
-          // Otros campos si son necesarios
+          name: title,
+          link: pdfUrl,
+          imageLink: imgUrl,
+          pdfTag: renameCategory(selectedSubcategory),
+          description: ""
         })
       });
       
       if (response.ok) {
         console.log('PDF creado exitosamente');
         
-        // Resetear el formulario
         setTitle("");
         setPdfUrl("");
         setSelectedCategory("");
         setSelectedSubcategory("");
         
-        // Actualizar la lista de PDFs
         fetchAndSetPDFs();
       } else {
         console.error('Error al crear el PDF');
@@ -181,6 +213,17 @@ export default function WelcomePage() {
                   className="w-full"
                   value={pdfUrl}
                   onChange={(e) => setPdfUrl(e.target.value)}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="imgUrl">Enlace a la imagen</Label>
+                <Input
+                  id="imgUrl"
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  className="w-full"
+                  value={imgUrl}
+                  onChange={(e) => setImgUrl(e.target.value)}
                 />
               </div>
 
