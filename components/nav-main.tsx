@@ -58,9 +58,7 @@ export function NavMain({
                   className={categoryFilter === item.title ? "text-primary" : ""}
                 >
                   <item.icon />
-                  <span>
-                    <Link href="/dashboard">{item.title}</Link>
-                  </span>
+                  <span>{item.title}</span>
                 </SidebarMenuButton>
               ) : (
                 <SidebarMenuButton asChild tooltip={item.title}>
@@ -88,9 +86,7 @@ export function NavMain({
                               onClick={() => setFilter(item.title, subItem.title)}
                               className={categoryFilter === item.title && subCategoryFilter === subItem.title ? "text-primary" : ""}
                             >
-                                <span>
-                                  <Link href="/dashboard">{subItem.title}</Link>
-                                </span>
+                                <span>{subItem.title}</span>
                             </SidebarMenuSubButton>
                           ) : (
                             <SidebarMenuSubButton asChild>
