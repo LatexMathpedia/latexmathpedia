@@ -43,7 +43,7 @@ const categories = {
   ]
 }
 
-function renameCategory(category: string) {
+export function renameCategory(category: string) {
   switch (category) {
     case "Análisis y Cálculo":
       return "AC";
@@ -171,6 +171,7 @@ export default function WelcomePage() {
         setPdfUrl("");
         setSelectedCategory("");
         setSelectedSubcategory("");
+        setImgUrl("");
         
         fetchAndSetPDFs();
       } else {

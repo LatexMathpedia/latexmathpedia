@@ -26,6 +26,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { renameCategory } from "@/app/dashboard/admin/pdfs/page"
+import { rename } from "fs"
 
 const categories = {
   "Matemáticas": [
@@ -57,12 +59,12 @@ type PDFProps = {
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
-const PDFAccordionCard = ({ 
-  pdf, 
-  onUpdate, 
-  onDelete 
-}: { 
-  pdf: PDFProps, 
+const PDFAccordionCard = ({
+  pdf,
+  onUpdate,
+  onDelete
+}: {
+  pdf: PDFProps,
   onUpdate?: (updatedPdf: PDFProps) => void,
   onDelete?: (pdfId: string) => void
 }) => {
@@ -71,7 +73,7 @@ const PDFAccordionCard = ({
 
   const [categoryOpen, setCategoryOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState("")
-  
+
   const [subcategoryOpen, setSubcategoryOpen] = useState(false)
   const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
@@ -82,23 +84,23 @@ const PDFAccordionCard = ({
 
   const handleUpdate = async () => {
     console.log("Actualizando PDF:", pdfData)
-    
+
     try {
-      const response = await fetch(`${apiUrl}/pdfs/update?=${pdf.name}`, {
+      const response = await fetch(`${apiUrl}/pdfs/update?=${pdfData.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
-          pdf_id: pdfData.id,
-          pdf_name: pdfData.name,
-          pdf_description: pdfData.description,
-          pdf_link: pdfData.link,
-          pdf_image_link: pdfData.imageLink,
+          name: pdfData.name,
+          link: pdfData.link,
+          imageLink: pdfData.imageLink,
+          pdfTag: renameCategory(selectedSubcategory),
+          description: pdfData.description,
         })
       });
-      
+
       if (response.ok) {
         console.log('PDF actualizado exitosamente');
         if (onUpdate) {
@@ -116,23 +118,23 @@ const PDFAccordionCard = ({
 
   const handleDelete = async () => {
     console.log("Eliminando PDF:", pdf.id)
-    
+
     try {
-        const response = await fetch(`${apiUrl}/pdfs/delete?pdfName=${pdf.name}`, {
-            method: 'DELETE',
-            credentials: 'include'
-        });
-        
-        if (response.ok) {
-            console.log('PDF eliminado exitosamente');
-            if (onDelete) {
-              onDelete(pdf.id);
-            }
-        } else {
-            console.error('Error al eliminar el PDF');
+      const response = await fetch(`${apiUrl}/pdfs/delete?pdfName=${pdf.name}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        console.log('PDF eliminado exitosamente');
+        if (onDelete) {
+          onDelete(pdf.id);
         }
+      } else {
+        console.error('Error al eliminar el PDF');
+      }
     } catch (error) {
-        console.error('Error al eliminar el PDF:', error);
+      console.error('Error al eliminar el PDF:', error);
     }
   }
 
@@ -162,7 +164,7 @@ const PDFAccordionCard = ({
           </CollapsibleTrigger>
         </div>
       </div>
-      
+
       <CollapsibleContent>
         <Separator />
         <div className="p-4 space-y-4">
@@ -175,7 +177,7 @@ const PDFAccordionCard = ({
               className="w-full"
             />
           </div>
-          
+
           <div className="grid gap-2">
             <Label htmlFor="pdfUrl">Enlace al PDF</Label>
             <Input
@@ -185,29 +187,29 @@ const PDFAccordionCard = ({
               className="w-full"
             />
           </div>
-          
+
           <div className="grid gap-2">
             <Label htmlFor="description">Descripción</Label>
             <Input
               id="description"
-              value={pdfData.description}
+              value={pdfData.description || ""}
               onChange={(e) => handleInputChange('description', e.target.value)}
               className="w-full"
             />
           </div>
-          
+
           <div className="grid gap-2">
             <Label htmlFor="imageLink">Enlace de imagen</Label>
             <Input
               id="imageLink"
-              value={pdfData.imageLink}
+              value={pdfData.imageLink || ""}
               onChange={(e) => handleInputChange('imageLink', e.target.value)}
               className="w-full"
             />
           </div>
-          
+
           <Separator className="my-4" />
-          
+
           {/* Campos de categoría y subcategoría */}
           <div className="md:flex md:flex-row md:gap-6">
             <div className="flex-1 grid gap-2 mb-4 md:mb-0">
@@ -307,7 +309,7 @@ const PDFAccordionCard = ({
               </Popover>
             </div>
           </div>
-          
+
           <div className="flex justify-end space-x-2 mt-6">
             <Button variant="outline" onClick={() => setIsOpen(false)}>
               Cancelar
