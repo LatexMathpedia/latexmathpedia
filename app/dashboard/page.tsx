@@ -5,12 +5,24 @@ import PDFCard from "@/components/pdf-card"
 import BlogCard from "@/components/blog-card"
 import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
+import { useAuth } from "@/contexts/auth-context"
 
 type PDFDocument = {
   title: string
   url: string
   date: string
   img: string
+}
+
+// Tipo para los PDFs que vienen de la API
+type APIPDFDocument = {
+  pdf_id: number
+  pdf_link?: string
+  pdf_last_time_edit: string
+  pdf_description: string | null
+  pdf_name: string
+  pdf_image_link: string | null
+  pdf_tag: string | null
 }
 
 type SubCategories = {
@@ -21,52 +33,14 @@ type Categories = {
   [key: string]: SubCategories | PDFDocument[]
 }
 
-const sampleData: Categories = {
-  "Matemáticas": {
-    "Análisis": [
-      { title: "Análisis: Límites", url: "https://example.com/", date: "15/1/2025", img: "/image.png" },
-      { title: "Análisis: Derivadas", url: "https://example.com/", date: "18/1/2025", img: "/image.png" },
-      { title: "Análisis: Integrales", url: "https://example.com/", date: "22/1/2025", img: "/image.png" },
-    ],
-    "Álgebra": [
-      { title: "Álgebra: Matrices", url: "https://example.com/", date: "10/1/2025", img: "/image.png" },
-      { title: "Álgebra: Determinantes", url: "https://example.com/", date: "14/1/2025", img: "/image.png" },
-      { title: "Álgebra: Espacios Vectoriales", url: "https://example.com/", date: "19/1/2025", img: "/image.png" },
-    ],
-    "Geometría": [
-      { title: "Geometría: Vectores", url: "https://example.com/", date: "8/1/2025", img: "/image.png" },
-      { title: "Geometría: Curvas", url: "https://example.com/", date: "12/1/2025", img: "/image.png" },
-      { title: "Geometría: Superficies", url: "https://example.com/", date: "17/1/2025", img: "/image.png" },
-    ],
-  },
-  "Software": {
-    "Frontend": [
-      { title: "Frontend: React", url: "https://example.com/", date: "5/1/2025", img: "/image.png" },
-      { title: "Frontend: CSS Avanzado", url: "https://example.com/", date: "9/1/2025", img: "/image.png" },
-    ],
-    "Backend": [
-      { title: "Backend: Node.js", url: "https://example.com/", date: "7/1/2025", img: "/image.png" },
-      { title: "Backend: Bases de Datos", url: "https://example.com/", date: "11/1/2025", img: "/image.png" },
-    ],
-    "DevOps": [
-      { title: "DevOps: Docker", url: "https://example.com/", date: "6/1/2025", img: "/image.png" },
-      { title: "DevOps: CI/CD", url: "https://example.com/", date: "13/1/2025", img: "/image.png" },
-    ],
-  },
-  "recientes": [
-    { title: "Topología Tema 1", url: "https://youtube.com/", date: "12/1/2025", img: "/image.png" },
-    { title: "Topología Tema 2", url: "https://youtube.com/", date: "12/1/2025", img: "/image.png" },
-    { title: "Topología Tema 3", url: "https://youtube.com/", date: "12/1/2025", img: "/image.png" },
-    { title: "Topología Tema 4", url: "https://youtube.com/", date: "12/1/2025", img: "/image.png" },
-  ],
-}
-
 const sampleDataBlog = [
-  { title: "Resolución del examen de Análisis 20/12/2025", description: "Análisis es una de las asignaturas más importantes y desafiantes en el campo de las matemáticas. En este artículo, exploraremos la resolución del examen de Análisis", date: "20/2/2025", estimatedReadTime: "5 min", tags: ["Análisis", "Matemáticas"], link: "resolucion-examen-analisis-2025"},
-  { title: "Introducción a React: Construyendo Interfaces de Usuario Dinámicas", description: "React es una biblioteca de JavaScript ampliamente utilizada para construir interfaces de usuario dinámicas y reactivas. En este artículo, exploraremos los conceptos básicos de React y cómo comenzar a desarrollar aplicaciones web con esta poderosa herramienta.", date: "15/2/2025", estimatedReadTime: "7 min", tags: ["React", "JavaScript", "Frontend"], link: "introduccion-react-interfaces-usuario"},
-  { title: "Guía Completa de Docker: Contenedores para el Desarrollo Moderno", description: "Docker ha revolucionado la forma en que desarrollamos, implementamos y gestionamos aplicaciones. En esta guía completa, exploraremos qué es Docker, cómo funciona y cómo puedes utilizarlo para mejorar tu flujo de trabajo de desarrollo.", date: "10/2/2025", estimatedReadTime: "10 min", tags: ["Docker", "DevOps", "Contenedores"], link: "guia-completa-docker-contenedores"},
-  { title: "Bases de Datos Relacionales vs NoSQL: ¿Cuál es la Mejor Opción para tu Proyecto?", description: "La elección entre bases de datos relacionales y NoSQL es una decisión crucial en el desarrollo de aplicaciones. En este artículo, compararemos ambas opciones, sus ventajas y desventajas, y te ayudaremos a decidir cuál es la mejor para tu proyecto.", date: "5/2/2025", estimatedReadTime: "6 min", tags: ["Bases de Datos", "SQL", "NoSQL"], link: "bases-datos-relacionales-vs-nosql"},
+  { title: "Resolución del examen de Análisis 20/12/2025", description: "Análisis es una de las asignaturas más importantes y desafiantes en el campo de las matemáticas. En este artículo, exploraremos la resolución del examen de Análisis", date: "20/2/2025", estimatedReadTime: "5 min", tags: ["Análisis", "Matemáticas"], link: "resolucion-examen-analisis-2025" },
+  { title: "Introducción a React: Construyendo Interfaces de Usuario Dinámicas", description: "React es una biblioteca de JavaScript ampliamente utilizada para construir interfaces de usuario dinámicas y reactivas. En este artículo, exploraremos los conceptos básicos de React y cómo comenzar a desarrollar aplicaciones web con esta poderosa herramienta.", date: "15/2/2025", estimatedReadTime: "7 min", tags: ["React", "JavaScript", "Frontend"], link: "introduccion-react-interfaces-usuario" },
+  { title: "Guía Completa de Docker: Contenedores para el Desarrollo Moderno", description: "Docker ha revolucionado la forma en que desarrollamos, implementamos y gestionamos aplicaciones. En esta guía completa, exploraremos qué es Docker, cómo funciona y cómo puedes utilizarlo para mejorar tu flujo de trabajo de desarrollo.", date: "10/2/2025", estimatedReadTime: "10 min", tags: ["Docker", "DevOps", "Contenedores"], link: "guia-completa-docker-contenedores" },
+  { title: "Bases de Datos Relacionales vs NoSQL: ¿Cuál es la Mejor Opción para tu Proyecto?", description: "La elección entre bases de datos relacionales y NoSQL es una decisión crucial en el desarrollo de aplicaciones. En este artículo, compararemos ambas opciones, sus ventajas y desventajas, y te ayudaremos a decidir cuál es la mejor para tu proyecto.", date: "5/2/2025", estimatedReadTime: "6 min", tags: ["Bases de Datos", "SQL", "NoSQL"], link: "bases-datos-relacionales-vs-nosql" },
 ]
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 function selectBests(pdfs: PDFDocument[]): PDFDocument[] {
   return pdfs.sort((a, b) => {
@@ -80,27 +54,47 @@ function selectBests(pdfs: PDFDocument[]): PDFDocument[] {
 
 function WelcomePage() {
   const { categoryFilter, subCategoryFilter } = useFilter()
-  const { searchQuery } = useSearch() 
-  const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>(selectBests(sampleData.recientes as PDFDocument[]))
+  const { searchQuery } = useSearch()
+  const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>([])
+  const [allPDFs, setAllPDFs] = useState<PDFDocument[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
+  const { isAdmin } = useAuth();
 
-  const getAllPDFs = (): PDFDocument[] => {
-    let allPDFs: PDFDocument[] = [...(sampleData.recientes as PDFDocument[])]
+  function convertApiPdfToDocument(apiPdf: APIPDFDocument): PDFDocument {
+    const date = new Date(apiPdf.pdf_last_time_edit);
+    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
-    Object.entries(sampleData).forEach(([key, value]) => {
-      if (key !== "recientes") {
-        if (Array.isArray(value)) {
-          allPDFs = [...allPDFs, ...value]
-        } else {
-          Object.values(value).forEach(subcategoryPDFs => {
-            allPDFs = [...allPDFs, ...subcategoryPDFs]
-          })
-        }
-      }
-    })
-
-    return allPDFs
+    return {
+      title: apiPdf.pdf_name,
+      url: apiPdf.pdf_link || '#',
+      date: formattedDate,
+      img: apiPdf.pdf_image_link || '/image.png',
+    };
   }
+
+  async function fetchPDFs(): Promise<APIPDFDocument[]> {
+    const apiQuery = isAdmin ? '/pdfs' : '/pdfs/no-link';
+
+    try {
+      const response = await fetch(`${apiUrl}${apiQuery}`);
+      if (!response.ok) {
+        throw new Error('Error fetching PDFs');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return [];
+    }
+  }
+
+  async function getAllPDFs(): Promise<PDFDocument[]> {
+    const apiPdfs = await fetchPDFs();
+    // Convierte los PDF de la API a nuestro formato de documento
+    return apiPdfs.map(apiPdf => convertApiPdfToDocument(apiPdf));
+  }
+
 
   // Función para normalizar texto (eliminar tildes y acentos)
   const normalizeText = (text: string): string => {
@@ -111,42 +105,45 @@ function WelcomePage() {
   };
 
   useEffect(() => {
-    const allPDFs = getAllPDFs()
+    async function loadPDFs() {
+      setIsLoading(true);
+      const pdfs = await getAllPDFs();
+      setAllPDFs(pdfs);
+      setIsLoading(false);
+    }
+
+    loadPDFs();
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) return;
 
     if (searchQuery.trim() !== "") {
       const normalizedSearch = normalizeText(searchQuery);
       const filteredPDFs = allPDFs.filter(pdf =>
         normalizeText(pdf.title).includes(normalizedSearch)
-      )
-      setDisplayedPDFs(filteredPDFs)
-      setPageTitle(`Resultados para: "${searchQuery}" (${filteredPDFs.length} encontrados)`)
-      return
+      );
+      setDisplayedPDFs(filteredPDFs);
+      setPageTitle(`Resultados para: "${searchQuery}" (${filteredPDFs.length} encontrados)`);
+      return;
     }
 
+    //TODO
+    // Por ahora, los filtros por categoría no funcionarán hasta que tengamos
+    // la estructura de categorías en la API. Podemos implementar esto más tarde
     if (categoryFilter) {
-      const category = sampleData[categoryFilter]
-      if (!category) return
-
-      if (subCategoryFilter && !Array.isArray(category)) {
-        const subCategory = (category as SubCategories)[subCategoryFilter]
-        if (subCategory) {
-          setDisplayedPDFs(subCategory)
-          setPageTitle(`${categoryFilter}: ${subCategoryFilter}`)
-        }
-      } else {
-        if (Array.isArray(category)) {
-          setDisplayedPDFs(category as PDFDocument[])
-        } else {
-          const allSubCategoryPDFs = Object.values(category as SubCategories).flat() as PDFDocument[]
-          setDisplayedPDFs(allSubCategoryPDFs)
-        }
-        setPageTitle(categoryFilter)
-      }
+      // Filtrar por etiqueta (pdf_tag) cuando tengamos esa funcionalidad
+      // Por ahora, simplemente mostraremos todos los PDFs y cambiaremos el título
+      setDisplayedPDFs(allPDFs);
+      setPageTitle(subCategoryFilter
+        ? `${categoryFilter}: ${subCategoryFilter}`
+        : categoryFilter);
     } else {
-      setDisplayedPDFs(selectBests(allPDFs))
-      setPageTitle("Últimos apuntes")
+      // Si no hay filtros, mostrar los PDFs más recientes
+      setDisplayedPDFs(selectBests(allPDFs));
+      setPageTitle("Últimos apuntes");
     }
-  }, [categoryFilter, subCategoryFilter, searchQuery])
+  }, [categoryFilter, subCategoryFilter, searchQuery, allPDFs, isLoading]);
 
   return (
     <>
@@ -157,17 +154,25 @@ function WelcomePage() {
             <h2 className="text-2xl font-bold">{pageTitle}</h2>
           </div>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {displayedPDFs.map((pdf, index) => (
-              <PDFCard
-                key={index}
-                title={pdf.title}
-                url={pdf.url}
-                date={pdf.date}
-                img={pdf.img}
-              />
-            ))}
+            {isLoading ? (
+              // Muestra indicadores de carga si los datos se están cargando
+              Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="animate-pulse bg-muted rounded-lg h-40"></div>
+              ))
+            ) : (
+              // Muestra los PDFs una vez cargados
+              displayedPDFs.map((pdf, index) => (
+                <PDFCard
+                  key={index}
+                  title={pdf.title}
+                  url={pdf.url}
+                  date={pdf.date}
+                  img={pdf.img}
+                />
+              ))
+            )}
           </div>
-          {displayedPDFs.length === 0 && (
+          {!isLoading && displayedPDFs.length === 0 && (
             <div className="text-center py-8">
               <p className="text-gray-500">No se encontraron apuntes para esta categoría</p>
             </div>

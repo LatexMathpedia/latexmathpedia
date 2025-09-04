@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/contexts/auth-context";
 
 interface BlogCardProps {
   title: string;
@@ -19,6 +20,9 @@ export default function BlogCard({
   tags,
   link,
 }: BlogCardProps) {
+
+  const { isAdmin } = useAuth();
+  
   return (
     <Card className="flex flex-col h-full transition-all duration-200 hover:shadow-md">
       <CardHeader className="p-4 pb-0">
