@@ -31,7 +31,6 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Tipos para los usuarios
 type User = {
-  id: string;
   email: string;
   role: "admin" | "user";
 }
@@ -41,7 +40,7 @@ const roles = ["admin", "user"];
 
 async function fetchUsers() {
   try {
-    const response = await fetch(`${apiUrl}/users`, {
+    const response = await fetch(`${apiUrl}/auth/all-users`, {
       method: 'GET',
       credentials: 'include',
     });
@@ -77,10 +76,10 @@ export default function UsersPage() {
   useEffect(() => {
     if (apiUrl === '') {
       setUsers([
-        { id: '1', email: 'maria@example.com', role: 'admin' },
-        { id: '2', email: 'juan@example.com', role: 'user' },
-        { id: '3', email: 'ana@example.com', role: 'user' },
-        { id: '4', email: 'carlos@example.com', role: 'user' },
+        { email: 'maria@example.com', role: 'admin' },
+        { email: 'juan@example.com', role: 'user' },
+        { email: 'ana@example.com', role: 'user' },
+        { email: 'carlos@example.com', role: 'user' },
       ]);
     } else {
       loadUsers();
@@ -148,7 +147,7 @@ export default function UsersPage() {
                 <TableBody>
                   {filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => (
-                      <TableRow key={user.id}>
+                      <TableRow key={user.email}>
                         <TableCell className="font-medium">{user.email}</TableCell>
                         <TableCell>
                           <Popover>
