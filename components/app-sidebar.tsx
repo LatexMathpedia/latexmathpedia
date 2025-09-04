@@ -164,7 +164,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
         { isAdmin && (
           <NavSecondary
-            items={[{ title: "Admin Panel", url: "/admin", icon: Bot }]}
+            items={[{ title: "Admin Panel", url: "/dashboard/admin", icon: Bot }]}
           />
         )}
       </SidebarContent>
