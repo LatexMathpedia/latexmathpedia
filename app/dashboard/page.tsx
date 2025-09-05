@@ -37,10 +37,9 @@ type Categories = {
 }
 
 const sampleDataBlog = [
-  { title: "Resolución del examen de Análisis 20/12/2025", description: "Análisis es una de las asignaturas más importantes y desafiantes en el campo de las matemáticas. En este artículo, exploraremos la resolución del examen de Análisis", date: "20/2/2025", estimatedReadTime: "5 min", tags: ["Análisis", "Matemáticas"], link: "resolucion-examen-analisis-2025" },
-  { title: "Introducción a React: Construyendo Interfaces de Usuario Dinámicas", description: "React es una biblioteca de JavaScript ampliamente utilizada para construir interfaces de usuario dinámicas y reactivas. En este artículo, exploraremos los conceptos básicos de React y cómo comenzar a desarrollar aplicaciones web con esta poderosa herramienta.", date: "15/2/2025", estimatedReadTime: "7 min", tags: ["React", "JavaScript", "Frontend"], link: "introduccion-react-interfaces-usuario" },
-  { title: "Guía Completa de Docker: Contenedores para el Desarrollo Moderno", description: "Docker ha revolucionado la forma en que desarrollamos, implementamos y gestionamos aplicaciones. En esta guía completa, exploraremos qué es Docker, cómo funciona y cómo puedes utilizarlo para mejorar tu flujo de trabajo de desarrollo.", date: "10/2/2025", estimatedReadTime: "10 min", tags: ["Docker", "DevOps", "Contenedores"], link: "guia-completa-docker-contenedores" },
-  { title: "Bases de Datos Relacionales vs NoSQL: ¿Cuál es la Mejor Opción para tu Proyecto?", description: "La elección entre bases de datos relacionales y NoSQL es una decisión crucial en el desarrollo de aplicaciones. En este artículo, compararemos ambas opciones, sus ventajas y desventajas, y te ayudaremos a decidir cuál es la mejor para tu proyecto.", date: "5/2/2025", estimatedReadTime: "6 min", tags: ["Bases de Datos", "SQL", "NoSQL"], link: "bases-datos-relacionales-vs-nosql" },
+  { title: "Resolución Examen Análisis 2025", description: "Resolución del examen de análisis de 2025 con explicaciones detalladas.", date: "2025-09-01", estimatedReadTime: "5 min", tags: ["Análisis", "Exámenes", "Cálculo", "Integrales"], link: "/resolucion-examen-analisis-2025" },
+  { title: "Teorema de Pitágoras", description: "Explicación y demostración del Teorema de Pitágoras.", date: "15/2/2025", estimatedReadTime: "7 min", tags: ["Matemáticas", "Geometría", "Teoremas"], link: "/teorema-pitagoras" },
+  { title: "Teorema de Darboux", description: "Descripción y aplicaciones del Teorema de Darboux.", date: "10/3/2025", estimatedReadTime: "6 min", tags: ["Matemáticas", "Análisis", "Teoremas"], link: "/teorema-darboux" },
 ]
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
