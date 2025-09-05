@@ -146,15 +146,12 @@ const dataAdminPanel = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-   const { isAdmin, isAuthenticated } = useAuth()
-  // console.log("isAdmin", isAdmin);
-  // console.log("isAuthenticated", isAuthenticated);
-
-  //TODO: recibir los datos del usuario y pasarlos al NavUser
+  const { isAdmin, email } = useAuth();
   const dataUser = {
-    name: "shadcn",
-    email: "shadcn@gmai.com",
-  }
+    name: email.split('@')[0],
+    email: email
+  };
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -181,7 +178,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} title="Apuntes"/>
         <NavProjects projects={data.projects} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
-        { true && (
+        { isAdmin && (
           <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel"/>
         )}
       </SidebarContent>

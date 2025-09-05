@@ -61,9 +61,7 @@ function WelcomePage() {
   const [allPDFs, setAllPDFs] = useState<ExtendedPDFDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
-  const { isAuthenticated, isAdmin } = useAuth();
-  console.log("User authentication status:", isAuthenticated);
-  console.log("User admin status:", isAdmin);
+  const { isAuthenticated } = useAuth();
 
   function convertApiPdfToDocument(apiPdf: APIPDFDocument): ExtendedPDFDocument {
     const date = new Date(apiPdf.pdf_last_time_edit);
@@ -193,6 +191,8 @@ function WelcomePage() {
       setPageTitle("Últimos apuntes");
     }
   }, [categoryFilter, subCategoryFilter, searchQuery, allPDFs, isLoading]);
+
+
 
   return (
     <>

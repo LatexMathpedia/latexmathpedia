@@ -13,8 +13,14 @@ type PDFCardProps = {
 
 function PDFCard({ title, url, date, img }: PDFCardProps) {
     const defaultImage = "/image.png";
-    const { isAdmin } = useAuth();
+    const { isAuthenticated } = useAuth();
 
+    function handleClick() {
+        if (!isAuthenticated) {
+            alert("Debes iniciar sesión para acceder a este contenido.");
+        }
+    }
+    
     return (
         <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
             <div className="relative h-36 w-full overflow-hidden">
@@ -41,11 +47,11 @@ function PDFCard({ title, url, date, img }: PDFCardProps) {
                         size="sm" 
                         className="w-full"
                         asChild
+                        onClick={handleClick}
                     >
-                        <Link href={isAdmin ? url : '#'}>
-                            {!isAdmin ? "Acceso restringido" : "Ver PDF"}
-                            Ver PDF
-                        </Link>
+                        <a href={isAuthenticated ? url : '#'}>
+                            {!isAuthenticated ? "Acceso restringido" : "Ver PDF"}
+                        </a>
                     </Button>
                 </div>
             </div>

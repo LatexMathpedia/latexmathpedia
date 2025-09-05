@@ -111,7 +111,6 @@ async function fetchExistingPDFs() {
       name: item.pdf_name,
       imageLink: item.pdf_image_link,
     }));
-    console.log(pdfs);
     return pdfs;
   } catch (error) {
     console.error('Error al obtener los PDFs existentes:', error);
