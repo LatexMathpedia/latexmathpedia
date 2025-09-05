@@ -14,7 +14,6 @@ import {
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -147,7 +146,9 @@ const dataAdminPanel = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin } = useAuth()
+  const { isAdmin, isAuthenticated } = useAuth()
+  // console.log("isAdmin", isAdmin);
+  // console.log("isAuthenticated", isAuthenticated);
 
   //TODO: recibir los datos del usuario y pasarlos al NavUser
   const dataUser = {
