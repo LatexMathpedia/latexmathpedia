@@ -25,6 +25,9 @@ type APIPDFDocument = {
   pdf_tag: string | null
 }
 
+// Extendemos el tipo PDFDocument para incluir la etiqueta original
+type ExtendedPDFDocument = PDFDocument & { originalTag?: string };
+
 type SubCategories = {
   [key: string]: PDFDocument[]
 }
@@ -42,7 +45,7 @@ const sampleDataBlog = [
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
-function selectBests(pdfs: PDFDocument[]): PDFDocument[] {
+function selectBests(pdfs: ExtendedPDFDocument[]): ExtendedPDFDocument[] {
   return pdfs.sort((a, b) => {
     const [dayA, monthA, yearA] = a.date.split("/").map(Number)
     const [dayB, monthB, yearB] = b.date.split("/").map(Number)
@@ -55,13 +58,13 @@ function selectBests(pdfs: PDFDocument[]): PDFDocument[] {
 function WelcomePage() {
   const { categoryFilter, subCategoryFilter } = useFilter()
   const { searchQuery } = useSearch()
-  const [displayedPDFs, setDisplayedPDFs] = useState<PDFDocument[]>([])
-  const [allPDFs, setAllPDFs] = useState<PDFDocument[]>([])
+  const [displayedPDFs, setDisplayedPDFs] = useState<ExtendedPDFDocument[]>([])
+  const [allPDFs, setAllPDFs] = useState<ExtendedPDFDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
   const { isAdmin } = useAuth();
 
-  function convertApiPdfToDocument(apiPdf: APIPDFDocument): PDFDocument {
+  function convertApiPdfToDocument(apiPdf: APIPDFDocument): ExtendedPDFDocument {
     const date = new Date(apiPdf.pdf_last_time_edit);
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
@@ -70,6 +73,7 @@ function WelcomePage() {
       url: apiPdf.pdf_link || '#',
       date: formattedDate,
       img: apiPdf.pdf_image_link || '/image.png',
+      originalTag: apiPdf.pdf_tag || undefined // Preservamos la etiqueta original
     };
   }
 
@@ -89,9 +93,9 @@ function WelcomePage() {
     }
   }
 
-  async function getAllPDFs(): Promise<PDFDocument[]> {
+  async function getAllPDFs(): Promise<ExtendedPDFDocument[]> {
     const apiPdfs = await fetchPDFs();
-    // Convierte los PDF de la API a nuestro formato de documento
+    // Convierte los PDF de la API a nuestro formato de documento extendido
     return apiPdfs.map(apiPdf => convertApiPdfToDocument(apiPdf));
   }
 
@@ -115,6 +119,25 @@ function WelcomePage() {
     loadPDFs();
   }, []);
 
+  const tagToCategory: {[key: string]: {category: string, subcategory?: string}} = {
+    // Matemáticas
+    "AC": { category: "Matemáticas", subcategory: "Análisis y Cálculo" },
+    "AG": { category: "Matemáticas", subcategory: "Álgebra y Geometría" },
+    "TE": { category: "Matemáticas", subcategory: "Probabilidad y Estadística" },
+    "PE": { category: "Matemáticas", subcategory: "Probabilidad y Estadística" },
+    "EM": { category: "Matemáticas", subcategory: "Ecuaciones Diferenciales y Métodos Numéricos" },
+    "OP": { category: "Matemáticas", subcategory: "Optimización y Programación Matemática" },
+    
+    // Software
+    "FA": { category: "Software", subcategory: "Fundamentos y Algoritmos"},
+    "EL": { category: "Software", subcategory: "Estructuras, Computación y Lenguajes"},
+    "AS": { category: "Software", subcategory: "Arquitectura y Sistemas"},
+    "IP": { category: "Software", subcategory: "Ingeniería de Software"},
+    "BD": { category: "Software", subcategory: "Bases de Datos" },
+    "RS": { category: "Software", subcategory: "Redes y Seguridad" },
+    "WI": { category: "Software", subcategory: "Web e Interfaces"}
+  };
+
   useEffect(() => {
     if (isLoading) return;
 
@@ -128,18 +151,28 @@ function WelcomePage() {
       return;
     }
 
-    //TODO
-    // Por ahora, los filtros por categoría no funcionarán hasta que tengamos
-    // la estructura de categorías en la API. Podemos implementar esto más tarde
     if (categoryFilter) {
-      // Filtrar por etiqueta (pdf_tag) cuando tengamos esa funcionalidad
-      // Por ahora, simplemente mostraremos todos los PDFs y cambiaremos el título
-      setDisplayedPDFs(allPDFs);
+      const filteredPDFs = allPDFs.filter(pdf => {
+        const pdfTag = (pdf as any).originalTag;
+        
+        if (!pdfTag) return false;
+        
+        const tagInfo = tagToCategory[pdfTag];
+        
+        if (!tagInfo) return false;
+        
+        if (subCategoryFilter) {
+          return tagInfo.category === categoryFilter && tagInfo.subcategory === subCategoryFilter;
+        }
+        
+        return tagInfo.category === categoryFilter;
+      });
+      
+      setDisplayedPDFs(filteredPDFs);
       setPageTitle(subCategoryFilter
         ? `${categoryFilter}: ${subCategoryFilter}`
         : categoryFilter);
     } else {
-      // Si no hay filtros, mostrar los PDFs más recientes
       setDisplayedPDFs(selectBests(allPDFs));
       setPageTitle("Últimos apuntes");
     }
