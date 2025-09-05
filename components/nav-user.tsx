@@ -37,11 +37,11 @@ export function NavUser({
   user: {
     name: string
     email: string
-    avatar: string
   }
 }) {
   const { isMobile } = useSidebar()
   const { isAuthenticated, logout } = useAuth();
+  const avatar = user.name.charAt(0).toUpperCase() + user.name.charAt(1).toUpperCase();
 
   const handleLogOut = async () => {
     try {
@@ -62,10 +62,9 @@ export function NavUser({
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
               >
-                <Avatar className="h-8 w-8 rounded-lg">
-                  {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
+                <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center">
+                  <span className="font-medium">{avatar}</span>
+                </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
@@ -81,10 +80,9 @@ export function NavUser({
             >
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                  </Avatar>
+                  <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center">
+                    <span className="font-medium">{avatar}</span>
+                  </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
                     <span className="truncate text-xs">{user.email}</span>
@@ -95,11 +93,11 @@ export function NavUser({
               <DropdownMenuGroup>
                 <DropdownMenuItem className="cursor-pointer">
                   <BadgeCheck />
-                  Account
+                  <Link href="/dashboard/profile">Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
                   <CreditCard />
-                  Donate
+                  <Link href="/dashboard/billing">Donate</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

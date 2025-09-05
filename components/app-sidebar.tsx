@@ -29,11 +29,6 @@ import { useAuth } from "@/contexts/auth-context"
 import Link from "next/link"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Matemáticas",
@@ -154,6 +149,11 @@ const dataAdminPanel = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isAdmin } = useAuth()
 
+  //TODO: recibir los datos del usuario y pasarlos al NavUser
+  const dataUser = {
+    name: "shadcn",
+    email: "shadcn@gmai.com",
+  }
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -185,7 +185,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         )}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user}/>
+        <NavUser user={dataUser}/>
       </SidebarFooter>
     </Sidebar>
   )
