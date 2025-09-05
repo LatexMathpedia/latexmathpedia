@@ -34,7 +34,7 @@ const data = {
       title: "Matemáticas",
       url: "#",
       icon: SquareTerminal,
-      isActive: true,
+      isActive: false,
       items: [
         {
           title: "Análisis y Cálculo",

@@ -61,7 +61,7 @@ function WelcomePage() {
   const [allPDFs, setAllPDFs] = useState<ExtendedPDFDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
-  const { isAdmin } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   function convertApiPdfToDocument(apiPdf: APIPDFDocument): ExtendedPDFDocument {
     const date = new Date(apiPdf.pdf_last_time_edit);
@@ -77,7 +77,7 @@ function WelcomePage() {
   }
 
   async function fetchPDFs(): Promise<APIPDFDocument[]> {
-    const apiQuery = isAdmin ? '/pdfs' : '/pdfs/no-link';
+    const apiQuery = isAuthenticated ? '/pdfs' : '/pdfs/no-link';
 
     try {
       const response = await fetch(`${apiUrl}${apiQuery}`);
