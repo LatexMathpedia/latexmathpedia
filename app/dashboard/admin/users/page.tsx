@@ -26,7 +26,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Tipos para los usuarios

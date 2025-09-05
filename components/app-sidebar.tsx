@@ -146,7 +146,7 @@ const dataAdminPanel = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin, isAuthenticated } = useAuth()
+   const { isAdmin, isAuthenticated } = useAuth()
   // console.log("isAdmin", isAdmin);
   // console.log("isAuthenticated", isAuthenticated);
 
@@ -181,7 +181,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} title="Apuntes"/>
         <NavProjects projects={data.projects} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
-        { isAdmin && (
+        { true && (
           <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel"/>
         )}
       </SidebarContent>
