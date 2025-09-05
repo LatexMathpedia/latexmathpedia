@@ -49,7 +49,7 @@ function PDFCard({ title, url, date, img }: PDFCardProps) {
                         asChild
                         onClick={handleClick}
                     >
-                        <a href={isAuthenticated ? url : '#'}>
+                        <a href={isAuthenticated ? url : '#'} target="_blank" rel="noopener noreferrer">
                             {!isAuthenticated ? "Acceso restringido" : "Ver PDF"}
                         </a>
                     </Button>
