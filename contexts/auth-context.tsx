@@ -11,6 +11,7 @@ const AuthContext = createContext({
     isAuthenticated: false,
     loading: true,
     isAdmin: false,
+    email: '',
     login: async (_credentials: CredentialsDTO) => false,
     logout: async () => {},
     checkAuth: async () => {},
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [email, setEmail] = useState('');
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -30,6 +32,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       if (res.ok) {
         setIsAuthenticated(true);
         await isAdminUser();
+        const data = await res.json();
+        setEmail(data.userEmail);
       } else {
         setIsAuthenticated(false);
       }
@@ -90,7 +94,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, isAdmin, login, logout, checkAuth }}
+      value={{ isAuthenticated, loading, isAdmin, email, login, logout, checkAuth }}
     >
       {children}
     </AuthContext.Provider>
