@@ -77,10 +77,25 @@ function WelcomePage() {
   }
 
   async function fetchPDFs(): Promise<APIPDFDocument[]> {
-    const apiQuery = isAuthenticated ? '/pdfs' : '/pdfs/no-link';
 
     try {
-      const response = await fetch(`${apiUrl}${apiQuery}`);
+      let response;
+      if (isAuthenticated) {
+        console.log("User is authenticated, fetching all PDFs.");
+        response = await fetch(`${apiUrl}/pdfs`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } else {
+        console.log("User is not authenticated, fetching public PDFs.");
+        response = await fetch(`${apiUrl}/pdfs/no-link`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
       if (!response.ok) {
         throw new Error('Error fetching PDFs');
       }
@@ -118,7 +133,7 @@ function WelcomePage() {
     loadPDFs();
   }, []);
 
-  const tagToCategory: {[key: string]: {category: string, subcategory?: string}} = {
+  const tagToCategory: { [key: string]: { category: string, subcategory?: string } } = {
     // Matemáticas
     "AC": { category: "Matemáticas", subcategory: "Análisis y Cálculo" },
     "AG": { category: "Matemáticas", subcategory: "Álgebra y Geometría" },
@@ -126,15 +141,15 @@ function WelcomePage() {
     "PE": { category: "Matemáticas", subcategory: "Probabilidad y Estadística" },
     "EM": { category: "Matemáticas", subcategory: "Ecuaciones Diferenciales y Métodos Numéricos" },
     "OP": { category: "Matemáticas", subcategory: "Optimización y Programación Matemática" },
-    
+
     // Software
-    "FA": { category: "Software", subcategory: "Fundamentos y Algoritmos"},
-    "EL": { category: "Software", subcategory: "Estructuras, Computación y Lenguajes"},
-    "AS": { category: "Software", subcategory: "Arquitectura y Sistemas"},
-    "IP": { category: "Software", subcategory: "Ingeniería de Software"},
+    "FA": { category: "Software", subcategory: "Fundamentos y Algoritmos" },
+    "EL": { category: "Software", subcategory: "Estructuras, Computación y Lenguajes" },
+    "AS": { category: "Software", subcategory: "Arquitectura y Sistemas" },
+    "IP": { category: "Software", subcategory: "Ingeniería de Software" },
     "BD": { category: "Software", subcategory: "Bases de Datos" },
     "RS": { category: "Software", subcategory: "Redes y Seguridad" },
-    "WI": { category: "Software", subcategory: "Web e Interfaces"}
+    "WI": { category: "Software", subcategory: "Web e Interfaces" }
   };
 
   useEffect(() => {
@@ -153,20 +168,20 @@ function WelcomePage() {
     if (categoryFilter) {
       const filteredPDFs = allPDFs.filter(pdf => {
         const pdfTag = (pdf as any).originalTag;
-        
+
         if (!pdfTag) return false;
-        
+
         const tagInfo = tagToCategory[pdfTag];
-        
+
         if (!tagInfo) return false;
-        
+
         if (subCategoryFilter) {
           return tagInfo.category === categoryFilter && tagInfo.subcategory === subCategoryFilter;
         }
-        
+
         return tagInfo.category === categoryFilter;
       });
-      
+
       setDisplayedPDFs(filteredPDFs);
       setPageTitle(subCategoryFilter
         ? `${categoryFilter}: ${subCategoryFilter}`
