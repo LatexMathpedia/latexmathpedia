@@ -30,7 +30,7 @@ export default function ProfilePage() {
 
   async function handlePwdChange() {
     try {
-      fetch(`${apiUrl}/auth/reset-password`,
+      const res = await fetch(`${apiUrl}/auth/reset-password`,
         {
           method: 'POST',
           headers: {
@@ -39,6 +39,11 @@ export default function ProfilePage() {
           body: JSON.stringify({ email }),
         }
       );
+
+      if (!res.ok) {
+        throw new Error('Failed to send password reset email');
+      }
+      
       await logout();
       router.push('/auth/pwd-email-sent');
     } catch (error) {
