@@ -80,7 +80,7 @@ const PDFAccordionCard = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [pdfData, setPdfData] = useState<PDFProps>(pdf)
-  
+
   // Si existe un pdfTag, convertimos el código a nombre de subcategoría
   const initialSubcategory = pdf.pdfTag ? renameCategoryInverted(pdf.pdfTag) : "";
   // Determinamos la categoría principal basada en la subcategoría
@@ -99,7 +99,7 @@ const PDFAccordionCard = ({
 
   const handleUpdate = async () => {
     console.log("Actualizando PDF:", pdfData)
-    
+
     // Actualizar el pdfData con el pdfTag antes de enviarlo
     const updatedPdf = {
       ...pdfData,
@@ -107,7 +107,7 @@ const PDFAccordionCard = ({
     };
 
     try {
-      const response = await fetch(`${apiUrl}/pdfs/update?=${pdfData.id}`, {
+      const response = await fetch(`${apiUrl}/pdfs/update?pdfId=${pdfData.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

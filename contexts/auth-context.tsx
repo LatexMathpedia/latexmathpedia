@@ -28,16 +28,20 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const checkAuth = async () => {
     setLoading(true);
     try {
+      console.log("Checking authentication status...");
       const res = await fetch(`${apiUrl}/auth/validate`, { credentials: 'include' });
       if (res.ok) {
-        setIsAuthenticated(true);
-        await isAdminUser();
         const data = await res.json();
+        console.log("Auth validated successfully:", data);
+        setIsAuthenticated(true);
         setEmail(data.userEmail);
+        await isAdminUser();
       } else {
+        console.log("Auth validation failed:", res.status);
         setIsAuthenticated(false);
       }
     } catch (error) {
+      console.error("Auth check error:", error);
       setIsAuthenticated(false);
     } finally {
       setLoading(false);

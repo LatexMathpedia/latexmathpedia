@@ -61,7 +61,7 @@ function WelcomePage() {
   const [allPDFs, setAllPDFs] = useState<ExtendedPDFDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pageTitle, setPageTitle] = useState("Últimos apuntes")
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   function convertApiPdfToDocument(apiPdf: APIPDFDocument): ExtendedPDFDocument {
     const date = new Date(apiPdf.pdf_last_time_edit);
@@ -77,8 +77,8 @@ function WelcomePage() {
   }
 
   async function fetchPDFs(): Promise<APIPDFDocument[]> {
-
     try {
+      console.log("Auth state:", { isAuthenticated, authLoading });
       let response;
       if (isAuthenticated) {
         console.log("User is authenticated, fetching all PDFs.");
@@ -97,9 +97,11 @@ function WelcomePage() {
         });
       }
       if (!response.ok) {
-        throw new Error('Error fetching PDFs');
+        console.error('Error fetching PDFs, status:', response.status);
+        throw new Error(`Error fetching PDFs: ${response.status}`);
       }
       const data = await response.json();
+      console.log("Fetched PDFs:", data);
       return data;
     } catch (error) {
       console.error('Fetch error:', error);
@@ -109,7 +111,6 @@ function WelcomePage() {
 
   async function getAllPDFs(): Promise<ExtendedPDFDocument[]> {
     const apiPdfs = await fetchPDFs();
-    // Convierte los PDF de la API a nuestro formato de documento extendido
     return apiPdfs.map(apiPdf => convertApiPdfToDocument(apiPdf));
   }
 
@@ -130,8 +131,11 @@ function WelcomePage() {
       setIsLoading(false);
     }
 
-    loadPDFs();
-  }, []);
+    // Solo cargar PDFs cuando el estado de autenticación esté establecido
+    if (!authLoading) {
+      loadPDFs();
+    }
+  }, [authLoading, isAuthenticated]);
 
   const tagToCategory: { [key: string]: { category: string, subcategory?: string } } = {
     // Matemáticas
