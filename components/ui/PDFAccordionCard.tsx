@@ -26,8 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { renameCategory } from "@/app/dashboard/admin/pdfs/page"
-import { rename } from "fs"
+import { renameCategory, renameCategoryInverted } from "@/lib/utils";
 
 const categories = {
   "Matemáticas": [
@@ -55,9 +54,20 @@ type PDFProps = {
   description: string;
   name: string;
   imageLink: string;
+  pdfTag?: string; // Código de categoría que viene de la base de datos
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
+// Función para identificar la categoría principal a partir de la subcategoría
+const getCategoryFromSubcategory = (subcategory: string): string => {
+  for (const [category, subcategories] of Object.entries(categories)) {
+    if (subcategories.includes(subcategory)) {
+      return category;
+    }
+  }
+  return "";
+}
 
 const PDFAccordionCard = ({
   pdf,
@@ -70,12 +80,17 @@ const PDFAccordionCard = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [pdfData, setPdfData] = useState<PDFProps>(pdf)
+  
+  // Si existe un pdfTag, convertimos el código a nombre de subcategoría
+  const initialSubcategory = pdf.pdfTag ? renameCategoryInverted(pdf.pdfTag) : "";
+  // Determinamos la categoría principal basada en la subcategoría
+  const initialCategory = initialSubcategory ? getCategoryFromSubcategory(initialSubcategory) : "";
 
   const [categoryOpen, setCategoryOpen] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory)
 
   const [subcategoryOpen, setSubcategoryOpen] = useState(false)
-  const [selectedSubcategory, setSelectedSubcategory] = useState("")
+  const [selectedSubcategory, setSelectedSubcategory] = useState(initialSubcategory)
 
   // Función para actualizar campos individuales
   const handleInputChange = (field: keyof PDFProps, value: string) => {
@@ -84,6 +99,12 @@ const PDFAccordionCard = ({
 
   const handleUpdate = async () => {
     console.log("Actualizando PDF:", pdfData)
+    
+    // Actualizar el pdfData con el pdfTag antes de enviarlo
+    const updatedPdf = {
+      ...pdfData,
+      pdfTag: selectedSubcategory ? renameCategory(selectedSubcategory) : undefined
+    };
 
     try {
       const response = await fetch(`${apiUrl}/pdfs/update?=${pdfData.id}`, {
@@ -93,18 +114,18 @@ const PDFAccordionCard = ({
         },
         credentials: 'include',
         body: JSON.stringify({
-          name: pdfData.name,
-          link: pdfData.link,
-          imageLink: pdfData.imageLink,
-          pdfTag: renameCategory(selectedSubcategory),
-          description: pdfData.description,
+          name: updatedPdf.name,
+          link: updatedPdf.link,
+          imageLink: updatedPdf.imageLink,
+          pdfTag: updatedPdf.pdfTag,
+          description: updatedPdf.description,
         })
       });
 
       if (response.ok) {
         console.log('PDF actualizado exitosamente');
         if (onUpdate) {
-          onUpdate(pdfData);
+          onUpdate(updatedPdf);
         }
       } else {
         console.error('Error al actualizar el PDF');
@@ -145,9 +166,21 @@ const PDFAccordionCard = ({
       className="border rounded-md mb-4 w-full"
     >
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center space-x-3">
-          <div className="font-medium">{pdf.name}</div>
-          <div className="text-xs text-muted-foreground">Última edición: {pdf.lastEdited}</div>
+        <div className="flex-col">
+          <div className="flex items-center space-x-3">
+            <div className="font-medium">{pdf.name}</div>
+            <div className="text-xs text-muted-foreground">Última edición: {pdf.lastEdited}</div>
+          </div>
+          {selectedCategory && selectedSubcategory && (
+            <div className="flex mt-1 items-center space-x-2">
+              <div className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                {selectedCategory}
+              </div>
+              <div className="text-xs bg-secondary/10 text-primary px-2 py-0.5 rounded-full">
+                {selectedSubcategory}
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex space-x-2">
           <Button variant="ghost" size="sm" onClick={handleDelete}>

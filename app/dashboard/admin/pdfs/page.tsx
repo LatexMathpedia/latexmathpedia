@@ -22,6 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { renameCategory } from "@/lib/utils"
 
 const categories = {
   "Matemáticas": [
@@ -43,39 +44,6 @@ const categories = {
   ]
 }
 
-export function renameCategory(category: string) {
-  switch (category) {
-    case "Análisis y Cálculo":
-      return "AC";
-    case "Álgebra y Geometría":
-      return "AG";
-    case "Topología":
-      return "TE";
-    case "Probabilidad y Estadística":
-      return "PE";
-    case "Ecuaciones Diferenciales y Métodos Numéricos":
-      return "EM";
-    case "Optimización y Programación Matemática":
-      return "OP";
-    case "Fundamentos y Algoritmos":
-      return "FA";
-    case "Estructuras, Computación y Lenguajes":
-      return "EL";
-    case "Arquitectura y Sistemas":
-      return "AS";
-    case "Ingeniería del Software":
-      return "IP";
-    case "Bases de Datos":
-      return "BD";
-    case "Redes y Seguridad":
-      return "RS";
-    case "Web e Interfaces":
-      return "WI";
-    default:
-      throw new Error("Categoría desconocida");
-  }
-}
-
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 type PDFFetchResponse = {
@@ -85,6 +53,7 @@ type PDFFetchResponse = {
   pdf_description: string;
   pdf_name: string;
   pdf_image_link: string;
+  pdf_tag: string;
 }
 
 async function fetchExistingPDFs() {
@@ -110,6 +79,7 @@ async function fetchExistingPDFs() {
       description: item.pdf_description,
       name: item.pdf_name,
       imageLink: item.pdf_image_link,
+      pdfTag: item.pdf_tag
     }));
     return pdfs;
   } catch (error) {
@@ -142,6 +112,7 @@ export default function WelcomePage() {
   const fetchAndSetPDFs = async () => {
     const pdfs = await fetchExistingPDFs();
     setExistingPDFs(pdfs);
+    console.log('PDFs existentes cargados:', pdfs);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
