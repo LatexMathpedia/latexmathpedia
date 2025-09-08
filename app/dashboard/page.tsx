@@ -6,6 +6,8 @@ import BlogCard from "@/components/blog-card"
 import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircleIcon } from "lucide-react"
 
 type PDFDocument = {
   title: string
@@ -75,10 +77,8 @@ function WelcomePage() {
 
   async function fetchPDFs(): Promise<APIPDFDocument[]> {
     try {
-      console.log("Auth state:", { isAuthenticated, authLoading });
       let response;
       if (isAuthenticated) {
-        console.log("User is authenticated, fetching all PDFs.");
         response = await fetch(`${apiUrl}/pdfs`, {
           credentials: 'include',
           headers: {
@@ -86,7 +86,6 @@ function WelcomePage() {
           },
         });
       } else {
-        console.log("User is not authenticated, fetching public PDFs.");
         response = await fetch(`${apiUrl}/pdfs/no-link`, {
           headers: {
             'Content-Type': 'application/json',
@@ -94,14 +93,24 @@ function WelcomePage() {
         });
       }
       if (!response.ok) {
-        console.error('Error fetching PDFs, status:', response.status);
         throw new Error(`Error fetching PDFs: ${response.status}`);
       }
       const data = await response.json();
-      console.log("Fetched PDFs:", data);
       return data;
     } catch (error) {
-      console.error('Fetch error:', error);
+      <div>
+        <Alert variant="destructive">
+          <AlertCircleIcon />
+          <AlertTitle>Unable to load the pdfs data</AlertTitle>
+          <AlertDescription>
+            <p>There was an error while fetching the pdfs data. Please try again later.</p>
+            <ul className="list-inside list-disc text-sm">
+              <li>{(error as Error).message}</li>
+              <li>If the problem persists, please contact the administrator.</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
+      </div>
       return [];
     }
   }
