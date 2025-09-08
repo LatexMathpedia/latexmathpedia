@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+Disallow: /_not-found
+Disallow: /auth/login
+Disallow: /auth/pwd-email-sent
+Disallow: /auth/register
+Disallow: /dashboard/admin
+Disallow: /dashboard/admin/pdfs
+Disallow: /dashboard/admin/users
+Disallow: /dashboard/billing
+
+Sitemap: https://www.mathtexpedia.es/sitemap.xml
