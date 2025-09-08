@@ -90,12 +90,12 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
             </div>
 
             <div className="flex flex-1 flex-col p-4">
-                <h3 className="mb-2 line-clamp-2 text-lg font-medium">{title}</h3>
+                <h3 className="mb-2 line-clamp-2 text-base font-medium">{title}</h3>
 
                 <div className="mb-4 flex items-center text-sm text-muted-foreground">
                     <div className="flex items-center gap-1.5 mr-4">
                         <CalendarIcon className="h-3.5 w-3.5" />
-                        <span>{date}</span>
+                        <span className="text-sm">{date}</span>
                     </div>
                 </div>
 
