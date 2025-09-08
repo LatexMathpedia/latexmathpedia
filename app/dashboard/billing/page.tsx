@@ -1,14 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { Check, CreditCard, Gift, Heart, Star, Zap } from "lucide-react"
+import { CreditCard, Gift, Heart, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { 
   Card, 
   CardContent, 
   CardDescription, 
-  CardFooter, 
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card"
@@ -22,35 +21,14 @@ import { Label } from "@/components/ui/label"
 //   SelectValue,
 // } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
 
 export default function DonationPage() {
   const [donationAmount, setDonationAmount] = useState("10")
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [donationFrequency, setDonationFrequency] = useState("once")
 
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, "")
     setDonationAmount(value)
-  }
-
-  const handlePlanSelect = (plan: string) => {
-    setSelectedPlan(plan)
-    
-    // Establecer el monto según el plan seleccionado
-    switch(plan) {
-      case "basic":
-        setDonationAmount("5")
-        break
-      case "standard":
-        setDonationAmount("15")
-        break
-      case "premium":
-        setDonationAmount("30")
-        break
-      default:
-        setDonationAmount("10")
-    }
   }
 
   return (

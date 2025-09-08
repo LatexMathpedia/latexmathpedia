@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { useState, useEffect } from "react"
+import { AlertCircleIcon, Check, CheckCircle2Icon, ChevronsUpDown, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -23,6 +23,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { renameCategory } from "@/lib/utils"
+import { useToast } from "@/hooks/use-toast";
+
 
 const categories = {
   "Matemáticas": [
@@ -55,42 +57,11 @@ type PDFFetchResponse = {
   pdf_tag: string;
 }
 
-async function fetchExistingPDFs() {
-  try {
-    const response = await fetch(`${apiUrl}/pdfs`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error('Error al obtener los PDFs existentes');
-    }
-
-    const data = await response.json();
-
-    const pdfs = data.map((item: PDFFetchResponse) => ({
-      id: item.pdf_id,
-      link: item.pdf_link,
-      lastEdited: new Date(item.pdf_last_time_edit).toLocaleDateString("es-ES", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }),
-      description: item.pdf_description,
-      name: item.pdf_name,
-      pdfTag: item.pdf_tag
-    }));
-    return pdfs;
-  } catch (error) {
-    console.error('Error al obtener los PDFs existentes:', error);
-    return [];
-  }
-}
-
 
 export default function WelcomePage() {
+  const toast = useToast();
   const [title, setTitle] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
 
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -104,12 +75,84 @@ export default function WelcomePage() {
     lastEdited: string;
     description: string;
     name: string;
+    pdfTag?: string;
   }>>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredPDFs, setFilteredPDFs] = useState<Array<{
+    id: string;
+    link: string;
+    lastEdited: string;
+    description: string;
+    name: string;
+    pdfTag?: string;
+  }>>([]);
+
+
+  async function fetchExistingPDFs() {
+    try {
+      const response = await fetch(`${apiUrl}/pdfs`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los PDFs existentes');
+      }
+
+      const data = await response.json();
+
+      const pdfs = data.map((item: PDFFetchResponse) => ({
+        id: item.pdf_id,
+        link: item.pdf_link,
+        lastEdited: new Date(item.pdf_last_time_edit).toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }),
+        description: item.pdf_description,
+        name: item.pdf_name,
+        pdfTag: item.pdf_tag
+      }));
+      return pdfs;
+    } catch (error) {
+      toast.error("Error al obtener los PDFs existentes.")
+      return [];
+    }
+  }
 
   const fetchAndSetPDFs = async () => {
     const pdfs = await fetchExistingPDFs();
-    setExistingPDFs(pdfs);
-    console.log('PDFs existentes cargados:', pdfs);
+    setExistingPDFs(pdfs || []);
+    setFilteredPDFs(pdfs || []);
+  };
+  
+  // Cargar PDFs cuando el componente se monta
+  useEffect(() => {
+    fetchAndSetPDFs();
+  }, []);
+
+  const handleSearch = (searchText: string) => {
+    setSearchTerm(searchText);
+    
+    // Si no hay PDFs existentes, no hacemos nada
+    if (!existingPDFs || existingPDFs.length === 0) {
+      setFilteredPDFs([]);
+      return;
+    }
+    
+    // Si el término de búsqueda está vacío, mostramos todos los PDFs
+    if (!searchText.trim()) {
+      setFilteredPDFs(existingPDFs);
+      return;
+    }
+    
+    // Filtramos los PDFs basados en el término de búsqueda
+    const filtered = existingPDFs.filter(pdf => 
+      (pdf.name && pdf.name.toLowerCase().includes(searchText.toLowerCase())) ||
+      (pdf.pdfTag && pdf.pdfTag.toLowerCase().includes(searchText.toLowerCase())) ||
+      (pdf.description && pdf.description.toLowerCase().includes(searchText.toLowerCase()))
+    );
+    
+    setFilteredPDFs(filtered);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -131,27 +174,26 @@ export default function WelcomePage() {
       });
 
       if (response.ok) {
-        console.log('PDF creado exitosamente');
+        toast.success("PDF creado exitosamente.");
 
         setTitle("");
         setPdfUrl("");
         setSelectedCategory("");
         setSelectedSubcategory("");
-        setImgUrl("");
 
         fetchAndSetPDFs();
       } else {
-        console.error('Error al crear el PDF');
+        toast.error("Error al crear el PDF.");
       }
     } catch (error) {
-      console.error('Error al crear el PDF:', error);
+      toast.error("Error al crear el PDF.");
     }
   };
+
 
   return (
     <div className="p-8 w-full mx-auto">
       <h1 className="text-3xl font-bold mb-6">Administración de Contenidos</h1>
-
       <Card>
         <CardHeader>
           <CardTitle>Subir un nuevo PDF</CardTitle>
@@ -289,7 +331,18 @@ export default function WelcomePage() {
         </CardContent>
 
         <CardFooter className="flex justify-end gap-2">
-          <Button variant="outline" className="cursor-pointer">Cancelar</Button>
+          <Button 
+            variant="outline" 
+            className="cursor-pointer"
+            onClick={() => {
+              setTitle("");
+              setPdfUrl("");
+              setSelectedCategory("");
+              setSelectedSubcategory("");
+            }}
+          >
+            Cancelar
+          </Button>
           <Button onClick={handleSubmit} className="cursor-pointer">Subir PDF</Button>
         </CardFooter>
       </Card>
@@ -302,32 +355,55 @@ export default function WelcomePage() {
 
         <CardContent>
           <div className="grid gap-4">
-            <Input
-              placeholder="Buscar documentos por título, categoría o subcategoría..."
-              className="w-full"
-            />
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar documentos por título, categoría o subcategoría..."
+                className="w-full pl-10"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+              {searchTerm && (
+                <Button
+                  variant="ghost"
+                  className="absolute right-0 top-0 h-full rounded-l-none px-3"
+                  onClick={() => handleSearch("")}
+                >
+                  <span className="sr-only">Borrar</span>
+                  <span>×</span>
+                </Button>
+              )}
+            </div>
             <div className="text-sm text-muted-foreground">
-              {existingPDFs && existingPDFs.length > 0 ? (
-                existingPDFs.map((pdf) => (
+              {filteredPDFs && filteredPDFs.length > 0 ? (
+                filteredPDFs.map((pdf) => (
                   <PDFAccordionCard
                     key={pdf.id}
                     pdf={pdf}
                     onUpdate={(updatedPdf) => {
+                      if (!existingPDFs) return;
                       // Actualizar el PDF en el estado local
-                      setExistingPDFs(prev =>
-                        prev.map(item =>
-                          item.id === updatedPdf.id ? updatedPdf : item
-                        )
+                      const updatedPDFs = existingPDFs.map(item =>
+                        item.id === updatedPdf.id ? updatedPdf : item
                       );
+                      setExistingPDFs(updatedPDFs);
+                      handleSearch(searchTerm); // Reaplica el filtro actual
                     }}
                     onDelete={(pdfId) => {
+                      if (!existingPDFs) return;
                       // Eliminar el PDF del estado local
-                      setExistingPDFs(prev =>
-                        prev.filter(item => item.id !== pdfId)
-                      );
+                      const updatedPDFs = existingPDFs.filter(item => item.id !== pdfId);
+                      setExistingPDFs(updatedPDFs);
+                      handleSearch(searchTerm); // Reaplica el filtro actual
                     }}
                   />
                 ))
+              ) : searchTerm ? (
+                <div className="text-center py-6">
+                  <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground opacity-50 mb-2" />
+                  <p>No se encontraron resultados para &quot;{searchTerm}&quot;</p>
+                  <p className="text-sm text-muted-foreground mt-1">Intenta con otro término de búsqueda</p>
+                </div>
               ) : (
                 <p>No hay PDFs existentes. Haz clic en &quot;Ver PDFS&quot; para cargar los documentos.</p>
               )}

@@ -25,7 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-
+import { useToast } from "@/hooks/use-toast"
 import { renameCategory, renameCategoryInverted } from "@/lib/utils";
 
 const categories = {
@@ -79,6 +79,7 @@ const PDFAccordionCard = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [pdfData, setPdfData] = useState<PDFProps>(pdf)
+  const toast = useToast();
 
   // Si existe un pdfTag, convertimos el código a nombre de subcategoría
   const initialSubcategory = pdf.pdfTag ? renameCategoryInverted(pdf.pdfTag) : "";
@@ -97,8 +98,7 @@ const PDFAccordionCard = ({
   }
 
   const handleUpdate = async () => {
-    console.log("Actualizando PDF:", pdfData)
-
+    toast.info("Actualizando PDF...");
     // Actualizar el pdfData con el pdfTag antes de enviarlo
     const updatedPdf = {
       ...pdfData,
@@ -121,22 +121,22 @@ const PDFAccordionCard = ({
       });
 
       if (response.ok) {
-        console.log('PDF actualizado exitosamente');
+        toast.success("PDF actualizado correctamente.");
         if (onUpdate) {
           onUpdate(updatedPdf);
         }
       } else {
-        console.error('Error al actualizar el PDF');
+        toast.error("Error al actualizar el PDF.");
       }
     } catch (error) {
-      console.error('Error al actualizar el PDF:', error);
+      toast.error("Error al actualizar el PDF.");
     } finally {
       setIsOpen(false);
     }
   }
 
   const handleDelete = async () => {
-    console.log("Eliminando PDF:", pdf.id)
+    toast.info("Eliminando PDF...");
 
     try {
       const response = await fetch(`${apiUrl}/pdfs/delete?pdfName=${pdf.name}`, {
@@ -145,15 +145,15 @@ const PDFAccordionCard = ({
       });
 
       if (response.ok) {
-        console.log('PDF eliminado exitosamente');
+        toast.success("PDF eliminado correctamente.");
         if (onDelete) {
           onDelete(pdf.id);
         }
       } else {
-        console.error('Error al eliminar el PDF');
+        toast.error("Error al eliminar el PDF.");
       }
     } catch (error) {
-      console.error('Error al eliminar el PDF:', error);
+      toast.error("Error al eliminar el PDF.");
     }
   }
 

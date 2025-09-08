@@ -8,7 +8,7 @@ import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation"
-
+import { useToast } from "@/hooks/use-toast";
 
 export function RegisterForm({
   className,
@@ -18,19 +18,55 @@ export function RegisterForm({
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const router = useRouter();
+  const toast = useToast();
 
   const register = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (password.length < 6) {
+      toast.error("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
-      await fetch(`${apiUrl}/auth/create`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const response = await fetch(`${apiUrl}/auth/create`, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({email, password})
+        body: JSON.stringify({ email, password })
       });
-      router.push('/auth/login')
+
+      if (!response.ok) {
+
+        switch (response.status) {
+          case 480:
+            toast.error("Email inválido. Por favor, introduce un email correcto.");
+            break;
+          case 484:
+            toast.error("El email ya está en uso. Prueba con otro.");
+            break;
+          case 485:
+            toast.error("Error en la verificación del email. Prueba de nuevo.");
+            break;
+          case 486:
+            toast.error("La contraseña es demasiado débil. Usa al menos 6 caracteres.");
+            break;
+          case 490:
+            toast.error("Error en la autenticación. Pruebe de nuevo.");
+            break;
+          case 500:
+            toast.error("Error del servidor. Por favor, inténtalo más tarde.");
+            break;
+          default:
+            toast.error("Error desconocido. Por favor, inténtalo de nuevo.");
+        }
+        return;
+      }
+
+      router.push('/auth/login');
+      toast.success("Cuenta creada correctamente. Por favor, inicia sesión.");
     } catch (error) {
-      console.error("Error during registration:", error);
+      toast.error("Error al crear la cuenta. Por favor, verifica tu conexión e inténtalo de nuevo.");
     }
   }
   return (

@@ -26,6 +26,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useToast } from "@/hooks/use-toast"
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Tipos para los usuarios
@@ -39,29 +41,30 @@ const roles = ["admin", "user", "moderator"];
 
 let numUsers = 0;
 
-async function fetchUsers() {
-  try {
-    const response = await fetch(`${apiUrl}/auth/all-users`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error('Error al obtener los usuarios');
-    }
-    const data = await response.json();
-    numUsers = data.length;
-    return data;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    return [];
-  }
-}
-
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  
+  const toast = useToast();
+
+  async function fetchUsers() {
+    try {
+      const response = await fetch(`${apiUrl}/auth/all-users`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los usuarios');
+      }
+      const data = await response.json();
+      numUsers = data.length;
+      return data;
+    } catch (error) {
+      toast.error('No se pudieron cargar los usuarios.');
+      return [];
+    }
+  }
+
   // Cargar usuarios
   const loadUsers = async () => {
     setLoading(true);
@@ -69,16 +72,16 @@ export default function UsersPage() {
       const fetchedUsers = await fetchUsers();
       setUsers(fetchedUsers);
     } catch (error) {
-      console.error("Error cargando usuarios:", error);
+      toast.error('No se pudieron cargar los usuarios.');
     } finally {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     loadUsers();
   }, []);
-  
+
   const updateUserRole = async (userEmail: string, newRole: string) => {
     try {
       const response = await fetch(`${apiUrl}/auth/change-role`, {
@@ -92,23 +95,23 @@ export default function UsersPage() {
           role: newRole
         })
       });
-      
+
       if (response.ok) {
-        setUsers(prevUsers => 
-          prevUsers.map(user => 
+        setUsers(prevUsers =>
+          prevUsers.map(user =>
             user.email === userEmail ? { ...user, role: newRole as "admin" | "user" | "moderator" } : user
           )
         );
-        console.log(`Rol del usuario ${userEmail} actualizado a ${newRole}`);
+        toast.success(`Rol del usuario ${userEmail} actualizado a ${newRole}.`);
       } else {
-        console.error('Error al actualizar el rol del usuario');
+        toast.error(`No se pudo actualizar el rol del usuario ${userEmail}.`);
       }
     } catch (error) {
-      console.error('Error en la petición:', error);
+      toast.error(`No se pudo actualizar el rol del usuario ${userEmail}.`);
     }
   };
-  
-  const filteredUsers = users.filter(user => 
+
+  const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -124,7 +127,7 @@ export default function UsersPage() {
 
         <CardContent>
           <div className="space-y-4">
-              <Input
+            <Input
               placeholder="Buscar usuarios por correo electrónico..."
               className="w-full"
               value={searchTerm}

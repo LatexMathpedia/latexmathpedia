@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
+import { useToast } from "@/hooks/use-toast";
 
 export function LoginForm({
   className,
@@ -18,16 +19,18 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const {isAuthenticated,login} = useAuth();
+  const toast = useToast();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       await login({ email, password });
       router.push("/dashboard");
-    } catch (error) {
-      alert(error);
+      toast.success("Has iniciado sesión correctamente");
+    } catch (error: any) {
+      toast.error(error.message || "Error al iniciar sesión. Revisa tus credenciales.");
     }
-  }
+  };
 
   return (
     <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>

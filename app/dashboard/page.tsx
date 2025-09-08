@@ -6,6 +6,7 @@ import BlogCard from "@/components/blog-card"
 import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context"
+import { useToast } from "@/hooks/use-toast"
 
 type PDFDocument = {
   title: string
@@ -53,6 +54,7 @@ function selectBests(pdfs: ExtendedPDFDocument[]): ExtendedPDFDocument[] {
 }
 
 function WelcomePage() {
+  const toast = useToast()
   const { categoryFilter, subCategoryFilter } = useFilter()
   const { searchQuery } = useSearch()
   const [displayedPDFs, setDisplayedPDFs] = useState<ExtendedPDFDocument[]>([])
@@ -75,10 +77,8 @@ function WelcomePage() {
 
   async function fetchPDFs(): Promise<APIPDFDocument[]> {
     try {
-      console.log("Auth state:", { isAuthenticated, authLoading });
       let response;
       if (isAuthenticated) {
-        console.log("User is authenticated, fetching all PDFs.");
         response = await fetch(`${apiUrl}/pdfs`, {
           credentials: 'include',
           headers: {
@@ -86,7 +86,6 @@ function WelcomePage() {
           },
         });
       } else {
-        console.log("User is not authenticated, fetching public PDFs.");
         response = await fetch(`${apiUrl}/pdfs/no-link`, {
           headers: {
             'Content-Type': 'application/json',
@@ -94,14 +93,12 @@ function WelcomePage() {
         });
       }
       if (!response.ok) {
-        console.error('Error fetching PDFs, status:', response.status);
         throw new Error(`Error fetching PDFs: ${response.status}`);
       }
       const data = await response.json();
-      console.log("Fetched PDFs:", data);
       return data;
     } catch (error) {
-      console.error('Fetch error:', error);
+      toast.error("Error loading the pdfs data");
       return [];
     }
   }
@@ -217,6 +214,7 @@ function WelcomePage() {
                   title={pdf.title}
                   url={pdf.url}
                   date={pdf.date}
+                  tag={pdf.originalTag}
                 />
               ))
             )}

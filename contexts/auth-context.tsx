@@ -28,16 +28,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const checkAuth = async () => {
     setLoading(true);
     try {
-      console.log("Checking authentication status...");
       const res = await fetch(`${apiUrl}/auth/validate`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
-        console.log("Auth validated successfully:", data);
         setIsAuthenticated(true);
         setEmail(data.email);
         await isAdminUser();
       } else {
-        console.log("Auth validation failed:", res.status);
         setIsAuthenticated(false);
       }
     } catch (error) {
@@ -66,7 +63,26 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     if (!response.ok) {
-      throw new Error('Login failed');
+      switch (response.status) {
+        case 480:
+          throw new Error('Email inválido. Por favor, introduce un email correcto.');
+        case 481:
+          throw new Error('Usuario no encontrado. Revisa tus credenciales.');
+        case 483:
+          throw new Error('Contraseña incorrecta. Inténtalo de nuevo.');
+        case 484:
+          throw new Error('El email ya está en uso. Prueba con otro.');
+        case 485:
+          throw new Error('Error en la verificación del email. Prueba de nuevo.');
+        case 486:
+          throw new Error('La contraseña es demasiado débil. Usa al menos 6 caracteres.');
+        case 490:
+          throw new Error('Error en la autenticación. Pruebe de nuevo.');
+        case 500:
+          throw new Error('Error del servidor. Por favor, inténtalo más tarde.');
+        default:
+          throw new Error('Error desconocido. Por favor, inténtalo de nuevo.');
+      }
     }
 
     setIsAuthenticated(true);

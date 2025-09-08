@@ -7,9 +7,10 @@ type PDFCardProps = {
     title: string;
     url: string;
     date: string;
+    tag?: string;
 }
 
-function PDFCard({ title, url, date }: PDFCardProps) {
+function PDFCard({ title, url, date, tag }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
     
     // Función para procesar el título y separarlo en partes
@@ -59,7 +60,9 @@ function PDFCard({ title, url, date }: PDFCardProps) {
             'bg-pink-100 dark:bg-pink-900',
         ];
         
-        const index = title.charCodeAt(0) % colors.length;
+        // Usar el tag si está disponible, de lo contrario usar el título
+        const textToUse = tag || title;
+        const index = textToUse.charCodeAt(0) % colors.length;
         return colors[index];
     };
 
@@ -87,12 +90,12 @@ function PDFCard({ title, url, date }: PDFCardProps) {
             </div>
 
             <div className="flex flex-1 flex-col p-4">
-                <h3 className="mb-2 line-clamp-2 text-lg font-medium">{title}</h3>
+                <h3 className="mb-2 line-clamp-2 text-base font-medium">{title}</h3>
 
                 <div className="mb-4 flex items-center text-sm text-muted-foreground">
                     <div className="flex items-center gap-1.5 mr-4">
                         <CalendarIcon className="h-3.5 w-3.5" />
-                        <span>{date}</span>
+                        <span className="text-sm">{date}</span>
                     </div>
                 </div>
 

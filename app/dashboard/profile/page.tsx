@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
@@ -13,12 +12,12 @@ import {
   CardFooter
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-
+import { useToast } from "@/hooks/use-toast"
 
 export default function ProfilePage() {
   const { email, logout } = useAuth()
   const router = useRouter()
-
+  const toast = useToast();
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -47,7 +46,7 @@ export default function ProfilePage() {
       await logout();
       router.push('/auth/pwd-email-sent');
     } catch (error) {
-      console.error("Error sending password reset email:", error);
+      toast.error('Error al enviar el correo de restablecimiento de contraseña.');
     }
   }
 

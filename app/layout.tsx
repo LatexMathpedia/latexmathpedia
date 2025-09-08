@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
     { name: "Diego Díaz Mendaña", url: "https://diego-diaz-mendana.web.app/" },
     { name: "Pablo García Pernas", url: "https://www.linkedin.com/in/pablo-garc%C3%ADa-pernas-873630352/" }
   ],
-  metadataBase: new URL("https://www.mathtexpedia.es"),
+  metadataBase: new URL("https://mathtexpedia.es"),
   creator: "MathTexpedia",
   publisher: "MathTexpedia",
   alternates: {
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/public/icon-meta.png",
+        url: "/icon-meta.png",
         width: 1200,
         height: 630,
         alt: "MathTexpedia Logo",
@@ -72,16 +73,16 @@ export const metadata: Metadata = {
     title: "MathTexpedia | Apuntes de Informática y Matemáticas - UniOvi",
     description:
       "Repositorio de apuntes de carrera universitaria en informática y matemáticas en la Universidad de Oviedo. Recursos claros, organizados y actualizados para estudiantes.",
-    images: ["/public/icon-meta.png"],
+    images: ["/icon-meta.png"],
     creator: "@MathsTexpedia",
     site: "@MathsTexpedia",
   },
   icons: {
-    icon: "/public/icon-meta.png",
-    shortcut: "/public/icon-meta.png",
-    apple: "/public/icon-apple.png",
+    icon: "/favicon.ico",
+    shortcut: "/icon-meta.png",
+    apple: "/icon-apple.png",
     other: {
-      rel: "apple-touch-icon-precomposed", url: "/public/icon-apple.png",
+      rel: "apple-touch-icon-precomposed", url: "/icon-apple.png",
     },
   },
   robots: {
@@ -112,7 +113,18 @@ export default function RootLayout({
   
   return (
     <html lang="es" suppressHydrationWarning>
-      <head />
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-6477110291995241"></meta>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/icon-apple.png" />
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <meta property="og:image:secure_url" content="https://mathtexpedia.es/icon-meta.png" />
+        <meta property="og:image" content="https://mathtexpedia.es/icon-meta.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="MathTexpedia Logo" />
+        <meta name="twitter:image" content="https://mathtexpedia.es/icon-meta.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -126,6 +138,34 @@ export default function RootLayout({
             {children}
           </AuthProvider>
         </ThemeProvider>
+        <Toaster 
+          position="bottom-right"
+          toastOptions={{
+            duration: 5000,
+            className: "!bg-popover !text-popover-foreground border border-border shadow-lg rounded-lg",
+            success: {
+              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-green-500 border border-border shadow-lg rounded-lg",
+              iconTheme: {
+                primary: "hsl(var(--chart-2))",
+                secondary: "hsl(var(--background))",
+              },
+            },
+            error: {
+              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-destructive border border-border shadow-lg rounded-lg",
+              iconTheme: {
+                primary: "hsl(var(--destructive))",
+                secondary: "hsl(var(--background))",
+              },
+            },
+            loading: {
+              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-muted-foreground border border-border shadow-lg rounded-lg",
+              iconTheme: {
+                primary: "hsl(var(--muted-foreground))",
+                secondary: "hsl(var(--background))",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

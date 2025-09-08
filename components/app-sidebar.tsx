@@ -25,6 +25,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/contexts/auth-context"
+import { useFilter } from "@/contexts/filter-context"
+import { useSearch } from "@/contexts/search-context"
 import Link from "next/link"
 import logo from '@/public/icon.png'
 
@@ -148,10 +150,18 @@ const dataAdminPanel = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isAdmin, email } = useAuth();
+  const { clearFilter } = useFilter();
+  const { setSearchQuery } = useSearch();
 
   const dataUser = {
     name: email.split('@')[0],
     email: email
+  }
+  
+  const handleLogoClick = () => {
+    // Limpiar los filtros y la búsqueda
+    clearFilter();
+    setSearchQuery("");
   }
 
 
@@ -165,7 +175,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-                <Link href="/dashboard" className="flex items-center space-x-2">
+                <Link href="/dashboard" className="flex items-center space-x-2" onClick={handleLogoClick}>
                 <img src={logo.src} alt="Logo" className="h-10 w-12 rounded-lg" />
                 <div className="flex flex-col text-left">
                   <span className="truncate font-medium text-lg">MathTexpedia</span>
