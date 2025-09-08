@@ -214,6 +214,7 @@ function WelcomePage() {
                   title={pdf.title}
                   url={pdf.url}
                   date={pdf.date}
+                  tag={pdf.originalTag}
                 />
               ))
             )}

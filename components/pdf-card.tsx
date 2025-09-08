@@ -7,9 +7,10 @@ type PDFCardProps = {
     title: string;
     url: string;
     date: string;
+    tag?: string;
 }
 
-function PDFCard({ title, url, date }: PDFCardProps) {
+function PDFCard({ title, url, date, tag }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
     
     // Función para procesar el título y separarlo en partes
@@ -59,7 +60,9 @@ function PDFCard({ title, url, date }: PDFCardProps) {
             'bg-pink-100 dark:bg-pink-900',
         ];
         
-        const index = title.charCodeAt(0) % colors.length;
+        // Usar el tag si está disponible, de lo contrario usar el título
+        const textToUse = tag || title;
+        const index = textToUse.charCodeAt(0) % colors.length;
         return colors[index];
     };
 
