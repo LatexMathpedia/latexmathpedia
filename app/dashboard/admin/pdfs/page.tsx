@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { AlertCircleIcon, Check, CheckCircle2Icon, ChevronsUpDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -23,6 +23,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { renameCategory } from "@/lib/utils"
+import { useToast } from "@/hooks/use-toast";
+
 
 const categories = {
   "Matemáticas": [
@@ -55,42 +57,11 @@ type PDFFetchResponse = {
   pdf_tag: string;
 }
 
-async function fetchExistingPDFs() {
-  try {
-    const response = await fetch(`${apiUrl}/pdfs`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error('Error al obtener los PDFs existentes');
-    }
-
-    const data = await response.json();
-
-    const pdfs = data.map((item: PDFFetchResponse) => ({
-      id: item.pdf_id,
-      link: item.pdf_link,
-      lastEdited: new Date(item.pdf_last_time_edit).toLocaleDateString("es-ES", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }),
-      description: item.pdf_description,
-      name: item.pdf_name,
-      pdfTag: item.pdf_tag
-    }));
-    return pdfs;
-  } catch (error) {
-    console.error('Error al obtener los PDFs existentes:', error);
-    return [];
-  }
-}
-
 
 export default function WelcomePage() {
+  const toast = useToast();
   const [title, setTitle] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
 
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -106,10 +77,41 @@ export default function WelcomePage() {
     name: string;
   }>>([]);
 
+
+  async function fetchExistingPDFs() {
+    try {
+      const response = await fetch(`${apiUrl}/pdfs`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los PDFs existentes');
+      }
+
+      const data = await response.json();
+
+      const pdfs = data.map((item: PDFFetchResponse) => ({
+        id: item.pdf_id,
+        link: item.pdf_link,
+        lastEdited: new Date(item.pdf_last_time_edit).toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }),
+        description: item.pdf_description,
+        name: item.pdf_name,
+        pdfTag: item.pdf_tag
+      }));
+      return pdfs;
+    } catch (error) {
+      toast.error("Error al obtener los PDFs existentes.")
+      return [];
+    }
+  }
+
   const fetchAndSetPDFs = async () => {
     const pdfs = await fetchExistingPDFs();
     setExistingPDFs(pdfs);
-    console.log('PDFs existentes cargados:', pdfs);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -131,27 +133,26 @@ export default function WelcomePage() {
       });
 
       if (response.ok) {
-        console.log('PDF creado exitosamente');
+        toast.success("PDF creado exitosamente.");
 
         setTitle("");
         setPdfUrl("");
         setSelectedCategory("");
         setSelectedSubcategory("");
-        setImgUrl("");
 
         fetchAndSetPDFs();
       } else {
-        console.error('Error al crear el PDF');
+        toast.error("Error al crear el PDF.");
       }
     } catch (error) {
-      console.error('Error al crear el PDF:', error);
+      toast.error("Error al crear el PDF.");
     }
   };
+
 
   return (
     <div className="p-8 w-full mx-auto">
       <h1 className="text-3xl font-bold mb-6">Administración de Contenidos</h1>
-
       <Card>
         <CardHeader>
           <CardTitle>Subir un nuevo PDF</CardTitle>

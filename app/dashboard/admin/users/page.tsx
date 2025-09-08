@@ -26,6 +26,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Tipos para los usuarios
@@ -52,7 +55,17 @@ async function fetchUsers() {
     numUsers = data.length;
     return data;
   } catch (error) {
-    console.error('Error fetching users:', error);
+    <Alert variant="destructive">
+      <AlertCircleIcon />
+        <AlertTitle>Error al cargar usuarios</AlertTitle>
+        <AlertDescription>
+          <p>No se pudieron cargar los usuarios. Por favor, intenta de nuevo más tarde.</p>
+          <ul className="list-inside list-disc text-sm">
+            <li>Verifica tu conexión a internet.</li>
+            <li>Si el problema persiste, contacta al soporte técnico.</li>
+          </ul>
+        </AlertDescription>
+      </Alert>
     return [];
   }
 }
@@ -69,7 +82,17 @@ export default function UsersPage() {
       const fetchedUsers = await fetchUsers();
       setUsers(fetchedUsers);
     } catch (error) {
-      console.error("Error cargando usuarios:", error);
+      <Alert variant="destructive">
+        <AlertCircleIcon />
+          <AlertTitle>Error al cargar usuarios</AlertTitle>
+          <AlertDescription>
+            <p>No se pudieron cargar los usuarios. Por favor, intenta de nuevo más tarde.</p>
+            <ul className="list-inside list-disc text-sm">
+              <li>Verifica tu conexión a internet.</li>
+              <li>Si el problema persiste, contacta al soporte técnico.</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
     } finally {
       setLoading(false);
     }
@@ -99,12 +122,30 @@ export default function UsersPage() {
             user.email === userEmail ? { ...user, role: newRole as "admin" | "user" | "moderator" } : user
           )
         );
-        console.log(`Rol del usuario ${userEmail} actualizado a ${newRole}`);
+        <Alert>
+          <CheckCircle2Icon />
+          <AlertTitle>Rol actualizado</AlertTitle>
+          <AlertDescription>
+            El rol del usuario {userEmail} ha sido actualizado a {newRole}.
+          </AlertDescription>
+        </Alert>
       } else {
-        console.error('Error al actualizar el rol del usuario');
+        <Alert variant="destructive">
+          <AlertCircleIcon />
+          <AlertTitle>Error al actualizar rol</AlertTitle>
+          <AlertDescription>
+            No se pudo actualizar el rol del usuario {userEmail}. Por favor, intenta de nuevo más tarde.
+          </AlertDescription>
+        </Alert>
       }
     } catch (error) {
-      console.error('Error en la petición:', error);
+      <Alert variant="destructive">
+        <AlertCircleIcon />
+          <AlertTitle>Error al actualizar rol</AlertTitle>
+          <AlertDescription>
+            No se pudo actualizar el rol del usuario {userEmail}. Por favor, intenta de nuevo más tarde.
+          </AlertDescription>
+        </Alert>
     }
   };
   

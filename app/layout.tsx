@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -126,6 +127,34 @@ export default function RootLayout({
             {children}
           </AuthProvider>
         </ThemeProvider>
+        <Toaster 
+          position="bottom-right"
+          toastOptions={{
+            duration: 5000,
+            className: "!bg-popover !text-popover-foreground border border-border shadow-lg rounded-lg",
+            success: {
+              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-green-500 border border-border shadow-lg rounded-lg",
+              iconTheme: {
+                primary: "hsl(var(--chart-2))",
+                secondary: "hsl(var(--background))",
+              },
+            },
+            error: {
+              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-destructive border border-border shadow-lg rounded-lg",
+              iconTheme: {
+                primary: "hsl(var(--destructive))",
+                secondary: "hsl(var(--background))",
+              },
+            },
+            loading: {
+              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-muted-foreground border border-border shadow-lg rounded-lg",
+              iconTheme: {
+                primary: "hsl(var(--muted-foreground))",
+                secondary: "hsl(var(--background))",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );
