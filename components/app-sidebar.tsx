@@ -147,10 +147,13 @@ const dataAdminPanel = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isAdmin, email } = useAuth();
+
   const dataUser = {
     name: email.split('@')[0],
     email: email
-  };
+  }
+
+
 
   return (
     <Sidebar
@@ -175,15 +178,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} title="Apuntes"/>
+        <NavMain items={data.navMain} title="Apuntes" />
         <NavProjects projects={data.projects} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
-        { isAdmin && (
-          <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel"/>
+        {isAdmin && (
+          <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel" />
         )}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={dataUser}/>
+        <NavUser user={dataUser} />
       </SidebarFooter>
     </Sidebar>
   )

@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         const data = await res.json();
         console.log("Auth validated successfully:", data);
         setIsAuthenticated(true);
-        setEmail(data.userEmail);
+        setEmail(data.email);
         await isAdminUser();
       } else {
         console.log("Auth validation failed:", res.status);
