@@ -27,10 +27,10 @@ export function LoginForm({
       await login({ email, password });
       router.push("/dashboard");
       toast.success("Has iniciado sesión correctamente");
-    } catch (error) {
-      toast.error("Error al iniciar sesión. Revisa tus credenciales.");
+    } catch (error: any) {
+      toast.error(error.message || "Error al iniciar sesión. Revisa tus credenciales.");
     }
-  }
+  };
 
   return (
     <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
