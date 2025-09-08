@@ -171,7 +171,7 @@ function WelcomePage() {
 
     if (categoryFilter) {
       const filteredPDFs = allPDFs.filter(pdf => {
-        const pdfTag = (pdf as any).originalTag;
+        const pdfTag = (pdf as ExtendedPDFDocument).originalTag;
 
         if (!pdfTag) return false;
 
