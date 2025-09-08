@@ -196,7 +196,7 @@ export default function WelcomePage() {
                         variant="outline"
                         role="combobox"
                         aria-expanded={categoryOpen}
-                        className="w-full justify-between"
+                        className="w-full justify-between cursor-pointer"
                       >
                         {selectedCategory || "Selecciona una categoría"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -246,7 +246,7 @@ export default function WelcomePage() {
                         variant="outline"
                         role="combobox"
                         aria-expanded={subcategoryOpen}
-                        className="w-full justify-between"
+                        className="w-full justify-between cursor-pointer"
                         disabled={!selectedCategory}
                       >
                         {selectedSubcategory || (selectedCategory ? "Selecciona una subcategoría" : "Primero selecciona una categoría")}
@@ -289,8 +289,8 @@ export default function WelcomePage() {
         </CardContent>
 
         <CardFooter className="flex justify-end gap-2">
-          <Button variant="outline">Cancelar</Button>
-          <Button onClick={handleSubmit}>Subir PDF</Button>
+          <Button variant="outline" className="cursor-pointer">Cancelar</Button>
+          <Button onClick={handleSubmit} className="cursor-pointer">Subir PDF</Button>
         </CardFooter>
       </Card>
 
@@ -336,7 +336,7 @@ export default function WelcomePage() {
         </CardContent>
 
         <CardFooter className="flex justify-end gap-2">
-          <Button onClick={fetchAndSetPDFs}>Ver PDFS</Button>
+          <Button onClick={fetchAndSetPDFs} className="cursor-pointer">Ver PDFS</Button>
         </CardFooter>
       </Card>
     </div>

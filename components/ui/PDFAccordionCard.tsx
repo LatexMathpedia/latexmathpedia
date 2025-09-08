@@ -181,11 +181,11 @@ const PDFAccordionCard = ({
           )}
         </div>
         <div className="flex space-x-2">
-          <Button variant="ghost" size="sm" onClick={handleDelete}>
+          <Button variant="ghost" size="sm" onClick={handleDelete} className="cursor-pointer">
             <Trash className="h-4 w-4" />
           </Button>
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="cursor-pointer">
               {isOpen ? (
                 <ChevronUp className="h-4 w-4" />
               ) : (
@@ -242,7 +242,7 @@ const PDFAccordionCard = ({
                     variant="outline"
                     role="combobox"
                     aria-expanded={categoryOpen}
-                    className="w-full justify-between"
+                    className="w-full justify-between cursor-pointer"
                   >
                     {selectedCategory || "Selecciona una categoría"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -292,7 +292,7 @@ const PDFAccordionCard = ({
                     variant="outline"
                     role="combobox"
                     aria-expanded={subcategoryOpen}
-                    className="w-full justify-between"
+                    className="w-full justify-between cursor-pointer"
                     disabled={!selectedCategory}
                   >
                     {selectedSubcategory || (selectedCategory ? "Selecciona una subcategoría" : "Primero selecciona una categoría")}
@@ -332,10 +332,10 @@ const PDFAccordionCard = ({
           </div>
 
           <div className="flex justify-end space-x-2 mt-6">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>
+            <Button variant="outline" onClick={() => setIsOpen(false)} className="cursor-pointer">
               Cancelar
             </Button>
-            <Button onClick={handleUpdate}>
+            <Button onClick={handleUpdate} className="cursor-pointer">
               Actualizar PDF
             </Button>
           </div>

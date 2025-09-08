@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
-
+import { useRouter } from "next/navigation"
 import {
   Collapsible,
   CollapsibleContent,
@@ -38,10 +38,21 @@ export function NavMain({
   title: string
 }) {
   const { categoryFilter, subCategoryFilter, setFilter } = useFilter()
+  const router = useRouter();
 
   // Determina si el elemento es filtrable (matemáticas o software)
   const isFilterable = (title: string) => {
     return title === "Matemáticas" || title === "Software"
+  }
+
+  function handleClickOnCategory(category: string) {
+    setFilter(category, null);
+    router.push("/dashboard");
+  }
+
+  function handleClickOnSubCategory(category: string, subCategory: string) {
+    setFilter(category, subCategory);
+    router.push("/dashboard");
   }
 
   return (
@@ -54,7 +65,7 @@ export function NavMain({
               {isFilterable(item.title) ? (
                 <SidebarMenuButton 
                   tooltip={item.title}
-                  onClick={() => setFilter(item.title, null)}
+                  onClick={() => handleClickOnCategory(item.title)}
                   className={categoryFilter === item.title ? "text-primary" : ""}
                 >
                   <item.icon />
@@ -83,7 +94,7 @@ export function NavMain({
                         <SidebarMenuSubItem key={subItem.title}>
                           {isFilterable(item.title) ? (
                             <SidebarMenuSubButton 
-                              onClick={() => setFilter(item.title, subItem.title)}
+                              onClick={() => handleClickOnSubCategory(item.title, subItem.title)}
                               className={categoryFilter === item.title && subCategoryFilter === subItem.title ? "text-primary" : ""}
                             >
                                 <span>{subItem.title}</span>

@@ -148,7 +148,7 @@ export default function UsersPage() {
                               <Button
                                 variant="outline"
                                 role="combobox"
-                                className="w-[120px] justify-between"
+                                className="w-[120px] justify-between cursor-pointer"
                               >
                                 {user.role}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -202,7 +202,7 @@ export default function UsersPage() {
           <p className="text-sm text-muted-foreground mr-auto">
             Total de usuarios: {numUsers || 0}
           </p>
-          <Button onClick={loadUsers} disabled={loading}>
+          <Button onClick={loadUsers} disabled={loading} className="cursor-pointer">
             {loading ? "Cargando..." : "Refrescar Lista"}
           </Button>
         </CardFooter>
