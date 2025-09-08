@@ -27,8 +27,12 @@ export function LoginForm({
       await login({ email, password });
       router.push("/dashboard");
       toast.success("Has iniciado sesión correctamente");
-    } catch (error: any) {
-      toast.error(error.message || "Error al iniciar sesión. Revisa tus credenciales.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Error al iniciar sesión. Revisa tus credenciales.");
+      }
     }
   };
 
