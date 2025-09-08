@@ -12,13 +12,12 @@ import {
   CardFooter
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircleIcon } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function ProfilePage() {
   const { email, logout } = useAuth()
   const router = useRouter()
-
+  const toast = useToast();
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -47,18 +46,7 @@ export default function ProfilePage() {
       await logout();
       router.push('/auth/pwd-email-sent');
     } catch (error) {
-      <Alert variant="destructive">
-        <AlertCircleIcon />
-        <AlertTitle>Error al enviar el correo</AlertTitle>
-        <AlertDescription>
-          <p>Hubo un problema al enviar el correo de restablecimiento de contraseña. Por favor, intenta lo siguiente:</p>
-          <ul className="list-inside list-disc text-sm">
-            <li>Verifica tu conexión a internet.</li>
-            <li>Asegúrate de que el correo electrónico proporcionado sea correcto.</li>
-            <li>Intenta nuevamente más tarde.</li>
-          </ul>
-        </AlertDescription>
-      </Alert>
+      toast.error('Error al enviar el correo de restablecimiento de contraseña.');
     }
   }
 

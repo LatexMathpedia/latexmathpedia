@@ -6,8 +6,7 @@ import BlogCard from "@/components/blog-card"
 import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircleIcon } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 type PDFDocument = {
   title: string
@@ -55,6 +54,7 @@ function selectBests(pdfs: ExtendedPDFDocument[]): ExtendedPDFDocument[] {
 }
 
 function WelcomePage() {
+  const toast = useToast()
   const { categoryFilter, subCategoryFilter } = useFilter()
   const { searchQuery } = useSearch()
   const [displayedPDFs, setDisplayedPDFs] = useState<ExtendedPDFDocument[]>([])
@@ -98,19 +98,7 @@ function WelcomePage() {
       const data = await response.json();
       return data;
     } catch (error) {
-      <div>
-        <Alert variant="destructive">
-          <AlertCircleIcon />
-          <AlertTitle>Unable to load the pdfs data</AlertTitle>
-          <AlertDescription>
-            <p>There was an error while fetching the pdfs data. Please try again later.</p>
-            <ul className="list-inside list-disc text-sm">
-              <li>{(error as Error).message}</li>
-              <li>If the problem persists, please contact the administrator.</li>
-            </ul>
-          </AlertDescription>
-        </Alert>
-      </div>
+      toast.error("Error loading the pdfs data");
       return [];
     }
   }

@@ -8,7 +8,7 @@ import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation"
-
+import { useToast } from "@/hooks/use-toast";
 
 export function RegisterForm({
   className,
@@ -18,6 +18,7 @@ export function RegisterForm({
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const router = useRouter();
+  const toast = useToast();
 
   const register = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +30,9 @@ export function RegisterForm({
         body: JSON.stringify({email, password})
       });
       router.push('/auth/login')
+      toast.success("Cuenta creada correctamente. Por favor, inicia sesión.");
     } catch (error) {
-      console.error("Error during registration:", error);
+      toast.error("Error al crear la cuenta. Por favor, inténtalo de nuevo.");
     }
   }
   return (

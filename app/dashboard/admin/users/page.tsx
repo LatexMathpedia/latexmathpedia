@@ -26,8 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -42,39 +41,30 @@ const roles = ["admin", "user", "moderator"];
 
 let numUsers = 0;
 
-async function fetchUsers() {
-  try {
-    const response = await fetch(`${apiUrl}/auth/all-users`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error('Error al obtener los usuarios');
-    }
-    const data = await response.json();
-    numUsers = data.length;
-    return data;
-  } catch (error) {
-    <Alert variant="destructive">
-      <AlertCircleIcon />
-        <AlertTitle>Error al cargar usuarios</AlertTitle>
-        <AlertDescription>
-          <p>No se pudieron cargar los usuarios. Por favor, intenta de nuevo más tarde.</p>
-          <ul className="list-inside list-disc text-sm">
-            <li>Verifica tu conexión a internet.</li>
-            <li>Si el problema persiste, contacta al soporte técnico.</li>
-          </ul>
-        </AlertDescription>
-      </Alert>
-    return [];
-  }
-}
-
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  
+  const toast = useToast();
+
+  async function fetchUsers() {
+    try {
+      const response = await fetch(`${apiUrl}/auth/all-users`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los usuarios');
+      }
+      const data = await response.json();
+      numUsers = data.length;
+      return data;
+    } catch (error) {
+      toast.error('No se pudieron cargar los usuarios.');
+      return [];
+    }
+  }
+
   // Cargar usuarios
   const loadUsers = async () => {
     setLoading(true);
@@ -82,26 +72,16 @@ export default function UsersPage() {
       const fetchedUsers = await fetchUsers();
       setUsers(fetchedUsers);
     } catch (error) {
-      <Alert variant="destructive">
-        <AlertCircleIcon />
-          <AlertTitle>Error al cargar usuarios</AlertTitle>
-          <AlertDescription>
-            <p>No se pudieron cargar los usuarios. Por favor, intenta de nuevo más tarde.</p>
-            <ul className="list-inside list-disc text-sm">
-              <li>Verifica tu conexión a internet.</li>
-              <li>Si el problema persiste, contacta al soporte técnico.</li>
-            </ul>
-          </AlertDescription>
-        </Alert>
+      toast.error('No se pudieron cargar los usuarios.');
     } finally {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     loadUsers();
   }, []);
-  
+
   const updateUserRole = async (userEmail: string, newRole: string) => {
     try {
       const response = await fetch(`${apiUrl}/auth/change-role`, {
@@ -115,41 +95,23 @@ export default function UsersPage() {
           role: newRole
         })
       });
-      
+
       if (response.ok) {
-        setUsers(prevUsers => 
-          prevUsers.map(user => 
+        setUsers(prevUsers =>
+          prevUsers.map(user =>
             user.email === userEmail ? { ...user, role: newRole as "admin" | "user" | "moderator" } : user
           )
         );
-        <Alert>
-          <CheckCircle2Icon />
-          <AlertTitle>Rol actualizado</AlertTitle>
-          <AlertDescription>
-            El rol del usuario {userEmail} ha sido actualizado a {newRole}.
-          </AlertDescription>
-        </Alert>
+        toast.success(`Rol del usuario ${userEmail} actualizado a ${newRole}.`);
       } else {
-        <Alert variant="destructive">
-          <AlertCircleIcon />
-          <AlertTitle>Error al actualizar rol</AlertTitle>
-          <AlertDescription>
-            No se pudo actualizar el rol del usuario {userEmail}. Por favor, intenta de nuevo más tarde.
-          </AlertDescription>
-        </Alert>
+        toast.error(`No se pudo actualizar el rol del usuario ${userEmail}.`);
       }
     } catch (error) {
-      <Alert variant="destructive">
-        <AlertCircleIcon />
-          <AlertTitle>Error al actualizar rol</AlertTitle>
-          <AlertDescription>
-            No se pudo actualizar el rol del usuario {userEmail}. Por favor, intenta de nuevo más tarde.
-          </AlertDescription>
-        </Alert>
+      toast.error(`No se pudo actualizar el rol del usuario ${userEmail}.`);
     }
   };
-  
-  const filteredUsers = users.filter(user => 
+
+  const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -165,7 +127,7 @@ export default function UsersPage() {
 
         <CardContent>
           <div className="space-y-4">
-              <Input
+            <Input
               placeholder="Buscar usuarios por correo electrónico..."
               className="w-full"
               value={searchTerm}
