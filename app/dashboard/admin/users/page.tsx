@@ -37,6 +37,8 @@ type User = {
 // Posibles roles
 const roles = ["admin", "user", "moderator"];
 
+let numUsers = 0;
+
 async function fetchUsers() {
   try {
     const response = await fetch(`${apiUrl}/auth/all-users`, {
@@ -47,6 +49,7 @@ async function fetchUsers() {
       throw new Error('Error al obtener los usuarios');
     }
     const data = await response.json();
+    numUsers = data.length;
     return data;
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -196,6 +199,9 @@ export default function UsersPage() {
         </CardContent>
 
         <CardFooter className="flex justify-end gap-2">
+          <p className="text-sm text-muted-foreground mr-auto">
+            Total de usuarios: {numUsers || 0}
+          </p>
           <Button onClick={loadUsers} disabled={loading}>
             {loading ? "Cargando..." : "Refrescar Lista"}
           </Button>
