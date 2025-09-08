@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/app/icon.png",
+        url: "/public/icon-meta.png",
         width: 1200,
         height: 630,
         alt: "MathTexpedia Logo",
@@ -72,16 +72,16 @@ export const metadata: Metadata = {
     title: "MathTexpedia | Apuntes de Informática y Matemáticas - UniOvi",
     description:
       "Repositorio de apuntes de carrera universitaria en informática y matemáticas en la Universidad de Oviedo. Recursos claros, organizados y actualizados para estudiantes.",
-    images: ["/app/icon.png"],
+    images: ["/public/icon-meta.png"],
     creator: "@MathsTexpedia",
     site: "@MathsTexpedia",
   },
   icons: {
-    icon: "/app/icon.png",
-    shortcut: "/app/icon.png",
-    apple: "/app/icon-apple.png",
+    icon: "/public/icon-meta.png",
+    shortcut: "/public/icon-meta.png",
+    apple: "/public/icon-apple.png",
     other: {
-      rel: "apple-touch-icon-precomposed", url: "/app/icon-apple.png",
+      rel: "apple-touch-icon-precomposed", url: "/public/icon-apple.png",
     },
   },
   robots: {
