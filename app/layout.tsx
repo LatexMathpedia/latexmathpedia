@@ -118,7 +118,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/icon-apple.png" />
         <link rel="icon" href="/icon.png" type="image/png" />
+        <meta property="og:image:secure_url" content="https://mathtexpedia.es/icon-meta.png" />
         <meta property="og:image" content="https://mathtexpedia.es/icon-meta.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="MathTexpedia Logo" />
         <meta name="twitter:image" content="https://mathtexpedia.es/icon-meta.png" />
       </head>
       <body
