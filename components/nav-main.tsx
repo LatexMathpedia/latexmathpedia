@@ -66,7 +66,7 @@ export function NavMain({
                 <SidebarMenuButton 
                   tooltip={item.title}
                   onClick={() => handleClickOnCategory(item.title)}
-                  className={categoryFilter === item.title ? "text-primary" : ""}
+                  className={`cursor-pointer ${categoryFilter === item.title ? "text-primary" : ""}`}
                 >
                   <item.icon />
                   <span>{item.title}</span>
@@ -95,7 +95,7 @@ export function NavMain({
                           {isFilterable(item.title) ? (
                             <SidebarMenuSubButton 
                               onClick={() => handleClickOnSubCategory(item.title, subItem.title)}
-                              className={categoryFilter === item.title && subCategoryFilter === subItem.title ? "text-primary" : ""}
+                              className={`cursor-pointer ${categoryFilter === item.title && subCategoryFilter === subItem.title ? "text-primary" : ""}`}
                             >
                                 <span>{subItem.title}</span>
                             </SidebarMenuSubButton>
