@@ -52,7 +52,6 @@ type PDFFetchResponse = {
   pdf_last_time_edit: string;
   pdf_description: string;
   pdf_name: string;
-  pdf_image_link: string;
   pdf_tag: string;
 }
 
@@ -78,7 +77,6 @@ async function fetchExistingPDFs() {
       }),
       description: item.pdf_description,
       name: item.pdf_name,
-      imageLink: item.pdf_image_link,
       pdfTag: item.pdf_tag
     }));
     return pdfs;
@@ -106,7 +104,6 @@ export default function WelcomePage() {
     lastEdited: string;
     description: string;
     name: string;
-    imageLink: string;
   }>>([]);
 
   const fetchAndSetPDFs = async () => {
@@ -117,7 +114,7 @@ export default function WelcomePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const response = await fetch(`${apiUrl}/pdfs/create`, {
         method: 'POST',
@@ -128,21 +125,20 @@ export default function WelcomePage() {
         body: JSON.stringify({
           name: title,
           link: pdfUrl,
-          imageLink: imgUrl,
           pdfTag: renameCategory(selectedSubcategory),
           description: ""
         })
       });
-      
+
       if (response.ok) {
         console.log('PDF creado exitosamente');
-        
+
         setTitle("");
         setPdfUrl("");
         setSelectedCategory("");
         setSelectedSubcategory("");
         setImgUrl("");
-        
+
         fetchAndSetPDFs();
       } else {
         console.error('Error al crear el PDF');
@@ -184,17 +180,6 @@ export default function WelcomePage() {
                   className="w-full"
                   value={pdfUrl}
                   onChange={(e) => setPdfUrl(e.target.value)}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="imgUrl">Enlace a la imagen</Label>
-                <Input
-                  id="imgUrl"
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                  className="w-full"
-                  value={imgUrl}
-                  onChange={(e) => setImgUrl(e.target.value)}
                 />
               </div>
 
@@ -324,27 +309,27 @@ export default function WelcomePage() {
             <div className="text-sm text-muted-foreground">
               {existingPDFs && existingPDFs.length > 0 ? (
                 existingPDFs.map((pdf) => (
-                  <PDFAccordionCard 
-                    key={pdf.id} 
-                    pdf={pdf} 
+                  <PDFAccordionCard
+                    key={pdf.id}
+                    pdf={pdf}
                     onUpdate={(updatedPdf) => {
                       // Actualizar el PDF en el estado local
-                      setExistingPDFs(prev => 
-                        prev.map(item => 
+                      setExistingPDFs(prev =>
+                        prev.map(item =>
                           item.id === updatedPdf.id ? updatedPdf : item
                         )
                       );
                     }}
                     onDelete={(pdfId) => {
                       // Eliminar el PDF del estado local
-                      setExistingPDFs(prev => 
+                      setExistingPDFs(prev =>
                         prev.filter(item => item.id !== pdfId)
                       );
                     }}
                   />
                 ))
               ) : (
-<p>No hay PDFs existentes. Haz clic en &quot;Ver PDFS&quot; para cargar los documentos.</p>
+                <p>No hay PDFs existentes. Haz clic en &quot;Ver PDFS&quot; para cargar los documentos.</p>
               )}
             </div>
           </div>

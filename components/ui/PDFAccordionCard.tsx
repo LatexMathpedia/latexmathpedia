@@ -53,7 +53,6 @@ type PDFProps = {
   lastEdited: string;
   description: string;
   name: string;
-  imageLink: string;
   pdfTag?: string; // Código de categoría que viene de la base de datos
 }
 
@@ -116,7 +115,6 @@ const PDFAccordionCard = ({
         body: JSON.stringify({
           name: updatedPdf.name,
           link: updatedPdf.link,
-          imageLink: updatedPdf.imageLink,
           pdfTag: updatedPdf.pdfTag,
           description: updatedPdf.description,
         })
@@ -227,16 +225,6 @@ const PDFAccordionCard = ({
               id="description"
               value={pdfData.description || ""}
               onChange={(e) => handleInputChange('description', e.target.value)}
-              className="w-full"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="imageLink">Enlace de imagen</Label>
-            <Input
-              id="imageLink"
-              value={pdfData.imageLink || ""}
-              onChange={(e) => handleInputChange('imageLink', e.target.value)}
               className="w-full"
             />
           </div>

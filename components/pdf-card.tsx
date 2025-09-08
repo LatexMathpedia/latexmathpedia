@@ -1,4 +1,4 @@
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, FileIcon } from "lucide-react";
 import { useAuth } from '@/contexts/auth-context';
 
 import { Button } from "@/components/ui/button";
@@ -7,27 +7,83 @@ type PDFCardProps = {
     title: string;
     url: string;
     date: string;
-    img: string;
 }
 
-function PDFCard({ title, url, date, img }: PDFCardProps) {
-    const defaultImage = "/image.png";
+function PDFCard({ title, url, date }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
+    
+    // Función para procesar el título y separarlo en partes
+    const getTitleParts = () => {
+        // Primero verificamos si contiene palabras clave especiales como "Completos"
+        const specialKeywords = ['Completos', 'completos'];
+        let mainPart = '';
+        let secondaryPart = '';
+        let tertiaryPart = '';
+        
+        // Verificar si hay palabras clave especiales
+        for (const keyword of specialKeywords) {
+            if (title.includes(keyword)) {
+                // Extraer el texto antes de la palabra clave como parte principal
+                const index = title.indexOf(keyword);
+                mainPart = title.substring(0, index).trim();
+                secondaryPart = keyword;
+                break;
+            }
+        }
+        
+        // Si no hay palabras clave especiales, dividir por guiones
+        if (!mainPart) {
+            const parts = title.split('-').map(part => part.trim());
+            mainPart = parts[0] || '';
+            secondaryPart = parts.length > 1 ? parts[1] : '';
+            tertiaryPart = parts.length > 2 ? parts.slice(2).join(' - ') : '';
+        }
+        
+        return {
+            main: mainPart,
+            secondary: secondaryPart,
+            tertiary: tertiaryPart
+        };
+    };
+    
+    const titleParts = getTitleParts();
+    
+    const generateBackgroundColor = () => {
+        const colors = [
+            'bg-blue-100 dark:bg-blue-900',
+            'bg-green-100 dark:bg-green-900',
+            'bg-purple-100 dark:bg-purple-900',
+            'bg-yellow-100 dark:bg-yellow-900',
+            'bg-red-100 dark:bg-red-900',
+            'bg-indigo-100 dark:bg-indigo-900',
+            'bg-pink-100 dark:bg-pink-900',
+        ];
+        
+        const index = title.charCodeAt(0) % colors.length;
+        return colors[index];
+    };
 
     function handleClick() {
         if (!isAuthenticated) {
             alert("Debes iniciar sesión para acceder a este contenido.");
         }
     }
-    console.log(url);
+
     return (
         <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
-            <div className="relative h-36 w-full overflow-hidden">
-                <img
-                    src={img || defaultImage}
-                    alt={`Imagen de ${title}`}
-                    className="object-cover"
-                />
+            <div className={`relative h-36 w-full overflow-hidden grid place-items-center ${generateBackgroundColor()} rounded-t-lg pdf-card-preview`}>
+                <div className="flex flex-col items-center justify-center text-center p-4 h-full w-full">
+                    <FileIcon className="mb-2 h-6 w-6" />
+                    {titleParts.main && (
+                        <div className="pdf-title-main text-sm">{titleParts.main}</div>
+                    )}
+                    {titleParts.secondary && (
+                        <div className="pdf-title-secondary text-xs mt-1">{titleParts.secondary}</div>
+                    )}
+                    {titleParts.tertiary && (
+                        <div className="pdf-title-tertiary text-xs mt-1">{titleParts.tertiary}</div>
+                    )}
+                </div>
             </div>
 
             <div className="flex flex-1 flex-col p-4">

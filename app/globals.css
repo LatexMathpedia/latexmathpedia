@@ -120,3 +120,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Estilos específicos para las tarjetas de PDF */
+.pdf-card-preview {
+  @apply transition-all duration-200;
+}
+
+.pdf-card-preview:hover {
+  @apply transform scale-105;
+}
+
+.pdf-title-main {
+  @apply line-clamp-1 font-bold;
+}
+
+.pdf-title-secondary {
+  @apply line-clamp-1 opacity-90;
+}
+
+.pdf-title-tertiary {
+  @apply line-clamp-1 opacity-70;
+}

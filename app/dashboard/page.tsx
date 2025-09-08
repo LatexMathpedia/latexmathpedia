@@ -11,7 +11,6 @@ type PDFDocument = {
   title: string
   url: string
   date: string
-  img: string
 }
 
 // Tipo para los PDFs que vienen de la API
@@ -21,7 +20,6 @@ type APIPDFDocument = {
   pdf_last_time_edit: string
   pdf_description: string | null
   pdf_name: string
-  pdf_image_link: string | null
   pdf_tag: string | null
 }
 
@@ -71,7 +69,6 @@ function WelcomePage() {
       title: apiPdf.pdf_name,
       url: apiPdf.pdf_link || '#',
       date: formattedDate,
-      img: apiPdf.pdf_image_link || '/image.png',
       originalTag: apiPdf.pdf_tag || undefined // Preservamos la etiqueta original
     };
   }
@@ -220,7 +217,6 @@ function WelcomePage() {
                   title={pdf.title}
                   url={pdf.url}
                   date={pdf.date}
-                  img={pdf.img}
                 />
               ))
             )}
