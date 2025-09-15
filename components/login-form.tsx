@@ -10,6 +10,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import { AlertCircleIcon } from "lucide-react"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 export function LoginForm({
   className,
@@ -18,7 +24,8 @@ export function LoginForm({
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {isAuthenticated,login} = useAuth();
+  const [showError, setShowError] = useState(false);
+  const { isAuthenticated, login } = useAuth();
   const toast = useToast();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +34,9 @@ export function LoginForm({
       await login({ email, password });
       router.push("/dashboard");
       toast.success("Has iniciado sesión correctamente");
+      setShowError(false);
     } catch (error: unknown) {
+      setShowError(true);
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
@@ -44,7 +53,7 @@ export function LoginForm({
           Introduce tus datos para acceder a tu cuenta
         </p>
       </div>
-      <div className="grid gap-6">
+      <div className="grid gap-6 max-w-xs mx-auto w-full">
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
           <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -59,7 +68,7 @@ export function LoginForm({
               Olvidaste tu contraseña?
             </a>
           </div>
-          <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <Button type="submit" className="w-full cursor-pointer">
           Iniciar sesión
@@ -80,6 +89,20 @@ export function LoginForm({
           Registrarse
         </Link>
       </div>
+      {showError && (
+        <Alert variant="destructive">
+          <AlertCircleIcon />
+          <AlertTitle>Error al iniciar sesión</AlertTitle>
+          <AlertDescription>
+            <p>Algunos motivos pueden ser:</p>
+            <ul className="list-inside list-disc text-sm">
+              <li>El servidor se ha caído, no podemos hacer nada :(</li>
+              <li>Algún dato está mal.</li>
+              <li>Si tenías una cuenta en la página antigua, ya no existe, debes volver a crearla.</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
+      )}
     </form>
   )
 }

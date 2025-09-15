@@ -1,5 +1,4 @@
 import { GalleryVerticalEnd } from "lucide-react"
-
 import { LoginForm } from "@/components/login-form"
 import Link from "next/link"
 
@@ -16,8 +15,8 @@ export default function LoginPage() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <LoginForm />
+          <div className="w-full max-w-xl">
+            <LoginForm/>
           </div>
         </div>
       </div>
