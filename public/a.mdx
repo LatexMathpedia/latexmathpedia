@@ -1,0 +1,343 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amsfonts, amssymb, mathtools, multirow} % Podemos añadir amssymb, amsthm o bm
+\usepackage{graphicx, tikz, xparse}
+\usepackage[top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry} % Este paquete permite modificar los márgenes del documento
+\usepackage[colorlinks=true, allcolors=blue]{hyperref} % Se indica que los hipervínculos van todos en azul
+\usepackage{setspace}
+\usepackage{xcolor, tcolorbox}
+\usepackage{cancel} %tachar cosas
+\tcbuselibrary{breakable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta}
+%\graphicspath{ {images/}}
+\usepackage{background}
+
+% Definir la marca de agua
+\backgroundsetup{
+  position=current page.west,
+  angle=90,
+  nodeanchor=west,
+  vshift=-1cm,
+  hshift=-5.5cm,
+  color=gray,
+  scale=1,
+  contents={\textsf{Created by Diego Díaz Mendaña $|$ Licensed under CC BY-NC-SA 4.0}}
+}
+%Colores
+\definecolor{blanco}{HTML}{FFFFFF}
+\definecolor{negro}{HTML}{000000}
+\definecolor{azulSuave}{HTML}{6ac9d5}
+\definecolor{naranjaSuave}{HTML}{d5956a}
+\definecolor{verdeSuave}{HTML}{6ad578}
+
+\newtcolorbox{dem_box}[1]{
+before=\par\smallskip\centering,
+colframe=azulSuave!70,
+colback=white,
+fonttitle=\bfseries,
+coltitle=negro,
+title=#1,
+flushleft title,
+width=1\linewidth,
+breakable = true
+}
+
+\newtcolorbox{ejem_box}[1]{
+before=\par\smallskip\centering,
+colframe=verdeSuave!70,
+colback=white,
+fonttitle=\bfseries,
+coltitle=negro,
+title=#1,
+flushleft title,
+width=1\linewidth,
+breakable = true
+}
+
+\newtcolorbox{ej_box}[1]{
+before=\par\smallskip\centering,
+colframe=naranjaSuave!70,
+colback=white,
+fonttitle=\bfseries,
+coltitle=negro,
+title=#1,
+flushleft title,
+width=1\linewidth,
+breakable = true
+}
+
+\decimalpoint
+\setstretch{1.3}
+\allowdisplaybreaks
+
+
+\title{\textbf{TEMA 2.} MODELOS PARA VECTORES ALEATORIOS}
+\author{Diego Díaz Mendaña}
+%\date{Fecha}
+
+\begin{document}
+
+\maketitle
+\NoBgThispage 
+\vspace{20ex}
+\section*{Disclaimer}
+Estos apuntes son un resumen basado en el material proporcionado en la asignatura de ``Probabilidad y Estadística'' de la Universidad de Oviedo. Han sido escritos mediante las definiciones y demostraciones explicadas en clase y el documento ``ApuntesPyE-Tema2.pdf''. Todo el contenido ha sido organizado y formulado con fines educativos y no comerciales.\vspace{2ex}
+
+
+\vspace{10ex}
+\section*{Licencia de uso}
+\noindent Apuntes PyE Tema 2 - Modelos para vectores aleatorios © 2024 by Diego Díaz Mendaña is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit\\\href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{https://creativecommons.org/licenses/by-nc-sa/4.0/}
+
+\newpage
+\hypersetup{linkcolor=black}
+\tableofcontents
+\hypersetup{linkcolor=blue}
+
+
+\newpage
+\section*{Introducción}
+Al igual que en el caso unidimensional, en el caso multidimensional también se pueden definir variables aleatorias. En este caso, se trata de vectores aleatorios. En este tema se estudiarán los modelos más importantes para vectores aleatorios discretos y continuos que permitan describir la variabilidad conjunta de las variables aleatorias que los componen. Estos prototipos se eligen de modo que:
+\begin{itemize}
+  \item Coincidan o se ajusten bin a las distribuciones reales
+  \item Que sean manejables desde el punto de vista matemático
+\end{itemize}
+
+\newpage
+\section{Modelos para vectores aleatorios discretos}
+  \subsection{Distribución multinomial}
+  Supongamos que se considera un experimento aleatorio consistente en repetir cierto número \(n\) de veces y de forma independiente un experimento cuyo resultado esté asociado a la ocurrencia de uno y sólo uno de \(k\) posibles sucesos \(A_1, \ldots, A_k\).\vspace{3ex}
+
+  \noindent Asociada al experimento aleatorio global se define el vector aleatorio \((X_1, \ldots, X_k)\) con \textbf{distribución multinomial de parámetros \(n\) y \((p_1, \ldots, p_k)\)} como aquel que a cada resultado del experimento aleatorio asocial el valor vectorial:
+  \begin{align*}
+    \left(\begin{array}{c}
+      \text{\small nº de veces que ocurre} A_1 \text{\small en las } n \, \text{\small realizaciones del experimento }, \ldots, \\
+      , \ldots, \text{\small nº de veces que ocurre} A_k \text{\small en las } n \, \text{\small realizaciones del experimento}
+    \end{array}\right)
+  \end{align*}
+  Es decir, \((X_1, \ldots, X_k)\) es un vector \(k\) dimensional donde \(X_i\) es ``el número de veces que ocurre \(A_i\) de entre \(n\) realizaciones experimentales independientes de un experimento'' entonces:
+  \begin{align*}
+    P(X_1 = x_1, \ldots, X_k = x_k) = P\left(\begin{array}{c}
+     \text{\small en } n \, \text{\small realizaciones independientes del experimento} \\
+     \text{\small aparece } x_1 \, \text{\small veces } A_1, \ldots, x_k \, \text{\small veces } A_k 
+    \end{array}\right)
+  \end{align*}
+  Y su probabilidad viene dada por:
+  \begin{align*}
+    P(X_1 = x_1, \ldots, X_k = x_k) = \dfrac{n!}{x_1! \ldots x_k!} [P(A_1)]^{x_1} \cdot \ldots \cdot [P(A_k)]^{x_k} = \dfrac{n!}{x_1! \ldots x_k!} p_1^{x_1} \ldots p_k^{x_k}
+  \end{align*}
+  O, si usamos notación de combinaciones:
+  \begin{align*}
+    P(X_1 = x_1, \ldots, X_k = x_k) = \binom{n}{x_1, \ldots, x_k} p_1^{x_1} \ldots p_k^{x_k} = PR_{n, x_1, \ldots, x_k} p_1^{x_1} \ldots p_k^{x_k}\\
+  \end{align*}
+  \underline{NOTACIÓN:}\(\,(X_1, \dots, X_k) \rightsquigarrow M(n, p_1, \dots, p_k)\)\vspace{3ex}
+  
+  \noindent Notar que: \(n \in \mathbb{N}\), \(p_1, \dots, p_k \in (0, 1)\) y \(p_1 + \dots + p_k = 1\)\vspace{3ex}
+
+  \begin{ej_box}{Nota}
+    La multinomial es una generalización de la binomial (que corresponde con el caso \(k = 2\)). En este caso nos interesa el estudio de la ocurrencia de varios sucesos y no sólo la de uno.
+  \end{ej_box}
+  \vspace{5ex}
+  \begin{ejem_box}{Ejemplo}
+    Podemos llegar de forma ``intuitiva'' a la fórmula de la distribución multinomial, para ello, consideremos el experimento aleatorio en el que extraemos \(n\) bolas de forma independiente (con reposición) de una urna con bolas de colores. Así, definimos:
+    \begin{align*}
+      X_i = \mbox{nº de bolas extraídas de tipo } i \quad \mbox{ con } i = 1, \ldots, k
+    \end{align*}
+    Así, definimos el vector aleatorio \((X_1, \ldots, X_k)\) vector \(k\)-dimensional.\vspace{2ex}
+
+    Ahora queremos estudiar el comportamiento o distribución de \((X_1, \ldots, X_k)\), es decir, queremos conocer:
+    \begin{align*}
+      P\left((X_1 = x_1) \cap \ldots \cap (X_k = x_k)\right) \quad \mbox{ con } x_1 + \ldots + x_k = n
+    \end{align*}
+    Basta notar que, como las bolas se extraen de forma independiente, y por ello, consideramos las probabilidades de que salga una bola de tipo \(i\) como:
+    \begin{align*}
+      P(X_i = x_i) = p_i^{x_i}
+    \end{align*}
+    Y como la probabilidad de que salga una bola de tipo \(i\) es independiente de la probabilidad de que salga una bola de tipo \(j\), tenemos que:
+    \begin{align*}
+      P(X_1 = x_1 \cap \ldots \cap X_k = x_k) & = \binom{n}{x_1} \binom{n - x_1}{x_2} \ldots \binom{n - x_1 - \ldots - x_{k - 1}}{x_k} p_1^{x_1} p_2^{x_2} \ldots p_k^{x_k}
+    \end{align*}
+    Basta desarrollar el producto de los coeficientes binomiales:
+    \begin{align*}
+      \binom{n}{x_1} \binom{n - x_1}{x_2} \binom{n - x_1 - x_2}{x_3} \dots  &= \frac{n!}{x_1!\cancel{(n - x_1)!}} \frac{\cancel{(n - x_1)!}}{x_2!\cancel{(n - x_1 - x_2)!}} \ldots = \frac{n!}{x_1! \ldots x_k!}
+    \end{align*}
+    Y así llegamos a que:
+    \begin{align*}
+      P(X_1 = x_1 \cap \ldots \cap X_k = x_k) = \frac{n!}{x_1! \ldots x_k!} p_1^{x_1} \ldots p_k^{x_k}
+    \end{align*}
+  \end{ejem_box}
+  \vspace{3ex}
+
+  \subsubsection{Probabilidad marginal en una multinomial}
+  Puede resultar interesante conocer la probabilidad marginal de una variable aleatoria en una multinomial. Así, si queremos hallar la probabilidad de que \(X_i = x\), y esta vendría dada por:
+  \begin{align*}
+      \sum_{\substack{x_1 + \ldots + x_k = n\\x_1 + \dots + x_{i - 1} + x_{i + 1} \dots + x_k = n - x }} P(X_1 = x_1; \ldots; X_{i - 1} = x_{i - 1}; X_i = x; X_{i + 1} = x_{i + 1}, \ldots; X_k = x_k) 
+  \end{align*}
+  Y aplicando la fórmula de la probabilidad, llegamos a que la marginal es:
+  \begin{align*} 
+    &\sum_{x_1, \ldots, x_{i - 1}, x_{i + 1}, \ldots, x_k} \dfrac{n!}{x_1! \ldots x_{i - 1}! x! x_{i + 1}! \ldots x_k!} p_1^{x_1} \ldots p_{i - 1}^{x_{i - 1}} p_i^x p_{i + 1}^{x_{i + 1}} \ldots p_k^{x_k} = \\[2ex]
+    & \hspace{4ex} = \dfrac{n!}{x!} p_i^x \sum_{x_1, \ldots, x_{i - 1}, x_{i + 1}, \ldots, x_k} \dfrac{1}{x_1! \ldots x_{i - 1}! x_{i + 1}! \ldots x_k!} p_1^{x_1} \ldots p_{i - 1}^{x_{i - 1}} p_{i + 1}^{x_{i + 1}} \ldots p_k^{x_k} = \\[2ex]
+    & \hspace{4ex} = \dfrac{n!}{x!(n - x)!} \sum_{\substack{x_1, \ldots, x_{i - 1}, x_{i + 1}, \ldots, x_k\\x_1 + \ldots + x_{i - 1} + x_{i + 1} + \ldots + x_k = n - x}} \dfrac{(n - x)!}{x_1! \ldots x_{i - 1}! x_{i + 1}! \ldots x_k!} p_1^{x_1} \ldots p_{i - 1}^{x_{i - 1}} p_{i + 1}^{x_{i + 1}} \ldots p_k^{x_k}
+    \end{align*}
+    Aplicando la fórmula de Leibniz para el desarrollo de un binomio:
+    \begin{align*}
+      \sum_{x_1, \ldots, x_k = n} \dfrac{n!}{x_1 \dots x_k!} a_1^{x_1} \ldots a_k^{x_k} = (a_1 + \ldots + a_k)^n
+    \end{align*}
+    Podemos llegar a que la marginal anterior se puede expresar como:
+    \begin{align*}
+    P(X_i = x) =  \dfrac{n!}{x!(n - x)!} p_i^x (p_1 + \ldots + p_{i - 1} + p_{i + 1} + \ldots + p_k)^{n - x} = \dfrac{n!}{x!(n - x)!} p_i^x (1 - p_i)^{n - x}
+    \end{align*}
+    Así, hemos llegado a que la marginal de una variable aleatoria en una multinomial es una distribución binomial de parámetros \(n\) y \(p_i\), es decir:
+    \begin{align*}
+      X_i \rightsquigarrow B(n, p_i)\\
+    \end{align*}
+
+    \subsubsection{Esperanza y varianza en las marginales de una multinomial}
+    Dado que la marginal de una variable aleatoria en una multinomial es una binomial, podemos hallar sus esperanzas y varianzas de forma sencilla:
+    \begin{align*}
+      E(X_i) = n \cdot p_i \quad \mbox{ y } \quad Var(X_i) = n \cdot p_i \cdot (1 - p_i)\\
+    \end{align*}
+
+    \subsubsection{Esperanza y varianza de una multinomial de orden 2}
+    \noindent En el caso de la multinomial de orden dos, podemos hallar la esperanza a través de:
+    \begin{align*}
+      E(X_i X_j) = \sum_{x_i, x_j} x_i \cdot x_j P(X_i = x_i; X_j = x_j)
+    \end{align*}
+
+
+   
+  \begin{dem_box}{Cáluclo de la marginal de orden 2 de una multinomial}
+    Sea \((X_1,\ldots, X_k) \rightsquigarrow \mathcal{M}(n, p_1, \ldots, p_k)\), queremos hallar la marginal del vector bidimensional \((X_1, X_2)\). Así, como \((X_1, X_2)\) es una variable aleatoria bidimensional discreta, entonces, supongamos que queremos hallar la probabilidad de que \(X_1 = x_1\) y \(X_2 = x_2\), es decir:
+    \begin{align*}
+      P(X_1 = x_1; X_2 = x_2) = \sum_{\substack{x_3, \ldots, x_k\\x_3 +  \ldots +  x_k = n - x_1 - x_2}} P(X_1 = x_1; X_2 = x_2; X_3 = x_3; \ldots; X_k = x_k)
+    \end{align*}
+    Y esto es equivalente a:
+    \begin{align*}
+      P(X_1 = x_1; X_2 = x_2) & = \sum_{x_3, \ldots, x_k} \dfrac{n!}{x_1! x_2! x_3! \ldots x_k!} p_1^{x_1} p_2^{x_2} p_3^{x_3} \ldots p_k^{x_k}	 = \\[2ex]
+      & = \frac{n!}{x_1!x_2!} p_1^{x_1}p_2^{x_2} \sum_{x_3, \ldots, x_k} \dfrac{1}{x_3! \ldots x_k!} p_3^{x_3} \ldots p_k^{x_k} = \\[3ex]
+      & = \frac{n!}{x_1!x_2!(n - x_1 - x_2)!} p_1^{x_1}p_2^{x_2} \sum_{x_3, \ldots, x_k} \dfrac{(n - x_1 - x_2)!}{x_3! \ldots x_k!} p_3^{x_3} \ldots p_k^{x_k} = \\[3ex]
+      & = \frac{n!}{x_1!x_2!(n - x_1 - x_2)!} p_1^{x_1}p_2^{x_2} (p_3 + \ldots + p_k)^{n - x_1 - x_2} = \\[3ex]
+      & = \frac{n!}{x_1!x_2!(n - x_1 - x_2)!} p_1^{x_1}p_2^{x_2} (1 - p_1 - p_2)^{n - x_1 - x_2}
+    \end{align*}
+    Y, de hecho, lo que hemos obtenido es una distribución multinomial de parámetros:
+    \begin{align*}
+      (X_1, X_2) \rightsquigarrow \mathcal{M}(n, p_1, p_2, 1 - p_1 - p_2)
+    \end{align*}
+  \end{dem_box}
+
+  \vspace{3ex}
+  \subsubsection{Covarianza de una marginal de orden 2 de una multinomial}
+  \noindent También, podemos comprobar las covarianzas:
+  \begin{align*}
+    \mbox{Cov}(X_i, X_j) = E(X_i \cdot X_j) - E(X_i)E(X_j)
+  \end{align*}
+  Donde esta esperanza se puede calcular como:
+  \begin{align*}
+    E(X_iX_j) = \sum_{x_ix_j} x_i \cdot x_j P(X_i = x_i; X_j = x_j)
+  \end{align*}
+  Y así, llegamos a que:
+  \begin{align*}
+    \mbox{Cov}(X_i, X_j) = -n \cdot p_i \cdot p_j
+  \end{align*}
+  \vspace{2ex}
+  \begin{dem_box}{Demostración}
+    Sea \((X_1, \ldots X_k) \rightsquigarrow \mathcal{M}(n, p_1, \ldots, p_k)\), queremos hallar la covarianza de \(X_i\) y \(X_j\). Así, como \((X_1, X_2)\) es una variable aleatoria bidimensional discreta, entonces, supongamos que queremos hallar la covarianza de \(X_1\) y \(X_2\), es decir:
+    \begin{align*}
+      \mbox{Cov}(X_1, X_2) & = E(X_1X_2) - E(X_1)E(X_2)
+    \end{align*}
+    Como hemos visto previamente:
+    \begin{align*}
+      P(X_1 = x_1, X_2 = x_2) = \dfrac{n!}{x_1!x_2!(n - x_1 - x_2)!} p_1^{x_1}p_2^{x_2} (1 - p_1 - p_2)^{n - x_1 - x_2}
+    \end{align*}
+    Y sabemos que la esperanza conjunta de \(X_1\) y \(X_2\) viene dada por:
+    \begin{align*}
+      E(X_1X_2) = \sum_{x_1 = 0}^{n} \sum_{x_2 = 0}^{n - x_1} x_1 x_2 P(X_1 = x_1, X_2 = x_2)
+    \end{align*}
+    Así, desarrollando obtenemos que:
+    \begin{align*}
+      E(X_1 X_2) & = \sum_{x_1 = 0}^{n} \sum_{x_2 = 0}^{n - x_1} x_1 x_2 \dfrac{n!}{x_1!x_2!(n - x_1 - x_2)!} p_1^{x_1}p_2^{x_2} (1 - p_1 - p_2)^{n - x_1 - x_2} =\\[2ex]
+      & = n! \sum_{x_1 = 0}^{n} \dfrac{p_1^{x_1}}{x_1!} x_1 \sum_{x_2 = 0}^{n - x_1} \dfrac{p_2^{x_2}}{x_2!} x_2 \dfrac{(1 - p_1 - p_2)^{n - x_1 - x_2}}{(n - x_1 - x_2)!} =\\[2ex]
+    \end{align*}
+    Y a partir de aquí podemos desarrollar la suma y llegar al resultado (espero)
+  \end{dem_box}
+  \vspace{3ex}
+
+  \subsubsection{Matriz de varianzas y covarianzas de una multinomial}
+  Como consecuencia de esto, podemos hallar la matriz de varianzas y covarianzas de una multinomial. Así, si consideramos la matriz de varianzas y covarianzas de un vector aleatorio \((X_1, \ldots, X_k)\) con distribución multinomial de parámetros \(n\) y \((p_1, \ldots, p_k)\), entonces, la matriz de varianzas y covarianzas viene dada por:
+  \begin{align*}
+    \Sigma_{(X_1, \ldots, X_k)} = \begin{pmatrix} np_1 (1 - p_1) & \cdots & - np_1p_k\\
+    \vdots & \ddots & \vdots\\
+    -np_kp_1 & \cdots & np_k(1 - p_k)\end{pmatrix}
+  \end{align*}
+  Análogamente, el vector de esperanzas vendría dado por:
+  \begin{align*}
+    E(X_1, \ldots, X_k) = \begin{pmatrix} np_1& \vdots& np_k\end{pmatrix}
+  \end{align*}
+
+
+  \newpage
+
+  \section{Modelos para vectores aleatorios continuos}
+  \subsection{Distribución uniforme en un recinto continuo y acotado \(B \in \mathcal{B}_{\mathbb{R}^k}\)}
+  Se dice que un vector aleatorio \(X = (X_1, \ldots, X_k)\) tiene \textbf{distribución uniforme en el recinto \(B \in \mathcal{B}_{\mathbb{R}^k}\)} si su función de densidad conjunta viene dada por:
+  \begin{align*}
+    f(x_1, \ldots, x_k) = \left\{
+      \begin{array}{ll}
+        \dfrac{1}{\lambda(B)} & \mbox{ si } (x_1, \ldots, x_k) \in B\\
+        0 & \mbox{ en otro caso}
+      \end{array}
+    \right.
+  \end{align*}
+  donde \(\lambda(B)\) es la medida de Lebesgue en \(B\). \vspace{2ex}
+
+  \noindent\underline{NOTACIÓN:} \(X \rightsquigarrow \mathcal{U}(B)\)\vspace{3ex}
+
+  \subsection{Distribución normal \(k\)-dimensional}
+  Es un modelo asociado a vectores que (idealmente) toman cualquier valor vectorial de acuerdo con una distribución simétrica y campaniforme en todas sus direcciones (más verosímiles los valores cuanto más centrales y menos cuanto más extremos). Se dice que \(X\) tiene \textbf{distribución normal de parámetros \(\mu\) y \(k\)} si su función de densidad conjunta viene dada por:
+  \begin{align*}
+    f(x_1, \ldots, x_k) = \dfrac{1}{\sqrt{(2\pi)^k \cdot |\Sigma|}} e^{ -\frac{1}{2}(x - \mu) \Sigma^{ - 1} (x - \mu)^t}
+  \end{align*}
+  donde \(\mu = \left(E(X_1), \ldots, E(X_k)\right)\) es el vector de medias y \(\Sigma = \Sigma_{(X_1, \ldots, X_k)}\) la matriz de varianzas y covarianzas de \(X\), es decir:
+  \begin{align*}
+    \Sigma = \begin{pmatrix} \sigma^2_1 & \cdots & \text{Cov}(X_1, X_k)\\
+    \vdots & \ddots & \vdots\\
+    Cov(X_k, X_1) & \cdots & \sigma_k^2\end{pmatrix} 
+  \end{align*}
+  \noindent\underline{NOTACIÓN:} \(X \rightsquigarrow \mathcal{N}(\mu, \Sigma)\)\vspace{3ex}
+
+  \begin{ej_box}{Nota}
+    En particular, para el caso de \(k = 2\), se puede desarrollar su función de densidad conjunta como:
+    \begin{align*}
+      f(x, y) = \dfrac{1}{2\pi\sigma_X\sigma_Y \sqrt{1 - \rho_{XY}^2}} e^{ - \frac{1}{2(1 - \rho_{XY}^2)} \left[\left(\frac{x - \mu_X}{\sigma_X}\right)^2 - 2\rho_{XY}\left(\frac{x - \mu_X}{\sigma_X}\right)\left(\frac{y - \mu_Y}{\sigma_Y}\right) + \left(\frac{y - \mu_Y}{\sigma_Y}\right)^2\right]}
+    \end{align*}
+    Y se denota como \(\mathcal{N}(\mu_X, \mu_Y, \sigma_X, \sigma_Y, \rho_{XY}) = \mathcal{N}(E(X), E(Y), \sigma_X, \sigma_Y, \rho_{XY})\) con:
+    \begin{align*}
+      \sigma_X = \sqrt{\text{Var}(X)} \quad \mbox{y} \quad \rho_{XY} = \dfrac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}
+    \end{align*}
+  \end{ej_box}
+  \vspace{3ex}
+  
+  \noindent 
+  Puede verificarse que si \((X_1, \ldots, X_k) \rightsquigarrow \mathcal{N}(\mu, \Sigma)\) donde:
+  \begin{align*}
+    \mu = \begin{pmatrix} \mu_1 & \cdots & \mu_k \end{pmatrix} \in \mathcal{R}^k \quad \mbox{y} \quad \Sigma = \left[\sigma_{i, j}\right]_{i, j = 1, \ldots, k} \in \mathcal{M}_{k \times k}(\mathbb{R}) 
+  \end{align*}
+  donde \(\Sigma\) es una matriz simétrica definida positiva entonces:
+  \begin{itemize}
+    \item Las variables unidimensionales componentes (marginales) son:
+    \begin{align*}
+      X_i \rightsquigarrow \mathcal{N}(\mu_i, \sigma_i^2) \quad \mbox{con} \quad i = 1, \ldots, k
+    \end{align*}
+    \begin{ej_box}{Nota}
+      Notar que el contrario no es cierto, es decir, que si las componentes son normales, no implica que el vector sea normal.
+    \end{ej_box}
+    \vspace{3ex}
+    \item \(\text{Cov}(X_i, X_j) = \sigma_{i,j} \) para todo \(i, j = 1, \ldots, k\)
+    \item Las variables unidimensionales componentes \(X_i\) son 2 a 2 independientes si y solo si \(\Sigma\) es diagonal. Además, en este caso se tiene que:
+    \begin{align*}
+      \text{Var}(X_1 + \ldots + X_k) = \text{Var}(X_1) + \ldots + \text{Var}(X_k)
+    \end{align*}
+  \end{itemize}
+  \end{document}
