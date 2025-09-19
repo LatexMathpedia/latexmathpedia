@@ -1,0 +1,84 @@
+---
+title: "Concepto de Métrica en Matemáticas"
+date: "2025-09-19"
+description: "Explicación detallada del concepto de métrica, propiedades y ejemplos en espacios métricos."
+tags: ["Topología", "Métrica", "Espacios métricos", "Análisis"]
+---
+
+## ¿Qué es una métrica?
+
+En matemáticas, una **métrica** es una función que define una noción de distancia entre elementos de un conjunto. Formalmente:
+
+Una **métrica** sobre un conjunto \( X \) es una función:
+
+$$
+d: X \times X \to \mathbb{R}
+$$
+
+que satisface las siguientes propiedades para todos \( x, y, z \in X \):
+
+1. **No negatividad:**  
+   \( d(x, y) \geq 0 \)
+
+2. **Identidad de los indiscernibles:**  
+   \( d(x, y) = 0 \iff x = y \)
+
+3. **Simetría:**  
+   \( d(x, y) = d(y, x) \)
+
+4. **Desigualdad triangular:**  
+   \( d(x, z) \leq d(x, y) + d(y, z) \)
+
+Estas condiciones aseguran que la función \( d \) se comporte como una distancia "razonable".
+
+
+## Ejemplo clásico: Métrica euclidiana
+
+En \( \mathbb{R}^n \), la **métrica euclidiana** está dada por:
+
+$$
+d(x, y) = \sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2 + \dots + (x_n - y_n)^2}
+$$
+
+Esta es la distancia habitual en el espacio tridimensional que usamos en la vida diaria.
+
+
+## Otros ejemplos de métricas
+
+### 1. **Métrica del valor absoluto** en \( \mathbb{R} \):
+
+$$
+d(x, y) = |x - y|
+$$
+
+### 2. **Métrica discreta**:
+
+$$
+d(x, y) =
+\begin{cases}
+0 & \text{si } x = y \\
+1 & \text{si } x \neq y
+\end{cases}
+$$
+
+Esta métrica considera que todos los puntos son "igualmente lejanos" entre sí, excepto si son iguales.
+
+
+## ¿Por qué es importante una métrica?
+
+Tener una métrica permite definir conceptos fundamentales como:
+
+- **Convergencia de sucesiones:**  
+  Una sucesión \( (x_n) \) converge a \( x \) si \( d(x_n, x) \to 0 \).
+
+- **Continuidad de funciones**
+- **Conjuntos abiertos y cerrados**
+- **Compacidad y conexidad**
+
+Todo esto forma la base de la **topología** inducida por una métrica.
+
+
+## Conclusión
+
+El concepto de métrica es esencial en muchas ramas de las matemáticas. Permite formalizar la idea de "distancia" y construir estructuras como los **espacios métricos**, que son la base para el análisis moderno y la topología.
+
