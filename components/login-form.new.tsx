@@ -7,10 +7,10 @@ import { Label } from "@/components/ui/label"
 import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
-import { AlertCircleIcon } from "lucide-react"
+import { AlertCircleIcon, LoaderIcon } from "lucide-react"
 import {
   Alert,
   AlertDescription,
@@ -25,23 +25,60 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
   const { isAuthenticated, login } = useAuth();
   const toast = useToast();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Limpia el timeout si el componente se desmonta
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+    setShowError(false);
+    setShowTimeoutMessage(false);
+    
+    // Configurar un timeout para mostrar el mensaje después de 3 segundos
+    timeoutRef.current = setTimeout(() => {
+      setShowTimeoutMessage(true);
+    }, 3000);
+    
     try {
       await login({ email, password });
+      
+      // Limpiar el timeout ya que la operación se completó
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      
       router.push("/dashboard");
       toast.success("Has iniciado sesión correctamente");
       setShowError(false);
+      setShowTimeoutMessage(false);
     } catch (error: unknown) {
+      // Limpiar el timeout ya que la operación se completó con error
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      
       setShowError(true);
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
         toast.error("Error al iniciar sesión. Revisa tus credenciales.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,7 +93,15 @@ export function LoginForm({
       <div className="grid gap-6 max-w-xs mx-auto w-full">
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input 
+            id="email" 
+            type="email" 
+            placeholder="m@example.com" 
+            required 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            disabled={isLoading}
+          />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
@@ -68,18 +113,34 @@ export function LoginForm({
               Olvidaste tu contraseña?
             </a>
           </div>
-          <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input 
+            id="password" 
+            type="password" 
+            required 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            disabled={isLoading}
+          />
         </div>
-        <Button type="submit" className="w-full cursor-pointer">
-          Iniciar sesión
+        <Button 
+          type="submit" 
+          className="w-full cursor-pointer" 
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+              Iniciando sesión...
+            </>
+          ) : "Iniciar sesión"}
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             O continúa con
           </span>
         </div>
-        <Button variant="outline" className="w-full cursor-pointer">
-          <FaGoogle />
+        <Button variant="outline" className="w-full cursor-pointer" disabled={isLoading}>
+          <FaGoogle className="mr-2" />
           Inicia sesión con Google
         </Button>
       </div>
@@ -89,6 +150,22 @@ export function LoginForm({
           Registrarse
         </Link>
       </div>
+      
+      {showTimeoutMessage && isLoading && (
+        <Alert className="border-l-4 border-l-yellow-500">
+          <AlertCircleIcon className="text-yellow-500" />
+          <AlertTitle>El servidor está tardando en responder</AlertTitle>
+          <AlertDescription>
+            <p>Estamos esperando la respuesta del servidor. Esto puede deberse a:</p>
+            <ul className="list-inside list-disc text-sm">
+              <li>Alta carga en el servidor en este momento</li>
+              <li>Conexión a internet lenta</li>
+            </ul>
+            <p className="mt-2 text-sm">Por favor, espera un momento mientras seguimos procesando tu solicitud.</p>
+          </AlertDescription>
+        </Alert>
+      )}
+      
       {showError && (
         <Alert variant="destructive">
           <AlertCircleIcon />

@@ -28,7 +28,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const checkAuth = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${apiUrl}/auth/validate`, { credentials: 'include' });
+      const res = await fetch(`${apiUrl}/auth/validate`, { 
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          // Header específico para Safari
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+        // Configuración específica para Safari/iOS
+        cache: 'no-store',
+      });
+      
       if (res.ok) {
         const data = await res.json();
         setIsAuthenticated(true);
@@ -57,8 +68,15 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        // Headers específicos para Safari
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
       credentials: 'include',
+      // Configuración específica para Safari/iOS
+      cache: 'no-store',
       body: JSON.stringify(credentials),
     });
 
@@ -95,16 +113,38 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     await fetch(`${apiUrl}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
+      cache: 'no-store',
     });
     setIsAuthenticated(false);
+    setEmail('');
+    setIsAdmin(false);
   };
 
   const isAdminUser = async () => {
-    const response = await fetch(`${apiUrl}/auth/is-admin`, { credentials: 'include' });
-    if (response.ok) {
-      const data = await response.json();
-      setIsAdmin(data);
-      return data;
+    try {
+      const response = await fetch(`${apiUrl}/auth/is-admin`, { 
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+        cache: 'no-store',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setIsAdmin(data);
+        return data;
+      }
+    } catch (error) {
+      console.error("isAdmin check error:", error);
+      setIsAdmin(false);
+      return false;
     }
   };
 

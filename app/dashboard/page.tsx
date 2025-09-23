@@ -135,7 +135,7 @@ function WelcomePage() {
     // Matemáticas
     "AC": { category: "Matemáticas", subcategory: "Análisis y Cálculo" },
     "AG": { category: "Matemáticas", subcategory: "Álgebra y Geometría" },
-    "TE": { category: "Matemáticas", subcategory: "Probabilidad y Estadística" },
+    "TE": { category: "Matemáticas", subcategory: "Topología" },
     "PE": { category: "Matemáticas", subcategory: "Probabilidad y Estadística" },
     "EM": { category: "Matemáticas", subcategory: "Ecuaciones Diferenciales y Métodos Numéricos" },
     "OP": { category: "Matemáticas", subcategory: "Optimización y Programación Matemática" },

@@ -19,7 +19,6 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { useFilter } from "@/contexts/filter-context"
-import Link from "next/link"
 
 export function NavMain({
   items,
