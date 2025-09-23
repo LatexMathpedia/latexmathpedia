@@ -7,7 +7,7 @@ tags: ["Probabilidad", "Estadística", "Distribución normal", "Distribución bi
 
 ## Distribución Binomial
 
-La **distribución binomial** modela la cantidad de éxitos en \( n \) ensayos independientes, donde cada ensayo tiene solo dos resultados posibles: **éxito** (con probabilidad \( p \)) o **fracaso** (con probabilidad \( 1 - p \)).
+La **distribución binomial** modela la cantidad de éxitos en $ n $ ensayos independientes, donde cada ensayo tiene solo dos resultados posibles: **éxito** (con probabilidad $ p $) o **fracaso** (con probabilidad $ 1 - p $).
 
 Se denota como:
 
@@ -23,8 +23,8 @@ $$
 
 Propiedades:
 
-- **Media:** \( \mu = np \)
-- **Varianza:** \( \sigma^2 = np(1 - p) \)
+- **Media:** $ \mu = np $
+- **Varianza:** $ \sigma^2 = np(1 - p) $
 
 
 ## Distribución Normal
@@ -43,8 +43,8 @@ $$
 
 Propiedades:
 
-- Simétrica alrededor de la media \( \mu \)
-- La probabilidad se concentra en torno a \( \mu \)
+- Simétrica alrededor de la media $ \mu $
+- La probabilidad se concentra en torno a $ \mu $
 - Es la base de muchos modelos estadísticos
 
 
@@ -56,22 +56,22 @@ El **Teorema Central del Límite** establece que si sumamos muchas variables ale
 
 En el caso de la binomial:
 
-> Si \( X \sim \text{Bin}(n, p) \) y \( n \) es suficientemente grande, entonces:
+> Si $ X \sim \text{Bin}(n, p) $ y $ n $ es suficientemente grande, entonces:
 >
 > $$
 > \frac{X - np}{\sqrt{np(1 - p)}} \to \mathcal{N}(0, 1)
 > $$
 
-Es decir, **una binomial puede aproximarse por una normal** cuando \( n \) es grande.
+Es decir, **una binomial puede aproximarse por una normal** cuando $ n $ es grande.
 
 
 ### Aproximación normal a la binomial
 
 Si se cumplen las condiciones:
 
-- \( n \) es grande
-- \( p \) no es demasiado cercano a 0 o 1  
-  (una regla práctica: \( np \geq 5 \) y \( n(1 - p) \geq 5 \))
+- $ n $ es grande
+- $ p $ no es demasiado cercano a 0 o 1  
+  (una regla práctica: $ np \geq 5 $ y $ n(1 - p) \geq 5 $)
 
 Entonces:
 
@@ -83,24 +83,24 @@ $$
 
 Dado que la binomial es discreta y la normal es continua, se suele aplicar una **corrección por continuidad** al usar la normal para aproximar la binomial.
 
-Por ejemplo, para aproximar \( P(X \leq k) \):
+Por ejemplo, para aproximar $ P(X \leq k) $:
 
 $$
 P(X \leq k) \approx P\left(Y \leq k + 0.5\right)
 $$
 
-donde \( Y \sim \mathcal{N}(np, np(1 - p)) \)
+donde $ Y \sim \mathcal{N}(np, np(1 - p)) $
 
 
 ## Ejemplo
 
-Supón que \( X \sim \text{Bin}(n = 100, p = 0.4) \).  
+Supón que $ X \sim \text{Bin}(n = 100, p = 0.4) $.  
 Entonces:
 
-- \( \mu = np = 40 \)
-- \( \sigma = \sqrt{np(1 - p)} = \sqrt{24} \approx 4.9 \)
+- $ \mu = np = 40 $
+- $ \sigma = \sqrt{np(1 - p)} = \sqrt{24} \approx 4.9 $
 
-Podemos aproximar \( P(X \leq 45) \) con:
+Podemos aproximar $ P(X \leq 45) $ con:
 
 $$
 P\left(Y \leq 45.5\right), \quad Y \sim \mathcal{N}(40, 24)
@@ -123,6 +123,6 @@ $$
 
 - La **binomial** describe conteos discretos de éxitos.
 - La **normal** describe variables continuas con comportamiento simétrico.
-- A través del **Teorema Central del Límite**, la binomial se aproxima a la normal cuando \( n \) es grande.
+- A través del **Teorema Central del Límite**, la binomial se aproxima a la normal cuando $ n $ es grande.
 - La **aproximación normal** es útil para calcular probabilidades cuando usar la fórmula binomial directamente es computacionalmente costoso.
 
