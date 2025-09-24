@@ -149,13 +149,13 @@ const dataAdminPanel = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin, email } = useAuth();
+  const { isAdmin, email, isAuthenticated } = useAuth();
   const { clearFilter } = useFilter();
   const { setSearchQuery } = useSearch();
 
   const dataUser = {
-    name: email.split('@')[0],
-    email: email
+    name: email ? email.split('@')[0] : 'Usuario',
+    email: email || ''
   }
   
   const handleLogoClick = () => {
@@ -189,8 +189,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} title="Apuntes" />
         <NavProjects projects={data.projects} />
-        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
-        {isAdmin && (
+        {/* Solo mostrar admin panel si está autenticado y es admin */}
+        {isAuthenticated && isAdmin && (
           <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel" />
         )}
       </SidebarContent>

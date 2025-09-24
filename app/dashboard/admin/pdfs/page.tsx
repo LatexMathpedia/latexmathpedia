@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/popover"
 import { renameCategory } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast";
-
+import { useProtectedRoute } from "@/hooks/use-protected-route"
 
 const categories = {
   "Matemáticas": [
@@ -87,6 +87,8 @@ export default function WelcomePage() {
     pdfTag?: string;
   }>>([]);
 
+  // Proteger esta ruta de administración
+  const { isAuthenticated, loading: authLoading } = useProtectedRoute();
 
   async function fetchExistingPDFs() {
     try {
@@ -125,10 +127,26 @@ export default function WelcomePage() {
     setFilteredPDFs(pdfs || []);
   };
   
-  // Cargar PDFs cuando el componente se monta
+  // Cargar PDFs cuando el componente se monta y está autenticado
   useEffect(() => {
-    fetchAndSetPDFs();
-  }, []);
+    if (isAuthenticated && !authLoading) {
+      fetchAndSetPDFs();
+    }
+  }, [isAuthenticated, authLoading]);
+
+  // Mostrar loading mientras se verifica la autenticación
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // Si no está autenticado, el hook maneja la redirección
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const handleSearch = (searchText: string) => {
     setSearchTerm(searchText);

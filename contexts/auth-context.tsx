@@ -26,8 +26,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
   const checkAuth = async () => {
-    setLoading(true);
+    // No mostrar loading en la verificación inicial para mejorar UX
     try {
+      // Crear timeout manualmente para mejor compatibilidad
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos de timeout
+
       const res = await fetch(`${apiUrl}/auth/validate`, { 
         credentials: 'include',
         headers: {
@@ -38,7 +42,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         },
         // Configuración específica para Safari/iOS
         cache: 'no-store',
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
       
       if (res.ok) {
         const data = await res.json();
@@ -49,7 +56,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setIsAuthenticated(false);
       }
     } catch (error) {
-      console.error("Auth check error:", error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.warn('Auth check timed out');
+      } else {
+        console.error("Auth check error:", error);
+      }
       setIsAuthenticated(false);
     } finally {
       setLoading(false);
