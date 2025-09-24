@@ -2,27 +2,9 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  // Rutas que requieren autenticación estricta (solo áreas de administración)
-  const protectedPaths = ['/dashboard/admin']
-  const isProtectedPath = protectedPaths.some(path => 
-    request.nextUrl.pathname.startsWith(path)
-  )
-
-  // Si es una ruta protegida, verificar autenticación
-  if (isProtectedPath) {
-    // Buscar la cookie de sesión (ajusta el nombre según tu backend)
-    const sessionCookie = request.cookies.get('session') || 
-                         request.cookies.get('auth-token') ||
-                         request.cookies.get('connect.sid')
-
-    // Si no hay cookie de sesión, redirigir al login
-    if (!sessionCookie) {
-      const loginUrl = new URL('/auth/login', request.url)
-      loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
-      return NextResponse.redirect(loginUrl)
-    }
-  }
-
+  // Solo manejar redirecciones de autenticación y headers
+  // La protección de rutas admin se maneja a nivel de componente
+  
   // Para rutas de auth, redirigir al dashboard si ya está autenticado
   const authPaths = ['/auth/login', '/auth/register']
   const isAuthPath = authPaths.some(path => 
@@ -30,13 +12,9 @@ export function middleware(request: NextRequest) {
   )
 
   if (isAuthPath) {
-    const sessionCookie = request.cookies.get('session') || 
-                         request.cookies.get('auth-token') ||
-                         request.cookies.get('connect.sid')
-    
-    if (sessionCookie) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
+    // Como tu backend usa headers en lugar de cookies, 
+    // no podemos verificar autenticación aquí de manera confiable
+    // Los componentes se encargan de esta verificación
   }
 
   // Configurar headers para mejorar compatibilidad con iOS/Safari

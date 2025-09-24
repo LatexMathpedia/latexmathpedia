@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/popover"
 import { renameCategory } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast";
-import { useProtectedRoute } from "@/hooks/use-protected-route"
+import { useAdminRoute } from "@/hooks/use-protected-route"
 
 const categories = {
   "Matemáticas": [
@@ -88,7 +88,7 @@ export default function WelcomePage() {
   }>>([]);
 
   // Proteger esta ruta de administración
-  const { isAuthenticated, loading: authLoading } = useProtectedRoute();
+  const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
 
   async function fetchExistingPDFs() {
     try {
@@ -127,12 +127,12 @@ export default function WelcomePage() {
     setFilteredPDFs(pdfs || []);
   };
   
-  // Cargar PDFs cuando el componente se monta y está autenticado
+  // Cargar PDFs cuando el componente se monta y está autenticado y es admin
   useEffect(() => {
-    if (isAuthenticated && !authLoading) {
+    if (isAuthenticated && isAdmin && !authLoading) {
       fetchAndSetPDFs();
     }
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, isAdmin, authLoading]);
 
   // Mostrar loading mientras se verifica la autenticación
   if (authLoading) {
@@ -143,8 +143,8 @@ export default function WelcomePage() {
     );
   }
 
-  // Si no está autenticado, el hook maneja la redirección
-  if (!isAuthenticated) {
+  // Si no está autenticado o no es admin, el hook maneja la redirección
+  if (!isAuthenticated || !isAdmin) {
     return null;
   }
 

@@ -151,6 +151,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         const data = await response.json();
         setIsAdmin(data);
         return data;
+      } else {
+        setIsAdmin(false);
+        return false;
       }
     } catch (error) {
       console.error("isAdmin check error:", error);

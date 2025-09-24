@@ -27,7 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useToast } from "@/hooks/use-toast"
-import { useProtectedRoute } from "@/hooks/use-protected-route"
+import { useAdminRoute } from "@/hooks/use-protected-route"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -49,7 +49,7 @@ export default function UsersPage() {
   const toast = useToast();
 
   // Proteger esta ruta de administración
-  const { isAuthenticated, loading: authLoading } = useProtectedRoute();
+  const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
 
   async function fetchUsers() {
     try {
@@ -83,11 +83,11 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    // Solo cargar usuarios si está autenticado
-    if (isAuthenticated && !authLoading) {
+    // Solo cargar usuarios si está autenticado y es admin
+    if (isAuthenticated && isAdmin && !authLoading) {
       loadUsers();
     }
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, isAdmin, authLoading]);
 
   // Mostrar loading mientras se verifica la autenticación
   if (authLoading) {
@@ -98,8 +98,8 @@ export default function UsersPage() {
     );
   }
 
-  // Si no está autenticado, el hook maneja la redirección
-  if (!isAuthenticated) {
+  // Si no está autenticado o no es admin, el hook maneja la redirección
+  if (!isAuthenticated || !isAdmin) {
     return null;
   }
 
