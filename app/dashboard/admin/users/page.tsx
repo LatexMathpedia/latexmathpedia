@@ -27,6 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useToast } from "@/hooks/use-toast"
+import { useProtectedRoute } from "@/hooks/use-protected-route"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -46,6 +47,9 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+
+  // Proteger esta ruta de administración
+  const { isAuthenticated, loading: authLoading } = useProtectedRoute();
 
   async function fetchUsers() {
     try {
@@ -79,8 +83,25 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    // Solo cargar usuarios si está autenticado
+    if (isAuthenticated && !authLoading) {
+      loadUsers();
+    }
+  }, [isAuthenticated, authLoading]);
+
+  // Mostrar loading mientras se verifica la autenticación
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // Si no está autenticado, el hook maneja la redirección
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const updateUserRole = async (userEmail: string, newRole: string) => {
     try {

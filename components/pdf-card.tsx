@@ -1,5 +1,6 @@
 import { CalendarIcon, FileIcon } from "lucide-react";
 import { useAuth } from '@/contexts/auth-context';
+import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +13,8 @@ type PDFCardProps = {
 
 function PDFCard({ title, url, date, tag }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
-    
+    const toast = useToast();
+
     // Función para procesar el título y separarlo en partes
     const getTitleParts = () => {
         // Primero verificamos si contiene palabras clave especiales como "Completos"
@@ -68,8 +70,10 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
 
     function handleClick() {
         if (!isAuthenticated) {
-            alert("Debes iniciar sesión para acceder a este contenido.");
+            toast.error("Debes iniciar sesión para acceder a los archivos PDF. Los blogs son de acceso libre.");
+            return false;
         }
+        return true;
     }
 
     return (
@@ -112,9 +116,9 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
                                 Ver PDF
                             </a>
                         ) : (
-                            <a href='#'>
-                                Acceso restringido
-                            </a>
+                            <span onClick={handleClick} className="cursor-pointer">
+                                Iniciar sesión para ver PDF
+                            </span>
                         )}
                     </Button>
                 </div>

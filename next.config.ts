@@ -54,10 +54,8 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // Configuración experimental para mejorar el manejo de cookies
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
+  // Configuración para componentes externos
+  serverExternalPackages: [],
 };
 
 export default nextConfig;

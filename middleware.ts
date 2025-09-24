@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  // Rutas que requieren autenticación
-  const protectedPaths = ['/dashboard']
+  // Rutas que requieren autenticación estricta (solo áreas de administración)
+  const protectedPaths = ['/dashboard/admin']
   const isProtectedPath = protectedPaths.some(path => 
     request.nextUrl.pathname.startsWith(path)
   )
