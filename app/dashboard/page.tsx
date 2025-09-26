@@ -39,6 +39,7 @@ const sampleDataBlog = [
   { title: "Resolución Examen Análisis 2025", description: "Resolución del examen de análisis de 2025 con explicaciones detalladas.", date: "2025-09-01", estimatedReadTime: "5 min", tags: ["Análisis", "Exámenes", "Cálculo", "Integrales"], link: "/resolucion-examen-analisis-2025" },
   { title: "Teorema de Pitágoras", description: "Explicación y demostración del Teorema de Pitágoras.", date: "15/2/2025", estimatedReadTime: "7 min", tags: ["Matemáticas", "Geometría", "Teoremas"], link: "/teorema-pitagoras" },
   { title: "Teorema de Darboux", description: "Descripción y aplicaciones del Teorema de Darboux.", date: "10/3/2025", estimatedReadTime: "6 min", tags: ["Matemáticas", "Análisis", "Teoremas"], link: "/teorema-darboux" },
+  { title: "Modelos de Vectores Aleatorios", description: "Introducción a los modelos de vectores aleatorios y su importancia en estadística.", date: "22/4/2025", estimatedReadTime: "11 min", tags: ["Estadística", "Probabilidad", "Matemáticas"], link: "/modelos-vectores-aleatorios" },
 ]
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
