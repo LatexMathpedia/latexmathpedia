@@ -25,23 +25,35 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
+  // Función helper para crear opciones de fetch optimizadas para Safari
+  const createFetchOptions = (method: string, body?: any): RequestInit => {
+    const options: RequestInit = {
+      method,
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
+      cache: 'no-store',
+    };
+
+    if (body) {
+      options.body = JSON.stringify(body);
+    }
+
+    return options;
+  };
+
   const checkAuth = async () => {
-    // No mostrar loading en la verificación inicial para mejorar UX
     try {
-      // Crear timeout manualmente para mejor compatibilidad
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos de timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const res = await fetch(`${apiUrl}/auth/validate`, { 
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          // Header específico para Safari
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-        },
-        // Configuración específica para Safari/iOS
-        cache: 'no-store',
+        ...createFetchOptions('GET'),
         signal: controller.signal,
       });
       
@@ -54,14 +66,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         await isAdminUser();
       } else {
         setIsAuthenticated(false);
+        setEmail('');
+        setIsAdmin(false);
       }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
-        console.warn('Auth check timed out');
+        console.warn('Auth check timed out - server may be slow');
       } else {
         console.error("Auth check error:", error);
       }
       setIsAuthenticated(false);
+      setEmail('');
+      setIsAdmin(false);
     } finally {
       setLoading(false);
     }
@@ -77,76 +93,68 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       throw new Error('Email and password are required');
     }
 
-    const response = await fetch(`${apiUrl}/auth/login`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        // Headers específicos para Safari
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-      credentials: 'include',
-      // Configuración específica para Safari/iOS
-      cache: 'no-store',
-      body: JSON.stringify(credentials),
-    });
+    try {
+      const response = await fetch(`${apiUrl}/auth/login`, createFetchOptions('POST', credentials));
 
-    if (!response.ok) {
-      switch (response.status) {
-        case 480:
-          throw new Error('Email inválido. Por favor, introduce un email correcto.');
-        case 481:
-          throw new Error('Usuario no encontrado. Revisa tus credenciales.');
-        case 483:
-          throw new Error('Contraseña incorrecta. Inténtalo de nuevo.');
-        case 484:
-          throw new Error('El email ya está en uso. Prueba con otro.');
-        case 485:
-          throw new Error('Error en la verificación del email. Prueba de nuevo.');
-        case 486:
-          throw new Error('La contraseña es demasiado débil. Usa al menos 6 caracteres.');
-        case 490:
-          throw new Error('Error en la autenticación. Pruebe de nuevo.');
-        case 500:
-          throw new Error('Error del servidor. Por favor, inténtalo más tarde.');
-        default:
-          throw new Error('Error desconocido. Por favor, inténtalo de nuevo.');
+      if (!response.ok) {
+        switch (response.status) {
+          case 480:
+            throw new Error('Email inválido. Por favor, introduce un email correcto.');
+          case 481:
+            throw new Error('Usuario no encontrado. Revisa tus credenciales.');
+          case 483:
+            throw new Error('Contraseña incorrecta. Inténtalo de nuevo.');
+          case 484:
+            throw new Error('El email ya está en uso. Prueba con otro.');
+          case 485:
+            throw new Error('Error en la verificación del email. Prueba de nuevo.');
+          case 486:
+            throw new Error('La contraseña es demasiado débil. Usa al menos 6 caracteres.');
+          case 490:
+            throw new Error('Error en la autenticación. Pruebe de nuevo.');
+          case 500:
+            throw new Error('Error del servidor. Por favor, inténtalo más tarde.');
+          default:
+            throw new Error('Error desconocido. Por favor, inténtalo de nuevo.');
+        }
       }
-    }
 
-    setIsAuthenticated(true);
-    await isAdminUser();
-    await checkAuth()
-    return true;
+      // Importante: Esperar un poco para que Safari procese la cookie
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      setIsAuthenticated(true);
+      await isAdminUser();
+      await checkAuth();
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
   const logout = async () => {
-    await fetch(`${apiUrl}/auth/logout`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-      cache: 'no-store',
-    });
-    setIsAuthenticated(false);
-    setEmail('');
-    setIsAdmin(false);
+    try {
+      await fetch(`${apiUrl}/auth/logout`, createFetchOptions('POST'));
+      
+      // Esperar un poco para que Safari procese el logout
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      setIsAuthenticated(false);
+      setEmail('');
+      setIsAdmin(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Aún así limpiar el estado local
+      setIsAuthenticated(false);
+      setEmail('');
+      setIsAdmin(false);
+    }
   };
 
   const isAdminUser = async () => {
     try {
-      const response = await fetch(`${apiUrl}/auth/is-admin`, { 
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-        },
-        cache: 'no-store',
-      });
+      const response = await fetch(`${apiUrl}/auth/is-admin`, createFetchOptions('GET'));
+      
       if (response.ok) {
         const data = await response.json();
         setIsAdmin(data);
