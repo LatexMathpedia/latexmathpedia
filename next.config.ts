@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Access-Control-Allow-Origin',
+            // En producción, usa tu dominio exacto, no wildcards
             value: process.env.NODE_ENV === 'production' ? 'https://mathtexpedia.es' : '*',
           },
           {
@@ -24,12 +25,16 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Access-Control-Allow-Headers',
-            value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+            value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Cache-Control, Pragma',
           },
-          // Header específico para Safari que ayuda con el cache
           {
             key: 'Vary',
-            value: 'Accept-Encoding, Cookie',
+            value: 'Origin, Cookie, Accept-Encoding',
+          },
+          // Header para indicar que el sitio permite cookies de terceros
+          {
+            key: 'Permissions-Policy',
+            value: 'interest-cohort=()',
           },
         ],
       },
@@ -54,8 +59,21 @@ const nextConfig: NextConfig = {
     ]
   },
 
+  // Deshabilitar X-Powered-By para seguridad
+  poweredByHeader: false,
+
   // Configuración para componentes externos
   serverExternalPackages: [],
+
+  // Configuración de imágenes si usas next/image
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
