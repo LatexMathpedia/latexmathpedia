@@ -111,7 +111,7 @@ export function MainFooter() {
                             <Link href="/dashboard/legal/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors w-fit">
                                 Términos de Servicio
                             </Link>
-                            <Link href="/dashboard/legal/cookies" className="text-muted-foreground hover:text-foreground transition-colors w-fit">
+                            <Link href="/dashboard/legal/cookies-policy" className="text-muted-foreground hover:text-foreground transition-colors w-fit">
                                 Política de Cookies
                             </Link>
                         </nav>
