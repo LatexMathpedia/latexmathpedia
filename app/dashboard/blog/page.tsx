@@ -15,7 +15,7 @@ export default function BlogIndex() {
     
     // Calcular tiempo estimado de lectura (promedio 200 palabras/minuto)
     const wordCount = content.split(/\s+/).length
-    const estimatedReadTime = `${Math.ceil(wordCount / 200)} min`
+    const estimatedReadTime = `${Math.ceil(wordCount / 80)} min`
 
     return { 
       slug, 
