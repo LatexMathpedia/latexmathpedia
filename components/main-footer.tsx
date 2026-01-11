@@ -92,7 +92,7 @@ export function MainFooter() {
                                 Contáctanos
                             </Link>
                             <a 
-                                href="mailto:latexmathpedia@gmail.com" 
+                                href="mailto:mathtexpedia@mathtexpedia.es" 
                                 className="text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"
                             >
                                 <Mail className="w-4 h-4" />
