@@ -7,6 +7,7 @@ import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context" // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context"
 import { useToast } from "@/hooks/use-toast"
+import { MainFooter } from "@/components/main-footer"
 
 type PDFDocument = {
   title: string
@@ -227,7 +228,7 @@ function WelcomePage() {
           )}
         </section>
         <div className="bg-muted/50 rounded-xl w-full h-32 mt-12" />
-        <section>
+        <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold mt-8">Blog</h2>
           </div>
@@ -246,7 +247,7 @@ function WelcomePage() {
           </div>
         </section>
       </div>
-
+      <MainFooter />
     </>
   )
 }
