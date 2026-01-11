@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
+import { MainFooter } from "@/components/main-footer"
 import {
   SidebarInset,
   SidebarProvider,
@@ -19,12 +20,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="[--header-height:calc(--spacing(14))]">
       <SearchProvider>
         <FilterProvider>
-          <SidebarProvider className="flex flex-col">
+          <SidebarProvider className="flex flex-col min-h-screen">
             <SiteHeader />
             <div className="flex flex-1">
               <AppSidebar />
-              <SidebarInset>
-                {children}
+              <SidebarInset className="flex flex-col">
+                <div className="flex-1">
+                  {children}
+                </div>
+                <MainFooter />
               </SidebarInset>
             </div>
           </SidebarProvider>
