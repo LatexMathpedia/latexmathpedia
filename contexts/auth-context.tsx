@@ -13,6 +13,7 @@ const AuthContext = createContext({
     isAdmin: false,
     email: '',
     login: async (_credentials: CredentialsDTO) => false,
+    loginWithGoogle: async (_idToken: any) => false,
     logout: async () => {},
     checkAuth: async () => {},
 });
@@ -97,7 +98,42 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       const response = await fetch(`${apiUrl}/auth/login`, createFetchOptions('POST', credentials));
 
       if (!response.ok) {
-        switch (response.status) {
+        checkError(response.status);
+      }
+
+      // Importante: Esperar un poco para que Safari procese la cookie
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      setIsAuthenticated(true);
+      await isAdminUser();
+      await checkAuth();
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  };
+
+  const loginWithGoogle = async (idToken: any) => {
+    try {
+      const response = await fetch(`${apiUrl}/auth/google-login`, createFetchOptions('POST', { idToken }));
+      if (!response.ok) {
+        checkError(response.status);
+      }
+      // Importante: Esperar un poco para que Safari procese la cookie
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsAuthenticated(true);
+      await isAdminUser();
+      await checkAuth();
+      return true;
+    } catch (error) {
+      console.error('Google Login error:', error);
+      throw error;
+    }
+  }
+
+  const checkError = (error: any) => {
+    switch (error) {
           case 480:
             throw new Error('Email inválido. Por favor, introduce un email correcto.');
           case 481:
@@ -117,20 +153,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           default:
             throw new Error('Error desconocido. Por favor, inténtalo de nuevo.');
         }
-      }
-
-      // Importante: Esperar un poco para que Safari procese la cookie
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      setIsAuthenticated(true);
-      await isAdminUser();
-      await checkAuth();
-      return true;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
-  };
+  }
 
   const logout = async () => {
     try {
@@ -176,7 +199,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, isAdmin, email, login, logout, checkAuth }}
+      value={{ isAuthenticated, loading, isAdmin, email, login, loginWithGoogle, logout, checkAuth }}
     >
       {children}
     </AuthContext.Provider>
