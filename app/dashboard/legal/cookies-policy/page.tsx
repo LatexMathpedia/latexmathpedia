@@ -143,8 +143,6 @@ export default function CookiesPolicyPage() {
                   <p className="text-sm font-medium mb-2">Ejemplos:</p>
                   <ul className="text-sm text-muted-foreground space-y-1">
                     <li>• <strong>auth-token:</strong> Mantiene tu sesión de usuario activa</li>
-                    <li>• <strong>csrf-token:</strong> Protege contra ataques de falsificación de solicitudes</li>
-                    <li>• <strong>consent:</strong> Registra tu preferencia sobre cookies</li>
                   </ul>
                   <p className="text-xs text-muted-foreground mt-2">
                     <strong>Duración:</strong> Sesión o hasta 30 días
@@ -166,8 +164,6 @@ export default function CookiesPolicyPage() {
                 <div className="bg-muted/50 p-3 rounded-md mt-2">
                   <p className="text-sm font-medium mb-2">Ejemplos:</p>
                   <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• <strong>theme:</strong> Recuerda tu preferencia de tema (oscuro/claro)</li>
-                    <li>• <strong>language:</strong> Guarda tu idioma preferido</li>
                     <li>• <strong>sidebar-state:</strong> Recuerda si la barra lateral está abierta o cerrada</li>
                   </ul>
                   <p className="text-xs text-muted-foreground mt-2">
