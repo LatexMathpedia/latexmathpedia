@@ -56,6 +56,16 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // Headers específicos para rutas de autenticación
+        source: "/:path*",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
+          },
+        ],
+      }
     ]
   },
 
