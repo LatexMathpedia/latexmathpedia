@@ -31,6 +31,9 @@ export function LoginForm({
   const toast = useToast();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
+
   // Limpia el timeout si el componente se desmonta
   useEffect(() => {
     return () => {
@@ -82,6 +85,38 @@ export function LoginForm({
     }
   };
 
+  const handleForgottenPassword = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
+
+    if (!email) {
+      toast.error("Por favor, introduce tu correo electrónico para restablecer la contraseña.");
+      return;
+    }
+    
+    fetch(`${apiUrl}/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+        },
+      body: JSON.stringify({ email }),
+    })
+    .then(async (response) => {
+      if (response.ok) {
+        toast.success("Se ha enviado un correo para restablecer tu contraseña.");
+      } else {
+        const data = await response.json();
+        throw new Error(data.message || "Error al solicitar el restablecimiento de contraseña.");
+      }
+    })
+    .catch((error: unknown) => {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Error al solicitar el restablecimiento de contraseña.");
+      }
+    });
+  }
+
   return (
     <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -109,6 +144,7 @@ export function LoginForm({
             <a
               href="#"
               className="ml-auto text-sm underline-offset-4 hover:underline"
+              onClick={handleForgottenPassword}
             >
               Olvidaste tu contraseña?
             </a>
