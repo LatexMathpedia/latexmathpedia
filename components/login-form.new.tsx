@@ -16,6 +16,8 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert"
+import {  signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export function LoginForm({
   className,
@@ -27,7 +29,7 @@ export function LoginForm({
   const [showError, setShowError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated, login, loginWithGoogle } = useAuth();
   const toast = useToast();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -84,6 +86,25 @@ export function LoginForm({
       setIsLoading(false);
     }
   };
+
+  const googleSingIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    
+    const provider = new GoogleAuthProvider();
+    setIsLoading(true);
+
+    try {
+    const result = await signInWithPopup(auth, provider);
+    const idToken = await result.user.getIdToken();
+    await loginWithGoogle(idToken);
+    router.push("/dashboard");
+    toast.success("Has iniciado sesión correctamente con Google");
+    } catch (error) {
+      toast.error("Error al iniciar sesión con Google. Inténtalo de nuevo.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const handleForgottenPassword = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
@@ -175,7 +196,7 @@ export function LoginForm({
             O continúa con
           </span>
         </div>
-        <Button variant="outline" className="w-full cursor-pointer" disabled={isLoading}>
+        <Button variant="outline" className="w-full cursor-pointer" disabled={isLoading} onClick={googleSingIn}>
           <FaGoogle className="mr-2" />
           Inicia sesión con Google
         </Button>
