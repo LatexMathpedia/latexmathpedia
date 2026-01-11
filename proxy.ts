@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   // Solo manejar redirecciones de autenticación y headers
   // La protección de rutas admin se maneja a nivel de componente
   
