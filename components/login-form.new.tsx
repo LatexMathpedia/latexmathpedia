@@ -92,19 +92,29 @@ export function LoginForm({
       toast.error("Por favor, introduce tu correo electrónico para restablecer la contraseña.");
       return;
     }
-
-    try {
-      const response = fetch(`${apiUrl}/auth/reset-password`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-          },
-        body: JSON.stringify({ email }),
-      })
-      toast.success("Si el correo existe, se ha enviado un email para restablecer la contraseña.");
-    } catch (error) {
-      toast.error("Error al enviar el correo de restablecimiento de contraseña.");
-    }
+    
+    fetch(`${apiUrl}/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+        },
+      body: JSON.stringify({ email }),
+    })
+    .then(async (response) => {
+      if (response.ok) {
+        toast.success("Se ha enviado un correo para restablecer tu contraseña.");
+      } else {
+        const data = await response.json();
+        throw new Error(data.message || "Error al solicitar el restablecimiento de contraseña.");
+      }
+    })
+    .catch((error: unknown) => {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Error al solicitar el restablecimiento de contraseña.");
+      }
+    });
   }
 
   return (
