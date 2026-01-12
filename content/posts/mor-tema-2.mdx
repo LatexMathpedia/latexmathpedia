@@ -1,0 +1,683 @@
+---
+title: "MOR - Tema 2"
+description: "Apuntes sobre árboles y arborescencias en Modelos de Optimización de Redes. Definiciones, teoremas y algoritmos clave."
+date: "2026-01-12"
+tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"]
+---
+
+
+## Árboles
+### Bosque. Definición
+Sea $G = (V, A)$, se dice **bosque** si es un grafo no orientado acíclico, es decir, si no contiene ciclos.
+
+### Árbol. Definición
+Sea $G = (V, A)$, se dice **árbol** si es un grafo no orientado acíclico y conexo.
+
+<EjBox title="Nota">
+
+Llamamos **árbol trivial** al árbol de orden 1, es decir, el árbol que contiene un único vértice y ningún arco.
+
+</EjBox>
+
+### Proposición
+Sea $G = (V, A)$ un bosque que no es árbol, entonces cada una de sus componentes conexas es un árbol.
+
+### Teorema 2.1
+Sea $G = (V, A)$ grafo no orientado con $o(G) = n > 1$ y $t(G) = m$, las siguientes expresiones son equivalentes:
+
+1. $G$ es un árbol.
+2. Entre cada dos vértices de $G$ existe una única cadena elemental que los une
+3. $G$ es conexo y $m = n - 1$
+4. $G$ es acíclico y $m = n - 1$
+
+<DemBox title="Demostración">
+
+- **$1 \Rightarrow 2)$** Sea $G$ árbol, entonces por definición de árbol, es conexo entonces $\forall i, j \in V$ existe al menos una cadena elemental que los une.
+
+Supongamos que no es única, es decir, para $i, j \in V$ existen $\pi_{ij}$ y $\pi_{ij}'$ cadenas elementales distintas que unen $i$ con $j$. Entonces:
+$$
+\begin{align*}
+\pi_{ij} \cup \pi_{ij}' \text{ contiene al menos un ciclo}
+\end{align*}
+$$
+Esto es imposible porque $G$ es acíclico por definición de árbol. Por lo tanto, la cadena elemental que une $i$ con $j$ es única.
+- **$2 \Rightarrow 3)$** Sea $G$ grafo no orientado tal que entre cada dos vértices existe una única cadena elemental que los une. Entonces, $G$ es conexo por definición.
+
+Para ver que $m = n - 1$ aplicamos inducción sobre $n$:
+
+- *Si $n = 2$.* Como existe una única cadena elemental que une los dos vértices, dicha cadena tiene que ser la arista que los une. Al ser única entonces:
+$$
+\begin{align*}
+m = 1 = n - 1
+\end{align*}
+$$
+- *Supongamos que se cumple para $n = k$, entonces se cumple para $n = k + 1$.* Sea $G = (V, A)$ grafo con $o(G) = n$ y $t(G) = m$ y $e = (i,j) \in A$ arista cualquiera. Como los vértices $i$ y $j$ están unidos por esta arista y por hipótesis existe una única cadena elemental que los une, por el *lema 1.4*:
+$$
+\begin{align*}
+G' = (V, A \setminus \{e\}) \text{ no es conexo}
+\end{align*}
+$$
+Por tanto, aplicando el *lema 1.8* tenemos que $G'$ tiene dos componentes conexas $G_1', G_2'$ que son grafos de orden menor a $n$. Por hipótesis de inducción, cada una de estas componentes cumple:
+$$
+\begin{align*}
+m_1 = n_1 - 1 \quad \text{y} \quad m_2 = n_2 - 1
+\end{align*}
+$$
+De esta forma:
+$$
+\begin{align*}
+m & = t(G) = t(G') + \overbrace{1}^{e} = m_1 + m_2 + 1 =\\[2ex]
+& = (n_1 - 1) + (n_2 - 1) + 1 = n_1 + n_2 - 1 = n - 1
+\end{align*}
+$$
+- **$3 \Rightarrow 4)$** *Basta ver que $G$ es acíclico.* Sea $G$ grafo conexo con $m = n - 1$, supongamos que $G$ contiene un ciclo $\pi$. Sea $e \in \pi$ arista cualquiera, aplicando la *proposición 1.6* tenemos que:
+$$
+\begin{align*}
+G' = (V, A \setminus \{e\}) \text{ es conexo}
+\end{align*}
+$$
+Ahora, aplicando el *teorema 1.9* tenemos que:
+$$
+\begin{align*}
+t(G') \geq o(G') - 1 = o(G) - 1
+\end{align*}
+$$
+Como por hipótesis $t(G) = o(G) - 1$, entonces llegamos a que:
+$$
+\begin{align*}
+t(G') \geq t(G)
+\end{align*}
+$$
+Pero por la construcción de $G'$ tenemos que:
+$$
+\begin{align*}
+t(G') = t(G) - 1 \implies t(G') < t(G) \quad \#
+\end{align*}
+$$
+- **$4 \Rightarrow 1)$** *Basta ver que $G$ es conexo.* Sea $G$ acíclico con $m = n - 1$ con $k$ componentes conexas $G_1, G_2, \dots, G_k$. Cada componente $G_i$ es conexa y acíclica (por serlo $G$), por lo que son árboles. Aplicando $1 \Rightarrow 3$ tenemos que:
+$$
+\begin{align*}
+t(G_i) = o(G_i) - 1 \quad \forall i = 1, \dots, k
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+t(G) = \displaystyle \sum_{i = 1}^{k} t(G_i) = \displaystyle \sum_{i = 1}^{k} (o(G_i) - 1) = o(G) - k
+\end{align*}
+$$
+Y por hipótesis $t(G) = o(G) - 1$, entonces:
+$$
+\begin{align*}
+o(G) - k = o(G) - 1 \implies k = 1
+\end{align*}
+$$
+Y por tanto, como solo tiene una componente conexa, $G$ es conexo.
+
+</DemBox>
+
+### Árbol. Definición equivalente
+A partir del teorema 2.1 y la proposición 1.7, podemos definir un árbol de las siguientes maneras equivalentes:
+
+- $G$ conexo y sin ciclos
+- Entre cada dos vértices de $G$ existe una única cadena elemental que los une
+- $G$ es acíclico y $m = n - 1$
+- $G$ es conexo y $m = n - 1$
+- $G$ es minimalmente conexo
+- $G$ es conexo y todas sus aristas son puentes
+
+<EjBox title="Nota">
+
+Como consecuencia, tenemos demostrado que un grafo minimalmente conexo tiene exactamente $n - 1$ aristas.
+
+</EjBox>
+
+### Raíz, nudo y hoja. Definición
+Sea $G = (V, A)$ un árbol, fijado un vértice $r \in V$ (llamado **raíz**) se definen:
+
+- **Nudo:** Cualquier vértice intermedio $v \in V$ entre la raíz y una hoja, es decir:
+$$
+\begin{align*}
+v \neq r \quad \text{y} \quad g(v) > 1
+\end{align*}
+$$
+- **Hoja:** Cualquier vértice $v \in V$ que cumple:
+$$
+\begin{align*}
+v \neq r \quad \text{ y } \quad g(v) = 1
+\end{align*}
+$$
+
+A cada arista de $G$ se le llama **rama**.
+
+### Nivel de un vértice. Definición
+Sea $G = (V, A)$ árbol y $r \in V$ su raíz, el **nivel de un vértice** es la longitud de la cadena elemental desde la raíz al vértice, es decir, el número de ramas que hay en dicha cadena.
+
+### Altura del árbol. Definición
+Sea $G = (V, A)$ árbol y $r \in V$ su raíz, la **altura del árbol** es el máximo nivel entre todos los vértices de $G$.
+
+### Árbol binario. Definición
+Sea $G = (V, A)$ un árbol, se dice **árbol binario** si, sea $r \in V$ su raíz:
+$$
+\begin{align*}
+g(r) = 2 \quad \text{y} \quad g(v) = 1 \lor 3 \quad \forall v \in V, v \neq r
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Para aquellos que curséis la asignatura desde el doble grado de informática, notar que en ED un árbol binario podía tener un nudo con un solo hijo, pero aquí no.
+
+</EjBox>
+
+## Árbol de unión de valor mínimo
+### Bosque de unión. Definición
+Sea $G = (V, A)$ grafo no orientado, se dice **bosque de unión** a todo grafo parcial $G' = (V, A')$ de $G$ que es un bosque.
+
+<EjemBox title="Ejercicio">
+
+*Dada la definición anterior, ¿se cumple que todo grafo contiene un bosque de unión?*
+
+Sí, ya que a partir de cualquier grafo, podemos eliminar aristas hasta que no queden ciclos. Incluso, basta notar que el grafo parcial generado a partir de un grafo $G = (V, A)$ en el que eliminamos todas las aristas, es decir, $G' = (V, \emptyset)$, es un bosque.
+
+</EjemBox>
+
+### Árbol de unión. Definición
+Sea $G = (V, A)$ grafo no orientado, se dice **árbol de unión** a todo grafo parcial $G' = (V, A')$ de $G$ que es un árbol.
+
+<EjemBox title="Ejemplo">
+
+*Dada la definición anterior, ¿se cumple que todo grafo contiene un árbol de unión?*
+
+No, ya que si el grafo de partida no es conexo, no podrá contener ningún árbol de unión.
+
+No obstante, si se añade el matiz de que el grafo de partida es conexo, entonces sí que se cumple que todo grafo conexo contiene un árbol de unión. Esto se debe a que, partiendo de un grafo conexo, podemos eliminar aristas hasta que no queden ciclos y el grafo siga siendo conexo. Al final, nos quedará un árbol.
+
+</EjemBox>
+
+### Teorema 2.2
+Sea $G = (V, A)$ un grafo no orientado, se cumple que:
+$$
+\begin{align*}
+G \text{ conexo} \iff G \text{ contiene un árbol de unión}\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+- **$\Leftarrow)$** Sea $G = (V, A)$ grafo que contiene a un árbol de unión $G' = (V, A')$, por definición de árbol de unión, se cumple que $A' \subseteq A$ y que $G'$ es conexo. Por lo tanto, para cada par de vértices $i, j$:
+$$
+\begin{align*}
+\exists \pi_{ij} \text{ cadena en } A' \implies \pi_{ij} \text{ cadena en } A \implies G \text{ conexo}
+\end{align*}
+$$
+- **$\Rightarrow$)** Sea $G = (V, A)$ grafo conexo se dan dos casos:
+
+</DemBox>
+
+### Redes
+#### Red. Definición
+Sea $G = (V, A)$ grao orientado (no orientado), se dice **red orientada (no orientada)** a la terna $R = (V, A, p)$ donde $p : A \to \mathbb{R}$ es una aplicación que a cada arco (arista) $e \in A$ le asigna un **peso** $p_e \in \mathbb{R}$. 
+
+Estos pesos son valores numéricos que indican el valor asociado a cada arco (arista) en la red. Pueden representar costos, distancias, capacidades u otras métricas relevantes según el contexto de la red.
+
+#### Matriz de distancias de una red orientada. Definición
+Sea $R = (V, A, p)$ red orientada de orden $n$, se define la **matriz de distancias asociada**, denotada como $D_0(G)$ o $D_0$ como la matriz $n \times n$ cuyos elementos vienen dados por:
+$$
+\begin{align*}
+D_0(i, j) = \left\{
+\begin{array}{ll}
+0 & \text{ si } i = j\\
+p_{ij} & \text{ si } (i, j) \in A\\
+\infty & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar que a partir de una matriz de pesos $D_0$ se puede obtener la matriz de adyacencia $A(G)$ de la red $R$. Sin embargo, una misma matriz de adyacencia puede corresponder a múltiples matrices de pesos diferentes, dependiendo de los valores asignados a los pesos de los arcos.
+
+</EjBox>
+
+#### Matriz de distancias de una red no orientada. Definición
+Sea $R = (V, A, p)$ red no orientada de orden $n$, se define la **matriz de distancias asociada**, denotada como $D_0(G)$ o $D_0$ como la matriz $n \times n$ cuyos elementos vienen dados por:
+$$
+\begin{align*}
+D_0(i, j) = \left\{
+\begin{array}{ll}
+0 & \text{ si } i = j\\
+p_{ij} & \text{ si } (i, j) \in A \text{ o } (j, i) \in A\\
+\infty & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Al igual que en el caso de las redes orientadas, a partir de $D_0$ se puede conocer $A(G)$ pero el recíproco no es cierto.
+
+</EjBox>
+
+#### Red no orientada conexa. Definición
+Sea $R = (V, A, p)$ red no orientada, se dice **conexa** si $G = (V, A)$ es un grafo no orientado conexo.
+
+#### Red orientada conexa. Definición
+Sea $R = (V, A, p)$ red orientada, se dice **débilmente conexa** (cuasi-fuertemente conexa; fuertemente conexa) si $G = (V, A)$ es un grafo orientado débilmente conexo (cuasi-fuertemente conexo; fuertemente conexo).
+
+<EjBox title="Nota">
+
+La conexión es una propiedad intrínseca del grafo, es decir, no depende de los pesos del mismo en una red.
+
+</EjBox>
+
+#### Árbol de unión de una red. Definición
+Sea $R = (V, A, p)$ red orientada (no orientada), se dice **árbol de unión de la red** a todo árbol $G'$ de $R$ cuyo grafo asociado es un árbol de unión.
+
+#### Valor de un árbol de unión
+Sea $R = (V, A, p)$ red no orientada conexa y $G' = (V, A')$ un árbol de unión del grafo $(V, A)$ asociado a la red $R$, se dice **valor del árbol de unión $G'$** al valor:
+$$
+\begin{align*}
+p(G') = \displaystyle \sum_{e \in A'} p_e\\
+\end{align*}
+$$
+
+#### Árbol de unión de valor mínimo
+Sea $R = (V, A, p)$ una red no orientada conexa y sea $G'$ un árbol de unión de $R$, se dice **árbol de unión de valor mínimo** de $R$ si:
+$$
+\begin{align*}
+p(G') = \min_{T \in AU(R)} p(T)
+\end{align*}
+$$ 
+donde $AU(R)$ es el conjunto de todos los árboles de unión en el grafo $(V, A)$ asociados a la red $R = (V, A, p)$.
+
+<EjemBox title="Ejercicio">
+
+*¿Podemos asegurar la existencia de un árbol de unión de valor mínimo?*
+
+Sí, ya que dado que $R$ es conexa, por el teorema 2.2 sabemos que existe al menos un árbol de unión en $R$. Además, como el conjunto de árboles de unión es finito (pues el conjunto de aristas es finito), existe al menos un árbol de unión con valor mínimo.
+
+</EjemBox>
+
+#### Teorema 2.3
+Sea $R = (V, A, p)$ red no orientada conexa, $G'$ un árbol de unión de valor mínimo en $R$ y $G^{(k)} = (V^{(k)}, A^{(k)})$ con $k = 1, \dots, q$ los $q$ subgrafos conexos de $G'$ tales que $\{V^{(1)}, \dots, V^{(q)}\}$ forman una partición de $V$. Dado $s \in \{1, \dots, q\}$, si $e_s \in A$ es una arista de menor valor entre las aristas con un extremo en $V^{(s)}$ y otro en $V \setminus V^{(s)}$, entonces:
+$$
+\begin{align*}
+e_s \text{ pertenece a un árbol de unión de valor mínimo de } R\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Bajo las condiciones previas, sea $s \in \{1, \dots, q\}$ y $e_s \in A$ arista de menor valor entre las aristas con extremos $i \in V^{(s)}$ y $j \notin V^{(s)}$. Entonces se dan dos casos:
+
+- *Si $e_s \in G'$.* En este caso, $e_s$ pertenece al árbol de unión de valor mínimo $G'$ y se cumple lo que queríamos demostrar.
+- *Si $e_s \notin G'$*. Como $G'$ conexo, entonces $\exists \pi_{ij}$ cadena en $G'$ que une $i$ con $j$. Así:
+$$
+\begin{align*}
+\exists e = (x, y) \in \pi_{ij} \quad \text{ con } x \in V^{(s)} \text{ e } y \notin V^{(s)}
+\end{align*}
+$$
+Si consideramos el subgrafo $G'' = (V, A'')$ con $A'' = A' \cup \{e_s\}$ entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+A' \subseteq A'' \\
+G' \text{ conexo}
+\end{array}
+\right\} \implies G'' \text{ conexo}
+\end{align*}
+$$
+
+Además, $\pi_{ij} \cup \{e_s\}$ es un ciclo en $G''$, por lo que aplicando la *proposición 1.6* tenemos que:
+$$
+\begin{align*}
+\hat{G} = (V, (A' \cup \{e_s\}) \setminus \{e\}) \text{ es conexo}
+\end{align*}
+$$
+Además, se cumple que:
+$$
+\begin{align*}
+t(\hat{G}) = t(G') + 1 - 1 = t(G') = o(G') - 1 = o(\hat{G}) - 1
+\end{align*}
+$$
+Por tanto, por el teorema 2.1, $\hat{G}$ es un árbol y por tanto, por definición de árbol de unión, $\hat{G}$ es un árbol de unión de $G$.
+
+Además, como:
+$$
+\begin{align*}
+p(\hat{G}) = p(G') + \underbrace{p_{e_s}}_{\leq p_e} - p_e \leq p(G')
+\end{align*}
+$$
+Y como $G'$ es un árbol de unión de valor mínimo, entonces:
+$$
+\begin{align*}
+p(\hat{G}) = p(G') \implies \hat{G} \text{ es un AUVM de } R
+\end{align*}
+$$
+
+</DemBox>
+
+#### Consecuencias del teorema 2.3
+Como consecuencias del teorema 2.3, tenemos:
+
+- Una arista de menor peso en un grafo conexo $G$ estará contenida en un árbol de unión de valor mínimo de $G$. 
+<EjBox title="Nota">
+
+Basta tomar $V^{(i)} = \{i\}$ y $A^{(i)} = \emptyset$ con $i \in \{1, \dots, n\}$ y $V^{(s)}$ como el conjunto formado por uno de los extremos de la arista de menor peso.
+
+</EjBox>
+- Si el AUVM es único, entonces es evidente que aplicando sucesivamente el teorema 2.3 se puede reconstruir el AUVM completo.
+- Si no es único, se podría probar que la aplicación reiterada de el teorema 2.3 permite construir uno de los AUVM del grafo.
+- Basándose en el teorema 2.3, se puedeen obtener distintos algoritmos para hallar un AUVM en una red conexa.
+
+### Algoritmo de Prim
+El **algoritmo de Prim** es un método voraz para encontrar un árbol de unión de valor mínimo en una red no orientada $R = (V, A, p)$, donde $G = (V, A)$ es un grafo con $o(G) = n \geq 2$ y $t(G) > 0$:
+
+1. Seleccionamos $v \in V$ cualquiera y definimos $V' = \{v\}$ y $A' = \emptyset$
+2. Sea $e' = (x', y') \in A$ con $x' \in V'$ e $y' \notin V'$ tal que:
+$$
+\begin{align*}
+p_{e'} = \min \left\{p_e : e = (x, y) \text{ con } x \in V', y \notin V' \right\}
+\end{align*}
+$$
+Hacemos $V' = V' \cup \{y'\}$ y $A' = A' \cup \{e'\}$ y avanzamos a 3. Si no existen ninguna arista, avanzamos a 4.
+3. Si $|A'| < n - 1$ ir a 2. Si $|A'| = n - 1$ parar porque $G' = (V', A')$ es un AUVM de $R$.
+4. Parar, el grafo no es conexo y por tanto no existe AUVM.
+
+#### Unicidad del AUVM. Proposición 2.4
+Sea $R = (V, A, p)$ una red no orientada conexa. Si todos los pesos asociados a las aristas son distintos, existe un único árbol de unión de valor mínimo en dicha red.
+
+<DemBox title="Demostración">
+
+Como $R$ es conexa, entonces $G = (V, A)$ es conexo y, por el teorema 2.2, contiene al menos un árbol de unión. Además, el número de árboles de unión es finito (ya q ue el grafo es finito), existirá al menos uno con valor mínimo.
+
+Para ver que es único, supongamos que existen dos árboles de unión en $R$ de valor mínimo y son distintos, es decir: $G_1 = (V, A_1)$ y $G_2 = (V, A_2)$ con $A_1 \neq A_2$ y $p(G_1) = p(G_2)$. Al ser distintos, se tiene que:
+$$
+\begin{align*}
+A_1 \triangle A_2 = (A_1 \setminus A_2) \cup (A_2 \setminus A_1) \neq \emptyset
+\end{align*}
+$$
+Sea $e_1$ la arista de menor peso en $A_1 \triangle A_2$, que es única por hipótesis, supongamos sin pérdida de generalidad que $e_1 \in A_1 \setminus A_2$. Como $G_2$ es conexo, existe una cadena $\pi^{e_1}$ en $G_2$ que une los extremos de $e_1$. Como $e_1 \notin G_2$ y estamos con 1-grafos, entonces la cadena $\pi^{e_1}$ no puede ser una arista. Por lo tanto, $G$ contendrá un ciclo $\pi$ formado por:
+$$
+\begin{align*}
+\pi = \pi^{e_1} \cup \{e_1\}
+\end{align*}
+$$
+Como $G_1$ es un árbol, por definición es acíclico, por lo que tiene que existir al menos una arista $e_2 \in \pi$ tal que $e_2 \in A_2 \setminus A_1$. Por lo tanto:
+$$
+\begin{align*}
+e_2 \in A_2 \triangle A_2
+\end{align*}
+$$
+Por la elección de $e_1$ como la arista de menor peso en $A_1 \triangle A_2$, se cumple que:
+$$
+\begin{align*}
+p(e_1) < p(e_2)
+\end{align*}
+$$
+Si consideramos el subgrafo parcial de $G$ definido como $G' = (V, A_2 \cup \{e_1\} \setminus \{e_2\})$, será conexo ya que $G_2$ lo era y, por tanto, $G'' = (V, A_2 \cup \{e_1\})$ también. Además, claramente el ciclo $\pi$ está en $G''$, por lo que aplicando la *proposición 1.6* tenemos que $G'$ es conexo.
+
+Además, sea $o(G) = n$, como $G_2$ es árbol, aplicando el teorema 2.1 tenemos que tiene $n - 1$ aristas y, por construcción, $G'$ también tiene $n - 1$ aristas.
+
+Como $G'$ es conexo y con $n - 1$ aristas, por el teorema 2.1 tenemos que $G'$ es un árbol de unión y, por tanto, por definición de árbol de unión, $G'$ es un árbol de unión de $R$.
+
+Finalmente, calculamos el valor de $G'$:
+$$
+\begin{align*}
+p(G') = p(G_2) + p(e_1) - p(e_2) < p(G_2)
+\end{align*}
+$$
+Lo que contradice la hipótesis de que $G_2$ es un árbol de unión de valor mínimo. Por lo tanto, nuestra suposición inicial era falsa y el AUVM es único.
+
+</DemBox>
+
+<EjemBox title="Ejercicio">
+
+*Sea una red no orientada conexa:*
+
+- *Si el árbol de unión no es único, ¿existen al menos dos pesos iguales?*
+
+Por la proposición anterior aplicando la negación tenemos:
+$$
+\begin{align*}
+\text{El AUVM no es único} \implies \text{No todos los pesos son distintos}
+\end{align*}
+$$
+Por lo tanto, si el AUVM no es único, existen al menos dos pesos iguales.
+- *Si los pesos no son todos distintos, ¿podemos asegurar que el árbol de unión no es único?*
+
+No, ya que el hecho de que existan pesos iguales no implica necesariamente que haya múltiples AUVM.
+- *Si el árbol de unión es único, ¿podemos asegurar que los pesos son todos distintos?*
+
+No, ya que el hecho de que el AUVM sea único no implica necesariamente que todos los pesos sean distintos.
+
+</EjemBox>
+
+#### Bosque de unión de valor mínimo
+Sea $R = (V, A, p)$ red no conexa, las $k$ componentes conexas de $G$ generan $k$ subgrafos y cada uno de ellos contiene un árbol de unión de valor mínimo. El **bosque de unión de valor mínimo** de $R$ es el conjunto formado por los $k$ árboles de unión de valor mínimo de cada una de las componentes conexas de $G$.
+
+#### Árboles y bosque de unión de valor máximo
+Sea $R = (V, A, p)$ red n orientada, si se aplican los algoritmos vistos anteriormente considerando los pesos $-p_e$ en lugar de $p_e$, se obtienen árboles y bosques de unión de valor máximo.
+
+#### Transformaciones monótonas de los pesos
+Sea $R = (V, A, p)$ red no orientada conexa, puesto que el AUVM los forman las $n - 1$ aristas de menor peso que no formen ciclos, encontrar el AUVM en $R$ es equivalente a encontrar el AUVM en la red $R' = (V, A, p')$ donde:
+$$
+\begin{align*}
+p_e' = f(p_e) \quad \forall e \in A \quad \text{ con } f: \mathbb{R} \to \mathbb{R} \text{ función estrictamente creciente}\\
+\end{align*}
+$$
+
+Análogamente, se llega a que el árbol de unión de valor máximo en $R$ es equivalente al árbol de unión de valor máximo en $R' = (V, A, p')$ donde:
+$$
+\begin{align*}
+p_e' = - f(p_e) \quad \forall e \in A \quad \text{ con } f: \mathbb{R} \to \mathbb{R} \text{ función continua estrictamente creciente}\\
+\end{align*}
+$$
+
+## Arborescencias
+La idea de arborescencia es similar a la de árbol, pero en este caso se trabaja con grafos orientados.
+
+$$
+\begin{array}{c|l}
+\textbf{No orientados} & \textbf{Orientados}\\
+\hline \hline
+& Raíz de entrada/salida\\[2ex]
+Árbol & Arborescencia de entrada/salida\\[2ex]
+Árbol de unión & Arborescencia de unión de entrada/salida\\[2ex]
+Grafo conexo & Grafo cuasi-fuertemente conexo en sentido ascendiente/descendente\\[2ex]
+AUVM & Arborescencia de unión de entrada/salida de valor mínimo
+\end{array}
+$$
+
+### Raíz de un grafo orientado. Definición
+Sea $G = (V, A)$ grafo orientado, se dice que $r \in V$ es **raíz de salida** de $G$ si todo vértice es alcanzable desde $r$, es decir, si para todo $v \in V$ existe $\pi_{rv}$ o, en otras palabras:
+$$
+\begin{align*}
+Ds(r) = V\\
+\end{align*}
+$$
+
+Análogamente, se dice que $r \in V$ es **raíz de entrada** de $G$ si todo vértice alcanza a $r$, es decir, si para todo $v \in V$ existe $\pi_{vr}$ o, en otras palabras:
+$$
+\begin{align*}
+As(r) = V\\
+\end{align*}
+$$
+
+### Teorema 2.5
+Sea $G = (V, A)$ grafo orientado:
+$$
+\begin{align*}
+G \text{ tiene raíz de entrada/salida} \iff G \text{ cuasi-fuertemente conexo}\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+La demostración es trivial a partir de las definiciones de raíz de entrada/salida y de grafo cuasi-fuertemente conexo en sentido ascendiente/descendente.
+
+</DemBox>
+
+### Arborescencia de salida/entrada.
+#### Idea
+La idea de la arborescencia de salida es que tiene que ser la forma minimal de ir de un vértice a todos los demás, por lo que $G$ debe tener un vértice del que se pueda ir a todos los demás, es decir, una raíz de salida.
+
+Por otra parte, la forma de ir debería de ser única y no resulta suficiente exigir que $G$ no tenga circuitos, hay que exigir que $G^s$ no tenga ciclos.
+
+Aún así, no es suficiente y hay que exigir que $G$ no tenga arcos de doble sentido, es decir:
+$$
+\begin{align*}
+\nexists i, j \in V : (i,j), (j,i) \in A \iff G \text{ no tiene circuitos}\\
+\end{align*}
+$$
+
+#### Redundancia de las condiciones
+Podemos plantearnos si alguna de las condiciones previas es redundante, es decir, si alguna de ellas se puede deducir de las otras. La condición candidata podría ser:
+$$
+\begin{align*}
+G^s \text{ acíclico} \iff G \text{ no tiene circuitos}
+\end{align*}
+$$
+Sin embargo, esto no es cierto en general, existen grafos cuyo grafo subyacente es acíclico pero que contienen circuitos. También pueden existir grafos sin circuitos cuyo grafo subyacente no es acíclico.
+
+Por tanto, ninguna de las condiciones es redundante y todas son necesarias para definir una arborescencia de salida/entrada.
+
+#### Arborescencia de salida. Definición formal
+Sea $G = (V, A)$ grafo orientado, se dice que es **arborescencia de salida** si:
+
+- $G$ tiene una raíz de salida o equivalentemente, $G$ es cuasi-fuertemente conexo en sentido descendiente.
+- $G^s$ es acíclico.
+- $G$ no tiene circuitos.
+
+Además, son equivalentes las siguientes condiciones:
+
+- $G$ no contiene circuitos entonces $\nexists i, j \in V : (i,j), (j,i) \in A$
+- Si $G^s$ es acíclico, es suficiente saber que no existen arcos de doble sentido para asegurar que $G$ no tiene circuitos. Esto se debe a que si el circuito tiene al menos 3 arcos, $G^s$ contendrá un ciclo y si tiene 2 arcos, tiene que ser de doble sentido. Por tanto:
+$$
+\begin{align*}
+\nexists i,j \in V : (i,j), (j,i) \in A \implies G \text{ no tiene circuitos}
+\end{align*}
+$$
+
+Por lo que se puede definir alternativamente la arborescencia de salida mediante las condiciones:
+
+- G tiene una raíz de salida o equivalentemente, $G$ es cuasi-fuertemente conexo en sentido descendiente.
+- $G^s$ es acíclico.
+- $\nexists i,j \in V : (i,j), (j,i) \in A$
+
+#### Arborescencia de entrada. Definición formal
+Análogamente, sea $G = (V, A)$ grafo orientado, se dice que es **arborescencia de entrada** si:
+
+- $G$ es cuasi-fuertemente conexo en sentido ascendiente o equivalentemente, $G$ tiene una raíz de entrada.
+- $G^s$ es acíclico.
+- $G$ no tiene circuitos o equivalentemente, no tiene arcos de doble sentido.
+
+#### Arborescencia de salida/entrada binaria
+Se dice que una arborescencia de salida/entrada es **binaria** a aquella en la que cada vértice tiene grado de salida/entrada igual a 0 o 2 
+
+### Teorema 2.6
+Sea $G = (V, A)$ grafo orientado con $o(G) = n > 1$ entonces son equivalentes:
+
+1. $G$ es una arborescencia de salida con raíz de salida $r$.
+2. Existe $r \in V$ de $G$ tal que $\exists ! \pi_{rv}$ con $v \in V, v \neq r$.
+3. $G$ es minimalmente cuasi-fuertemente conexo en sentido descendiente con raíz de salida $r$
+
+<DemBox title="Demostración">
+
+Sea $G = (V, A)$ grafo orientado con $o(G) = n > 1$:
+
+- **$1 \Rightarrow 2$)** Como $G$ es arborescencia de salida con raíz de salida $r$, entonces para cualquier $v \in V$ existe $\pi_{rv}$. Supongamos que existen dos caminos distintos $\pi_{rv}^1$ y $\pi_{rv}^2$. Entones, se el conjunto de aristas $\pi_{rv}^1 \cup \pi_{rv}^2$ contiene un ciclo en $G^s$, lo que entra en contradicción con la definición de arborescencia de salida. Por lo tanto, existe un único camino $\pi_{rv}$ para cada $v \in V, v \neq r$.
+- **$2 \Rightarrow 3$)** Si $\exists r \in V$ tal que $\exists ! \pi_{rv}$ con $v \in V, v \neq r$, entonces $G$ es cuasi-fuertemente conexo en sentido descendiente con raíz de salida $r$. Supongamos que $G$ no es minimal, es decir:
+$$
+\begin{align*}
+\exists e = (i, j) \in A \text{ tq } G' = (V, A \setminus \{e\}) \text{  cuasi-fuerte. conexo en sentido desc.}
+\end{align*}
+$$
+Por tanto, existen en $G'$ caminos $\pi_{ri}$ y $\pi_{rj}$. De esta forma, $\pi_{ri} \cup \{e\}$ y $\pi_{rj}$ son dos caminos distintos en $G$ que unen $r$ con $j$, lo que contradice la hipótesis. Por lo tanto, $G$ es minimalmente cuasi-fuertemente conexo en sentido descendiente con raíz de salida $r$.
+- **$3 \Rightarrow 1$)** Sea $G$ minimalmente cuasi-fuertemente conexo en sentido descendiente, entonces $G$ es débilmente conexo. Por definición entonces, el grafo subyacente es conexo y, por el *teorema 1.9*, se cumple que:
+$$
+\begin{align*}
+t(G^s) \geq o(G^s) - 1 = n - 1
+\end{align*}
+$$
+Además, se cumple que $g^{ - }(r) = 0$ ya que si hubiera algún arco entrante a $r$, al eliminarlo el grafo seguiría siendo cuasi-fuertemente conexo en sentido descendiente, lo que contradice la hipótesis de minimalidad.
+
+También, tenemos que $g^{ - }(i) = 1$ para $i \in V \setminus \{r\}$ ya que, al ser $G$ cuasi-fuertemente conexo en sentido descendiente, existe al menos un arco entrante a $i$ y si hubiera más de uno, al eliminar alguno de ellos el grafo seguiría siendo cuasi-fuertemente conexo en sentido descendiente, lo que contradice la hipótesis de minimalidad.
+
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+t(G) = \displaystyle \sum_{j = 1}^n g^{-}_j = \underbrace{g^{-}_r}_{0} + \displaystyle \sum_{j = 1 ,  j \neq r}^n \underbrace{g^{-}_j}_{1} = n - 1
+\end{align*}
+$$
+De esta forma, el grafo subyacente cumple que:
+$$
+\begin{align*}
+t(G^s) \leq t(G) = n - 1 \xRightarrow[]{} t(G^s) = n - 1
+\end{align*}
+$$
+Además, por ser $G^s$ conexo, por el teorema 2.1 tenemos que $G^s$ es un árbol y, por tanto, acíclico.
+
+Ahora, falta ver que no existen arcos de doble sentido en $G$. Supongamos que existen $i, j \in V$ tales que $(i,j), (j,i) \in A$. Si eliminamos el arco $(i,j)$, el grafo $G' = (V, A \setminus \{(i,j)\})$ sigue siendo cuasi-fuertemente conexo en sentido descendiente, lo que contradice la hipótesis de minimalidad. Por lo tanto, no existen arcos de doble sentido en $G$.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+La arborescencia de salida es equivalente a decir que es cuasi-fuertemente conexo en sentido descendente con $t(G) = o(G) - 1$
+
+</EjBox>
+
+### Arborescencia de unión. Definición
+Sea $G = (V, A)$ grafo orientado, se dice **arborescencia de unión** (de entrada/salida) a una arborescencia $G' = (V, A')$ (de entrada/salida) donde $A'\subseteq A$.
+
+<EjBox title="Nota">
+
+La arborescencia de unión podría no existir
+
+</EjBox>
+
+### Teorema 2.7
+Sea $G = (V, A)$ grafo orientado entonces:
+$$
+\begin{align*}
+G \text{ cuasi-fuertemente conexo} \iff G \text{ contiene arborescencia de unión}
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+*La demostración se hará para el caso cuasi-fuertemente conexo en sentido descendiente y arborescencia de unión de salida, siendo análoga para el caso ascendente/entrada.*
+
+- **$\Leftarrow$)** Sea $G' = (V, A)$ la arborescencia de unión contenida en $G = (V, A)$, por la definición de arborescencia de salida, $G'$ es cuasi-fuertemente conexo en sentido descendiente. Por tanto, $\exists r \in V$ tal que $\forall i \in V$, existe $\pi_{ri}$ en $G'$. Como $A' \subseteq A$, entonces $\pi_{ri}$ también está en $G$ y, por tanto, $G$ es cuasi-fuertemente conexo en sentido descendiente.
+- **$\Rightarrow$)** Sea $G = (V, A)$ cuasi-fuertemente conexo en sentido descendiente, entonces:
+
+</DemBox>
+
+### Arborescencia de unión de valor mínimo
+#### Idea
+Partimos de una red orientada $R = (V, A, p)$ cuasi-fuertemente conexa (ascendiente/descendente) y queremos encontrar una red orientada $R' = (V, A', p)$ tal que $G' = (V, A')$ sea una arborescencia de unión (de entrada/salida) del grafo $G = (V, A)$ que minimice el valor:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in A'} p_e\\
+\end{align*}
+$$
+
+#### AUVM fijada la raíz de salida
+Sea $R = (V, A, p)$ red orientada cuasi-fuertemente conexa en sentido descendiente y sea $r \in V$ la raíz de salida de una arborescencia de unión de $R$. Se dice **arborescencia de unión de valor mínimo con raíz de salida $r$** a toda arborescencia de unión $G' = (V, A')$ de $R$ que minimice:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in A'} p_e\\
+\end{align*}
+$$
+
+Análogamente se puede definir la **arborescencia de unión de valor mínimo con raíz de entrada $r$**.
+
+#### Algoritmo de Edmonds
+Este algoritmo se escapa del alcance de este curso. No obstante, si se da el caso particular en el que todos los arcos son en ambos sentidos y el peso es el mismo en todas las direcciones, se podría resolver este problema empleado los algoritmos para grafos no orientados, sin más que adaptar la solución de forma adecuada.
+
+#### Existencia del AUVM
+No siempre el árbol de unión de valor mínimo genera una arborescencia de unión.

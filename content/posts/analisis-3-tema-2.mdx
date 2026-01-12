@@ -1,0 +1,527 @@
+---
+title: "Análisis 3 - Tema 2"
+description: "Introducción a los espacios de medida y sus propiedades fundamentales. Análisis de las σ-álgebras y medidas asociadas."
+date: "2026-01-12"
+tags: ["Análisis III", "Medida", "Espacios de medida"]
+---
+
+
+## Espacios de medida
+### Espacio de medida. Definición
+Se llama **espacio de medida** a un triplete $(X, \Sigma, \mu)$ donde:
+
+- **i)** $X$ es un conjunto
+- **ii)** $\Sigma$ es una $\sigma$-álgebra de $X$, es decir, $\Sigma \subseteq \mathcal{P}(X)$ con las propiedades:
+
+- **iii)** $\mu$ es una **medida**, esto es, una aplicación: 
+$$
+\begin{align*}
+\mu : \Sigma & \longrightarrow [0, \infty]\\
+E & \longmapsto \mu(E)
+\end{align*}
+$$
+que cumple las siguientes propiedades:
+
+1. $\mu(\emptyset ) = 0$
+2. Sean $\{E_i\}_{i \in \mathbb{N}} \subseteq \Sigma$ con $E_i \cap E_j = \emptyset \, \text{ si } i \neq j$ entonces: $\mu\left(\displaystyle \bigcup_{i \in \mathbb{N}} E_i\right) = \displaystyle \sum_{i = 1}^{\infty} \mu(E_i)$
+
+A los elementos de $\Sigma$ se les llama **subconjuntos medibles ($\mu$-medibles)** de $X$.
+
+### Caracterización de las $\sigma$-álgebras. Proposición
+Sea $\Sigma$ una $\sigma$-álgebra de $X$ entonces se cumplen los siguientes enunciados:
+
+- **a)** Sean $\left\{E_i\right\}_{i \in \mathbb{N}} \subseteq \Sigma$ entonces $\bigcap_{i \in \mathbb{N}} E_i \in \Sigma$
+- **b)** Sean $E, F \in \Sigma$ entonces se tiene:
+
+<DemBox title="Demostración">
+
+- **a)** Sea $\{E_i\}_{i \in \mathbb{N}} \subseteq \Sigma$, por De Morgan se tiene:
+$$
+\begin{align*}
+\displaystyle \bigcap_{i \in \mathbb{N}} E_i = X \setminus \left(\displaystyle \bigcup_{i \in \mathbb{N}} (X \setminus E_i)\right)
+\end{align*}
+$$
+
+donde se tiene:
+
+- Cada $E_i \in \Sigma$ por hipótesis $\xRightarrow[\text{esp. med.}]{\text{ii.c) def}} X \setminus E_i \in \Sigma$
+- Por definición de espacio de medida ii.a) tenemos que $\bigcup_{i \in \mathbb{N}} (X \setminus E_i) \in \Sigma$
+- Por definición de espacio de medida ii.c) tenemos: $X \setminus \left(\bigcup_{i \in \mathbb{N}} (X \setminus E_i)\right) \in \Sigma$
+
+Por lo tanto:
+$$
+\begin{align*}
+\displaystyle \bigcap_{i \in \mathbb{N}} E_i \in \Sigma
+\end{align*}
+$$
+- **b.1)** Sea $E, F \in \Sigma$, notar que podemos escribir:
+$$
+\begin{align*}
+E \cup F = \underbrace{E}_{\in \Sigma} \cup \underbrace{F}_{\in \Sigma} \cup \underbrace{\emptyset }_{\in \Sigma} \cup \underbrace{\emptyset }_{\in \Sigma} \cup \underbrace{\emptyset }_{\in \Sigma} \cup \ldots \overset{2}{\in} \Sigma
+\end{align*}
+$$
+que es unión numerable de conjuntos de $\Sigma$ ya que:
+
+- $E, F \in \Sigma$ por hipótesis
+- $\emptyset \in \Sigma$ por definición de espacio de medida ii.a)
+- Por definción de espacio de medida ii.b) la $\sigma$-álgebra es cerrada bajo uniones numerables
+- **b.2)** Sean $E, F \in \Sigma$, notar que:
+$$
+\begin{align*}
+E \cap F = \underbrace{X}_{\in \Sigma} \cap \underbrace{E}_{\in \Sigma} \cap \underbrace{F}_{\in \Sigma} \cap \underbrace{X}_{\in \Sigma} \cap \underbrace{X}_{\in \Sigma} \cap \underbrace{X}_{\in \Sigma} \cap \ldots \overset{a)}{\in} \Sigma
+\end{align*}
+$$
+que es intersección numerable de conjuntos de $\Sigma$ ya que:
+
+- **b.3)** Sea $E, F \in \Sigma$, notar que podemos escribir:
+$$
+\begin{align*}
+E \setminus F = \underbrace{E}_{\in \Sigma} \cap \underbrace{(X \setminus F)}_{\in \Sigma} \overset{b.2)}{\in} \Sigma
+\end{align*}
+$$
+ya que:
+
+- $E \in \Sigma$ por hipótesis
+- Como $F \in \Sigma$ por hipótesis, entonces $X \setminus F \in \Sigma$ por definición de espacio de medida ii.c)
+- Por el punto b.2) como $E, (X \setminus F) \in \Sigma$ entonces $E \cap (X \setminus F) \in \Sigma$
+
+</DemBox>
+
+### Proposición
+Sea un espacio medible $(X, \Sigma, \mu)$ se cumplen las siguientes propiedades:
+
+- **a)** Sean $E, F\in \Sigma$ con $F \subseteq E$ entonces:
+
+- **b)** Sean $\{E_i\}_{i \in \mathbb{N}} \subseteq \Sigma$ tales que $E_i \subseteq E_{i + 1} \quad \forall i$ entonces:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i \in \mathbb{N}} E_i\right) = \lim_n \mu(E_n)
+\end{align*}
+$$
+- **c)** Sean $\{E_i\}_{i \in \mathbb{N}} \subseteq \Sigma$ tales que $E_{i + 1} \subseteq E_i \quad \forall i$ y $\mu(E_1) < \infty$ entonces:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcap_{i \in \mathbb{N}} E_i\right) = \lim_n \mu(E_n)
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+- **a.1)** Sean $E, F \in \Sigma$ con $F \subseteq E$ entonces:
+$$
+\begin{align*}
+E = \underbrace{\left(E \setminus F\right)}_{\in \Sigma} \cup \underbrace{F}_{\in \Sigma} \cup \underbrace{\emptyset }_{\in \Sigma} \cup \ldots & \xRightarrow[\text{esp. med.}]{\text{iii.a) def.}} \mu(E) = \mu(E \setminus F) + \mu(F) + 0 + \ldots \implies \\[2ex]
+& \implies \mu(E) = \underbrace{\mu(E \setminus F)}_{\geq 0} + \mu(F) \geq \mu(F)
+\end{align*}
+$$
+donde se ha usado que como $E, F \in \Sigma$ por la caracterización de las $\sigma$-álgebras b.3) se tiene que $E \setminus F \in \Sigma$.
+- **a.2)** Siguiendo con el razonamiento anterior, si $\mu(F) < \infty$ entonces podemos restarlo a ambos lados de la igualdad:
+$$
+\begin{align*}
+\mu(E) = \mu(E \setminus F) + \mu(F) \implies \mu(E \setminus F) = \mu(E) - \mu(F) \in [0, \infty]
+\end{align*}
+$$
+- **b)** Sea $\{E_i\}_{i \in \mathbb{N}} \subseteq \Sigma$ sucesión con $E_i \subseteq E_{i + 1}$, desjuntificamos la unión:
+$$
+\begin{align*}
+\displaystyle \bigcup_{i \in \mathbb{N}} E_i & = \underbrace{\underbrace{E_1}_{\in \Sigma} \cup \underbrace{\left(E_2 \setminus E_1\right)}_{\in \Sigma} \cup \underbrace{\left(E_3 \setminus E_2\right)}_{\in \Sigma} \cup \underbrace{\left(E_4 \setminus E_3\right)}_{\in \Sigma} \cup \ldots}_{\text{disjuntos dos a dos}} \implies \\[2ex]
+& \implies \mu\left(\displaystyle \bigcup_{i \in \mathbb{N}} E_i\right) \xlongequal[\text{esp. med.}]{\text{iii.b) def.}} \mu(E_1) + \displaystyle \sum_{i = 1}^{\infty} \mu(E_{i + 1} \setminus E_i)
+\end{align*}
+$$
+ya que por la caracterización de las $\sigma$-álgebras b.3) se tiene que $E_{i + 1} \setminus E_i \in \Sigma$ para todo $i$.
+
+Y ahora se presentan dos casos:
+
+- **c)** Sea $\mu(E_1) < \infty$ y $E_i \supseteq E_{i + 1} \quad \forall i$ consideramos la diferencia:
+$$
+\begin{align*}
+E_1 \setminus \displaystyle \bigcap_{i \in \mathbb{N}} E_i = \displaystyle \bigcup_{i \in \mathbb{N}} \left[E_1 \setminus E_i\right]
+\end{align*}
+$$
+Como $\{E_i\}_{i \in \mathbb{N}}$ es sucesión de conjuntos decreciente, entonces $\{E_1 \setminus E_i\}_{i \in \mathbb{N}}$ es sucesión creciente de conjuntos, ya que:
+$$
+\begin{align*}
+E_{i + 1} \subseteq E_i \implies E_1 \setminus E_i \subseteq E_1 \setminus E_{i + 1} \quad \forall i
+\end{align*}
+$$
+Aplicando ahora el apartado b) sobre la sucesión $\{E_1 \setminus E_i\}_{i \in \mathbb{N}}$ tenemos:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i \in \mathbb{N}} \left[E_1 \setminus E_i\right]\right) = \lim_n \mu(E_1 \setminus E_n)
+\end{align*}
+$$
+Y por la diferencia de conjuntos vista al principio del apartado c) tenemos:
+$$
+\begin{align*}
+\mu\left(E_1 \setminus \displaystyle \bigcap_{i \in \mathbb{N}} E_i\right) = \lim_n \mu(E_1 \setminus E_n)
+\end{align*}
+$$
+Como $\mu(E_1) < \infty$ podemos aplicar el apartado a.2):
+$$
+\begin{align*}
+\mu(E_1) - \mu\left(\displaystyle \bigcap_{i \in \mathbb{N}} E_i\right) = \mu \left(E_1 \setminus \displaystyle \bigcap_{i \in \mathbb{N}} E_i\right) = \lim_n \mu(E_1 \setminus E_n) = \lim_n \left[\mu(E_1) - \mu(E_n)\right]
+\end{align*}
+$$
+Y como $\mu(E_1)$ es finito, podemos restarlo a ambos lados de la igualdad:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcap_{i \in \mathbb{N}} E_i\right) = \lim_n \mu(E_n)\\
+\end{align*}
+$$
+
+</DemBox>
+
+<EjemBox title="Ejercicio">
+
+*Dado un espacio de medida $(X, \Sigma, \mu)$ y $A \in \Sigma$, se define:*
+$$
+\begin{align*}
+\Sigma(A) \coloneq \{\underbrace{B \cap A}_{\in \Sigma} : B \in \Sigma\}
+\end{align*}
+$$
+*Entonces, se pide demostrar que $(A, \Sigma(A), \mu_{|\Sigma(A)})$ es un espacio de medida.* 
+
+Para ello, miremos que cumple las tres propiedades de la definición de espacio de medida:
+
+- [i)] $A$ es un conjunto. Se cumple por hipótesis.
+- [ii)] $\Sigma(A)$ es una $\sigma$-álgebra de $A$. Para ver que es así, veamos que cumple las tres propiedades de la $\sigma$-álgebra:
+
+- **iii)** $\mu_{|\Sigma(A)}$ es una medida. Veamos que cumple las dos propiedades de la medida:
+
+- [iii.a)] $\mu_{|\Sigma(A)}(\emptyset) = 0$. Se cumple ya que:
+$$
+\begin{align*}
+\mu_{|\Sigma(A)}(\emptyset) = \mu(\emptyset) = 0
+\end{align*}
+$$
+- **iii.b)** Sea $\{C_i\}_{i \in \mathbb{N}} \subseteq \Sigma(A)$ con $C_i \cap C_j = \emptyset \, \text{ si } i \neq j$. Sabemos que $C_i = B_i \cap A$ y que podemos reescribir la unión numerable como:
+$$
+\begin{align*}
+\displaystyle \bigcup_{i \in \mathbb{N}} C_i = \displaystyle \bigcup_{i \in \mathbb{N}} (B_i \cap A) = \left(\displaystyle \bigcup_{i \in \mathbb{N}} B_i\right) \cap A \in \Sigma(A)
+\end{align*}
+$$
+Por otro lado, como $C_i \cap C_j = \emptyset \, \text{ si } i \neq j$ entonces:
+$$
+\begin{align*}
+(B_i \cap A) \cap (B_j \cap A) = (B_i \cap B_j) \cap A = \emptyset \implies B_i \cap B_j = \emptyset \, \text{ si } i \neq j
+\end{align*}
+$$
+Por lo tanto, aplicando la propiedad iii.b) de la medida $\mu$ tenemos:
+$$
+\begin{align*}
+\mu_{|\Sigma(A)}\left(\displaystyle \bigcup_{i \in \mathbb{N}} C_i\right) & = \mu\left(\left(\displaystyle \bigcup_{i \in \mathbb{N}} B_i\right) \cap A\right) =  \\[2ex]
+& = \mu\left(\displaystyle \bigcup_{i \in \mathbb{N}} B_i\right) - \mu\left(\left(\displaystyle \bigcup_{i \in \mathbb{N}} B_i\right) \cap A^c\right) = \\[2ex]
+& = \displaystyle \sum_{i = 1}^{\infty} \mu(B_i) - \mu\left(\left(\displaystyle \bigcup_{i \in \mathbb{N}} B_i\right) \cap A^c\right) = \\[2ex]
+& = \displaystyle \sum_{i = 1}^{\infty} [\mu(B_i) - \mu(B_i \cap A^c)] = \\[2ex]
+& =\displaystyle \sum_{i = 1}^{\infty} \mu(B_i \cap A) = \displaystyle \sum_{i = 1}^{\infty} \mu_{|\Sigma(A)}(C_i) 
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo. Medida trivial">
+
+Sea $(X, \{\emptyset, X\}, \mu)$ donde:
+$$
+\begin{align*}
+\mu(E) = \left\{
+\begin{array}{ll}
+0 & \text{ si } E = \emptyset \\[2ex]
+\infty & \text{ si } E = X
+\end{array}
+\right.
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo. Medida nula">
+
+Sea $(X, \mathcal{P}(X), \mu)$ donde:
+$$
+\begin{align*}
+\mu(A) = 0 \quad \forall A \in \mathcal{P}(X)
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo. Medida de conteo">
+
+Sea $(\mathbb{N}, \mathcal{P}(\mathbb{N}), m)$ donde $m$ es la medida de conteo, es decir:
+$$
+\begin{align*}
+m \colon \mathcal{P}(\mathbb{N}) & \longrightarrow [0, \infty]\\
+A &\longmapsto m(A) \coloneq \left\{
+\begin{array}{ll}
+\text{card } A \in \mathbb{N} & \text{ si } A \text{ es finito}\\[2ex]
+\infty & \text{ si } A \text{ es infinito}
+\end{array}
+\right.
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo. Medida inducida en $\mathbb{R}$ por los naturales">
+
+Consideramos el espacio de medida $(\mathbb{R}, \mathcal{P}(\mathbb{R}), \mu)$ donde:
+$$
+\begin{align*}
+\mu(B) \coloneq m(B \cap \mathbb{N}) \quad \forall B \subseteq \mathbb{R}
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo. Medida de Lebesgue en $\mathbb{R}^N$">
+
+Consideramos el espacio de medida $(\mathbb{R}^N, \mathcal{M}_N, \mu_N)$, con $\tau_{\mathbb{R^N}} \subseteq \mathcal{M}_N$, donde:
+
+$$
+\begin{array}{rcl}
+\mu_N :  & \longrightarrow & [0, \infty]\\[2ex]
+[a_1, b_1] \times \dots \times [a_N, b_N] & \longmapsto & \displaystyle \prod_{i = 1}^{N} (b_i - a_i) = (b_1 - a_1)(b_2 - a_2) \cdots (b_N - a_N)
+\end{array}
+$$
+
+donde $- \infty < a_i < b_i < \infty$.
+
+</EjemBox>
+
+### Subaditividad. Proposición
+Sea $(X, \Sigma, \mu)$ espacio de medida y $\{E_i\}_{i \in \mathbb{N}} \subseteq \Sigma$ entonces:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i \in \mathbb{N}} E_i\right) \leq \displaystyle \sum_{i = 1}^{\infty} \mu(E_i)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Primero, transformaremos la sucesión de conjuntos $\{E_i\}_{i \in \mathbb{N}}$ no necesariamente disjuntos entre sí, en una sucesión de conjuntos disjuntos entre sí. Para ello, definimos la sucesión $\{F_i\}_{i \in \mathbb{N}}$ de la siguiente forma:
+$$
+\begin{align*}
+F_1 & \coloneq E_1 \in \Sigma \\
+F_2 & \coloneq E_2 \setminus E_1 \in \Sigma \\
+F_3 & \coloneq E_3 \setminus (E_1 \cup E_2) \in \Sigma \\
+\vdots  &  \vdots \\[2ex]
+F_{n + 1} & \coloneq E_{n + 1} \setminus (\underbrace{E_1 \cup E_2 \cup \ldots \cup E_n}_{\in \Sigma}) \in \Sigma
+\end{align*}
+$$
+De esta forma, obtenemos que los conjuntos $F_i$ cumplen:
+
+- **Medibilidad**: $F_n \in \Sigma \quad \forall n \in \mathbb{N}$ ya que se obtienen mediante operaciones de diferencia y unión numberable de conjuntos medibles.
+- **Disjointitud**: Si $n > m$ entonces $F_n \cap F_m = \emptyset$ ya que:
+$$
+\begin{align*}
+F_n \subseteq E_n \text{ pero } F_n \cap E_i = \emptyset \quad \forall i < n
+\end{align*}
+$$
+Como $m < n$ entonces $F_n \cap F_m \subseteq F_n \cap E_m = \emptyset$.
+- **Equivalencia de uniones**: Para cualquier $n \in \mathbb{N}$ se cumple que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{i = 1}^{n} F_i = \displaystyle \bigcup_{i = 1}^{n} E_i
+\end{align*}
+$$
+Para probar esta igualdad basta ver:
+
+Ahora, aplicando la propiedad iii.b) de la definición de espacio de medida, como los conjuntos $F_i$ son disjuntos entre sí, tenemos:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i = 1}^{\infty} F_i\right) = \displaystyle \sum_{i = 1}^{\infty} \mu(F_i)
+\end{align*}
+$$
+Y además, para cada $i$ se tiene $F_i \subseteq E_i$, por lo que $\mu(F_i) \leq \mu(E_i)$ entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{\infty} \mu(F_i) \leq \displaystyle \sum_{i = 1}^{\infty} \mu(E_i)
+\end{align*}
+$$
+Combinando ambas expresiones, tenemos que:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i = 1}^{\infty} E_i\right) = \mu\left(\displaystyle \bigcup_{i = 1}^{\infty} F_i\right) = \displaystyle \sum_{i = 1}^{\infty} \mu(F_i) \leq \displaystyle \sum_{i = 1}^{\infty} \mu(E_i)
+\end{align*}
+$$
+
+</DemBox>
+
+### Espacio de medida completo. Definición
+Sea $(X, \Sigma, \mu)$ se dice **completo** (ó $\Sigma$ es completo respecto de $\mu$) si se cumple que:
+$$
+\begin{align*}
+\forall B \in \Sigma \text{ con } \mu(B) = 0, \quad \forall A \subseteq B \text{ se tiene que } A \in \Sigma \quad (\text{y por tanto } \mu(A) = 0)\\
+\end{align*}
+$$
+
+### Proposición
+Sea $(X, \Sigma, \mu)$ un espacio de medida cualquiera, existe una $\sigma$-álgebra $\widetilde{\Sigma} \supseteq \Sigma$ y una medida $\widetilde{\mu} : \widetilde{\Sigma} \to [0, \infty]$ tal que $\widetilde{\mu}_{|_{\Sigma}} = \mu$ y tal que $(X, \widetilde{\Sigma}, \widetilde{\mu})$ es espacio de medida completo. 
+
+Además, si $(X, \Omega, \nu)$ es espacio de medida completo con $\Sigma \subseteq \Omega$ y $\nu_{|_{\Sigma}} = \mu$ entonces $\widetilde{\Sigma} \subseteq \Omega$.
+
+A $(X, \widetilde{\Sigma}, \widetilde{\mu})$ se le llama **completación** de $(X, \Sigma, \mu)$.
+
+<EjBox title="Observación">
+
+Lo que buscamos es que, dado un espacio de medida cualquiera $(X, \Sigma, \mu)$ podamos ampliarlo a un espacio de medida completo $(X, \widetilde{\Sigma}, \widetilde{\mu})$, es decir, agregar todos los subconjuntos de conjuntos de medida nula a la $\sigma$-álgebra original $\Sigma$ y definir una medida $\widetilde{\mu}$ que coincida con $\mu$ en los conjuntos de $\Sigma$ y que asigne medida nula a estos nuevos conjuntos añadidos.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Para la demostración, vamos a realizar explícitamente la construcción de dicha completación. Para ello, primero definimos el conjunto de los conjunto de medida nula, es decir:
+$$
+\begin{align*}
+\mathcal{N} \coloneq \left\{N \subseteq X \colon \exists M \in \Sigma \text{ con } \mu(M) =\, 0 \text{ y } N \subseteq M\right\}
+\end{align*}
+$$
+y a continuación definimos la $\sigma$-álgebra ampliada:
+$$
+\begin{align*}
+\widetilde{\Sigma} \coloneq \left\{A \cup N : A \in \Sigma, \, N \in \mathcal{N}\right\}
+\end{align*}
+$$
+
+<EjBox title="Observación">
+
+Sea $E = A \cup N \in \widetilde{\Sigma}$, con $A \in \Sigma$ y $N \in \mathcal{N}$, existen $N_1 \in \mathcal{N}$ y $M_1 \in \Sigma$ donde:
+$$
+\begin{align*}
+N_1 \subseteq M_1, \quad \mu(M_1) = 0, \quad A \cap M_1 = \emptyset
+\end{align*}
+$$
+En efecto, tenemos que:
+$$
+\begin{align*}
+N \in \mathcal{N} & \implies \exists M \in \Sigma \text{ con } \mu(M) = 0 \text{ y } N \subseteq M \implies \\[2ex]
+& \implies E = A \cup (N \setminus A) \text{ con } N \setminus A \subseteq M \setminus A \eqcolon M_1 \in \Sigma
+\end{align*}
+$$
+Y además, tenemos que:
+$$
+\begin{align*}
+\mu(M_1) \leq \mu(M) = 0 \quad \text{ y } A \cap M_1 = \emptyset
+\end{align*}
+$$
+
+</EjBox>
+
+Veamos ahora que $(X, \widetilde{\Sigma}, \widetilde{\mu})$ es espacio de medida completo.
+
+- *Ver si $\widetilde{\Sigma}$ es $\sigma$-álgebra:*
+
+- *Cerrada bajo complementos:* Sea $E = A \cup N \in \widetilde{\Sigma}$ con $A \in \Sigma$ y $N \in \mathcal{N}$. Entonces, existe $M \in \Sigma$ con $N \subseteq M$, $M \cap A = \emptyset$ y $\mu(M) = 0$ por lo que:
+$$
+\begin{align*}
+E^c = \underbrace{(\underbrace{A}_{\in \Sigma} \cup \underbrace{M}_{\in \Sigma})^c}_{\in \Sigma} \cup \underbrace{(M \setminus N)}_{\in \mathcal{N}} \in \widetilde{\Sigma}
+\end{align*}
+$$
+Esto es así ya que:
+
+- Como $(A \cup M) \in \Sigma$ y $\Sigma$ es $\sigma$-álgebra, entonces $(A \cup M)^c \in \Sigma$
+- Como $M \setminus N \subseteq M$ y $\mu(M) = 0$ entonces $M \setminus N \in \mathcal{N}$
+
+\item *Definición de la medida $\widetilde{\mu}$ y ver que es medida:* Podemos definir $\widetilde{\mu}$ como:
+$$
+\begin{align*}
+\widetilde{\mu} : \widetilde{\Sigma} & \longrightarrow [0, \infty]\\
+E & \longmapsto \widetilde{\mu}(E) \coloneq \mu(A) \quad \text{ donde } E = A \cup N \text{ con } A \in \Sigma, \, N \in \mathcal{N}
+\end{align*}
+$$
+Podemos ver que está bien definida ya que, sea $E \in \Sigma$ y podemos considerar dos descomposiciones suyas:
+$$
+\begin{align*}
+E & = A \cup N \quad \, \: \, \text{ con } A \in \Sigma, \, N \in \mathcal{N} \, \, \, \implies \exists M \in \Sigma \, \text{ con } \left\{
+\begin{array}{l}
+N \subseteq M\\[1ex]
+\mu(M) = 0
+\end{array}
+\right.\\[4ex]
+E & = A_1 \cup N_1 \quad \text{ con } A_1 \in \Sigma, \, N_1 \in \mathcal{N} \implies \exists M_1 \in \Sigma \text{ con } \left\{
+\begin{array}{l}
+N_1 \subseteq M_1\\[1ex]
+\mu(M_1) = 0
+\end{array}
+\right.
+\end{align*}
+$$
+Y podemos ver que $\mu(A) = \mu(A_1)$ ya que:
+$$
+\begin{align*}
+A \subseteq A_1 \cup N_1 \subseteq A \cup M_1 \in \Sigma \implies \mu(A) & \leq \mu(A_1 \cup M_1) \overset{\text{\tiny subaditividad}}{\leq} \\[2ex]
+& \leq \mu(A_1) + \underbrace{\mu(M_1)}_{= 0} = \mu(A_1)
+\end{align*}
+$$
+Y análogamente podemos ver que $\mu(A_1) \leq \mu(A)$.
+
+Ahora, veamos que $\widetilde{\mu}$ es una medida:
+
+- *La medida del conjunto vacío es cero:*
+$$
+\begin{align*}
+\widetilde{\mu}(\emptyset) = \mu(\emptyset) = 0
+\end{align*}
+$$
+- *Es aditiva numerable:* Sea $\{E_i\}_{i = 1}^\infty \subseteq \widetilde{\Sigma}$ con $E_i \cap E_j = \emptyset \text{ si } i \neq j$, cada $E_i$ se puede escribir como:
+$$
+\begin{align*}
+E_i = A_i \cup N_i \quad \text{ con } A_i \in \Sigma, \, N_i \in \mathcal{N}
+\end{align*}
+$$
+
+Podemos notar que $A_i \cap A_j = \emptyset$ si $i \neq j$ ya que si no fuera así, es decir, si $\exists x \in A_i \cap A_j$ entonces $x \in E_i \cap E_j$ lo cual es una contradicción. Así:
+$$
+\begin{align*}
+\widetilde{\mu} \left(\displaystyle \bigcup_{i \in \mathbb{N}} E_i\right) = \widetilde{\mu} \left(\left[\displaystyle \bigcup_{i \in \mathbb{N}} A_i\right] \cup \left[\displaystyle \bigcup_{i \in \mathbb{N}}N_i \right]\right)
+\end{align*}
+$$
+Ahora, como $\bigcup_i N_i \in \mathcal{N}$ (se vio el razonamiento previamente en la demostración de que $\widetilde{\Sigma}$ es cerrada bajo uniones numerables) y $\bigcup_i A_i \in \Sigma$ (al ser $\Sigma$ una $\sigma$-álgebra), por la definición de $\widetilde{\mu}$ tenemos:
+$$
+\begin{align*}
+\widetilde{\mu} \left(\left[\displaystyle \bigcup_{i \in \mathbb{N}} A_i\right] \cup \left[\displaystyle \bigcup_{i \in \mathbb{N}}N_i \right]\right) = \mu\left(\displaystyle \bigcup_{i\in \mathbb{N}} A_i\right) \xlongequal[\text{\tiny iii.b) esp.med.}]{A_i \cap A_j = \emptyset} \displaystyle \sum_{i = 1}^{\infty} \mu(A_i) = \displaystyle \sum_{i = 1}^{\infty}\widetilde{\mu}(E_i)
+\end{align*}
+$$
+- *Extensión a $\mu$:* es decir $\widetilde{\mu}_{|_\Sigma} = \mu$. Si $A \in \Sigma$ entonces:
+$$
+\begin{align*}
+A = \underbrace{A}_{\in \Sigma} \cup \underbrace{\emptyset }_{\in \mathcal{N}} \xRightarrow[\text{\tiny def de } \widetilde{\mu}]{} \widetilde{\mu}(A) = \mu(A)
+\end{align*}
+$$
+
+\item *Completitud de $(X, \widetilde{\Sigma}, \widetilde{\mu})$:* Sea $E \subseteq F \in \widetilde{\Sigma}$ con $\widetilde{\mu}(F) = 0$ entonces:
+$$
+\begin{align*}
+F = A \cup N \quad \text{ con } A \in \Sigma, \, N \in \mathcal{N} \text{ y } \mu(A) = 0 \implies \exists M \in \Sigma \text{ con } \left\{
+\begin{array}{l}
+N \subseteq M\\
+\mu(M) = 0
+\end{array}
+\right.
+\end{align*}
+$$
+Por lo tanto, $E \subseteq A \cup M$ y $\mu(A \cup M) = 0$ así que $E \in \mathcal{N} \subseteq \widetilde{\Sigma}$. Además:
+$$
+\begin{align*}
+E = \emptyset \cup E \quad \text{ con } \emptyset \in \Sigma, \, E \in \mathcal{N} \implies \widetilde{\mu}(E) = 0
+\end{align*}
+$$
+*Minimalidad de la completación:* Sea $(X, \Omega, \nu)$ espacio de medida completo donde tenemos $\Sigma \subseteq \Omega$ y $\nu_{|_\Sigma} = \mu$, veamos que $\widetilde{\Sigma} \subseteq \Omega$. Sea $E \in \widetilde{\Sigma}$ entonces:
+$$
+\begin{align*}
+E = A \cup N \quad \text{ con } \left\{
+\begin{array}{l}
+A \in \Sigma \subseteq \Omega\\[1ex]
+N \in \mathcal{N} \implies \exists M \in \Sigma \text{ con } N \subseteq M, \, \mu(M) = 0
+\end{array}
+\right.
+\end{align*}
+$$
+Como $\nu(M) = \mu(M) = 0$ y $\nu$ es completa entonces $N \in \Omega$ luego:
+$$
+\begin{align*}
+E = A \cup N \in \Omega \implies \widetilde{\Sigma} \subseteq \Omega
+\end{align*}
+$$
+
+</DemBox>

@@ -1,0 +1,298 @@
+---
+title: "Inferencia - Tema 0"
+description: "Conceptos básicos de probabilidad y estadística necesarios para el estudio de la inferencia estadística."
+date: "2026-01-12"
+tags: ["inferencia estadística", "Probabilidad", "Estadística"]
+---
+
+
+## Introducción
+El objetivo de la **inferencia estadística** es extraer conclusiones sobre la población a partir de la información obtenida de una muestra. Para ello, partimos de una **población** de la que no es posible conocer los parámetros o algunas características ($\mu$, $\sigma$, $p$, independencia, etc.) y se dispone de la información suministrada por una **muestra** $(X_1, \dots, X_n)$.
+
+### Probabilidad
+Sea cualquier característica de interés de la población, a esta se le asigna el conjunto de valores posibles $\Omega$ que llamamos **espacio muestral**. También, se le asocia una colección de sucesos $\mathcal{A}$ con estructura de $\sigma$-álgebra.
+
+A partir de ellos, se define una **medida de probabilidad** $P \colon \mathcal{A} \longrightarrow [0, 1]$ que verifica los axiomas de Kolmogórov:
+
+- $P(A) \geq 0$ para todo $A \in \mathcal{A}$.
+- $P(\Omega) = 1$.
+- Si $A_1, A_2, \dots$ son sucesos disjuntos dos a dos, entonces
+$$
+\begin{align*}
+P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)\\
+\end{align*}
+$$
+
+#### Propiedades de la probabilidad
+A partir de los axiomas, se pueden deducir las siguientes propiedades:
+
+- $P(\emptyset ) = 0$
+- Sea $A \subseteq B$ entonces $P(A) \leq P(B)$
+- $P(A) \leq 1$ para todo $A \in \mathcal{A}$
+- $P(A^c) = 1 - P(A)$ para todo $A \in \mathcal{A}$
+- $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ para todo $A, B \in \mathcal{A}$
+
+#### Propabilidad condicionada
+Sean $A, B \in \mathcal{A}$ sucesos con $P(B) > 0$ entonces:
+$$
+\begin{align*}
+P\left(A_{|_B}\right) = \frac{P(A \cap B)}{P(B)}\\
+\end{align*}
+$$
+
+#### Teorema de la probabilidad total
+Sean $A_1, A_2, \dots, A_n \in \mathcal{A}$ una partición del espacio muestral $\Omega$ y sea $B \in \mathcal{A}$ cualquiera, del que se conoce $P\left(B_{|_{B_i}}\right)$ para $i = 1, \dots, n$ entonces la probabilidad de $B$ viene dada por:
+$$
+\begin{align*}
+P(B) = \sum_{i=1}^{n} P\left(B_{|_{A_i}}\right) P(A_i)\\
+\end{align*}
+$$
+
+#### Teorema de Bayes
+Sean $\{A_1, \dots, A_n\}$ partición de $\Omega$ y tales que $P(A_i) > 0$ para $i = 1, \dots, n$. Sea $B \in \mathcal{A}$ donde es conocida $P\left(B_{|_{A_i}}\right)$ para $i = 1, \dots, n$ y $P(B) > 0$. Entonces:
+$$
+\begin{align*}
+P\left({A_i}_{|_B}\right) = \frac{P(B_{|_{A_i}}) P(A_i)}{P(B)}\\
+\end{align*}
+$$
+
+### Variables aleatorias
+Podemos entender una **variable aleatoria** como una medición de los resultados asociados a un experimento aleatorio que nos permite trabajar con modelos estadísticos.
+
+Formalmente, sea espacio de probabilidad $(\Omega, \mathcal{A}, P)$, decimos $X$ es **variable aleatoria** si es una función medible respecto de $\mathcal{A}$ y la $\sigma$-álgebra de Borel $\mathcal{B}(\mathbb{R})$, es decir:
+$$
+\begin{align*}
+X \colon \Omega \longrightarrow \mathbb{R} \text{ tal que } \forall B \in \mathcal{B}(\mathbb{R}), X^{-1}(B) \in \mathcal{A}\\
+\end{align*}
+$$
+La **función de distribución** $F_X$ caracteriza su comportamiento y viene dada por:
+$$
+\begin{align*}
+F_X \colon \mathbb{R} & \longrightarrow [0, 1]\\
+x & \longmapsto F_X(x) = P(\omega \mid X(\omega) \leq x)\\
+\end{align*}
+$$
+
+#### Variable aleatoria discreta
+Decimos que $X$ es **discreta** si toma un número finito o numerable de valores $x_i$ con probabilidades no nulas que verifican:
+$$
+\begin{align*}
+\sum_{i} P(X = x_i) = 1
+\end{align*}
+$$
+En este caso, tenemos que:
+
+- Su función de distribución viene dada por:
+$$
+\begin{align*}
+F_X(x) = P(X \leq x) = \sum_{x_i \leq x} P(X = x_i)
+\end{align*}
+$$
+- Su esperanza (en caso de existir) viene dada por:
+$$
+\begin{align*}
+\mu = E(X) = \sum_{i} x_i P(X = x_i)
+\end{align*}
+$$
+- Su varianza (en caso de existir) viene dada por:
+$$
+\begin{align*}
+\sigma^2 = \text{Var}(X) = E\left[(X - \mu)^2\right] = \sum_{i} (x_i - \mu)^2 P(X = x_i)
+\end{align*}
+$$
+
+#### Variable aleatoria continua
+Decimos que $X$ es **continua** si puede tomar valores en un continuo, intervalo o unión de intervalos. Queda caracterizada por su **función de densidad** $f_X$ que cumple:
+
+- $f_X(x) \geq 0$ para todo $x \in \mathbb{R}$
+- $\int_{\mathbb{R}} f_X(x) \, dx = 1$
+
+En este caso, tenemos que:
+
+- Su función de distribución viene dada por:
+$$
+\begin{align*}
+F_X(x) = \int_{ - \infty}^x f_X(t) \, dt
+\end{align*}
+$$
+- Su esperanza (en caso de existir) viene dada por:
+$$
+\begin{align*}
+\mu = E(X) = \int_{-\infty}^{\infty} x f_X(x) \, dx
+\end{align*}
+$$
+- Su varianza (en caso de existir) viene dada por:
+$$
+\begin{align*}
+\sigma^2 = \text{Var}(X) = \int_{-\infty}^{\infty} (x - \mu)^2 f_X(x) \, dx = E(X^2) - (E(X))^2
+\end{align*}
+$$
+
+#### Distribuciones discretas más comunes
+Algunos de los modelos de distribución discreta más comunes son:
+
+- **Bernoulli** $X \rightsquigarrow \mathcal{B}(p)$ con $p \in (0, 1)$
+
+- **Binomial** $X \rightsquigarrow \mathbb{B}(n, p)$ con $n \in \mathbb{N}$ y $p \in (0, 1)$
+
+- $P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}$ para $k = 0, 1, \dots, n$
+- $E(X) = np$
+- $\text{Var}(X) = np(1 - p) = npq$
+- **Geométrica** $X \rightsquigarrow \mathcal{G}(p)$ con $p \in (0, 1)$
+
+- $P(X = k) = (1 - p)^{k - 1} p$ para $k = 1, 2, \dots$
+- $E(X) = \frac{1}{p}$
+- $\text{Var}(X) = \frac{1 - p}{p^2} = \frac{q}{p^2}$
+- **Poisson** $X \rightsquigarrow \mathcal{P}(\lambda)$ con $\lambda > 0$
+
+- $P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$ para $k = 0, 1, 2, \dots$
+- $E(X) = \lambda$
+- $\text{Var}(X) = \lambda$
+
+#### Distribuciones continuas más comunes
+Algunos de los modelos de distribución continua más comunes son:
+
+- **Uniforme** $X \rightsquigarrow \mathcal{U}(a, b)$ con $a < b$
+
+- **Exponencial** $X \rightsquigarrow \mathcal{E}(\lambda)$ con $\lambda > 0$
+
+- $f_X(x) = \lambda e^{-\lambda x}$ para $x \geq 0$ y $0$ en otro caso
+- $E(X) = \frac{1}{\lambda}$
+- $\text{Var}(X) = \frac{1}{\lambda^2}$
+- **Gamma** $X \rightsquigarrow \Gamma(\alpha, \lambda)$ con $\alpha, \lambda > 0$
+
+- $f_X(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\lambda x}$ para $x \geq 0$ y $0$ en otro caso
+- $E(X) = \frac{\alpha}{\lambda}$
+- $\text{Var}(X) = \frac{\alpha}{\lambda^2}$
+- **Normal** $X \rightsquigarrow \mathcal{N}(\mu, \sigma^2)$ con $\mu \in \mathbb{R}$ y $\sigma > 0$
+
+- $f_X(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x - \mu)^2}{2 \sigma^2}}$ para $x \in \mathbb{R}$
+- $E(X) = \mu$
+- $\text{Var}(X) = \sigma^2$
+- **Beta** $X \rightsquigarrow \mathcal{B}e(\alpha, \beta)$ con $\alpha, \beta > 0$
+
+- $f_X(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1}$ para $x \in [0, 1]$ y $0$ en otro caso
+- $E(X) = \frac{\alpha}{\alpha + \beta}$
+- $\text{Var}(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}$
+
+#### Cambio de variable
+Cualquier variable obtenida por transformación de otra puede caracterizarse a través de la función de distribución o de densidad de la variable original.
+
+Sea $X$ una variable aleatoria continua con soporte $(a, b)$ y función de densidad $f_X(x)$, sea $g$ función diferenciable en $(a, b)$ con derivada no nula (inyectiva) entonces la función de densidad de la variable $Y = g(X)$ viene dada por:
+$$
+\begin{align*}
+f_Y(y) = f(g^{ - 1}(y)) \left| \frac{d}{dy} g^{ - 1}(y) \right| \quad  \text{ para } y \in (g(a), g(b))\\
+\end{align*}
+$$
+
+### Muestras aleatorias simples
+Una **muestra aleatoria simple** de tamaño $n$ es un conjunto de $n$ variables aleatorias $X_1, X_2, \dots, X_n$ independientes e idénticamente distribuidas (i.i.d.) con la misma distribución que la variable aleatoria $X$ que representa a la población.
+
+El comportamiento de la variable aleatoria $X$ determina el comportamiento de la muestra aleatoria simple, donde:
+$$
+\begin{align*}
+\text{Caso discreto: } & \longrightarrow P(x_1, \dots, x_n) = \prod_{i=1}^{n} P(X_i = x_i)\\[2ex]
+\text{Caso continuo: } & \longrightarrow f(x_1, \dots, x_n) = \prod_{i=1}^{n} f_X(x_i)\\
+\end{align*}
+$$
+
+### Estadístico
+Un **estadístico** es cualquier función medible del conjunto de posibles resultados muestrales en $\mathbb{R}^p$, es decir:
+$$
+\begin{align*}
+T \colon (X_1, \dots, X_n) \longmapsto T(X_1, \dots, X_n) \in \mathbb{R}^p
+\end{align*}
+$$
+El manejo de estadísticos pretende simplificar la información contenida en la muestra y permiten trasladar las probabilidades de $\mathbb{R}^n$ a $\mathbb{R}^p$ con $p < n$.
+
+#### Estadístico media muestral
+Sea $X_1, \dots, X_n$ una muestra aleatoria simple de tamaño $n$ de una población con media $\mu$ y varianza $\sigma^2$. La **media muestral** viene dada por:
+$$
+\begin{align*}
+\overline{X} = \frac{1}{n} \sum_{i=1}^{n} X_i
+\end{align*}
+$$
+
+La media muestral es un estadístico que cumple:
+
+- $E(\overline{X}) = \mu$
+- $\text{Var}(\overline{X}) = \frac{\sigma^2}{n}$
+- Si $X \rightsquigarrow \mathcal{N}(\mu, \sigma^2)$ entonces $\overline{X} \rightsquigarrow \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)$
+- Si $n$ es grande, $\overline{X}$ se aproxima a una distribución normal (Teorema Central del Límite), es decir:
+$$
+\begin{align*}
+\frac{\overline{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} \mathcal{N}(0, 1) \text{ cuando } n \to \infty\\
+\end{align*}
+$$
+
+#### Estadístico cuasivarianza muestral
+Sea $X_1, \dots, X_n$ una muestra aleatoria simple de tamaño $n$ de una población con media $\mu$ y varianza $\sigma^2$. La **cuasivarianza muestral** viene dada por:
+$$
+\begin{align*}
+\widehat{S}^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (X_i - \overline{X})^2
+\end{align*}
+$$
+La cuasivarianza muestral es un estadístico que cumple:
+
+- $E(\widehat{S}^2) = \sigma^2$
+- Si $X \rightsquigarrow \mathcal{N}(\mu, \sigma^2)$ entonces:
+$$
+\begin{align*}
+\widehat{S}^2 \rightsquigarrow \sigma^2 \chi^2_{n - 1} = \sigma^2 \gamma\left(\frac{n - 1}{2}, \frac{1}{2} \right)
+\end{align*}
+$$
+
+#### Convergencia en ley
+Sea $\{X_n\}_{n \in \mathbb{N}}$ sucesión de variables aleatorias, se dice que converge en ley a una variable aleatoria $X$ si:
+$$
+\begin{align*}
+F_{X_n}(x) \xrightarrow{n \to \infty} F_X(x) \text{ para todo } x \text{ donde } F_X \text{ es continua}\\ 
+\end{align*}
+$$
+
+#### Convergencia en probabilidad
+Sea $\{X_n\}_{n \in \mathbb{N}}$ sucesión de variables aleatorias definidas en el mismo espacio probabilístico $(\Omega, \sigma, P)$, se dice que converge en probabilidad a una variable aleatoria $X$ si:
+$$
+\begin{align*}
+P(|X_n - X| \geq \varepsilon) \xrightarrow{n \to \infty} 0 \text{ para todo } \varepsilon > 0\\
+\end{align*}
+$$
+
+#### Convergencia casi segura
+Sea $\{X_n\}_{n \in \mathbb{N}}$ sucesión de variables aleatorias definidas en el mismo espacio probabilístico $(\Omega, \sigma, P)$, se dice que converge casi seguramente a una variable aleatoria $X$ si y solo si:
+$$
+\begin{align*}
+P\left(\omega \colon X_n(\omega) \xrightarrow[n\to \infty]{} X(\omega)\right) = 1
+\end{align*}
+$$
+Es decir, que existe un conjunto $C$ con $P(C) = 1$ tal que si $\omega \in C$ entonces $X_n(\omega)$ converge puntualmente a $X(\omega)$.
+
+#### Propiedades de las convergencias
+Se cumplen las siguientes propiedades:
+
+- Si $X_n \overset{P}{\longrightarrow} X \implies X_n \overset{L}{\longrightarrow} X$
+- Si $X_n \overset{L}{\longrightarrow} k \implies X_n \overset{P}{\longrightarrow} k$ con $k$ constante
+- Si $X_n \overset{c.s.}{\longrightarrow} X \implies X_n \overset{P}{\longrightarrow} X$
+
+#### Teorema de Slutsky
+Sea $\{X_n\}_{n \in \mathbb{N}}$ y $\{Y_n\}_{n \in \mathbb{N}}$ dos sucesiones de variables aleatorias tales que $X_n \overset{L}{\longrightarrow} X$ y $Y_n \overset{P}{\longrightarrow} c$ con $c$ constante. Entonces:
+
+- $X_n + Y_n \overset{L}{\longrightarrow} X + c$
+- $X_n Y_n \overset{L}{\longrightarrow} cX$
+- $\frac{X_n}{Y_n} \overset{L}{\longrightarrow} \frac{X}{c}$ si $c \neq 0$
+
+#### Teorema central del límite
+Sea $\{X_n\}_{n \in \mathbb{N}}$ una sucesión de variables aleatorias i.i.d. con $E(X_i) = \mu$ y $\text{Var}(X_i) = \sigma^2$. Se verifica que:
+$$
+\begin{align*}
+\sqrt{n} \left(\frac{\overline{X_n} - \mu}{\sigma} \right) \overset{L}{\longrightarrow} \mathcal{N}(0, 1) \text{ cuando } n \to \infty\\
+\end{align*}
+$$
+
+#### Ley fuerte de los grandes números
+Sea $\{X_n\}_{n \in \mathbb{N}}$ una sucesión de variables aleatorias i.i.d. con $E(X_i) = \mu$, se verifica que:
+$$
+\begin{align*}
+\overline{X_n} \overset{c.s.}{\longrightarrow} \mu \text{ cuando } n \to \infty\\
+\end{align*}
+$$

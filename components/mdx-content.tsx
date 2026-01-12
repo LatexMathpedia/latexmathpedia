@@ -1,15 +1,17 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
 
 interface MDXContentProps {
   source: string;
   className?: string;
+  components?: Record<string, React.ComponentType<any>>;
 }
 
-export default function MDXContent({ source, className }: MDXContentProps) {
+export default function MDXContent({ source, className, components = {} }: MDXContentProps) {
   return (
     <div className={cn(
       "prose dark:prose-invert max-w-none",
@@ -21,7 +23,9 @@ export default function MDXContent({ source, className }: MDXContentProps) {
       "[&_h4]:text-xl [&_h4]:font-semibold [&_h4]:mt-10 [&_h4]:mb-4",
       "[&_h5]:text-lg [&_h5]:font-semibold [&_h5]:mt-6 [&_h5]:mb-2",
       // Personalizaciones para párrafos y listas
-      "[&_p]:my-4 [&_ul]:my-4 [&_ol]:my-4 [&_li]:my-2",
+      "[&_p]:my-4 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ml-6",
+      "[&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ml-6",
+      "[&_li]:my-2 [&_li]:ml-2",
       // Clase adicional personalizada
       className
     )}>
@@ -29,10 +33,11 @@ export default function MDXContent({ source, className }: MDXContentProps) {
         source={source}
         options={{
           mdxOptions: {
-            remarkPlugins: [remarkMath],
-            rehypePlugins: [rehypeKatex],
+            remarkPlugins: [remarkMath, remarkGfm],
+            rehypePlugins: [[rehypeKatex, { strict: false }]],
           },
         }}
+        components={components}
       />
     </div>
   );

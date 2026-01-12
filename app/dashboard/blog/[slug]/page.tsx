@@ -8,6 +8,9 @@ import { CalendarIcon, Clock } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import MDXContent from "@/components/mdx-content"
+import { DemBox } from '@/components/mdx/DemBox';
+import { EjBox } from '@/components/mdx/EjBox';
+import { EjemBox } from '@/components/mdx/EjemBox';
 
 export async function generateStaticParams() {
   const postsDir = path.join(process.cwd(), "content/posts")
@@ -28,7 +31,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
   // Calcular tiempo estimado de lectura (promedio 200 palabras/minuto)
   const wordCount = content.split(/\s+/).length;
-  const estimatedReadTime = `${Math.ceil(wordCount / 200)} min`;
+  const estimatedReadTime = `${Math.ceil(wordCount / 80)} min`;
 
   // Usar tags si están disponibles, o un valor predeterminado
   const tags = (data.tags as string[]) || ["Matemáticas"];
@@ -69,7 +72,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
             <Separator className="my-4" />
 
-            <MDXContent source={content} className="prose-math" />
+            <MDXContent source={content} components={{ DemBox, EjBox, EjemBox }} />
           </article>
         </CardContent>
       </Card>

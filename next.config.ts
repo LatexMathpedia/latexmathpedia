@@ -3,6 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   
+  // Aumentar el límite de tamaño para el caché de Next.js
+  // experimental: {
+  //   largePageDataBytes: 512 * 1024,
+  // },
+  
   // Configuración específica para mejorar compatibilidad con Safari/iOS
   async headers() {
     return [

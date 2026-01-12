@@ -1,0 +1,1064 @@
+---
+title: "MOR - Tema 3"
+description: "Apuntes sobre caminos de menor valor en Modelos de Optimización de Redes. Definiciones, teoremas y algoritmos clave."
+date: "2026-01-12"
+tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"]
+---
+
+
+## Camino de menor valor
+### Conjunto de caminos desde un nodo. Definición
+Sea $R = (V, A, p)$ red orientada con raíz de salida $i$, sea $j \in V$ nodo cualquiera denotamos al **conjunto de caminos que van de $i$ a $j$** como $\Pi_{ij}$, es decir,
+$$
+\begin{align*}
+\Pi_{ij} = \{P \mid P \text{ es un camino en } R \text{ que va de } i \text{ a } j\}\\
+\end{align*}
+$$
+
+### Valor de un camino. Definición
+Sea $R = (V, A, p)$ red orientada con raíz de salida $i$ y sea $\pi_{ij} \in \Pi_{ij}$ camino definido como:
+$$
+\begin{align*}
+i \xrightarrow[]{p_{i, i_1}} i_1 \xrightarrow[]{p_{i_1, i_2}} i_2 \xrightarrow[]{} \ldots \xrightarrow[]{} i_{m-1} \xrightarrow[]{p_{i_{m-1}, j}} j
+\end{align*}
+$$
+definimos el **valor del camino** como la suma de los pesos de los arcos que lo forman:
+$$
+\begin{align*}
+p(\pi_{ij}) = \displaystyle \sum_{e \in \pi_{ij}} p(e) = p_{i, i_1} + p_{i_1, i_2} + \ldots + p_{i_{m-1}, j}\\
+\end{align*}
+$$
+
+### Camino de valor mínimo. Definición
+Sea $R = (V, A, p)$ red orientada con raíz de salida $i$ y sea $j \in V$ nodo cualquiera. Definimos el **camino de valor mínimo** como el camino $\pi_{ij}' \in \Pi_{ij}$ que cumple:
+$$
+\begin{align*}
+p(\pi_{ij}') = \min_{\pi_{ij} \in \Pi_{ij}} p(\pi_{ij})
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*¿Los caminos de mínimo valor de una raíz de salida $r$ al resto de los vértices forman siempre una arborescencia de unión de salida en $r$?*
+
+En general, esto no es cierto. Por ejemplo:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_0.svg)
+
+Si consideramos los caminos de mínimo valor desde $r$ al resto de vértices, obtenemos:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_1.svg)
+
+Observamos que el arco $(r, c)$ no pertenece al conjunto de caminos de mínimo valor, pero el conjunto de caminos de mínimo valor no forma una arborescencia de unión de salida en $r$ ya que el nodo $c$ tiene grado de entrada 2.
+
+No obstante, en el caso particular de que los caminos de valor mínimo sean únicos, entonces si forman una arborescencia de unión de salida en $r$.
+
+</EjemBox>
+
+### Teorema 3.1. Caracterización de los caminos de valor mínimo
+Sea $R = (V, A, p)$ red con raíz de salida $i$, se cumple que:
+$$
+\begin{align*}
+\exists \pi_{ij}' \in \Pi_{ij} \texttt{ CVM } \forall j \in V \iff \nexists \text{ circuitos de valor negativo en } R\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+- **$\Rightarrow)$** Sea $\pi$ circuito con $p(\pi) < 0$ y sea $j \in V$, por hipótesis existe un camino de valor mínimo $\pi_{ij}$ desde $i$ a $j$. Consideramos el camino:
+$$
+\begin{align*}
+\pi_{ij}' = \pi_{ij} \cup \pi \implies \pi_{ij}' \in \Pi_{ij}
+\end{align*}
+$$
+Entonces, si calculamos el valor del camino $\pi_{ij}'$:
+$$
+\begin{align*}
+p(\pi_{ij}') = p(\pi_{ij}) + p(\pi) < p(\pi_{ij})
+\end{align*}
+$$
+lo cual contradice la hipótesis de que $\pi_{ij}$ es un CVM desde $i$ a $j$.
+- **$\Leftarrow)$** Como $Ds(i) = V$ ya que $i$ es la raíz de salida, existe al menos un camino de $i$ a cualquier vértice $j \in V$. Veamos que existe un camino de valor mínimo desde $i$ a $j$.
+
+Al no existir circuitos de valor negativo, nos basta con encontrar el camino de menor valor entre los caminos elementales. Como el grafo es finito, el número de caminos elementales entre $i$ y $j$ es finito y por tanto, los pesos asociados a dichos caminos es una colección finita de números reales. Por tanto, existe el mínimo entre ellos, que corresponderá al camino de valor mínimo desde $i$ a $j$.
+
+</DemBox>
+
+#### Valor del camino trivial
+Sea $R = (V, A, p)$ red orientada con raíz de salida $i$. Consideramos el camino trivial $\pi_{ii}$ que va desde $i$ a $i$ sin pasar por ningún otro vértice. El valor del camino trivial es:
+$$
+\begin{align*}
+p(\pi_{ii}) = 0
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Si no hay circuito de valor negativo, ¿el camino trivial es un CMV de $i$ a $i$? ¿Y es único?*
+
+Si no hay circuito de valor negativo, el camino trivial es un CMV de $i$ a $i$ ya que cualquier otro camino desde $i$ a $i$ tendrá un valor mayor o igual a 0. No obstante, el camino trivial no tiene por qué ser único. Por ejemplo:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_2.svg)
+
+En este caso, el camino trivial $\pi_{ii}$ tiene valor 0, pero también existe otro camino desde $i$ a $i$ que pasa por $a$ y tiene valor $2 + (-2) = 0$. Por tanto, el camino trivial no es único.
+
+</EjemBox>
+
+#### Consecuencia del Teorema 3.1
+A partir del Teorema 3.1, se deduce que si no existen circuitos de valor negativo en la red $R = (V, A, p)$, es suficiente buscar caminos elementales para encontrar los caminos de valor mínimo desde la raíz de salida $i$ al resto de vértices $j \in V$.
+
+### Teorema 3.2. Subcaminos de caminos de valor mínimo
+Sea $R = (V, A, p)$ red orientada y $\pi_{rs}$ camino de menor valor de $r$ a $s$ en $R$, entonces se tiene que cualquier subcamino $\pi_{ri}$ de $\pi_{rs}$ es un camino de menor valor de $r$ a $i$ en $R$, para cualquier $i$ vértice en $\pi_{rs}$ con $i \neq r$ y $i \neq s$.
+
+<DemBox title="Demostración">
+
+Sea $\pi_{rs}$ camino de menor valor de $r$ a $s$ y sea $\pi_{ri}$ subcamino de $\pi_{rs}$ con vértice final $i$, supongamos que no es de menor valor, entonces:
+$$
+\begin{align*}
+\exists \pi_{ri}' \in \Pi_{ri} \quad \text{ tal que } \quad  p(\pi_{ri}') < p(\pi_{ri})
+\end{align*}
+$$
+Consideramos ahora el camino dado por:
+$$
+\begin{align*}
+\pi_{rs}' = \pi_{ri}' \cup (\pi_{rs} - \pi_{ri})
+\end{align*}
+$$
+Y entonces se tiene que $\pi_{rs}'$ es un camino de $r$ a $s$ y su valor es:
+$$
+\begin{align*}
+p(\pi_{rs}') = p(\pi_{ri}') + p(\pi_{rs} - \pi_{ri}) < p(\pi_{ri}) + p(\pi_{rs} - \pi_{ri}) = p(\pi_{rs})
+\end{align*}
+$$
+Lo cual contradice que $\pi_{rs}$ sea camino de menor valor de $r$ a $s$. Por lo tanto, cualquier subcamino de un camino de menor valor es también un camino de menor valor.
+
+</DemBox>
+
+#### Consecuencia del Teorema 3.2
+A partir del Teorema 3.2, se deduce que al obtener un camino de valor mínimo desde la raíz de salida $r$ a un vértice $s$, con el mínimo esfuerzo ya tenemos los caminos de valor mínimo desde $r$ a todos los vértices intermedios que forman el camino de $r$ a $s$.
+
+### Algoritmo de Ford-Moore-Bellman
+Este algoritmo se puede emplear para obtener un camino de valor mínimo desde un vértice fijado a todos los demás vértices de una red orientada independientemente del valor de los pesos de los arcos, es decir, $p(e) \in \mathbb{R}$ para cualquier $e \in A$. No obstante, su tiempo de ejecución es $O(n^2m)$.
+
+#### Teorema 3.3. Condición suficiente y necesaria para caminos de valor mínimo
+Sea $R = (V, A, p)$ red orientada y $d(i)$ el valor de un camino $\pi_{ri}$ desde $r$ a $i$ en $R$, para cada $i \in V$. Entonces, los caminos $\pi_{ri}$ son caminos de valor mínimo desde $r$ a $i$ en $R$ si y solo si se cumplen las siguientes condiciones:
+
+- $d(r) = 0$
+- $d(j) \leq d(i) + p_{ij} \quad \forall (i, j) \in A$
+
+<DemBox title="Demostración">
+
+- **$\Rightarrow$)** Sea $(i, j) \in A$ cualquiera, por hipótesis sabemos que:
+
+- **$\Leftarrow$)** Suponiendo que $d(j) - d(i) \leq p_{ij}$ para todo $(i, j) \in A$ veamos que la familia de caminos $\pi_{ri}$ es de valor mínimo desde $r$ a $i$ para todo $i \in V$.
+
+Sea $i \in V$ cualquiera, consideramos un camino $\pi_{ri}'$ formado por:
+$$
+\begin{align*}
+\pi_{ri}' = r \xrightarrow[]{} i_1 \xrightarrow[]{} i_2 \xrightarrow[]{} \ldots \xrightarrow[]{} i_{q} \xrightarrow[]{} i
+\end{align*}
+$$
+Entonces, aplicando expresión $d(j) - d(i) \leq p_{ij}$ a cada arco del camino $\pi_{ri}'$, obtenemos:
+$$
+\begin{align*}
+d(i) - d(i_q) & \leq p_{i_q i} \\
+d(i_q) - d(i_{q-1}) & \leq p_{i_{q-1} i_q} \\
+\vdots  &  \vdots \\
+d(i_1) - d(r) & \leq p_{r i_1}
+\end{align*}
+$$
+Sumando todas estas desigualdades, obtenemos:
+$$
+\begin{align*}
+d(i) - d(r) & \leq \displaystyle \sum_{e \in \pi_{ri}'} p(e) = p(\pi_{ri}')
+\end{align*}
+$$
+Y como $d(r) = 0$, tenemos que:
+$$
+\begin{align*}
+d(i) = p(\pi_{ri}) \leq p(\pi_{ri}') \quad \forall \pi_{ri}' \in \Pi_{ri}
+\end{align*}
+$$
+Por tanto, $p(\pi_{ri})$ es el valor mínimo entre todos los caminos desde $r$ a $i$, es decir, $\pi_{ri}$ es un camino de valor mínimo desde $r$ a $i$.
+
+</DemBox>
+
+#### Descripción del Algoritmo de Ford-Moore-Bellman
+Sea $R = (V, A, p)$ red con raíz de salida $r$, consideramos $p_{ij} \in \mathbb{R}$ para cualquier $(i, j) \in A$ y consideramos que no existen circuitos de valor negativo en $R$ entonces, el algoritmo de Ford-Moore-Bellman se describe a continuación:
+
+1. Tomar $V' = V \setminus \{r\}$ y se definen:
+$$
+\begin{align*}
+d(i) = \left\{
+\begin{array}{ll}
+0 & \text{ si } i = r\\
+p_{ri} & \text{ si } i \in \Gamma^+(r)\\
++\infty & \text{ en otro caso}
+\end{array}
+\right. \qquad \text{y} \qquad I(i) = \left\{
+\begin{array}{ll}
+r & \text{ si } i \in \Gamma^+(r)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+2. Sea $v \in V'$ tal que $d(v) = \min_{i \in V'} d(i)$ entonces:
+
+1. Repetir el paso 2 hasta que $V' = \emptyset$
+
+<EjBox title="Nota">
+
+Una vez completado el algoritmo, el valor $d(i)$ representa el valor del camino de valor mínimo desde $r$ a $i$. Para obtener dichos caminos utilizamos las etiquetas $I$ hacia atrás, es decir:
+$$
+\begin{align*}
+r = I(\dots I(I(i)))
+\end{align*}
+$$
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Dada la siguiente red orientada con raíz de salida 1, aplicar el algoritmo de Ford-Moore-Bellman para obtener los caminos de valor mínimo desde la raíz de salida al resto de vértices.*
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_3.svg)
+
+Aplicando los pasos del algoritmo, obtenemos:
+
+1. Sea $r = 1$ entonces tenemos $V' = \{2, 3, 4, 5\}$ y $\Gamma^+(1) = \{2, 3, 5\}$, por tanto:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 2 & 3 & \infty & 8 \\
+I(i) & 0 & 1 & 1 & 0 & 1 \\
+\end{array}
+$$
+2. Veamos cual es el vértice $v \in V'$ con $d(v)$ mínimo, es decir:
+$$
+\begin{align*}
+d(v) = \min\{d(2), d(3), d(4), d(5)\} = \min\{2, 3, \infty, 8\} = 2 \implies v = 2
+\end{align*}
+$$
+Actualizamos $V' = \{3, 4, 5\}$ y tenemos $\Gamma^+(2) = \{1\}$ calculamos:
+$$
+\begin{align*}
+t_1 = d(2) + p_{21} = 2 + 2 = 4 \not< d(1) = 0
+\end{align*}
+$$
+Por tanto, no actualizamos nada. Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+3. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(3), d(4), d(5)\} = \min\{3, \infty, 8\} = 3 \implies v = 3
+\end{align*}
+$$
+Actualizamos $V' = \{4, 5\}$ y tenemos $\Gamma^+(3) = \{4,5\}$ calculamos:
+$$
+\begin{align*}
+t_4 & = d(3) + p_{34} = 3 + 2 = 5 < d(4) = \infty\\
+t_5 & = d(3) + p_{35} = 3 + 7 = 10 \not< d(5) = 8
+\end{align*}
+$$
+Como $t_4 < d(4)$, actualizamos esa entrada de la tabla:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 2 & 3 & \textcolor{red}{5} & 8 \\
+I(i) & 0 & 1 & 1 & 3 & 1 \\
+\end{array}
+$$
+
+Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+4. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(4), d(5)\} = \min\{5, 8\} = 5 \implies v = 4
+\end{align*}
+$$
+Actualizamos $V' = \{5\}$ y tenemos $\Gamma^+(4) = \{2\}$ calculamos:
+$$
+\begin{align*}
+t_2 = d(4) + p_{42} = 5 + (-4) = 1 < d(2) = 2
+\end{align*}
+$$
+Por tanto, actualizamos esa entrada de la tabla:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & \textcolor{red}{1} & 3 & 5 & 8 \\
+I(i) & 0 & 4 & 1 & 3 & 1 \\
+\end{array}
+$$
+
+Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+5. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(5)\} = 8 \implies v = 5
+\end{align*}
+$$
+Actualizamos $V' = \emptyset$ y tenemos $\Gamma^+(5) = \{3\}$ calculamos:
+$$
+\begin{align*}
+t_3 = d(5) + p_{53} = 8 + 7 = 15 \not< d(3) = 3
+\end{align*}
+$$
+Por tanto, no actualizamos nada. Ahora, como $V' = \emptyset$, el algoritmo termina.
+
+El resultado final del algoritmo es:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 1 & 3 & 5 & 8 \\
+I(i) & 0 & 4 & 1 & 3 & 1 \\
+\end{array}
+$$
+
+Así, los caminos de valor mínimo desde la raíz de salida 1 al resto de vértices son:
+
+- Camino de 1 a 2: $1 \xrightarrow[]{} 4 \xrightarrow[]{} 2$ con valor 1
+- Camino de 1 a 3: $1 \xrightarrow[]{} 3$ con valor 3
+- Camino de 1 a 4: $1 \xrightarrow[]{} 3 \xrightarrow[]{} 4$ con valor 5
+- Camino de 1 a 5: $1 \xrightarrow[]{} 5$ con valor 8
+- Camino de 1 a 1: camino trivial con valor 0
+
+Además, podemos construir la arborescencia de unión de salida formada por los caminos de valor mínimo:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_4.svg)
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+En el ejercicio anterior, la arborescencia de unión de salida formada por los caminos de valor mínimo no es una arborescencia de salida de valor mínimo, ya que:
+$$
+\begin{align*}
+p(T) & = p_{13} + p_{34} + p_{42} + p_{15} = 3 + 2 + (-4) + 8 = 9
+\end{align*}
+$$
+No obstante, si consideramos la arborescencia de salida:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_5.svg)
+
+$$
+\begin{align*}
+p(T) & = p_{13} + p_{34} + p_{42} + p_{35} = 3 + 2 + (-4) + 7 = 8
+\end{align*}
+$$
+
+</EjBox>
+
+### Algoritmo de Dijkstra
+El algoritmo de Dijkstra se puede emplear para obtener un camino de valor mínimo desde un vértice fijado a todos los demás vértices de una red orientada siempre que los pesos de los arcos sean no negativos, es decir, $p(e) \geq 0$ para cualquier $e \in A$. Su tiempo de ejecución es $O(n^2)$.
+
+#### Teorema 3.4. Condición suficiente para caminos de valor mínimo
+Sea $R = (V, A, p)$ red orientada con raíz de salida $r$ y $p(e) \geq 0$ para cualquier $e \in A$, una colección de caminos de $r$ a $i$ para cada $i \in V \setminus \{r\}$, cada uno de valor $d(i)$ y, además, existe un conjunto $V' \subseteq V \setminus \{r\}$ tal que:
+$$
+\begin{align*}
+d(i) = \left\{
+\begin{array}{ll}
+\text{ valor de un CMV de } r \text{ a } i & \text{ si } i \in V \setminus V'\\[2ex]
+\displaystyle \min_{j \in \Gamma^-(i) \cap (V \setminus V')} \{d(j) + p_{ji}\} & \text{ si } i \in V' \cap \left( \displaystyle  \bigcup_{j \in V\setminus V'} \Gamma^+(j)\right)
+\end{array}
+\right.
+\end{align*}
+$$
+Si $v \in V'$ cumple que $d(v) = \displaystyle \min_{i \in V'} d(i)$, entonces $d(v)$ es el valor de un CMV desde $r$ a $v$.
+
+<DemBox title="Demostración (no entra)">
+
+Sea $v \in V'$ tal que $d(v) = \displaystyle \min_{i \in V'} d(i)$. Tenemos $v \in V' \subseteq V \setminus \{r\}$ y, por hipótesis, $d(v)$ denota el valor de un camino desde $r$ a $v$. Veamos que es un camino de valor mínimo.
+
+Sea $\pi_{rv}$ camino cualquiera de $r$ a $v$ y denotamos:
+
+- $s$ al primer vértices en $\pi_{rv}$ que pertenece a $V'$
+- $t$ al antecesor de $s$ en $\pi_{rv}$
+
+Por lo tanto, tenemos que $t \notin V$ y, así:
+$$
+\begin{align*}
+p(\pi_{rv}) = p(\pi_{rt}) + p_{ts} + p(\pi_{sv})
+\end{align*}
+$$
+Como $t \in V \setminus V'$, sabemos que $d(t)$ es el valor de un camino de menor valor de $r$ a $t$ y, por tanto, $p(\pi_{rt}) \geq d(t)$. Además, como por hipótesis todos los pesos son positivos, se tiene que $p(\pi_{sv}) \geq 0$ y, por tanto:
+$$
+\begin{align*}
+p(\pi_{rv}) = p(\pi_{rt}) + p_{ts} + p(\pi_{sv}) \geq d(t) + p_{ts}
+\end{align*}
+$$
+Como $s \in V'$ y $(t, s) \in A$ entonces $s \in \Gamma^{ + }(t)$ y por tanto:
+$$
+\begin{align*}
+s \in \displaystyle \bigcup_{j \in V'} \Gamma^{ + }(j) \implies s \in V' \cap \left( \displaystyle  \bigcup_{j \in V\setminus V'} \Gamma^+(j)\right)
+\end{align*}
+$$
+Aplicando la hipótesis de la definición de $d(s)$, tenemos que:
+$$
+\begin{align*}
+d(s) = \min_{j \in \Gamma^-(s) \cap (V \setminus V')} \{d(j) + p_{js}\} \overset{t \in \Gamma^-(s) \cap (V \setminus V')}{\leq} d(t) + p_{ts}
+\end{align*}
+$$
+Como estamos suponiendo que $d(v) = \min_{i \in V'} d(i)$ y $s \in V'$, entonces:
+$$
+\begin{align*}
+d(v) \leq d(s) \leq d(t) + p_{ts} \leq p(\pi_{rv})
+\end{align*}
+$$
+Y esto se cumple para cualquier camino $\pi_{rv}$ desde $r$ a $v$, por lo que $d(v)$ es el valor de un camino de valor mínimo desde $r$ a $v$.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Notar que $V \setminus V'$ representa el conjunto de vértices para los cuales ya se ha encontrado un camino de valor mínimo desde la raíz de salida $r$. Por otro lado, $V'$ representa el conjunto de vértices para los cuales aún no se ha encontrado un camino de valor mínimo desde $r$.
+
+</EjBox>
+
+#### Descripción del Algoritmo de Dijkstra
+Sea $R = (V, A, p)$ red con raíz de salida $r$ y $p(e) \geq 0$ para cualquier $e \in A$, entonces el algoritmo de Dijkstra se describe a continuación:
+
+1. Tomar $V' = V \setminus \{r\}$ y se definen:
+$$
+\begin{align*}
+d(i) = \left\{
+\begin{array}{ll}
+0 & \text{ si } i = r\\
+p_{ri} & \text{ si } i \in \Gamma^+(r)\\
++\infty & \text{ en otro caso}
+\end{array}
+\right. \qquad \text{y} \qquad I(i) = \left\{
+\begin{array}{ll}
+r & \text{ si } i \in \Gamma^+(r)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+2. Sea $v \in V'$ tal que $d(v) = \min_{j \in V'} d(i)$ entonces:
+
+1. Repetir el paso 2 hasta que $V' = \emptyset$
+
+<EjBox title="Nota">
+
+Una vez completado el algoritmo, el valor $d(i)$ representa el valor del camino de valor mínimo desde $r$ a $i$. Para obtener dichos caminos utilizamos las etiquetas $I$ hacia atrás, es decir:
+$$
+\begin{align*}
+r = I(\dots I(I(i)))
+\end{align*}
+$$
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Dada la siguiente red orientada con raíz de salida 1, aplicar el algoritmo de Dijkstra para obtener los caminos de valor mínimo desde la raíz de salida al resto de vértices.*
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_6.svg)
+
+Aplicando los pasos del algoritmo, obtenemos:
+
+1. Sea $r = 1$ entonces tenemos $V' = \{2, 3, 4, 5\}$ y $\Gamma^+(1) = \{2, 3, 5\}$, por tanto:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 2 & 3 & \infty & 8 \\
+I(i) & 0 & 1 & 1 & 0 & 1 \\
+\end{array}
+$$
+2. Veamos cual es el vértice $v \in V'$ con $d(v)$ mínimo, es decir:
+$$
+\begin{align*}
+d(v) = \min\{d(2), d(3), d(4), d(5)\} = \min\{2, 3, \infty, 8\} = 2 \implies v = 2
+\end{align*}
+$$
+Actualizamos $V' = \{3, 4, 5\}$ y tenemos $\Gamma^+(2) = \{1\}$ entones $\Gamma^{ + }(2) \cap V' = \emptyset$, por tanto, no actualizamos nada. Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+3. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(3), d(4), d(5)\} = \min\{3, \infty, 8\} = 3 \implies v = 3
+\end{align*}
+$$
+Actualizamos $V' = \{4, 5\}$ y tenemos $\Gamma^+(3) = \{4,5\}$ entonces $\Gamma^{ + }(3) \cap V' = \{4,5\}$, calculamos:
+$$
+\begin{align*}
+t_4 & = d(3) + p_{34} = 3 + 2 = 5 < d(4) = \infty\\
+t_5 & = d(3) + p_{35} = 3 + 7 = 10 \not< d(5) = 8
+\end{align*}
+$$
+Como $t_4 < d(4)$, actualizamos esa entrada de la tabla
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 2 & 3 & \textcolor{red}{5} & 8 \\
+I(i) & 0 & 1 & 1 & 3 & 1 \\
+\end{array}
+$$
+
+Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+4. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(4), d(5)\} = \min\{5, 8\} = 5 \implies v = 4
+\end{align*}
+$$
+Actualizamos $V' = \{5\}$ y tenemos $\Gamma^+(4) = \{2\}$ entonces $\Gamma^{ + }(4) \cap V' = \emptyset$, por tanto, no actualizamos nada. Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+5. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(5)\} = 8 \implies v = 5
+\end{align*}
+$$
+Actualizamos $V' = \emptyset$ y tenemos $\Gamma^+(5) = \{3\}$ entonces $\Gamma^{ + }(5) \cap V' = \emptyset$, por tanto, no actualizamos nada. Ahora, como $V' = \emptyset$, el algoritmo termina.
+
+El resultado final del algoritmo es:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 2 & 3 & 5 & 8 \\
+I(i) & 0 & 1 & 1 & 3 & 1 \\
+\end{array}
+$$
+
+Así, los caminos de valor mínimo desde la raíz de salida 1 al resto de vértices son:
+
+- Camino de 1 a 2: $1 \xrightarrow[]{} 2$ con valor 2
+- Camino de 1 a 3: $1 \xrightarrow[]{} 3$ con valor 3
+- Camino de 1 a 4: $1 \xrightarrow[]{} 3 \xrightarrow[]{} 4$ con valor 5
+- Camino de 1 a 5: $1 \xrightarrow[]{} 5$ con valor 8
+- Camino de 1 a 1: camino trivial con valor 0
+
+Además, podemos construir la arborescencia de unión de salida formada por los caminos de valor mínimo:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_7.svg)
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+Al igual que en el caso del algoritmo de Ford-Moore-Bellman, la arborescencia de unión de salida formada por los caminos de valor mínimo no es necesariamente una arborescencia de salida de valor mínimo:
+$$
+\begin{align*}
+P(T) = p_{12} + p_{13} + p_{34} + p_{15} = 2 + 3 + 2 + 8 = 15
+\end{align*}
+$$
+Sin embargo, si consideramos la arborescencia de salida:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_8.svg)
+
+$$
+\begin{align*}
+P(T) = p_{12} + p_{13} + p_{34} + p_{35} = 2 + 3 + 2 + 7 = 14
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Notar que, ambos algoritmos pueden ser usados indistintamente para redes con pesos no negativos (en caso de que algún peso fuera negativo, habría que usar el algoritmo de Ford-Moore-Bellman). No obstante, el algoritmo de Dijkstra es más eficiente en este caso, ya que su tiempo de ejecución es $O(n^2)$ frente a los $O(nm)$ del algoritmo de Ford-Moore-Bellman.
+
+Esta diferencia de eficiencia se debe a que, el algoritmos de Dijkstra, recalcula en cada iteración las etiquetas $d(i)$ únicamente para los vértices adyacentes al vértice $v$ seleccionado en dicha iteración, mientras que el algoritmo de Ford-Moore-Bellman recalcula las etiquetas $d(i)$ para todos los vértices en cada iteración.
+
+</EjBox>
+
+### Transformaciones monótonas de redes orientadas
+En general, los caminos de valor mínimo en una red orientada no se mantienen bajo transformaciones estrictamente crecientes de los pesos de los arcos.
+
+<EjBox title="Nota">
+
+Para estos casos, basta considerar funciones como logaritmos, exponenciales o algunas transformaciones lineales.
+
+</EjBox>
+
+#### Transformación $kx$
+No obstante, existe una transformación monótona que si permite relacionar los caminos de valor mínimo. Se define como:
+$$
+\begin{align*}
+f(x) = k \cdot x
+\end{align*}
+$$
+Así, consideramos la transformación de una red orientada $R = (V, A, p)$ en otra red orientada $R' = (V, A, p')$ y, por tanto, $p'(e) = k \cdot p(e)$ para cualquier $e \in A$ y $k \in \mathbb{R} \setminus \{0\}$.
+
+De esta forma, sea $\pi$ un camino cualquiera en $R$, entonces:
+$$
+\begin{align*}
+p'(\pi) = \displaystyle \sum_{e \in \pi} p'(e) = \displaystyle \sum_{e \in \pi} k \cdot p(e) = k \cdot \displaystyle \sum_{e \in \pi} p(e) = k \cdot p(\pi)
+\end{align*}
+$$
+
+Entonces, se dan las siguientes propiedades:
+
+- Si $k > 0$ el camino de valor mínimo en $R$ es el mismo que en $R'$
+- Si $k < 0$ el camino de valor mínimo en $R'$ es el camino de valor máximo en $R$
+
+<EjBox title="Nota">
+
+Notar que, a partir de esta transformación, podemos obtener los caminos de valor máximo en una red orientada $R$ a partir de los caminos de valor mínimo en la red transformada $R'$ con $k = -1$.
+
+</EjBox>
+
+## Camino de menor longitud
+Este problema se puede reinterpretar como encontrar el camino de valor mínimo en una red orientada donde los pesos de los arcos valen 1, es decir, $p(e) = 1$ para cualquier $e \in A$.
+
+A través de esta interpretación, podemos aplicar los algoritmos vistos anteriormente para encontrar caminos de menor longitud en una red orientada.
+
+<EjemBox title="Ejemplo">
+
+*Dada la siguiente red orientada con raíz de salida 1, aplicar el algoritmo de Dijkstra para obtener los caminos de menor longitud desde la raíz de salida al resto de vértices.*
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_9.svg)
+
+Aplicando los pasos del algoritmo, obtenemos:
+
+1. Sea $r = 1$ entonces tenemos $V' = \{2, 3, 4, 5\}$ y $\Gamma^+(1) = \{2\}$, por tanto:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 1 & \infty & \infty & \infty \\
+I(i) & 0 & 1 & 0 & 0 & 0 \\
+\end{array}
+$$
+2. Veamos cual es el vértice $v \in V'$ con $d(v)$ mínimo, es decir:
+$$
+\begin{align*}
+d(v) = \min\{d(2), d(3), d(4), d(5)\} = \min\{1, \infty, \infty, \infty\} = 1 \implies v = 2
+\end{align*}
+$$
+Actualizamos $V' = \{3, 4, 5\}$ y tenemos $\Gamma^+(2) = \{1,3,4\}$, entonces:
+$$
+\begin{align*}
+\Gamma^{ + }(2) \cap V' = \{3,4\} \implies \left\{
+\begin{array}{l}
+t_3 = d(2) + p_{23} = 1 + 1 = 2 < d(3) = \infty\\
+t_4 = d(2) + p_{24} = 1 + 1 = 2 < d(4) = \infty
+\end{array}
+\right.
+\end{align*}
+$$
+Por tanto, actualizamos esas entradas de la tabla:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 1 & \textcolor{red}{2} & \textcolor{red}{2} & \infty \\
+I(i) & 0 & 1 & \textcolor{red}{2} & \textcolor{red}{2} & 0 \\
+\end{array}
+$$
+
+Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+3. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(3), d(4), d(5)\} = \min\{2, 2, \infty\} = 2 \implies v = 3
+\end{align*}
+$$
+Actualizamos $V' = \{4, 5\}$ y tenemos $\Gamma^+(3) = \{2,4,5\}$, entonces:
+$$
+\begin{align*}
+\Gamma^{ + }(3) \cap V' = \{4,5\} \implies \left\{
+\begin{array}{l}
+t_4 = d(3) + p_{34} = 2 + 1 = 3 \not< d(4) = 2\\
+t_5 = d(3) + p_{35} = 2 + 1 = 3 < d(5) = \infty
+\end{array}
+\right.
+\end{align*}
+$$
+Por tanto, actualizamos esa entrada de la tabla:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 1 & 2 & 2 & \textcolor{red}{3} \\
+I(i) & 0 & 1 & 2 & 2 & \textcolor{red}{3} \\
+\end{array}
+$$
+
+Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+4. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(4), d(5)\} = \min\{2, 3\} = 2 \implies v = 4
+\end{align*}
+$$
+Actualizamos $V' = \{5\}$ y tenemos $\Gamma^+(4) = \{5\}$, entonces:
+$$
+\begin{align*}
+\Gamma^{ + }(4) \cap V' = \{5\} \implies t_5 = d(4) + p_{45} = 2 + 1 = 3 \not< d(5) = 3
+\end{align*}
+$$
+Por tanto, no actualizamos nada. Ahora, como $V' \neq \emptyset$, repetimos el paso 2.
+5. El vértice $v \in V'$ con $d(v)$ mínimo es:
+$$
+\begin{align*}
+d(v) = \min\{d(5)\} = 3 \implies v = 5
+\end{align*}
+$$
+Actualizamos $V' = \emptyset$ y tenemos $\Gamma^+(5) = \{4\}$, entonces:
+$$
+\begin{align*}
+\Gamma^{ + }(5) \cap V' = \emptyset
+\end{align*}
+$$
+Por tanto, no actualizamos nada. Ahora, como $V' = \emptyset$, el algoritmo termina.
+
+El resultado final del algoritmo es:
+
+$$
+\begin{array}{c|ccccc}
+& 1 & 2 & 3 & 4 & 5 \\
+\hline
+d(i) & 0 & 1 & 2 & 2 & 3 \\
+I(i) & 0 & 1 & 2 & 2 & 3 \\
+\end{array}
+$$
+
+Así, los caminos de menor longitud desde la raíz de salida 1 al resto de vértices son:
+
+- Camino de 1 a 2: $1 \xrightarrow[]{} 2$ con longitud 1
+- Camino de 1 a 3: $1 \xrightarrow[]{} 2 \xrightarrow[]{} 3$ con longitud 2
+- Camino de 1 a 4: $1 \xrightarrow[]{} 2 \xrightarrow[]{} 4$ con longitud 2
+- Camino de 1 a 5: $1 \xrightarrow[]{} 2 \xrightarrow[]{} 3 \xrightarrow[]{} 5$ con longitud 3
+- Camino de 1 a 1: camino trivial con longitud 0
+
+Además, podemos construir la arborescencia de unión de salida formada por los caminos de menor longitud:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_10.svg)
+
+</EjemBox>
+
+## Caminos de menor valor entre todos los pares de vértices
+Sea $R = (V, A, p)$ red orientada, se pretende calcular todos los caminos de menor valor entre todos los pares de vértices $i, j \in V$. Aunque una opción sería aplicar el algoritmo de Dijkstra $n$ veces, existe un algoritmo más eficiente conocido como el algoritmo de Floyd-Warshall.
+
+### Teorema 3.5. Algoritmo de Floyd-Warshall
+Sea $R = (V, A, p)$ red orientada fuertemente conexa sin circuitos de valor negativo con $o(G) = n$ y $p(e) \in \mathbb{R}$ para cualquier $e \in A$ y sean:
+$$
+\begin{align*}
+D_0(i,j) = \left\{
+\begin{array}{ll}
+0 & \text{ si } i = j\\
+p_{ij} & \text{ si } (i,j) \in A\\
+\infty & \text{ en otro caso}
+\end{array}
+\right. \qquad \text{y} \qquad I_0(i,j) = \left\{
+\begin{array}{ll}
+i & \text{ si } i \neq j\\
+- & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+Y para cada $k \in \{1, \dots, n\}$ se definen:
+$$
+\begin{align*}
+D_k(i, j) & = \min \left\{D_{k - 1}(i, j), D_{k - 1}(i, k) + D_{k - 1}(k, j)\right\}\\[2ex]
+I_k(i, j) & = \left\{
+\begin{array}{ll}
+I_{k - 1}(i, j) & \text{ si } D_k(i, j) = D_{k - 1}(i, j)\\
+I_{k - 1}(k, j) & \text{ si } D_k(i, j) \neq D_{k - 1}(i, j)
+\end{array}
+\right.
+\end{align*}
+$$
+Se verifica que:
+
+- $D_k(i, i) = 0$ representa el valor de un camino de menor valor de $i$ a $i$ tal que sus vértices intermedios pertenecen a $\{1, \dots, k\}$
+- Si $i \neq j$ y $\exists \pi_{ij}$ con posibles vértices intermedios en $\{1, \dots, k\}$ entonces $D_k(i, j) \neq \emptyset$ representa el valor de un camino de menor valor de $i$ a $j$ tal que sus vértices intermedios pertenecen a $\{1, \dots, k\}$. Además, $I_k(i, j)$ representa el penúltimo vértice de dicho camino. Si no existe tal camino, entonces $D_k(i, j) = \infty$ y $I_k(i, j) = -$.
+
+<DemBox title="Demostración (no entra)">
+
+La demostración se realiza por inducción sobre $k$. Ver apuntes de la asignatura para un desarrollo completo.
+
+</DemBox>
+
+### Corolario 3.6
+Sea $R = (V, A, p)$ red orientada fuertemente conexa sin circuitos de valor negativo con $o(G) = n$ y $p(e) \in \mathbb{R}$ para cualquier $e \in A$. Entonces, para cualquier $i, j \in V$, $D_n(i, j)$ representa el valor de un camino de menor valor de $i$ a $j$ y $I_n(i, j)$ representa el penúltimo vértice de dicho camino. Si no existe tal camino, entonces $D_n(i, j) = \infty$ y $I_n(i, j) = -$.
+
+<DemBox title="Demostración (no entra)">
+
+Al ser una red fuertemente conexa y sin circuitos, se puede aplicar el Teorema 3.5 para $k = n$ y así:
+
+- Si $i = j$ entonces $D_n(i, i) = 0$ que coincide con el valor del camino trivial de $i$ a $i$, que es el camino de menor valor entre ambos vértices.
+- Si $i \neq j$, como la red es fuertemente conexa, existe al menos un camino de $i$ a $j$ con posibles vértices intermedios en $\{1, \dots, n\}$, por lo que $D_n(i, j) \neq \emptyset$ representa el valor de un camino de menor valor de $i$ a $j$ con posibles vértices intermedios en $\{1, \dots, n\}$. Además, $I_n(i, j)$ representa el penúltimo vértice de dicho camino.
+
+</DemBox>
+
+### Consecuencias del corolario 3.6
+A partir del Corolario 3.6, se pueden extraer las siguientes consecuencias:
+
+- De $I_n$ se obtienen todos los vértices de un camino de menor valor entre $i$ y $j$ aplicando el Teorema 3.2 de forma recursiva hacia atrás.
+- De $D_n$ se obtiene el valor del camino de menor valor entre $i$ y $j$.
+- Los caminos de menor valor desde un vértice $i$ se obtienen de las filas $i$-ésimas de las matrices $D_n$ e $I_n$.
+- La información proporcionada en las filas es equivalente a la obtenida en la tabla resultante del algoritmo de Ford-Moore-Bellman aplicado desde la raíz de salida $i$.
+
+### Descripción del algoritmo de Floyd-Warshall
+Sea $R = (V, A, p)$ red orientada fuertemente conexa con $o(G) = n$ y $p(e) \in \mathbb{R}$ para cualquier $e \in A$. El algoritmo de Floyd-Warshall se describe a continuación:
+
+1. Definimos las matrices $D_0$ e $I_0$ como en el Teorema 3.5 y consideramos $k = 1$
+2. Definimos los elementos de la matriz $D_k$ como:
+$$
+\begin{align*}
+D_k(i, j) = \min \left\{D_{k - 1}(i, j), D_{k - 1}(i, k) + D_{k - 1}(k, j)\right\}
+\end{align*}
+$$
+3. Obtenemos los elementos de la matriz $I_k$ como:
+$$
+\begin{align*}
+I_k(i, j) = \left\{
+\begin{array}{ll}
+I_{k - 1}(i, j) & \text{ si } D_k(i, j) = D_{k - 1}(i, j)\\
+I_{k - 1}(k, j) & \text{ si } D_k(i, j) \neq D_{k - 1}(i, j)
+\end{array}
+\right.
+\end{align*}
+$$
+4. Si $k < n$ entonces $k = k + 1$ y volvemos al paso 2. En otro caso, el algoritmo termina con las matrices $D_n$ e $I_n$.
+
+<EjemBox title="Ejemplo">
+
+*Dada la siguiente red orientada, aplicar el algoritmo de Floyd-Warshall para obtener los caminos de menor valor entre todos los pares de vértices.*
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_11.svg)
+
+Aplicamos los pasos del algoritmo:
+
+1. Definimos las matrices $D_0$ e $I_0$:
+$$
+\begin{align*}
+D_0 = \begin{pmatrix} 
+0 & \infty & - 2 & \infty \\
+4 & 0 & 3 & \infty \\
+\infty & \infty & 0 & 2 \\
+5 & - 1 & \infty & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_0 = \begin{pmatrix} 
+- & 1 & 1 & 1 \\
+2 & - & 2 & 2 \\
+3 & 3 & - & 3 \\
+4 & 4 & 4 & -
+\end{pmatrix} 
+\end{align*}
+$$
+2. Para $k = 1$, calculamos $D_1$ e $I_1$, es decir, nos fijamos en la primera fila y primera columna y comprobamos si existe algún camino de menor valor que pase por el vértice 1. Podemos ver que:
+$$
+\begin{align*}
+D_1(2, 3) & = \min\{D_0(2, 3), D_0(2, 1) + D_0(1, 3)\} = \min\{3, 4 + (-2)\} = 2\\
+D_1(4, 3) & = \min\{D_0(4, 3), D_0(4, 1) + D_0(1, 3)\} = \min\{\infty, 5 + (-2)\} = 3
+\end{align*}
+$$
+Por tanto, las matrices quedan como:
+$$
+\begin{align*}
+D_1 = \begin{pmatrix} 
+0 & \infty & - 2 & \infty \\
+4 & 0 & \textcolor{red}{2} & \infty \\
+\infty & \infty & 0 & 2 \\
+5 & - 1 & \textcolor{red}{3} & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_1 = \begin{pmatrix} 
+- & 1 & 1 & 1 \\
+2 & - & \textcolor{red}{1} & 2 \\
+3 & 3 & - & 3 \\
+4 & 4 & \textcolor{red}{1} & -
+\end{pmatrix}
+\end{align*}
+$$
+Como $k < n$, pasamos a $k = 2$.
+3. Para $k = 2$, calculamos $D_2$ e $I_2$. Podemos ver que:
+$$
+\begin{align*}
+D_2(4, 1) & = \min\{D_1(4, 1), D_1(4, 2) + D_1(2, 1)\} = \min\{5, -1 + 4\} = 3\\
+D_2(4, 3) & = \min\{D_1(4, 3), D_1(4, 2) + D_1(2, 3)\} = \min\{3, -1 + 2\} = 1
+\end{align*}
+$$
+Por tanto, las matrices quedan como:
+$$
+\begin{align*}
+D_2 = \begin{pmatrix} 
+0 & \infty & - 2 & \infty \\
+4 & 0 & 2 & \infty \\
+\infty & \infty & 0 & 2 \\
+\textcolor{red}{3} & - 1 & \textcolor{red}{1} & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_2 = \begin{pmatrix} 
+- & 1 & 1 & 1 \\
+2 & - & 1 & 2 \\
+3 & 3 & - & 3 \\
+\textcolor{red}{2} & 4 & \textcolor{blue}{1} & -
+\end{pmatrix}
+\end{align*}
+$$
+Como $k < n$, pasamos a $k = 3$.
+4. Para $k = 3$, calculamos $D_3$ e $I_3$. Podemos ver que:
+$$
+\begin{align*}
+D_3(1, 4) & = \min\{D_2(1, 4), D_2(1, 3) + D_2(3, 4)\} = \min\{\infty, -2 + 2\} = 0\\
+D_3(2, 4) & = \min\{D_2(2, 4), D_2(2, 3) + D_2(3, 4)\} = \min\{\infty, 2 + 2\} = 4
+\end{align*}
+$$
+Por tanto, las matrices quedan como:
+$$
+\begin{align*}
+D_3 = \begin{pmatrix} 
+0 & \infty & - 2 & \textcolor{red}{0} \\
+4 & 0 & 2 & \textcolor{red}{4} \\
+\infty & \infty & 0 & 2 \\
+3 & - 1 & 1 & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_3 = \begin{pmatrix} 
+- & 1 & 1 & \textcolor{red}{3} \\
+2 & - & 1 & \textcolor{red}{3} \\
+3 & 3 & - & 3 \\
+2 & 4 & 1 & -
+\end{pmatrix}
+\end{align*}
+$$
+Como $k < n$, pasamos a $k = 4$.
+5. Para $k = 4$, calculamos $D_4$ e $I_4$. Podemos ver que:
+$$
+\begin{align*}
+D_4(3, 1) & = \min\{D_3(3, 1), D_3(3, 4) + D_3(4, 1)\} = \min\{\infty, 2 + 3\} = 5\\
+D_4(1, 2) & = \min\{D_3(1, 2), D_3(1, 4) + D_3(4, 2)\} = \min\{\infty, 0 + (-1)\} = -1\\
+D_4(3, 2) & = \min\{D_3(3, 2), D_3(3, 4) + D_3(4, 2)\} = \min\{\infty, 2 + (-1)\} = 1
+\end{align*}
+$$
+Por tanto, las matrices quedan como:
+$$
+\begin{align*}
+D_4 = \begin{pmatrix} 
+0 & \textcolor{red}{-1} & - 2 & 0 \\
+4 & 0 & 2 & 4 \\
+\textcolor{red}{5} & \textcolor{red}{1} & 0 & 2 \\
+3 & - 1 & 1 & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_4 = \begin{pmatrix} 
+- & \textcolor{blue}{4} & 1 & 3 \\
+2 & - & 1 & 3 \\
+\textcolor{red}{2} & \textcolor{blue}{4} & - & 3 \\
+2 & 4 & 1 & -
+\end{pmatrix}
+\end{align*}
+$$   
+Como $k = n$, el algoritmo termina con las matrices $D_4$ e $I_4$.
+
+Así, los caminos de menor valor entre todos los pares de vértices son:
+
+- Camino de 1 a 2: $1 \xrightarrow[]{} 3 \xrightarrow[]{} 4 \xrightarrow[]{} 2$ con valor $-1$
+- Camino de 1 a 3: $1 \xrightarrow[]{} 3$ con valor $-2$
+- Camino de 1 a 4: $1 \xrightarrow[]{} 3 \xrightarrow[]{} 4$ con valor $0$
+- Camino de 2 a 1: $2 \xrightarrow[]{} 1$ con valor $4$
+- Camino de 2 a 3: $2 \xrightarrow[]{} 1 \xrightarrow[]{} 3$ con valor $2$
+- Camino de 2 a 4: $2 \xrightarrow[]{} 1 \xrightarrow[]{} 3 \xrightarrow[]{} 4$ con valor $4$
+- Camino de 3 a 1: $3 \xrightarrow[]{} 4 \xrightarrow[]{} 2 \xrightarrow[]{} 1$ con valor $5$
+- Camino de 3 a 2: $3 \xrightarrow[]{} 4 \xrightarrow[]{} 2$ con valor $1$
+- Camino de 3 a 4: $3 \xrightarrow[]{} 4$ con valor $2$
+- Camino de 4 a 1: $4 \xrightarrow[]{} 2 \xrightarrow[]{} 1$ con valor $3$
+- Camino de 4 a 2: $4 \xrightarrow[]{} 2$ con valor $-1$
+- Camino de 4 a 3: $4 \xrightarrow[]{} 2 \xrightarrow[]{} 1 \xrightarrow[]{} 3$ con valor $1$
+- Camino de $i$ a $i$: camino trivial con valor $0$ para cualquier $i \in \{1, 2, 3, 4\}$
+
+</EjemBox>
+
+## Cadena de menor valor/longitud
+### Cadena de menor valor
+#### Valor de una cadena. Definición
+Sea $R = (V, A, p)$ red no orientada conexa, dados $i, j \in V$ y una cadena de $i$ a $j$ definida como:
+$$
+\begin{align*}
+i \xleftrightarrow{p_{i, i_1}} i_1 \xleftrightarrow{p_{i_1, i_2}} i_2 \xleftrightarrow{p_{i_2, i_3}} \dots \xleftrightarrow{p_{i_{k-1}, i_k}} i_k \xleftrightarrow{p_{i_k, j}} j
+\end{align*}
+$$
+El **valor de la cadena** se define como:
+$$
+\begin{align*}
+\sum_{m = 0}^{k} p_{i_m, i_{m + 1}} = p_{i, i_1} + p_{i_1, i_2} + p_{i_2, i_3} + \dots + p_{i_{k-1}, i_k} + p_{i_k, j}\\
+\end{align*}
+$$
+
+#### Cadena de menor valor. Definición
+Sea $R = (V, A, p)$ red no orientada conexa, dados $i, j \in V$, una **cadena de menor valor** de $i$ a $j$ es aquella cadena de $i$ a $j$ cuyo valor es mínimo entre todas las cadenas de $i$ a $j$.
+
+<EjBox title="Nota">
+
+Notar que, en caso de tener un grafo no dirigido, es posible transformar dicho grafo en una red orientada duplicando cada arista en dos arcos opuestos con el mismo valor. De esta forma, se pueden demostrar resultados análogos a los vistos en redes orientadas y aplicar métodos como los algoritmos de Dijkstra o Floyd-Warshall para encontrar cadenas de menor valor entre vértices.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea la siguiente red no orientada, encontrar las cadenas de menor valor entre todos los vértices.*
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_12.svg)
+
+Transformamos la red no orientada en una red orientada:
+
+![TikZ Graph](/blogs/images/tema-3-camino-de-menor-valor_tikz_13.svg)
+
+Y ahora, aplicamos el algoritmo de Floyd-Warshall:
+
+1. Definimos las matrices $D_0$ e $I_0$:
+$$
+\begin{align*}
+D_0 = \begin{pmatrix} 
+0 & 4 & 2 \\
+4 & 0 & 9 \\
+2 & 9 & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_0 = \begin{pmatrix} 
+- & 1 & 1 \\
+2 & - & 2 \\
+3 & 3 & -
+\end{pmatrix}
+\end{align*}
+$$
+2. Para $k = 1$ calculamos $D_1$ e $I_1$. Tenemos que:
+$$
+\begin{align*}
+D_1(2, 3) & = \min\{D_0(2, 3), D_0(2, 1) + D_0(1, 3)\} = \min\{9, 4 + 2\} = 6\\
+D_1(3, 2) & = \min\{D_0(3, 2), D_0(3, 1) + D_0(1, 2)\} = \min\{9, 2 + 4\} = 6
+\end{align*}
+$$
+Por tanto, las matrices quedan como:
+$$
+\begin{align*}
+D_1 = \begin{pmatrix} 
+0 & 4 & 2 \\
+4 & 0 & \textcolor{red}{6} \\
+2 & \textcolor{red}{6} & 0
+\end{pmatrix} \qquad \text{ y } \qquad I_1 = \begin{pmatrix} 
+- & 1 & 1 \\
+2 & - & \textcolor{red}{1} \\
+3 & \textcolor{red}{1} & -
+\end{pmatrix}
+\end{align*}
+$$
+Como $k < n$, pasamos a $k = 2$.
+3. Para $k = 2$ calculamos $D_2$ e $I_2$. No se actualiza ningún valor, por lo que las matrices quedan igual. Como $k < n$, pasamos a $k = 3$.
+4. Para $k = 3$ calculamos $D_3$ e $I_3$. No se actualiza ningún valor, por lo que las matrices quedan igual. Como $k = n$, el algoritmo termina con las matrices $D_3$ e $I_3$.
+
+Así, las cadenas de menor valor entre todos los pares de vértices son:
+
+- Cadena de 1 a 2: $1 \xleftrightarrow[]{} 2$ con valor $4$
+- Cadena de 1 a 3: $1 \xleftrightarrow[]{} 3$ con valor $2$
+- Cadena de 2 a 1: $2 \xleftrightarrow[]{} 1$ con valor $4$
+- Cadena de 2 a 3: $2 \xleftrightarrow[]{} 1 \xleftrightarrow[]{} 3$ con valor $6$
+- Cadena de 3 a 1: $3 \xleftrightarrow[]{} 1$ con valor $2$
+- Cadena de 3 a 2: $3 \xleftrightarrow[]{} 1 \xleftrightarrow[]{} 2$ con valor $6$
+- Cadena de $i$ a $i$: cadena trivial con valor $0$ para cualquier $i \in \{1, 2, 3\}$
+
+</EjemBox>
+
+### Cadena de menor longitud
+La idea de cadena de menor longitud es análoga a la de cadena de menor valor, pero en este caso, el peso de cada arista se considera como 1. Por tanto, el valor de una cadena coincide con su longitud, y la cadena de menor longitud entre dos vértices es aquella que tiene el menor número de aristas entre ellos.

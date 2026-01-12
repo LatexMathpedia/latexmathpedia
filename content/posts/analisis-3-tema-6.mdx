@@ -1,0 +1,744 @@
+---
+title: "Análisis 3 - Tema 6"
+description: "Espacios Lp, normas y desigualdades fundamentales asociadas a dichos espacios. Espacios vectoriales seminormados."
+date: "2026-01-12"
+tags: ["Análisis III", "Análisis Matemático", "Espacios Lp", "Normas", "Desigualdades de Hölder y Minkowski", "Espacios vectoriales seminormados"]
+---
+
+
+## Espacios $\mathcal{L}_p$
+A lo largo de este tema consideraremos un espacio de medida $(X, \Sigma, \mu)$ fijo genérico.
+
+### Conjunto de funciones medibles con potencia $p$-ésima integrable. Definición
+Sea $p \in [0, \infty)$, se define el **conjunto de todas las funciones medibles $f: X \to \mathbb{R}$ tales que su potencia $p$-ésima es integrable** como:
+$$
+\begin{align*}
+\mathcal{L}_p(X, \Sigma, \mu) = \mathcal{L}_p(X) = \left\{
+f: X \to \mathbb{R} \, : \, f \text{ medible y } \int_X |f(x)|^p \, d\mu(x) < \infty
+\right\}\\
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Sea $X = [0, 1]$ y $\mu$ la medida de Lebesgue en $[0, 1]$, se considera la función $f: [0, 1] \to \mathbb{R}$ definida como:*
+$$
+\begin{align*}
+f(x) = \frac{1}{\sqrt{x}} \quad \forall x \in [0, 1]
+\end{align*}
+$$
+*Ver que no pertenece a $\mathcal{L}_2$ pero sí a $\mathcal{L}_1$.*
+
+Vemos que $f$ es medible porque es continua en $(0, 1]$ y el conjunto $\{0\}$ es de medida nula. Ahora, calculamos:
+$$
+\begin{align*}
+\int_0^1 |f(x)|^2 \, dx & = \int_0^1 \left|\frac{1}{\sqrt{x}}\right|^2 \, dx = \int_0^1 \frac{1}{x} \, dx = \lim_{t \to 0^+} \int_t^1 \frac{1}{x} \, dx = \\[2ex]
+& = \lim_{t \to 0^+} \left[\ln|x|\right]_t^1 = \lim_{t \to 0^+} (0 - \ln|t|) = \infty
+\end{align*}
+$$
+Por tanto, $f \notin \mathcal{L}_2([0, 1])$. Ahora, calculamos:
+$$
+\begin{align*}
+\int_0^1 |f(x)| \, dx & = \int_0^1 \left|\frac{1}{\sqrt{x}}\right| \, dx = \int_0^1 \frac{1}{\sqrt{x}} \, dx = \lim_{t \to 0^+} \int_t^1 \frac{1}{\sqrt{x}} \, dx = \\[2ex]
+& = \lim_{t \to 0^+} \left[2\sqrt{x}\right]_t^1 = \lim_{t \to 0^+} (2 - 2\sqrt{t}) = 2
+\end{align*}
+$$
+Por tanto, $f \in \mathcal{L}_1([0, 1])$.
+
+</EjemBox>
+
+### Norma $p$-ésima. Definición
+Sea $p \in [1, \infty)$ y $f \in \mathcal{L}_p(X)$ entonces se define la **norma $p$-ésima** como:
+$$
+\begin{align*}
+\|f\|_p \coloneq \left(\int_X |f(x)|^p \, d\mu(x)\right)^{\frac{1}{p}}\\
+\end{align*}
+$$
+
+<EjBox title="Recordatorio">
+
+Recordemos que una norma $\|\cdot\|$ se define como una aplicación $\|\cdot\|: V \to [0, \infty)$ donde $V$ es un espacio vectorial sobre $\mathbb{R}$ que cumple las siguientes propiedades $\forall u, v \in V$ y $\forall \lambda \in \mathbb{R}$:
+
+- *Positividad:* $\|v\| \geq 0$ y $\|v\| = 0 \iff v = 0$
+- *Homogeneidad:* $\|\lambda v\| = |\lambda| \cdot \|v\|$
+- *Desigualdad triangular:* $\|u + v\| \leq \|u\| + \|v\|$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Observar que el caso particular de $p = 1$ ya se ha estudiado en el tema de *Integrales de Lebesgue*.
+
+</EjBox>
+
+### Existencia de función en $\mathcal{L}_p(X)$ equivalente casi en todas partes a $f$. Proposición
+Sea $f: X \to \overline{\mathbb{R}}$ medible y $\int_X |f(x)|^p \, d\mu(x) < \infty$ entonces:
+$$
+\begin{align*}
+\exists g \in \mathcal{L}_p(X) \text{ tq } f = g \, \mu\text{-a.e.}
+\end{align*}
+$$
+En consecuencia tenemos que:
+$$
+\begin{align*}
+\left(\int_X |f(x)|^p \, d\mu(x)\right)^{\frac{1}{p}} = \left(\int_X |g(x)|^p \, d\mu(x)\right)^{\frac{1}{p}} = \|g\|_p
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Notar que esto afirma que toda función $f$ que tenga su potencia $p$-ésima integrable puede modificarse en un conjunto de medida cero para convertirla en una función $g$ que pertenezca a $\mathcal{L}_p(X)$.
+
+Por lo tanto, la integral entre $f$ y $g$ es la misma, ya que difieren solo en un conjunto de medida nula.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Basta tomar la función $g$ dada por:
+$$
+\begin{align*}
+g(x) = f(x) \cdot \mathcal{X}_{X\setminus A} (x) = \left\{
+\begin{array}{ll}
+f(x) & \text{si } x \in X \setminus  A \\[1ex]
+0 & \text{si } x \in A
+\end{array}
+\right. \quad \text{ con } A = \left\{x \in X : |f(x)| = \infty \right\}
+\end{align*}
+$$
+Es claro que $g$ es medible y que $f = g \, \mu\text{-a.e.}$ ya que $\mu(A) = 0$ (pues si no, la integral de $|f|^p$ sería infinita). Además:
+$$
+\begin{align*}
+\int_X |g(x)|^p \, d\mu(x) & = \int_A |0|^p \, d\mu(x) + \int_{X \setminus A} |f(x)|^p \, d\mu(x) = \\[2ex]
+& = \int_{X \setminus A} |f(x)|^p \, d\mu(x) \leq \int_X |f(x)|^p \, d\mu(x) < \infty
+\end{align*}
+$$
+Por tanto, $g \in \mathcal{L}_p(X)$.
+
+</DemBox>
+
+### Conjunto de funciones medibles esencialmente acotadas. Definición
+Sea $p = \infty$, se define el **conjunto de todas las funciones medibles esencialmente acotadas** como:
+$$
+\begin{align*}
+L_\infty(X) = \left\{
+f: X \to \mathbb{R} \, : \, f \text{ medible y } \exists \alpha \in [0, \infty) \text{ tq } \mu(\left\{x \in X : |f(x)| > \alpha\right\}) = 0
+\right\}
+\end{align*}
+$$
+O, equivalentemente,
+$$
+\begin{align*}
+L_\infty(X) = \left\{
+f: X \to \mathbb{R} \, : \, f \text{ medible y } \exists \alpha \in [0, \infty) \text{ tq } \mu\left(X \setminus \left\{x \in X : |f(x)| \leq \alpha\right\}\right) = 0
+\right\}\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Intuitivamente, la idea es que $f$ no tiene que estar acotada en todo $X$, sino que puede tener valores muy grandes en un conjunto de medida nula. De hecho, el $\alpha$ es una cota ``esencial'' para $f$ en el sentido de que $f$ está acotada por $\alpha$ en casi todo $X$, excepto en un conjunto de medida cero.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $X = [0, 1]$ y $\mu$ la medida de Lebesgue en $[0, 1]$, se considera la función $f: [0, 1] \to \mathbb{R}$ definida como:*
+$$
+\begin{align*}
+f(x) = \frac{1}{x} \quad \forall x \in [0, 1]
+\end{align*}
+$$
+*La función no está en $L_\infty([0, 1])$.*
+
+Basta notar que para cualquier $\alpha > 0$ se tiene que:
+$$
+\begin{align*}
+\left\{x \in [0, 1] : |f(x)| > \alpha \right\} = \left\{x \in [0, 1] : \frac{1}{x} > \alpha \right\} = \left(\left.0, \frac{1}{\alpha}\right] \right.
+\end{align*}
+$$
+Y por tanto, $\mu\left(\left\{x \in [0, 1] : |f(x)| > \alpha \right\}\right) = \frac{1}{\alpha} > 0$. Luego, no existe ningún $\alpha$ que cumpla la condición de la definición y por tanto, $f \notin L_\infty([0, 1])$.
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $X = [0, 1]$ y $\mu$ la medida de Lebesgue en $[0, 1]$, se considera la función $f: [0, 1] \to \mathbb{R}$ definida como:*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+67 & \text{si } x \in (0, 1] \\[1ex]
+\infty & \text{si } x = 0
+\end{array}
+\right.
+\end{align*}
+$$
+*La función está en $L_\infty([0, 1])$.*
+Basta notar que para $\alpha = 69$ se tiene que:
+$$
+\begin{align*}
+\left\{x \in [0, 1] : |f(x)| > 69 \right\} = \{0\}
+\end{align*}
+$$
+Y por tanto, $\mu\left(\left\{x \in [0, 1] : |f(x)| > 69 \right\}\right) = 0$. Luego, existe un $\alpha$ que cumple la condición de la definición y por tanto, $f \in L_\infty([0, 1])$.
+
+</EjemBox>
+
+### Norma del supremo. Definición
+Sea $f: X \to \overline{\mathbb{R}}$ medible y supongamos que $\exists \alpha \in [0, \infty)$ tal que:
+$$
+\begin{align*}
+\mu\left(\left\{x \in X : |f(x)| > \alpha\right\}\right) = 0
+\end{align*}
+$$
+Entonces existe una función $g \in \mathcal{L}_\infty(X)$ tal que $f = g \, \mu\text{-a.e.}$ y se define la **norma del supremo** como:
+$$
+\begin{align*}
+\|f\|_\infty & \coloneq \inf \left\{\alpha \in [0, \infty) : \mu\left(\left\{x \in X : |f(x)| > \alpha\right\}\right) = 0 \right\}
+\end{align*}
+$$
+O, equivalentemente, como $\{x : |f(x)| > \alpha\} = X \setminus \{x : |f(x)| \leq \alpha\}$:
+$$
+\begin{align*}
+\|f\|_{\infty} =  \inf \{\alpha \in [0, \infty) : X = \left\{x \in X : |g(x)| \leq \alpha\right\} \, \mu\text{-a.e.} \}\\
+\end{align*}
+$$
+
+### Proposición de equivalencia de la norma del supremo. Proposición
+En la definición anterior, si consideramos el conjunto:
+$$
+\begin{align*}
+A_f \coloneq \left\{\alpha \in [0, \infty) : \mu\left(\left\{x \in X : |f(x)| > \alpha\right\}\right) = 0 \right\}
+\end{align*}
+$$
+Entonces se tiene que:
+$$
+\begin{align*}
+\|f\|_\infty = \min A_f
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar que lo que se dice aquí es que el ínfimo en la definición de la norma del supremo es en realidad un mínimo, es decir, que se alcanza.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Definimos $\beta \coloneq \inf A_f$ y tomamos $(\beta_n)_{n \in \mathbb{N}} \subseteq A_f$ una sucesión decreciente tal que $\lim_{n \to \infty} \beta_n = \beta$. Entonces, definimos los conjuntos:
+$$
+\begin{align*}
+B_n \coloneq \left\{x \in X : |f(x)| \leq \beta_n \right\} \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Se tiene que:
+
+- $B_n \subseteq B_{n+1} \quad \forall n \in \mathbb{N}$
+- $B_n \in \Sigma$ ya que $f$ es medible
+- $B_n = X \setminus M_n$ con $\mu(M_n) = 0$ ya que $\beta_n \in A_f$
+
+Como $(\beta_n)_n \to \beta$ decrecientemente, $|f(x)| \leq \beta$ equivale a que $|f(x)| \leq \beta_n$ $\forall n$. Por tanto, se tiene que:
+$$
+\begin{align*}
+\left\{x : |f(x) \leq \beta \right\} = \displaystyle \bigcap_{n = 1}^{\infty} \left\{x : |f(x)| \leq \beta_n \right\} = \bigcap_{n = 1}^{\infty} B_n = X \setminus \left(\bigcup_{n = 1}^{\infty} M_n\right)
+\end{align*}
+$$
+Como cada $M_n$ es de medida nula, se tiene que:
+$$
+\begin{align*}
+\mu\left(\bigcup_{n = 1}^{\infty} M_n\right) = 0 \implies \mu\left(\left\{x : |f(x)| > \beta \right\}\right) = 0
+\end{align*}
+$$
+Por tanto, $\beta \in A_f$ y como $\beta = \inf A_f$ se tiene que $\|f\|_\infty = \min A_f$.
+
+</DemBox>
+
+### Estructura de espacio vectorial de $\mathcal{L}_p(X)$. Proposición
+Para todo $p \in {1, \dots, \infty}$ se tiene que $\mathcal{L}_p(X)$ es un espacio vectorial.
+
+<DemBox title="Demostración">
+
+*La demostración se divide en tres casos:*
+
+- *Caso $p = 1$:* Ya está demostrado en el tema de *Integrales de Lebesgue*.
+- *Caso $p = \infty$:* Consideramos $f \in \mathcal{L}_\infty(X)$ y veamos que se cumplen las propiedades de espacio vectorial:
+
+- *Caso $1 < p < \infty$*: Consideramos $f, g \in \mathcal{L}_p(X)$ y veamos que se cumplen las propiedades de espacio vectorial:
+
+- *Multiplicación por escalares.* Sea $\lambda \in \mathbb{R}$ entonces:
+$$
+\begin{align*}
+\int_X |\lambda f(x)|^p \, d\mu(x) = |\lambda|^p \int_X |f(x)|^p \, d\mu(x) = |\lambda|^p \|f\|_p^p < \infty
+\end{align*}
+$$
+Por tanto, $\lambda f \in \mathcal{L}_p(X)$.
+- *Cierre por suma.* Tenemos que:
+$$
+\begin{align*}
+f(x) + g(x) = \frac{1}{2} \cdot 2f(x) + \frac{1}{2} \cdot 2g(x) \quad \forall x \in X
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\int_X |f(x) + g(x)|^p \, d\mu & = \int_X \left|\frac{1}{2} \cdot 2f(x) + \frac{1}{2} \cdot 2g(x)\right|^p \, d\mu \leq \\[2ex]
+& \leq \int_X \left|\frac{1}{2} |2f(x)| + \frac{1}{2} |2g(x)|\right|^p \, d\mu = (\star)
+\end{align*}
+$$
+Como $h(t) = t^p$ es convexa en $t \in [0, \infty)$ porque $p > 1$ se tiene que:
+$$
+\begin{align*}
+(\star)& \leq \int_X \left(\frac{1}{2} |2f(x)|^p + \frac{1}{2} |2g(x)|^p \right) d\mu  = \int_X \left(2^{p-1} |f(x)|^p + 2^{p-1} |g(x)|^p \right)d\mu \\[2ex]
+&  = 2^{p-1} \int_X |f(x)|^p \, d\mu + 2^{p-1} \int_X |g(x)|^p \, d\mu =\\[2ex]
+&  = 2^{p-1} \|f\|_p^p + 2^{p-1} \|g\|_p^p < \infty
+\end{align*}
+$$
+Por tanto, $f + g \in \mathcal{L}_p(X)$.
+
+</DemBox>
+
+### Desigualdad de Hölder. Proposición
+Sea $f \in \mathcal{L}_p(X)$ y $g \in \mathcal{L}_{p^*} (X)$ con $1 \leq p \leq \infty$ entonces:
+$$
+\begin{align*}
+f \cdot g \in \mathcal{L}_1(X) \qquad \text{y} \qquad \|f \cdot g\|_1 \leq \|f\|_p \cdot \|g\|_{p^*}
+\end{align*}
+$$
+
+<EjBox title="Notación">
+
+Dado $p \in [1, \infty)$, la notación $p^{*}$ se define como el único número en $[0, \infty]$ que cumple:
+$$
+\begin{align*}
+\frac{1}{p} + \frac{1}{p^{*}} = 1
+\end{align*}
+$$
+Algunos de los casos particulares son:
+
+- Sea $p = 1$ entonces $p^{*} = \infty$
+- Sea $p = \infty$ entonces $p^{*} = 1$
+- Sea $1 < p < \infty$ entonces:
+$$
+\begin{align*}
+\frac{1}{p} + \frac{1}{x} = 1 \implies  x = \dfrac{1}{1 - \frac{1}{p}} = \frac{p}{p - 1} \in (1, \infty)
+\end{align*}
+$$
+
+Además, se dan algunas propiedades importantes $\forall p \in [1, \infty]$ como:
+
+- $p^{**} = p$
+- $p + p^{*} = p \cdot p^{*}$
+- $p^* = \frac{p}{p - 1}$
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+*La demostración se divide en los siguientes casos:*
+
+- *Caso $p = 1$ entonces $p^{*} = \infty$:* Se tiene que $f \in \mathcal{L}_1(X)$ y $g \in \mathcal{L}_\infty(X)$ entonces:
+$$
+\begin{align*}
+\exists M \in \Sigma \text{ con } \mu(M) = 0 \text{ tq } X \setminus M = \{x \in X : |g(x)| \leq \|g\|_\infty \}
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\int_X |f(x) \cdot g(x)| \, d\mu(x) & = \int_{X \setminus M} |f(x)| \cdot |g(x)| \, d\mu(x) + \cancel{\int_M |f(x) \cdot g(x)| \, d\mu(x) } \leq \\[2ex]
+& \leq \int_{X \setminus M} |f(x)| \cdot \|g\|_\infty \, d\mu(x) = \\[2ex]
+& = \|g\|_\infty \int_{X \setminus M} |f(x)| \, d\mu(x) = \|g\|_\infty \cdot \|f\|_1 < \infty
+\end{align*}
+$$
+Por tanto, $f \cdot g \in \mathcal{L}_1(X)$ y se cumple la desigualdad de Hölder.
+- *Caso $p = \infty$ entonces $p^{*} = 1$:* Este caso es análogo al anterior, es decir, se tiene que $f \in \mathcal{L}_\infty(X)$ y $g \in \mathcal{L}_1(X)$ entonces:
+$$
+\begin{align*}
+\exists M \in \Sigma \text{ con } \mu(M) = 0 \text{ tq } X \setminus M = \{x \in X : |f(x)| \leq \|f\|_\infty \}
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\int_X |f(x) \cdot g(x)| \, d\mu(x) & = \int_{X \setminus M} |f(x)| \cdot |g(x)| \, d\mu(x) + \cancel{\int_M |f(x) \cdot g(x)| \, d\mu(x) } \leq \\[2ex]
+& \leq \int_{X \setminus M} \|f\|_\infty \cdot |g(x)| \, d\mu(x) = \\[2ex]
+& = \|f\|_\infty \int_{X \setminus M} |g(x)| \, d\mu(x) = \|f\|_\infty \cdot \|g\|_1 < \infty
+\end{align*}
+$$
+Por tanto, $f \cdot g \in \mathcal{L}_1(X)$ y se cumple la desigualdad de Hölder.
+- *Caso $1 < p < \infty$:* Este caso, se divide a su vez en dos subcasos:
+
+</DemBox>
+
+### Desigualdad de Minkowski. Proposición
+Sea $1 \leq p \leq \infty$ y $f, g \in \mathcal{L}_p(X)$ entonces:
+$$
+\begin{align*}
+\|f + g\|_p \leq \|f\|_p + \|g\|_p
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+*Se distinguen tres casos para la demostración:*
+
+- *Caso $p = 1$:* Ya está demostrado en el tema de *Integrales de Lebesgue*.
+- *Caso $p = \infty$:* Sea $f, g \in \mathcal{L}_\infty(X)$, por definición de $\mathcal{L_\infty(X)$}:
+$$
+\begin{align*}
+&\exists M_f \in \Sigma \text{ con } \mu(M_f) = 0 \text{ tq } X \setminus M_f = \{x \in X : |f(x)| \leq \|f\|_\infty \} \\
+&\exists M_g \in \Sigma \text{ con } \mu(M_g) = 0 \text{ tq } X \setminus M_g = \{x \in X : |g(x)| \leq \|g\|_\infty \}
+\end{align*}
+$$
+Entonces, para cada $x \in X \setminus (M_f \cup M_g)$ se tiene que:
+$$
+\begin{align*}
+|f(x) - g(x)| \overset{\text{D.T.}}{\leq} |f(x)| + |g(x)| \leq \|f\|_\infty + \|g\|_\infty
+\end{align*}
+$$
+Y por tanto, como $\mu(M_f \cup M_g) = 0$ se tiene que $f + g \in \mathcal{L}_\infty(X)$ y:
+$$
+\begin{align*}
+\|f + g\|_\infty \leq \|f\|_\infty + \|g\|_\infty\\
+\end{align*}
+$$
+- *Caso $1 < p < \infty$:* Sea $f, g \in \mathcal{L}_p(X)$, entonces:
+$$
+\begin{align*}
+\|f + g\|_p^p & = \int_X |f(x) + g(x)|^p \, d\mu  = \int_X |f(x) + g(x)| \cdot |f(x) + g(x)|^{p - 1} \, d\mu \leq \\[2ex]
+& \leq \int_X \underbrace{|f(x)|}_{\in \mathcal{L}_p(X)} \cdot \underbrace{|f(x) + g(x)|^{p - 1}}_{\in \mathcal{L}_{p^{*}}(X)} \, d\mu + \int_X \underbrace{|g(x)|}_{\in \mathcal{L}_p(X)} \cdot \underbrace{|f(x) + g(x)|^{p - 1}}_{\in \mathcal{L}_{p^{*}}(X)} \, d\mu  
+\end{align*}
+$$
+Además, por ? tenemos que:
+$$
+\begin{align*}
+\int_X |f(x) + g(x)|^{(p - 1) p^{*}} \, d\mu = \int_X |f(x) + g(x)|^p \, d\mu = \|f + g\|_p^p < \infty
+\end{align*}
+$$
+Por tanto, aplicando desigualdad de Hölder en las dos integrales de (1) se tiene:
+$$
+\begin{align*}
+\|f + g\|_p^p & = \overset{(1)}{\dots} \leq \|f\|_p \cdot \left\| |f + g|^{p - 1} \right\|_{p^{*}} + \|g\|_p \cdot \left\| |f + g|^{p - 1} \right\|_{p^{*}} = \\[2ex]
+& = \left(\|f\|_p + \|g\|_p \right) \cdot \left\| |f + g|^{p - 1} \right\|_{p^{*}} = \\[2ex]
+& = \left(\|f\|_p + \|g\|_p \right) \cdot \left( \int_X |f(x) + g(x)|^{(p - 1) p^{*}} \, d\mu \right)^{\frac{1}{p^{*}}} = \\[2ex]
+& = \left(\|f\|_p + \|g\|_p \right) \cdot \left( \int_X |f(x) + g(x)|^p \, d\mu \right)^{\frac{1}{p^{*}}} = \\[2ex]
+& = \left(\|f\|_p + \|g\|_p \right) \cdot \left(\|f + g\|_p^p \right)^{\frac{1}{p^{*}}} = \left(\|f\|_p + \|g\|_p \right) \cdot \|f + g\|_p^{p - 1}
+\end{align*}
+$$
+Por lo tanto, si despejamos se obtiene la desigualdad de Minkowski:
+$$
+\begin{align*}
+\|f + g\|_p^{p} \leq \left(\|f\|_p + \|g\|_p \right) \cdot \|f + g\|_p^{p - 1}& \implies \|f + g\|_p^{p - (p - 1)} \leq \|f\|_p + \|g\|_p \implies \\[2ex]
+& \implies \|f + g\|_p \leq \|f\|_p + \|g\|_p
+\end{align*}
+$$
+
+</DemBox>
+
+### Espacio vectorial seminormado. Definición
+Sea $V$ un espacio vectorial, se dice **seminormado** si existe una aplicación, llamada **seminorma de $V$**, $\|\cdot\| : V \to [0, \infty)$ que cumple las siguientes propiedades:
+
+- **i)** $\|\lambda x\| = |\lambda| \cdot \|x\| \quad \forall x \in V, \, \forall \lambda \in \mathbb{R}$ (notar que $\|0_V\| = 0$)
+- **ii)** $\|x + y\| \leq \|x\| + \|y\| \quad \forall x, y \in V$
+
+### Corolario
+Sea $1 \leq p \leq \infty$ entonces $(\mathcal{L}_p(X), \|\cdot\|_p)$ es un espacio vectorial seminormado.
+
+<EjBox title="Nota">
+
+Ojo, $\|f\|_p = 0$ no implica que $f = 0$ sino que $f = 0 \, \mu\text{-a.e.}$
+
+</EjBox>
+
+### Paso de espacio seminormado a espacio normado
+Sea $(V, \|\cdot\|)$ un espacio vectorial seminormado, definimos:
+$$
+\begin{align*}
+N = \left\{x \in V : \|x\| = 0 \right\} \subseteq V
+\end{align*}
+$$
+Entonces, tenemos que $N$ es un subespacio vectorial de $V$ ya que:
+
+- Sean $\lambda \in \mathbb{R}$ y $x \in N$ entonces:
+$$
+\begin{align*}
+\|\lambda x\| = |\lambda| \cdot \|x\| = |\lambda| \cdot 0 = 0 \implies \lambda x \in N
+\end{align*}
+$$
+- Sean $x, y \in N$ entonces:
+$$
+\begin{align*}
+\|x + y\| \leq \|x\| + \|y\| = 0 + 0 = 0 \implies x + y \in N
+\end{align*}
+$$
+
+Por tanto, podemos definir el espacio vectorial cociente $V / N$ y la aplicación:
+$$
+\begin{align*}
+\| \cdot \|' : V / N & \to [0, \infty) \\
+x + N & \mapsto \|x + N \|' \coloneq \|x\| 
+\end{align*}
+$$
+Podemos notar que $\|\cdot\|'$ está bien definida ya que si $x + N = y + N$ entonces:
+$$
+\begin{align*}
+\exists u \in N \text{ tq } x = y + u
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\|x\| = \|y + u\| \leq \|y\| + \|u\| = \|y\| + 0 = \|y\| \\
+\|y\| = \|x - u\| \leq \|x\| + \|-u\| = \|x\| + 0 = \|x\|
+\end{array}
+\right\} \implies \|x\| = \|y\|
+\end{align*}
+$$
+
+Además, podemos ver que $\|\cdot\|'$ es una norma en $V / N$ ya que:
+
+- Sean $\lambda \in \mathbb{R}$ y $x + N \in V / N$ entonces:
+$$
+\begin{align*}
+\|\lambda (x + N) \|' = \|\lambda x + N\|' = \|\lambda x\| = |\lambda| \cdot \|x\| = |\lambda| \cdot \|x + N\|'
+\end{align*}
+$$
+- Sean $x + N, y + N \in V / N$ entonces:
+$$
+\begin{align*}
+\| (x + N) + (y + N) \|' = \|x + y + N\|' = \|x + y\| \leq \|x\| + \|y\| = \|x + N\|' + \|y + N\|'
+\end{align*}
+$$
+- Si $\|x + N\|' = 0$ entonces:
+$$
+\begin{align*}
+\|x\| = 0 \implies x \in N \implies x + N = N = 0_{V / N}
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Se suele escribir $(V / N, \|\cdot\|)$ en lugar de $(V / N, \|\cdot\|')$ por simplicidad.
+
+</EjBox>
+
+### Aplicación al espacio $\mathcal{L}_p(X)$
+Para cada $p \in [1, \infty]$ definimos:
+$$
+\begin{align*}
+N_p & = \left\{f \in \mathcal{L}_p(X, \Sigma, \mu): \|f\|_p = 0 \right\}\\[2ex]
+N & = \left\{f: X \to \mathbb{R}: f(x) = 0 \, \mu\text{-a.e.} \text{ y } f\text{ medible} \right\}
+\end{align*}
+$$
+donde el espacio $(X, \Sigma, \mu)$ es un espacio de medida completo. Entonces, para cada $p \in [1, \infty]$ se tiene que $N_p = N$ ya que:
+
+- Si $p \in [1, \infty)$ se tiene que: 
+$$
+\begin{align*}
+\|f\|_p = \left(\int_X |f(x)|^p \, d\mu(x) \right)^{\frac{1}{p}} = 0 \iff |f(x)|^p = 0 \, \mu\text{-a.e.} \iff f(x) = 0 \, \mu\text{-a.e.} 
+\end{align*}
+$$
+- Si $p = \infty$ se tiene que:
+$$
+\begin{align*}
+\|f\|_\infty = 0 \iff \left\{x \in X : |f(x)| \leq \|f\|_\infty = 0 \right\} = X \, \mu\text{-a.e.} \iff f(x) = 0 \, \mu\text{-a.e.}
+\end{align*}
+$$
+
+De esta forma, para cada $p \in [1, \infty]$ se tiene que:
+$$
+\begin{align*}
+L_p(X,\Sigma, \mu) = \left(\frac{\mathcal{L}_p(X, \Sigma, \mu)}{N}, \|\cdot\|_p\right) \quad \text{es un espacio vectorial normado.}\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Dada $f \in \mathcal{L}_p(X, \Sigma, \mu)$, escribimos $f \in L_p(X, \Sigma, \mu)$ en lugar de $f + N$ o $[f]$ y tenemos en cuenta que $f = g$ (en $L_p(X, \Sigma, \mu)$) significa que:
+$$
+\begin{align*}
+f(x) = g(x) \, \mu\text{-a.e.} \quad (\text{ como funciones})
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Si el contexto es claro, escribimos $L_p(X)$ en lugar de $L_p(X, \Sigma, \mu)$.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Se considera el caso particular de la medida de contar, es decir:*
+$$
+\begin{align*}
+\frac{\mathcal{L}_p(\mathbb{N}, \mathcal{P}(\mathbb{N}), m)}{N} 
+\end{align*}
+$$
+*donde $m$ es la medida de contar en $\mathbb{N}$. Entonces, se tiene que:*
+
+Sea $s \in \mathcal{L}_p(\mathbb{N}, \mathcal{P}(\mathbb{N}), m)$ entonces $s$ es una función definida como:
+$$
+\begin{align*}
+s: \mathbb{N} & \longrightarrow \mathbb{R} \\
+n & \longmapsto x_n
+\end{align*}
+$$
+de modo que $s = (x_n)_{n \in \mathbb{N}}$ es una sucesión de números reales. Además, se tiene que:
+$$
+\begin{align*}
+\|s\|_p^p = \int_{\mathbb{N}} |s(n)|^p \, dm(n) = \sum_{n = 1}^{\infty} |x_n|^p < \infty
+\end{align*}
+$$
+Así, tenemos que:
+$$
+\begin{align*}
+\ell_p = L_p(\mathbb{N}) = \dfrac{\mathcal{L}_p(\mathbb{N}, \mathcal{P}(\mathbb{N}), m)}{N}
+\end{align*}
+$$
+
+</EjemBox>
+
+### Teorema de Riesz-Fischer. Teorema
+Sea $(X, \Sigma, \mu)$ espacio de medida, $1 \leq p \leq \infty$ y $(f_n)_{n \in \mathbb{N}} \subseteq \mathcal{L}_p(X, \Sigma, \mu)$ una sucesión de Cauchy en $L_p(X, \Sigma, \mu)$ entonces existen $(k_n)_n \subseteq (n)_n$ sucesión creciente de naturales y $f \in \mathcal{L}_p(X, \Sigma, \mu)$ tal que se cumplen las siguientes propiedades:
+
+- **1)** $f_{k_n} (x) \xrightarrow[n \to \infty]{} f(x) \, \mu\text{-a.e.}$
+- **2)** $\|f_n - f\|_p \xrightarrow[n \to \infty]{} 0$
+- **3)** Para $p = \infty$ se tiene que $(k_n)_n = (n)_n$
+
+En consecuencia, $L_p(X, \Sigma, \mu)$ es de Banach.
+
+<DemBox title="Demostración">
+
+*Consideraremos los siguientes casos:*
+
+- *Sea $1 \leq p < \infty$.* Como $(f_n)_n$ es de Cauchy en $\mathcal{L}_p(X)$ para cada $n \in \mathbb{N}$ existe $k_n \in \mathbb{N}$ tal que $\forall k \geq k_n$ se cumple que:
+$$
+\begin{align*}
+\|f_k - f_{k_n}\|_p < \frac{1}{2^n}
+\end{align*}
+$$
+Podemos considerar $k_1 < k_2 < k_3 < \dots$ así tenemos que:
+$$
+\begin{align*}
+\| f_{k_{n + 1}} - f_{k_n} \|_p < \frac{1}{2^n} \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Consideramos las funciones:
+$$
+\begin{align*}
+g_n(x) & \coloneq \displaystyle \sum_{m = 1}^n \left|f_{k_{m + 1}}(x) - f_{k_m}(x)\right| \xrightarrow[n \to \infty]{} \displaystyle \sum_{m = 1}^{\infty} \left|f_{k_{m + 1}}(x) - f_{k_m}(x)\right| \eqqcolon g(x) \\
+\end{align*}
+$$
+Como $g_n(x)$ es una sucesión creciente de funciones medibles, se tiene que $g(x)$ es medible. Ahora tenemos:
+Ahora tenemos:
+$$
+\begin{align*}
+\int_X g(x)^p \, d \mu & \xlongequal[]{\text{TCM}} \lim_n \int_X g_n(x)^p \, d\mu = \lim_n \left\|\sum_{m = 1}^{n} |f_{k_{m + 1}} - f_{k_m}| \right\|_p^p \overset{\text{D.T.}}{\leq} \\[2ex]
+& \leq \left( \lim_n \sum_{m = 1}^{n} \|f_{k_{m + 1}} - f_{k_m}\|_p \right)^p \leq \left( \sum_{m = 1}^{\infty} \frac{1}{2^m} \right)^p \leq 1 < \infty
+\end{align*}
+$$
+
+Sea $A \coloneq \{x \in X : g(x) = \infty \}$. Como su integral es finita, se sigue que $\mu(A) = 0$. 
+Para cada $x \in X \setminus A$, la serie $\sum_{m = 1}^{\infty} (f_{k_{m + 1}}(x) - f_{k_m}(x))$ es absolutamente convergente en $\mathbb{R}$ y, por tanto, convergente. Al ser una serie telescópica, sus sumas parciales cumplen:
+$$
+\begin{align*}
+\sum_{m = 1}^{n} (f_{k_{m + 1}}(x) - f_{k_m}(x)) = f_{k_{n + 1}}(x) - f_{k_1}(x)
+\end{align*}
+$$
+Tomando límites cuando $n \to \infty$, definimos para cada $x \in X \setminus A$:
+$$
+\begin{align*}
+f(x) \coloneq \lim_n f_{k_n}(x) = f_{k_1}(x) + \sum_{m = 1}^{\infty} (f_{k_{m + 1}}(x) - f_{k_m}(x)) \in \mathbb{R}
+\end{align*}
+$$
+Ahora, tenemos que:
+$$
+\begin{align*}
+\int_X |f(x) - f_{k_n}(x)|^p \, d\mu & \overset{\text{Fatou}}{\leq} \liminf_{m \to \infty} \int_X |f_{k_m}(x) - f_{k_n}(x)|^p \, d\mu =\\[2ex]
+& = \left(\liminf_{m \to \infty} \|f_{k_m} - f_{k_n}\|_p \right)^p \leq \frac{1}{2^{np}}
+\end{align*}
+$$
+En particular, para $k_n = k_1$ se tiene que:
+$$
+\begin{align*}
+\int_X |f(x) - f_{k_1}(x)|^p \, d\mu < \infty \implies f - f_{k_1} \in \mathcal{L}_p(X) \implies f \in \mathcal{L}_p(X)
+\end{align*}
+$$
+Además, de (1) se deduce que:
+$$
+\begin{align*}
+\left\|f - f_{k_n}\right\|_p^p \leq \frac{1}{2^{np}} 
+\end{align*}
+$$
+Luego $f_n \xrightarrow[n \to \infty]{} f$ en $\mathcal{L}_p(X)$ y como $(f_n)_n$ es de Cauchy en $\mathcal{L}_p$ entonces:
+$$
+\begin{align*}
+\|f_n - f\|_p \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+- *Sea $p = \infty$.* Tenemos por hipótesis que $\forall \varepsilon > 0$ existe $n_\varepsilon \in \mathbb{N}$ tal que $\forall n, m \geq n_\varepsilon$ se cumple que:
+$$
+\begin{align*}
+\|f_n - f_m\|_\infty < \varepsilon
+\end{align*}
+$$
+Para cada par $(n, m) \in \mathbb{N}^2$ definimos:
+$$
+\begin{align*}
+A_{nm} \coloneq \left\{x \in X : |f_n(x) - f_m(x)| \leq \|f_n - f_m\|_\infty \right\}
+\end{align*}
+$$
+Así, $A_{nm} = X \setminus B_{nm}$ donde $B_{nm} \in \Sigma$ y $\mu(B_{nm}) = 0$. Entonces, definimos:
+$$
+\begin{align*}
+B \coloneq \displaystyle \bigcup_{(n,m) \in \mathbb{N}^2} B_{nm} \in \Sigma \quad \text{ con } \mu(B) = 0
+\end{align*}
+$$
+Por tanto, tenemos que para cada $x \notin B$ y para todo $n, m \geq n_\varepsilon$ se cumple que:
+$$
+\begin{align*}
+|f_n(x) - f_m(x)| \leq \|f_n - f_m\|_\infty < \varepsilon
+\end{align*}
+$$
+Entonces, para cada $x \in X \setminus B$ la sucesión $(f_n(x))_n$ es de Cauchy en $\mathbb{R}$ y por tanto tiene límite. Definimos:
+$$
+\begin{align*}
+\exists f(x) \coloneq \lim_n f_n(x) \in \mathbb{R} \quad \forall x \in X \setminus B
+\end{align*}
+$$
+Y para $x \in X \setminus B$, sea $m \geq n_\varepsilon$ entonces en (2) se tiene que:
+$$
+\begin{align*}
+|f(x) - f_m(x)| = \lim_n \underbrace{|f_n(x) - f_m(x)|}_{< \varepsilon} \leq \varepsilon
+\end{align*}
+$$
+Por tanto, tenemos que $f \in \mathcal{L}_\infty(X)$ ya que tomando $n = n_\varepsilon$ llegamos a:
+$$
+\begin{align*}
+|f(x) - f_{n_\varepsilon}(x)| \leq \varepsilon \quad \forall x \in X \setminus B
+\end{align*}
+$$
+Y como $\mu(B) = 0$ se tiene que:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+f - f_{n_\varepsilon} \in \mathcal{L}_\infty(X)\\
+f_{n_\varepsilon} \in \mathcal{L}_\infty(X)
+\end{array}
+\right\} \implies f \in \mathcal{L}_\infty(X)
+\end{align*}
+$$
+Finalmente, para $n \geq n_\varepsilon$ y $x \in X \setminus B$ se tiene que:
+$$
+\begin{align*}
+f_n \xrightarrow[n \to \infty]{\mathcal{L}_\infty(X)} f
+\end{align*}
+$$
+
+</DemBox>
