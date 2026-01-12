@@ -31,7 +31,7 @@ const faqCategories = [
         questions: [
             {
                 question: "¿Qué tipo de contenido ofrecen?",
-                answer: "Ofrecemos apuntes de matemáticas universitarias e Ingeniería Informática De Software en formato PDF y artículos interactivos con fórmulas renderizadas en LaTeX. Cubrimos todos los temas principales de ambas carreras universitarias, en particular, de las asignaturas impartidas en la Universidad de Oviedo."
+                answer: "Ofrecemos apuntes de matemáticas universitarias e Ingeniería Informática de Software en formato PDF y artículos interactivos con fórmulas renderizadas en LaTeX. Cubrimos todos los temas principales de ambas carreras universitarias, en particular, de las asignaturas impartidas en la Universidad de Oviedo."
             },
             {
                 question: "¿Con qué frecuencia se actualiza el contenido?",
