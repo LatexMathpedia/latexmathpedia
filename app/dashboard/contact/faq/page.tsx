@@ -253,7 +253,7 @@ export default function FAQPage() {
                                 Conoce más sobre el proyecto MathTexpedia
                             </p>
                             <Button variant="link" className="p-0 h-auto" asChild>
-                                <a href="/dashboard/contact/about-us">Leer más →</a>
+                                <Link href="/dashboard/contact/about-us">Leer más →</Link>
                             </Button>
                         </CardContent>
                     </Card>
