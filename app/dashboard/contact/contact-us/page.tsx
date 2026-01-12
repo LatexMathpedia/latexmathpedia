@@ -32,33 +32,29 @@ export default function ContactUsPage() {
         e.preventDefault()
         setIsSubmitting(true)
 
-        try {
-            const formDataToSend = {
-                from: formData.email,
-                subject: `[MathTexPedia] ${formData.subject}`,
-                body: `Nombre: ${formData.name}\nEmail: ${formData.email}\n\nMensaje:\n${formData.message}`
-            }
-            fetch(`${apiUrl}/mail/send`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formDataToSend),
-            }).then((response) => {
-                if (response.ok) {
-                    toast.success("Mensaje enviado con éxito. ¡Gracias por contactarnos!")
-                    setFormData({ name: "", email: "", subject: "", message: "" })
-                } else {
-                    toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
-                }
-            }).catch(() => {
-                toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
-            })
-        } catch (error) {
-            toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
-        } finally {
-            setIsSubmitting(false)
+        const fromDataToSend = {
+            from: formData.email,
+            subject: `[MathTexPedia] ${formData.subject}`,
+            body: `Nombre: ${formData.name}\nEmail: ${formData.email}\n\nMensaje:\n${formData.message}`
         }
+        await fetch(`${apiUrl}/mail/send`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(fromDataToSend),
+        }).then((response) => {
+            if (response.ok) {
+                toast.success("Mensaje enviado con éxito. ¡Gracias por contactarnos!")
+                setFormData({ name: "", email: "", subject: "", message: "" })
+            } else {
+                toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
+            }
+        }).catch(() => {
+            toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
+        }).finally(() => {
+            setIsSubmitting(false)
+        })
     }
 
     return (
