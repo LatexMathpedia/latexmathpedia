@@ -1,0 +1,240 @@
+---
+title: "TPP - Tema 1 - Lenguajes y Paradigmas de la Programación"
+description: "Principales conceptos sobre lenguajes y paradigmas de programación, incluyendo definiciones, clasificaciones y características destacadas."
+date: "2025-01-12"
+tags: ["TPP", "Lenguajes de Programación", "Paradigmas de Programación", "Tecnologías de la Programación"]
+---
+
+## Lenguaje de Programación
+### Lenguaje de programación. Compiladores e Intérpretes
+Un lenguaje de programación es un lenguaje artificial empleado para escribir instrucciones, algoritmos o funciones que pueden ser ejecutadas por un ordenador. Estos lenguajes permiten acercar el nivel de abstracción del programador al de la máquina, facilitando la creación de software.
+
+#### Traductor. Definción
+Un **traductor** es un programa que procesa un texto fuente (origen) y genera un texto objeto (destino).
+
+#### Compilador. Definción
+Un **compilador** es un traductor que transforma código fuente de un lenguaje de alto nivel a código fuente de otro lenguaje de bajo nivel.
+
+<EjBox title="Nota">
+
+Notar que un compilador es un caso particular de traductor.
+
+</EjBox>
+
+#### Intérprete. Definción
+Un **intérprete** ejecuta las instrucciones de los programas escritos en un lenguaje de programación.
+
+### Clasificación de los lenguajes de programación
+Los lenguajes de programación se pueden clasificar según varios criterios como su nivel de abstracción, paradigma de programación, tipado, entre otros.
+
+#### Nivel de abstracción
+El nivel de abstracción mide la proximidad del lenguaje al hardware o al nivel humano.
+
+- Un lenguaje de **bajo nivel** está más cerca del hardware y es más difícil de entender para los humanos. Ejemplos incluyen el lenguaje ensamblador y el lenguaje máquina.
+- Algunos autores consideran un **nivel intermedio**, como el lenguaje C, que ofrece un equilibrio entre control del hardware y facilidad de uso.
+- Un lenguaje de **alto nivel** está más cerca del lenguaje humano y es más fácil de entender. Ejemplos incluyen `Python` o `Java`.
+
+<EjBox title="Nota">
+
+Los lenguajes específicos de dominio (DSL) tendrían un nivel de abstracción aún mayor. Estos lenguajes están diseñados para tareas específicas, como `SQL` para bases de datos.
+
+</EjBox>
+
+#### En función de su dominio
+Según el dominio de aplicación, es decir, del propósito para el que están diseñados, los lenguajes de programación se pueden clasificar en:
+
+- Los lenguajes de **propósito general** se emplean para resolver problemas computacionales de diversa índole. Ejemplos incluyen Python, Java, C++ y JavaScript.
+- Los lenguajes **específicos** de un dominio (*DSL*) están diseñados para tareas concretas. Ejemplos incluyen `SQL` (bases de datos), `Logo` (dibujo) o `R` (estadística).
+
+<EjBox title="Nota">
+
+El uso de *DSL*s ha aumentado mucho recientemente gracias al **Modelado Específico del Dominio** (*DSM*) y al **Desarrollo Dirigido por Modelos** (*MDD*).
+
+</EjBox>
+
+#### Soporte a la concurrencia
+Hay determinados lenguajes que ofrecen soporte nativo para la creación y gestión de procesos concurrentes, es decir, que permiten la ejecución simultanea de múltiples procesos o hilos que interactúan entre sí. Los programas derivados de estos lenguajes pueden ejecutarse:
+
+- En un único procesador, intercalando la ejecución de los procesos.
+- En paralelo, en sistemas con múltiples procesadores o núcleos pueden ejecutarse simultáneamente. También podrían ejecutarse en redes de ordenadores.
+
+Algunos de estos lenguajes son `Erlang`, `Go` y `Ada`. Además, muchos lenguajes no ofrecen de forma primitiva soporte a la concurrencia, pero sí a través de su biblioteca estándar, como puede ser el caso de `Java`, `Python`, `C++11` o `C\#`.
+
+Finalmente, también existen lenguajes sin soporte para la concurrencia, como es el caso de `C` y `C++2003`.
+
+#### En función de su implementación
+Esta clasificación se relaciona más con la implementación del lenguaje que con el lenguaje en sí mismo. Además, no es excluyente, ya que un mismo lenguaje puede ser compilado e interpretado, como `Java` o `C\#`.
+
+Mediante la **compilación JIT** (*Just In Time*) se combina la compilación y la interpretación. En este caso, un compilador **JIT** traduce el código fuente a código binario de la plataforma de destino previo a su ejecución. Además, en el caso particular de que esta traducción se realice previo a la ejecución, se denomina **AoT** (*Ahead Of Time*) como ocurre con `Dalvik` (VM de Java para Android).
+
+Existen utilidades como `NGen` (para `.Net`) que permiten controlar la compilación *JIT* de un programa, generando código nativo de la plataforma de destino antes de su ejecución.
+
+Los lenguajes pueden ser diseñados para ser:
+
+- **Interpretados**: como `Perl`, `Tcl`, `JavaScript`, `Matlab`, `PHP`
+- **Compilados**: `C`, `C++`, `Go`, `Pascal`, `Eiffel`, `Ada`
+- **Compilados y luego interpretados**: `Java`, `UCSD Pascal`
+
+Y también existen casos de lenguajes con implementaciones tanto compiladas como interpretadas, como `Haskell` o `Lisp`.
+
+#### Sistema de tipos
+La comprobación de tipo, es decir, la verificación de las operaciones que pueden ser aplicadas a una variable u objeto, pueden realizarse en diferentes momentos del ciclo de vida del programa. Al igual que en la clasificación anterior, esta clasificación no es excluyente, con ejemplos como `Java`. Los lenguajes pueden ser de:
+
+- Tipado **estático**: la comprobación se realiza en tiempo de compilación permitiendo una detección temprana de errores y un mayor rendimiento ya que no hay que realizar comprobaciones en tiempo de ejecución.
+- Tipado **dinámico**: la comprobación se realiza en tiempo de ejecución, lo que ofrece mayor adaptabilidad (o flexibilidad) y permite emplear la meta-programación dinámica. Además, estos lenguajes pueden ser:
+
+<EjBox title="Nota">
+
+Podemos notar que todo lenguaje con únicamente comprobación estática es compilado y que ningún lenguaje puramente interpretado puede tener únicamente comprobación estática.
+
+Por otra parte, existen lenguajes compilados con comprobación dinámica y aquellos lenguajes que solo tienen comprobación dinámica necesariamente tienen una fase de interpretación.
+
+</EjBox>
+
+#### Representación del código fuente
+El código fuente puede representarse de diferentes maneras:
+
+- Lenguajes **visuales**: representan las entidades mediante notación visual en lugar de textual. Ejemplos incluyen `(Executable) UML`, `Lava`, `LabVIEW` o `VisSim`.
+
+Además, existen lenguajes visuales específicos para ciertos dominios, como `Simulink` (modelado de sistemas dinámicos) o `Scratch` (enseñanza de programación), entre otros.
+- Lenguajes **textuales**: representan las entidades mediante notación textual. La mayoría de los lenguajes de programación son textuales, como `C`, `Java`, `Python`, etc.
+
+## Paradigmas de Programación
+Un **paradigma de programación** es un enfoque o estilo de programación basado en abstracciones y conceptos principales para representar programas (objetos, funciones, procedimientos, etc.) y resolver problemas computacionales.
+
+El paradigma de programación se puede emplear también para clasificar lenguajes, dando lugar a:
+
+- Lenguajes **multi-paradigma**: soportan varios paradigmas de programación. Ejemplos incluyen `Python`, `JavaScript`, `C++`, `Scala` o `Ruby`.
+- Lenguajes **mono-paradigma**: soportan un único paradigma de programación.
+
+No obstante, un paradigma de programación no constituye una característica intrínseca de un lenguaje, sino que depende de su implementación y uso.
+
+### Paradigmas Imperativos y Declarativos
+Hay autores que consideran a tanto al **imperativo** como al **declarativo** dos tipos de paradigmas en si mismos. Sin embargo, es más correcto referirse a ellos como una clasificación de paradigmas o, incluso, como clasificación de lenguajes.
+
+#### Imperativo
+Los paradigmas imperativos se basan en la idea de escribir programas como una secuencia de instrucciones que modifican el estado del sistema. El programador debe especificar cómo se deben realizar las tareas, detallando los pasos necesarios para alcanzar un objetivo.
+
+Sus abstracciones son más cercanas al hardware y a la arquitectura del ordenador. Algunos ejemplos de lenguajes imperativos son `C`, `Java`, `C\#` o `Pascal`
+
+Algunos ejemplos de paradigmas imperativo son **Estructurado basado en procedimientos** (o simplemente **imperativo**) o el **Orientado a objetos**.
+
+#### Declarativo
+Los paradigmas declarativos se basan en escribir programas que especifiquen qué se quiere lograr, sin detallar cómo se debe de hacer. El programador declara qué quiere obtener. Cada paradigma declarativo tiene su propia forma (abstracción) de expresar el qué, como funciones (*funcional*), predicados (*lógico*), restricciones (*basado en restricciones*) o consultas (*basado en consultas*).
+
+Algunos ejemplos de lenguajes declarativos son `Haskell`, `Prolog`, `SQL` o `CLP(R)`.
+
+### Principales paradigmas de programación
+Existen numerosos paradigmas de programación, cada uno con sus propias características y enfoques. A continuación, se describen algunos de los principales paradigmas.
+
+#### Paradigma Estructurado basado en procedimientos
+El paradigma estructurado basado en procedimientos (comúnmente llamado imperativo) es un paradigma imperativo que se crea mediante la combinación de dos paradigmas previos: el paradigma estructurado y el paradigma procedural.
+
+En el **paradigma estructurado** se emplean 3 estructuras de control: secuencial, condicional e iterativa. Se evitan las instrucciones de salto (tanto condicionales como incondicionales), fomentando la claridad y mantenibilidad. Además las estructuras de control pueden anidarse.
+
+A partir de este paradigma, se define el **procedimiento** o **subrutina** como el primer mecanismo de descomposición. Un procedimiento contiene una lista ordenada de instrucciones. Además, incluye el concepto de **ámbito** para las variables, previniendo accesos indebidos.
+
+A partir de los procedimientos, se definen las **funciones**, que son aquellos procedimientos que devuelven un valor.
+
+<EjBox title="Nota">
+
+Este concepto de función es diferente a la función matemática del paradigma funcional. En este caso, las funciones pueden tener efectos colaterales (modificar variables globales, realizar operaciones de entrada/salida, etc.), no suelen ofrecer funciones de orden superior y no implementan el concepto de cláusulas.
+
+</EjBox>
+
+Existen muchos lenguajes estructurados basados en procedimientos como `Algol`, `Ada`, `C`, `Pascal`, `Fortran`, `Cobol` o `PL/I`, entre otros.
+
+#### Paradigma Orientado a Objetos
+El paradigma orientado a objetos (*POO*) emplea el concepto de **objetos**, que es una unión de datos y métodos, como abstracción principal y definiendo programas como las interacciones entre estos objetos.
+
+La idea fundamental es la modelación de objetos reales introducidos en el diseño mediante la codificación de objetos de software que representan dichos objetos reales. Un programa se puede entender como un conjunto de objetos que interactúan entre sí mediante el envío de mensajes (llamadas a métodos).
+
+Típicamente, este paradigma es imperativo y sus elementos principales son el encapsulamiento, la herencia, el polimorfismo y el enlace dinámico.
+
+Existen dos enfoques o modelos computacionales para la *POO*:
+
+- **Basados en clases**: todo objeto es instancia de una clase, donde por tanto, la clase es el tipo del objeto. Estas clases definen la estructura y comportamiento de sus instancias. Ejemplos incluyen `C++`, `Java`, `C\#`, `Smalltalk` o `Eiffel`.
+- **Basados en prototipos**: no existe el concepto de clases sino que los objetos son la única entidad. Se emplean los objetos prototipo y el resto de objetos con una estructura similar se crean mediante clonación de estos prototipos. Ejemplos incluyen `JavaScript`, `Self` o `Lua`.
+
+Un lenguaje orientado a objetos se dice **puro** cuando toda abstracción del lenguaje es un objeto. Ejemplos incluyen `Smalltalk`, `Eiffel` o `Ruby`.
+
+#### Paradigma Funcional
+El paradigma funcional es un paradigma declarativo que se basa en el uso de funciones (matemáticas) que manejan datos inmutables, es decir, que nunca se modifican los datos. En su lugar, se llaman a funciones que devuelven nuevos datos modificados sin alterar los originales. De esta forma, un programa se define como un conjunto de funciones que se invocan entre sí.
+
+Las funciones no tienen efectos colaterales (*side effects*) y, por tanto, el valor que devuelven depende únicamente de sus parámetros de entrada. Además, por lo general, se explota mucho más la recursividad que la iteración para definir algoritmos.
+
+Los lenguajes funcionales **puros** (aquellos que no permiten efectos colaterales) no emplean ni la asignación (destructiva) ni la secuenciación de instrucciones. Ejemplos incluyen `Miranda`, `Clean`, `Haskell` o `Elm`. Otros casos de lenguajes funcionales no puros son `Lisp`, `Erlang` o `ML`, entre otros.
+
+#### Paradigma Lógico
+El paradigma lógico es un paradigma declarativo basado en la programación de ordenadores mediante lógica matemática, es decir, mediante la definición de reglas lógicas y axiomas (hechos) y, un **demostrador de teoremas** con razonamiento hacia atrás resuelve las consultas.
+
+El primer lenguaje lógico fue `Absys` y uno de los más conocidos es `Prolog` que presenta diferentes variaciones que lo dotan de concurrencia o restricciones, entre otras características. También, existen lenguajes lógico-funcionales como `ALF`, `Mercury`, `Mozart`, `Life`, `Toy`, etc.
+
+#### Paradigma orientado a aspectos
+La programación orientada a aspectos consiste en modularizar la funcionalidad transversal en unidades llamadas **aspectos**. Estos aspectos pueden incluir casos como persistencia, seguridad, manejo de errores, logging, etc. Las herramientas que dan soporte a este paradigma se basan en técnicas de instrumentación llamadas **tejidos** de aspectos.
+
+Este paradigma mezcla imperativo y declarativo para ofrecer beneficios gracias a la modularidad, tales como la mantenibilidad, reutilización de código, adaptabilidad, etc. Una de las herramientas/lenguajes más conocidos es `AspectJ`. Este paradigma se ha implementado en servidores de aplicaciones comerciales como `JBoss` o `Spring`.
+
+Se considera la disciplina **AOSD** (*Aspect Oriented Software Development*) como aquella que sigue la filosofía de la programación orientada a aspectos durante todo el ciclo de vida del software.
+
+#### Paradigma basado en restricciones
+El paradigma basado en restricciones es un paradigma declarativo que expresa relaciones entre variables en forma de ecuaciones (restricciones), dando como resultado de su ejecución un conjunto de valores que satisfacen dichas restricciones.
+
+Las restricciones pueden expresarse en diferentes dominios, como booleanos, enteros, racionales, lineales o finitos. Suelen implementarse en lenguajes propios como `ECLiPSe`, `OPL` o `Mozart - OZ`, aunque también existen ampliaciones de lenguajes existentes (comúnmente lógicos) como `CLP(R)`, `B-Prolog` o `Ciao Prolog` o incluso a través de API de lenguajes imperativos como `Comet`, `Disolver`, `Gecode` o `ChocoSolver`
+
+#### Sistemas en Tiempo Real
+Un sistema en tiempo real es aquel que debe cumplir con restricciones temporales independientemente de su carga. Hay os tipos de sistemas en tiempo real:
+
+- **Hard real-time**: No realizar la operación en el tiempo establecido causa un fallo crítico en el sistema.
+- **Soft real-time**: No realizar una operación en el tiempo establecido no causa un fallo crítico, si no que tiene sistemas para recuperarse.
+
+Algunos lenguajes diseñados para sistemas en tiempo real son `Ada` o `Real-Time Java` y, además, es común programar en lenguajes compilados nativos con API del SO, como podría ser `C` con `Real-Time Posix`.
+
+#### Paradigma guiado por eventos
+Este paradigma el flujo está determinado por eventos que pueden ser tanto acciones del usuario como datos leídos por sensores o mensajes recibidos de otros programas/hilos. Por tanto, es especialmente útil en aplicaciones que tienen que responder a ciertas acciones, como drivers o GUIs.
+
+Las aplicaciones suelen basarse en un bucle que escucha eventos y, a través de callbacks, se ejecutan las acciones correspondientes. Es posible escribir estos programas en casi cualquier lenguaje, aunque es más sencillo si soporta `await` o clausuras (*closures*).
+
+La mayor parte de herramientas para desarrollo de interfaces gráficas lo usan, como puede ser `Java AWT framework` (procesa todos los cambios en un solo hilo) o `Node.js`.
+
+#### Programación basada en autómatas
+Los programas están basados en máquinas de estados finitas (FSM) o autómatas formales. Por tanto, los programas son un ciclo de pasos definidos por estados y transiciones. A veces se refiere a este paradigma como *FSM-based programming* aunque es un término más general.
+
+Los programas que siguen dicho paradigma tienen algunas propiedades importantes como:
+
+- El tiempo de ejecución está separado en los pasos definidos por los estados.
+- Cada paso consiste en la ejecución de una sección de código con una única entrada. Además, se pueden subdividir en sub-pasos que se ejecutan según el estado actual.
+- Las comunicaciones entre pasos solo se pueden realizar mediante un conjunto de variables especial llamado **estado**
+- Entre dos estados no pueden existir otros componentes que determinen su estado que no sean las variables de estado (como variables en la pila, direcciones de retorno, punteros, etc.). Por tanto, el estado del programa es completamente determinado por las variables de estado.
+
+Este paradigma se usa en análisis léxico, sintáctico y semántico. Además, es fundamental en la programación guiada por eventos para implementar paralelismo y sus conceptos se usan en el campo de la **especificación formal**, es decir, en diagramas UML o protocolos de comunicación.
+
+#### Programación reactiva
+Este paradigma es declarativo y usa flujos de datos y propagaciones de cambios. Permite expresar flujos de datos estáticos (arrays) o dinámicos (eventos) y las dependencias entre ellos mediante un modelo de ejecución asociado. Se basa un patrón de diseño llamado **Observer** donde un objeto **Publisher** se comunica con muchos otros (**Subscribers**) enviándoles (*push*) o dejándoles disponibles (*pull*) mensajes hacia o para ellos. A este conjunto de mensajes se le llama **data flow**.
+
+La API más popular para crear programas reactivos es `ReactiveX` que se basa en el patrón **Observer** e **Iterator** y el paradigma funcional. Además, provee librerías para `JavaScript` (`RxJS`) o `Java` (*RxJava*), entre otros.
+
+En `.NET` la programación reactiva se implementa mediante `IObservable<T>` para los **Publishers** y `IObserver<T>` para los **Subscribers**. No obstante, para hacer programas reactivos, hay que emplear el paquete `NuGet` `System.Reactive`.
+
+## Tecnologías de la Programación
+El término **tecnología de la programación** es muy amplio. En este caso se verá acotado a: ``aquellas técnicas o elementos ofrecidos por distintos lenguajes y paradigmas de programación para diseñar, construir y mantener aplicaciones de forma correcta, robusta, segura y eficiente''.
+
+El lenguaje que se empleará en el resto del curso será `C\#` debido a que presenta:
+
+- Elementos del POO: encapsulamiento, herencia, polimorfismo, genericidad, autoboxing
+- Elementos del paradigma funcional: funciones lambda, funciones de orden superior, clausuras, generadores
+- API estándar concurrente y paralela
+- Características avanzadas de reflexión, meta-programación, generación dinámica de código, anotaciones, tipado híbrido, lenguaje integrado de consulta
+- Implementaciones para Windows, Linux Y Mac OS
+- Es estándar IO y ECMA
+
+Por lo tanto, podemos categorizar a `C\#` como:
+
+- Lenguaje de alto nivel
+- De propósito general
+- Concurrente y paralelo mediante su API estándar
+- Compilado a bytecode y ejecutado por una VM con compilación JIT
+- Sistemas de tipado estático (principal) y dinámico
+- Textual
+- Imperativo
+- Base orientada a objetos (incluyendo elementos de programación funcional)

@@ -1,0 +1,2004 @@
+---
+title: "Ejercicios Resueltos Análisis III - Parte 2"
+description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo."
+date: "2026-01-12"
+tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebsegue"]
+---
+
+## Aplicaciones del lenguaje de la Teoría de la Medida
+### Ejercicio 1
+*Sea la sucesión funcional $f_n(x) = x^n$ con $x \in \mathbb{R}$. Determina los valores de $x$ para los que existe $\lim_n f_n(x)$ y es finito. ¿Qué puedes decir sobre la convergencia uniforme?*
+
+<DemBox title="Demostración">
+
+Sea $f_n: \mathbb{R} \to \mathbb{R}$ la sucesión funcional dada por $f_n(x) = x^n$. Analicemos el límite de $f_n(x)$ cuando $n$ tiende a infinito para diferentes valores de $x$:
+
+- Si $x > 1$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(x) = \lim_n x^n = \infty
+\end{align*}
+$$
+- Si $x = 1$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(1) = \lim_n 1^n = 1
+\end{align*}
+$$
+- Si $0 < x < 1$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(x) = \lim_n x^n = 0
+\end{align*}
+$$
+- Si $x = 0$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(0) = \lim_n 0^n = 0
+\end{align*}
+$$
+- Si $-1 < x < 0$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(x) = \lim_n x^n = 0
+\end{align*}
+$$
+- Si $x = -1$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(-1) \text{ no existe (la sucesión oscila entre } -1 \text{ y } 1\text{)}
+\end{align*}
+$$
+- Si $x < -1$ entonces:
+$$
+\begin{align*}
+\lim_n f_n(x) \text{ no existe (la sucesión diverge)}
+\end{align*}
+$$
+
+Por lo tanto, el límite $\lim_n f_n(x)$ existe y es finito para $x \in (-1, 1]$. 
+
+En cuanto a la convergencia uniforme, observamos que la sucesión $f_n(x) = x^n$ no converge uniformemente en $(-1, 1]$. Esto se debe a que para cualquier $\varepsilon > 0$, podemos encontrar un $x$ cercano a $1$ tal que $f_n(x)$ no esté dentro de $\varepsilon$ del límite $0$ para cualquier $n$. Por ejemplo, si tomamos $x = 1 - \delta$ con $\delta$ pequeño, entonces:
+$$
+\begin{align*}
+|f_n(1 - \delta) - 0| = |(1 - \delta)^n| \approx 1 \quad \text{ para } n \text{ grande}
+\end{align*}
+$$
+Por lo tanto, la convergencia no es uniforme en $(-1, 1]$.
+
+</DemBox>
+
+### Ejercicio 2
+*Sea la sucesión funcional $f_n(x) = \arctan nx$ con $x \in \mathbb{R}$. Determina los valores de $x$ para los que existe $\lim_n f_n(x)$ y es finito. ¿Qué puedes decir sobre la convergencia uniforme?*
+
+<DemBox title="Demostración">
+
+La función $f_n(x) = \arctan(nx)$ converge puntualmente a la función límite $f(x)$ definida por:
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+-\frac{\pi}{2} & \text{ si } x < 0\\
+0 & \text{ si } x = 0\\
+\frac{\pi}{2} & \text{ si } x > 0
+\end{array}
+\right.
+\end{align*}
+$$
+Ahora, para analizar la convergencia uniforme, consideremos el intervalo $[-M, M]$ para algún $M > 0$. En este intervalo, la función $f_n(x)$ converge uniformemente a $f(x)$ ya que:
+$$
+\begin{align*}
+\sup_{x \in [-M, M]} |f_n(x) - f(x)| = \sup_{x \in [-M, M]} |\arctan(nx) - f(x)|
+\end{align*}
+$$
+A medida que $n$ tiende a infinito, $\arctan(nx)$ se acerca a $\frac{\pi}{2}$ para $x > 0$ y a $-\frac{\pi}{2}$ para $x < 0$, y a $0$ en $x = 0$. Por lo tanto, la convergencia es uniforme en cualquier intervalo compacto que no incluya el punto $x = 0$. Sin embargo, en todo $\mathbb{R}$, la convergencia no es uniforme debido a la discontinuidad en $x = 0$.
+
+</DemBox>
+
+### Ejercicio 3
+*Sea $E \in \mathcal{M}$ tal que $\mu(E) < \infty$ y $(f_n)_n$ sucesión de funciones medibles $f_n: E \to \mathbb{R}$ que convergen puntualmente a $f: E \to \mathbb{R}$. Demuestra que para todo $\varepsilon > 0$ existe un conjunto medible $D \subseteq E$ tal que $\mu(E \setminus D) < \varepsilon$ y $f_n|_D$ converge uniformemente a $f|_D$.*
+
+*Para la demostración, se seguirán los siguientes pasos:*
+
+1. *Para cada par $i, j \in \mathbb{N}$ se considera:*
+$$
+\begin{align*}
+E_{ij} \coloneq \left\{x \in E : |f(x) - f_k(x)| < \frac{1}{i} \quad \forall k \geq j \right\}
+\end{align*}
+$$
+*Demostrar que es medible.*
+
+<DemBox title="Demostración">
+
+Sabemos por hipótesis que $f, f_k$ son funciones medibles entonces:
+$$
+\begin{align*}
+f - f_k \text{ es medible} \implies g_k(x) = |f(x) - f_k(x)| \text{ es medible}
+\end{align*}
+$$
+Para cada $k \geq j$ y dado $i$ fijo entonces, consideramos:
+$$
+\begin{align*}
+A_{k, i} = \left\{x \in E : g_k(x) < \frac{1}{i}\right\}
+\end{align*}
+$$
+Por definición de función medible, entonces:
+$$
+\begin{align*}
+A_{k, i} \in \mathcal{M} \implies E_{ij} = \displaystyle \bigcap_{k = j}^\infty A_{k, i} \in \mathcal{M}
+\end{align*}
+$$
+
+</DemBox>
+2. *Para cada $k$, determina $\cup_{j = 1}^\infty E_{kj}$*
+
+<DemBox title="Demostración">
+
+Sea $k \in \mathbb{N}$ cualquiera fijo se tiene:
+$$
+\begin{align*}
+\displaystyle \bigcup_{j = 1}^{\infty} E_{kj} = E
+\end{align*}
+$$
+Basta notar que:
+
+- **$\subseteq$)** Por definición $E_{jk} \subseteq E$ entonces:
+$$
+\begin{align*}
+\displaystyle \bigcup_{j = 1}^{\infty} E_{jk} \subseteq E
+\end{align*}
+$$
+- **$\supseteq$)** Sea $x \in E$ cualquiera, sabemos que $(f_n)_n$ converge uniformemente a $f$ en $E$, es decir, que sea $\varepsilon > 0$ cualquiera pero fijo, $\exists n_0 \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+|f(x) - f_m(x)| < \varepsilon \quad \forall m \geq N
+\end{align*}
+$$
+Así, tomando $\varepsilon = \frac{1}{k}$ tenemos que $\exists j_0(x, k) \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+|f(x) - f_m(x)| < \frac{1}{k} \quad \forall m \geq j_0(x, k)
+\end{align*}
+$$
+Y tenemos precisamente:
+$$
+\begin{align*}
+E_{kj_0} = \left\{y \in E: |f(y) - f_m(y)| < \frac{1}{k} \quad \forall m \geq j_0\right\}
+\end{align*}
+$$
+Por tanto, $x \in E_{kj_0}$ y así:
+$$
+\begin{align*}
+x \in \displaystyle \bigcup_{j = 1}^{\infty} E_{kj}
+\end{align*}
+$$
+Y por tanto:
+$$
+\begin{align*}
+E \subseteq \displaystyle \bigcup_{j = 1}^{\infty} E_{kj}
+\end{align*}
+$$
+
+</DemBox>
+3. *Para cada $k$, encuentra $i_k\in\mathbb{N}$ verificando que:*
+$$
+\begin{align*}
+\mu\left(E\setminus E_{k i_k}\right) < \frac{\varepsilon}{2^k}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $k \in \mathbb{N}$ fijo, por el paso anterior sabemos que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{j = 1}^{\infty} E_{kj} = E
+\end{align*}
+$$
+Entonces, como la sucesión $(E_{kj})_{j \in \mathbb{N}}$ es creciente, tenemos que:
+$$
+\begin{align*}
+\mu(E) & = \mu\left(\displaystyle \bigcup_{j = 1}^{\infty} E_{kj}\right) = \lim_{j \to \infty} \mu(E_{kj}) =\\[2ex]
+& = \lim_{j \to \infty} \left[\mu(E) - \mu(E \setminus E_{kj})\right] = \mu(E) - \lim_{j \to \infty} \mu(E \setminus E_{kj})
+\end{align*}
+$$
+Además, como la sucesión $(\mu(E \setminus E_{kj}))_{j \in \mathbb{N}}$ es decreciente y acotada inferiormente por $0$, entonces:
+$$
+\begin{align*}
+\lim_{j \to \infty} \mu(E \setminus E_{kj}) = 0
+\end{align*}
+$$
+Entonces, dado $\varepsilon > 0$ cualquiera, existe $j_k \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\mu(E \setminus E_{k j_k}) < \frac{\varepsilon}{2^k}
+\end{align*}
+$$
+Por tanto, tomando $i_k = j_k$ se cumple lo pedido.
+
+</DemBox>
+4. *Estudia el conjunto $D = \displaystyle \bigcap_{k = 1}^\infty E_{k i_k}$*
+<DemBox title="Demostración">
+
+Consideramos el conjunto:
+$$
+\begin{align*}
+D = \displaystyle \bigcap_{k = 1}^\infty E_{k i_k}
+\end{align*}
+$$
+Entonces, por las propiedades de la medida tenemos que:
+$$
+\begin{align*}
+\mu(E \setminus D) & = \mu\left(E \setminus \displaystyle \bigcap_{k = 1}^\infty E_{k i_k}\right) = \mu\left(\displaystyle \bigcup_{k = 1}^\infty (E \setminus E_{k i_k})\right) \leq\\[2ex]
+& \leq \displaystyle \sum_{k = 1}^\infty \mu(E \setminus E_{k i_k}) < \displaystyle \sum_{k = 1}^\infty \frac{\varepsilon}{2^k} = \varepsilon
+\end{align*}
+$$
+Además, para demostrar que $f_n|_D$ converge uniformemente a $f|_D$, sea $\varepsilon > 0$ cualquiera, entonces existe $k_0 \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\frac{1}{k_0} < \varepsilon
+\end{align*}
+$$
+Y por definición de $D$, para todo $x \in D$ se tiene que:
+$$
+\begin{align*}
+|f(x) - f_n(x)| < \frac{1}{k_0} < \varepsilon \quad \forall n \geq i_{k_0}
+\end{align*}
+$$
+Por lo tanto, $f_n|_D$ converge uniformemente a $f|_D$.
+
+</DemBox>
+
+### Ejercicio 4
+*Demuestra que, en general, el teorema de Egorov falla cuando $\mu(E) = \infty$.*
+
+<DemBox title="Demostración">
+
+Consideremos el conjunto $E = \mathbb{R}$ con la medida de Lebesgue $\mu$ y la sucesión de funciones $f_n: \mathbb{R} \to \mathbb{R}$ definida por:
+$$
+\begin{align*}
+f_n(x) = \left\{
+\begin{array}{ll}
+1 & \text{ si } |x| < n\\
+0 & \text{ si } |x| \geq n
+\end{array}
+\right.
+\end{align*}
+$$
+Entonces, para cada $x \in \mathbb{R}$, tenemos:
+$$
+\begin{align*}
+\lim_{n \to \infty} f_n(x) = 1
+\end{align*}
+$$
+Por lo tanto, la sucesión $f_n$ converge puntualmente a la función constante $f(x) = 1$ en todo $E$. Ahora, supongamos que existe un conjunto medible $D \subseteq E$ tal que $\mu(E \setminus D) < \varepsilon$ para algún $\varepsilon > 0$ y que $f_n|_D$ converge uniformemente a $f|_D$. Entonces, para cualquier $\delta > 0$, existe un $N \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+|f_n(x) - f(x)| < \delta \quad \forall x \in D, n \geq N
+\end{align*}
+$$
+Sin embargo, dado que $f_n(x) = 0$ para $x$ con $|x| \geq n$, podemos elegir $x_0$ tal que $|x_0| > N$. Entonces, para este $x_0$:
+$$
+\begin{align*}
+|f_n(x_0) - f(x_0)| = |0 - 1| = 1
+\end{align*}
+$$
+Lo cual contradice la suposición de convergencia uniforme en $D$. Por lo tanto, el teorema de Egorov no se cumple cuando la medida del conjunto es infinita.
+
+</DemBox>
+
+### Ejercicio 5
+*Sea $f: X \to \mathbb{R}$ una función integrable Riemann tal que $f(x) > 0$ para todo $x \in [a, b]$, demuestra que $\int_a^b f > 0$.*
+
+<DemBox title="Demostración">
+
+Sea $f: [a, b] \to \mathbb{R}$ una función integrable Riemann tal que $f(x) > 0$ para todo $x \in [a, b]$. Como $f$ es acotada en el intervalo cerrado y es integrable Riemann, entonces es medible y ya que $f(x) > 0$ para todo $x \in [a, b]$, tenemos que el conjunto:
+$$
+\begin{align*}
+A \coloneq \{x \in [a, b] : f(x) > 0\} = [a, b]
+\end{align*}
+$$
+Además, la integral Riemann de $f$ en $[a,b]$ coincide con la integral de Lebesgue de $f$ en $[a, b]$. Para cada $n \in \mathbb{N}$ definimos los conjuntos:
+$$
+\begin{align*}
+E_n \coloneq \left\{x \in [a, b] : f(x) > \frac{1}{n}\right\}
+\end{align*}
+$$
+Como $f(x) > 0$ entonces tenemos que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{n = 1}^{\infty} E_n = A = [a, b]
+\end{align*}
+$$
+Supongamos por contradicción que cada $E_n$ tiene medida nula, es decir, $\mu(E_n) = 0$ para todo $n \in \mathbb{N}$. Entonces, por la subaditividad numerable de la medida de Lebesgue, se tendría que:
+$$
+\begin{align*}
+\mu(A) = \mu\left(\displaystyle \bigcup_{n = 1}^{\infty} E_n\right) \leq \displaystyle \sum_{n = 1}^{\infty} \mu(E_n) = 0
+\end{align*}
+$$
+Lo cual es imposible porque:
+$$
+\begin{align*}
+\mu(A) = \mu([a, b]) = b - a > 0
+\end{align*}
+$$
+Además, tenemos que:
+$$
+\begin{align*}
+\int_a^b f(x) \, dx \geq \int_{E_n} f(x) \, dx \geq \int_{E_n} \frac{1}{n} \, dx = \frac{1}{n} \mu(E_n) > 0
+\end{align*}
+$$
+Por lo tanto, $\int_a^b f(x) \, dx > 0$.
+
+</DemBox>
+
+### Ejercicio 6
+*Sea $f: [0, 1] \to \mathbb{R}$ la función dada por:*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x = 0\\
+0 & \text{ si } x \in \mathbb{I} \cap [0, 1]\\
+\frac{1}{q} & \text{ si } x \in \mathbb{Q} \setminus \{0\} \text{ y } x = \frac{p}{q} \text{ con } p, q \in \mathbb{N} \text{ primos entre sí}
+\end{array}
+\right.
+\end{align*}
+$$
+*Demostrar que:*
+
+- *$f$ es discontinua en los valores racionales no nulos y continua en el resto*.
+<DemBox title="Demostración">
+
+Sea $x_0 \in [0, 1]$ un punto cualquiera:
+
+- Si $x \in \mathbb{I} \cap [0, 1]$ o $x = 0$, entonces $f(x_0) = 0$. Dado $\varepsilon > 0$ cualquiera, tomamos $\delta = \varepsilon$. Entonces, si $x \in (x_0 - \delta, x_0 + \delta) \cap [0, 1]$ se tiene que:
+$$
+\begin{align*}
+|f(x) - f(x_0)| = |f(x) - 0| = |f(x)| < \varepsilon
+\end{align*}
+$$
+Por lo tanto, $f$ es continua en $x_0$.
+- Si $x_0 \in \mathbb{Q} \setminus \{0\}$, entonces $f(x_0) = \frac{1}{q_0}$ donde $x_0 = \frac{p_0}{q_0}$ con $p_0, q_0 \in \mathbb{N}$ primos entre sí. Tomamos $\varepsilon = \frac{1}{2q_0}$. Entonces, para cualquier $\delta > 0$, en el intervalo $(x_0 - \delta, x_0 + \delta) \cap [0, 1]$ existen números irracionales $x$ tales que:
+$$
+\begin{align*}
+|f(x) - f(x_0)| = \left|0 - \frac{1}{q_0}\right| = \frac{1}{q_0} > \varepsilon
+\end{align*}
+$$
+Por lo tanto, $f$ es discontinua en $x_0$.
+
+</DemBox>
+- *$f$ es integrable Riemann.*
+
+<DemBox title="Demostración">
+
+Basta notar que, por el apartado anterior hemos visto que $f$ es discontinua en los racionales no nulos, es decir:
+$$
+\begin{align*}
+\{x \in (\mathbb{Q} \cap [0, 1]) \setminus \{0\}\}
+\end{align*}
+$$
+Como sabemos que los racionales son numerables, entonces en particular los serán en el $[0, 1]$. Por tanto, como la medida de cualquier conjunto numerable es nula, tenemos que:
+$$
+\begin{align*}
+\mu(\{x \in (\mathbb{Q} \cap [0, 1]) \setminus \{0\}\}) = 0
+\end{align*}
+$$
+Por tanto, por un resultado visto en clase, $f$ es Riemann integrable si y solo si el conjunto de discontinuidades tiene medida nula, por lo tanto, $f$ es Riemann integrable
+
+</DemBox>
+
+### Ejercicio 7
+*Demuestra que toda función monótona $f: [a, b] \to \mathbb{R}$ tiene a lo sumo una cantidad numerable de discontinuidades. Para tal fin, se recomienda seguir los siguientes pasos:*
+
+- *Demuestra que todas las discontinuidades de $f$ en $(a, b)$ son de primera especie de salto finito, y que cada salto es igual o inferior a $f(b) - f(a)$. Demuestra también que si $f$ es discontinua en $a$ o $b$, tal discontinuidad es evitable.*
+
+<DemBox title="Demostración">
+
+Sea $f: [a, b] \to \mathbb{R}$ función monótona, supongamos sin pérdida de generalidad que es creciente, es decir, para $x \in [a, b)$:
+$$
+\begin{align*}
+f(x) \leq f(y) \quad \forall y \in (x, b]
+\end{align*}
+$$
+Sea $x_0 \in [a, b]$ un punto donde $f$ no es continua, entonces el valor en $f(x_0)$ será estrictamente mayor al valor inmediatamente anterior ya que, como $f$ es monótona creciente, $f(x_0)$ tiene que ser mayor al valor de la imagen en el valor inmediatamente anterior y, además, tiene que ser distinto, ya que si no no habría discontinuidad, es decir:
+$$
+\begin{align*}
+f(x_0) > f(x) \quad \forall x \in [a, x_0)
+\end{align*}
+$$
+Además, el salto es finito ya que $f$ es acotada en $[a, b]$ porque es monótona (aplicando ?) tenemos que:
+$$
+\begin{align*}
+f(a) \leq f(x) \leq f(b) \quad \forall x \in [a, b]
+\end{align*}
+$$
+Por lo tanto, el salto en $x_0$ es:
+$$
+\begin{align*}
+\Delta f(x_0) = f(x_0^+) - f(x_0^-) \leq f(b) - f(a)
+\end{align*}
+$$
+Por otro lado, si $x_0 = a$ o $x_0 = b$, entonces la discontinuidad es evitable ya que:
+$$
+\begin{align*}
+\lim_{x \to a^+} f(x) = f(a) \quad \text{ y } \quad \lim_{x \to b^-} f(x) = f(b)
+\end{align*}
+$$
+Es decir, podemos definir $f(a)$ y $f(b)$ como los límites laterales y así eliminar la discontinuidad.
+
+</DemBox>
+- *Dado un número natural cualquiera, demuestra que el número de discontinuidades de salto mayor o igual que $\frac{f(b) - f(a)}{n}$ es menor o igual que $n$.*
+<DemBox title="Demostración">
+
+Definimos el conjunto de discontinuidades de salto mayor o igual que $\frac{f(b) - f(a)}{n}$:
+$$
+\begin{align*}
+D_n \coloneq \left\{x \in (a, b) : \Delta f(x) \geq \frac{f(b) - f(a)}{n}\right\}
+\end{align*}
+$$
+Y supongamos que su cardinal es mayor a $n$, por lo tanto, si calculamos la imagen total de las sumas de todos estos saltos tenemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{m} \Delta f(x) & \geq \displaystyle \sum_{i = 1}^{m} \Delta \frac{f(b) - f(a)}{n} =\\[2ex]
+& = m \cdot \frac{f(b) - f(a)}{n} = n(m - n) \cdot \frac{f(b) - f(a)}{n} = (m - n) (f(b) - f(a)) 
+\end{align*}
+$$
+donde $m > n$.
+
+Como $m, n \in \mathbb{N}$ entonces $m - n \in \mathbb{N}$ y además $m - n \geq 1$, entonces:
+$$
+\begin{align*}
+(m - n)(f(b) - f(a)) \geq f(b) - f(a)
+\end{align*}
+$$
+Como sabemos que $f$ es monótona y hemos supuesto sin pérdida de generalidad que es creciente, entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{m} \Delta f(x) \leq f(b) - f(a)
+\end{align*}
+$$
+Por lo tanto, llegamos a una contradicción, ya que hemos visto que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{m} \Delta f(x) \geq (m - n)(f(b) - f(a)) \geq f(b) - f(a) \geq \displaystyle \sum_{i = 1}^{m} \Delta f(x)
+\end{align*}
+$$
+Por lo tanto, el cardinal de $D_n$ es menor o igual que $n$.
+
+</DemBox>
+- *Concluye probando ahora que el cardinal del conjunto de todas las discontinuidades es a lo sumo $\aleph_0$*.
+
+<DemBox title="Demostración">
+
+Sea $D$ el conjunto de todas las discontinuidades de $f$ en $(a, b)$:
+$$
+\begin{align*}
+D \coloneq \{x \in (a, b) : f \text{ es discontinua en } x\}
+\end{align*}
+$$
+Entonces, podemos expresar $D$ como la unión numerable de los conjuntos $D_n$:
+$$
+\begin{align*}
+D = \displaystyle \bigcup_{n = 1}^{\infty} D_n
+\end{align*}
+$$
+Donde $D_n$ es el conjunto de discontinuidades de salto mayor o igual que $\frac{f(b) - f(a)}{n}$. Como hemos visto en el apartado anterior, cada conjunto $D_n$ tiene cardinal menor o igual que $n$, por lo que cada $D_n$ es numerable. Entonces, la unión numerable de conjuntos numerables es numerable, por lo que el conjunto $D$ también es numerable. Por lo tanto, el cardinal del conjunto de todas las discontinuidades es a lo sumo $\aleph_0$.
+
+</DemBox>
+
+### Ejercicio 8
+*Sea $f: [a, b] \to \mathbb{R}$ una función integrable Riemann y $g: [m, M] \to \mathbb{R}$ una función continua, donde $m = \inf f([a, b])$ y $M = \sup f([a, b])$. Demuestra que la función $g \circ f: [a, b] \to \mathbb{R}$ es integrable Riemann.*
+
+<DemBox title="Demostración">
+
+Sea $f: [a, b] \to \mathbb{R}$ una función integrable Riemann y $g: [m, M] \to \mathbb{R}$ una función continua, donde $m = \inf f([a, b])$ y $M = \sup f([a, b])$. Como $f$ es integrable Riemann, entonces es acotada en $[a, b]$, por lo que existen $m, M \in \mathbb{R}$ tales que:
+$$
+\begin{align*}
+m \leq f(x) \leq M \quad \forall x \in [a, b]
+\end{align*}
+$$
+Por lo tanto, la imagen de $f$ está contenida en el intervalo cerrado $[m, M]$. Dado que $g$ es continua en el intervalo cerrado $[m, M]$, entonces $g$ es uniformemente continua en dicho intervalo. Por lo tanto, para cualquier $\varepsilon > 0$, existe un $\delta > 0$ tal que si $y_1, y_2 \in [m, M]$ y $|y_1 - y_2| < \delta$, entonces:
+$$
+\begin{align*}
+|g(y_1) - g(y_2)| < \varepsilon
+\end{align*}
+$$
+Ahora, como $f$ es integrable Riemann en $[a, b]$, para cualquier partición $P = \{x_0, x_1, \ldots, x_n\}$ de $[a, b]$, podemos considerar las sumas superiores e inferiores de Riemann de $f$:
+$$
+\begin{align*}
+U(f, P) = \sum_{i = 1}^{n} M_i (x_i - x_{i-1}) \quad \text{ y } \quad L(f, P) = \sum_{i = 1}^{n} m_i (x_i - x_{i-1})
+\end{align*}
+$$
+donde $M_i = \sup_{x \in [x_{i-1}, x_i]} f(x)$ y $m_i = \inf_{x \in [x_{i-1}, x_i]} f(x)$. Dado que $f$ es integrable Riemann, para cualquier $\varepsilon > 0$, existe una partición $P$ tal que:
+$$
+\begin{align*}
+U(f, P) - L(f, P) < \delta
+\end{align*}
+$$
+Ahora, consideramos las sumas superiores e inferiores de Riemann de $g \circ f$ con la misma partición $P$:
+$$
+\begin{align*}
+U(g \circ f, P) = \sum_{i = 1}^{n} G_i (x_i - x_{i-1}) \quad \text{ y } \quad L(g \circ f, P) = \sum_{i = 1}^{n} g_i (x_i - x_{i-1})
+\end{align*}
+$$
+donde $G_i = \sup_{x \in [x_{i-1}, x_i]} g(f(x))$ y $g_i = \inf_{x \in [x_{i-1}, x_i]} g(f(x))$. Dado que $g$ es uniformemente continua, tenemos que:
+$$
+\begin{align*}
+|G_i - g_i| < \varepsilon \quad \forall i = 1, 2, \ldots, n
+\end{align*}
+$$
+Por lo tanto, podemos estimar la diferencia entre las sumas superiores e inferiores de Riemann de $g \circ f$:
+$$
+\begin{align*}
+U(g \circ f, P) - L(g \circ f, P) & = \sum_{i = 1}^{n} (G_i - g_i) (x_i - x_{i-1}) < \sum_{i = 1}^{n} \varepsilon (x_i - x_{i-1}) = \varepsilon (b - a)
+\end{align*}
+$$
+Dado que $\varepsilon > 0$ es arbitrario, podemos hacer que $U(g \circ f, P) - L(g \circ f, P)$ sea tan pequeño como queramos eligiendo una partición adecuada $P$. Por lo tanto, $g \circ f$ es integrable Riemann en $[a, b]$.
+
+</DemBox>
+
+## Funciones medibles
+### Ejercicio 1
+*Sea $f: \mathbb{R}^N \to \mathbb{R}$ con $f$ uniformemente continua y acotada. Demuestra que la función $\varphi : \mathbb{R}^N \to \mathbb{R}$ definida por:*
+$$
+\begin{align*}
+\varphi(t) \coloneq \sup_{x \in \mathbb{R}^N} \left|f(x + t) - f(x)\right|
+\end{align*}
+$$
+*es medible*.
+
+<DemBox title="Demostración">
+
+Para ver que $\varphi$ es medible, veamos por definición que:
+$$
+\begin{align*}
+\left\{t \in \mathbb{R}^N : \varphi(t) \leq \alpha\right\} \in \mathcal{M}_N \quad \forall \alpha \in \mathbb{R}
+\end{align*}
+$$
+Sea $\alpha \in \mathbb{R}$ cualquiera pero fijo, tenemos que:
+$$
+\begin{align*}
+\{t \in \mathbb{R}^N : \varphi(t) \leq \alpha\} = \left\{t \in \mathbb{R}^N : \sup_{x \in \mathbb{R}^N} |f(x + t) - f(x)| \leq \alpha\right\}
+\end{align*}
+$$
+Como $f$ es uniformemente continua, por definición sabemos que para cualquier $\varepsilon > 0$ existe un $\delta > 0$ tal que para cada $x, y \in \mathbb{R}^N$ con $\|x - y\| < \delta$ se cumple que:
+$$
+\begin{align*}
+|f(x) - f(y)| < \varepsilon
+\end{align*}
+$$
+Como $x + t \in \mathbb{R}^N$ entonces tenemos que:
+$$
+\begin{align*}
+|x + t - x| = |t| < \delta \implies |f(x + t) - f(x)| < \varepsilon
+\end{align*}
+$$
+Además, $f$ es acotada, por lo que $\exists m, M \in \mathbb{R}$ tales que:
+$$
+\begin{align*}
+m \leq f(x) \leq M \quad \forall x \in \mathbb{R}^N
+\end{align*}
+$$
+Por terminar
+
+</DemBox>
+
+### Ejercicio 2
+*Sea $(X, \Sigma, \mu)$ espacio de medida completo y sean $f, g$ dos funciones de $X$ en $\overline{\mathbb{R}}$. Demuestra que si $f$ es medible y $f = g$ casi en todas partes, entonces $g$ es medible.*
+
+<DemBox title="Demostración">
+
+Sabemos que, por definición de medibilidad, $f$ es medible en $(X, \Sigma, \mu)$ si $\forall \alpha \in \overline{\mathbb{R}}$ se tiene que:
+$$
+\begin{align*}
+\left\{x \in X : f(x) < \alpha\right\} \in \Sigma
+\end{align*}
+$$
+Queremos ver que esto se cumple para $g$ también, es decir, que $\forall \alpha \in \overline{\mathbb{R}}$ se tiene que:
+$$
+\begin{align*}
+\left\{x \in X : g(x) < \alpha\right\} \in \Sigma
+\end{align*}
+$$
+Podemos notar que, como $g = f$ en casi todo punto, esto significa que $\exists B \in \Sigma$ con $\mu(B) = 0$ tal que:
+$$
+\begin{align*}
+\left\{x \in X : g(x) \neq f(x)\right\} \subseteq B
+\end{align*}
+$$
+Como es espacio de medida completo y $\mu(B) = 0$, entonces tenemos que:
+$$
+\begin{align*}
+\left\{x \in X : g(x) \neq f(x)\right\} \in \Sigma
+\end{align*}
+$$
+Entonces, si volvemos a la expresión , tenemos que:
+$$
+\begin{align*}
+\left\{x \in X : g(x) < \alpha\right\} & = \left(\left\{x \in X : g(x) < \alpha\right\} \cap \left\{x \in X : g(x) = f(x)\right\}\right) \cup\\[2ex]
+&  \cup \left(\left\{x \in X : g(x) < \alpha\right\} \cap \left\{x \in X : g(x) \neq f(x)\right\}\right) = \\[2ex]
+& = \left(\left\{x \in X : f(x) < \alpha\right\} \cap \left\{x \in X : g(x) = f(x)\right\}\right) \cup\\[2ex]
+&  \cup \left(\left\{x \in X : g(x) < \alpha\right\} \cap \left\{x \in X : g(x) \neq f(x)\right\}\right)
+\end{align*}
+$$
+Como $f$ es medible, entonces $\left\{x \in X : f(x) < \alpha\right\} \in \Sigma$ y como hemos visto antes, $\left\{x \in X : g(x) \neq f(x)\right\} \in \Sigma$. Además, el conjunto $\left\{x \in X : g(x) = f(x)\right\}$ es el complemento de $\left\{x \in X : g(x) \neq f(x)\right\}$, por lo que también pertenece a $\Sigma$. Por lo tanto, la unión de ambos conjuntos también pertenece a $\Sigma$, es decir:
+$$
+\begin{align*}
+\left\{x \in X : g(x) < \alpha\right\} \in \Sigma
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Sea $A \in \mathcal{M}_N$ y $f, g: A \to \overline{\mathbb{R}}$ tales que $f = g$ en casi todo punto. Demostrar que:*
+
+- *Si $f$ es integrable sobre $A$ entonces $g$ también lo es*
+<DemBox title="Demostración">
+
+Sea $f: A \to \overline{\mathbb{R}}$ integrable, entonces tenemos que:
+$$
+\begin{align*}
+\int_A f^{ + } \, d\mu < \infty \quad \text{ o } \quad \int_A f^{ - } \, d\mu < \infty
+\end{align*}
+$$
+Supongamos sin pérdida de generalidad que $\int_A f^{ + } \, d\mu$ finita.
+
+Como $f = g$ $\mu$-a.e., por definición, existe $B \in \mathcal{M}_N$ con $\mu(B) = 0$ tal que:
+$$
+\begin{align*}
+\left\{x \in A : f(x) \neq g(x)\right\} \subseteq B
+\end{align*}
+$$
+Así, como $B$ es de medida nula, tenemos que:
+$$
+\begin{align*}
+\int_A f^ + \, d\mu = \int_{A\setminus B} f^ + \, d\mu = \int_{A\setminus B} g^ + \, d\mu \leq \int_A g^ + \, d\mu
+\end{align*}
+$$
+Por lo tanto, $\int_A g^ + \, d\mu$ es finita, y así $g$ es integrable sobre $A$.
+
+</DemBox>
+- *Si $f \in \mathcal{L}_1(A)$ entonces $g$ es sumable sobre $A$*.
+<DemBox title="Demostración">
+
+Sea $f \in \mathcal{L}_1(A)$, entonces $f$ es integrable sobre $A$ y:
+$$
+\begin{align*}
+\int_A |f| \, d\mu < \infty
+\end{align*}
+$$
+Como $f = g$ $\mu$-a.e., por definición, existe $B \in \mathcal{M}_N$ con $\mu(B) = 0$ tal que:
+$$
+\begin{align*}
+\left\{x \in A : f(x) \neq g(x)\right\} \subseteq B
+\end{align*}
+$$
+Así, como $B$ es de medida nula, tenemos que:
+$$
+\begin{align*}
+\int_A |f| \, d\mu = \int_{A\setminus B} |f| \, d\mu = \int_{A\setminus B} |g| \, d\mu \leq \int_A |g| \, d\mu
+\end{align*}
+$$
+Por lo tanto, $\int_A |g| \, d\mu$ es finita, y así $g$ es sumable sobre $A$.
+
+</DemBox>
+
+### Ejercicio 4
+*Dada una función $f$ con dominio $A \subseteq \mathbb{R}^N$ y llegada en $\overline{\mathbb{R}}$, demuestra que si es continua en $x_0 \in A$ entonces sus partes positiva y negativa, $f^{ + }$ y $f^{ - }$, también lo son en $x_0$.*
+
+<DemBox title="Demostración">
+
+Sea $f: A \subseteq \mathbb{R}^N \to \overline{\mathbb{R}}$ continua en $x_0 \in A$ entonces, por definición de continuidad, para cualquier $\varepsilon > 0$ existe un $\delta > 0$ tal que:
+$$
+\begin{align*}
+|x - x_0| < \delta \implies |f(x) - f(x_0)| < \varepsilon
+\end{align*}
+$$
+Ahora, consideremos las funciones $f^{ + }$ y $f^{ - }$ definidas por:
+$$
+\begin{align*}
+f^{ + }(x) = \max\{f(x), 0\} \quad \text{ y } \quad f^{ - }(x) = \max\{-f(x), 0\}
+\end{align*}
+$$
+Queremos demostrar que $f^{ + }$ es continua en $x_0$. Sea $\varepsilon > 0$ cualquiera, tomamos el mismo $\delta > 0$ que para $f$. Entonces, si $|x - x_0| < \delta$, tenemos dos casos:
+
+- Si $f(x_0) \geq 0$, entonces:
+$$
+\begin{align*}
+|f^{ + }(x) - f^{ + }(x_0)| & = | \max\{f(x), 0\} - f(x_0)| \leq |f(x) - f(x_0)| < \varepsilon
+\end{align*}
+$$
+- Si $f(x_0) < 0$, entonces:
+$$
+\begin{align*}
+|f^{ + }(x) - f^{ + }(x_0)| & = | \max\{f(x), 0\} - 0| = | \max\{f(x), 0\}| \leq |f(x) - f(x_0)| < \varepsilon
+\end{align*}
+$$
+
+En ambos casos, hemos demostrado que $f^{ + }$ es continua en $x_0$.
+
+De manera similar, podemos demostrar que $f^{ - }$ es continua en $x_0$. Sea $\varepsilon > 0$ cualquiera, tomamos el mismo $\delta > 0$ que para $f$. Entonces, si $|x - x_0| < \delta$, tenemos dos casos:
+
+- Si $f(x_0) \leq 0$, entonces:
+$$
+\begin{align*}
+|f^{ - }(x) - f^{ - }(x_0)| & = | \max\{-f(x), 0\} - (-f(x_0))| \leq\\[2ex]
+& \leq |-f(x) + f(x_0)| = |f(x) - f(x_0)| < \varepsilon
+\end{align*}
+$$
+- If $f(x_0) > 0$, entonces:
+$$
+\begin{align*}
+|f^{ - }(x) - f^{ - }(x_0)| & = | \max\{-f(x), 0\} - 0| = \\[2ex]
+& = | \max\{-f(x), 0\}| \leq |f(x) - f(x_0)| < \varepsilon
+\end{align*}
+$$
+
+En ambos casos, hemos demostrado que $f^{ - }$ es continua en $x_0$.
+
+</DemBox>
+
+### Ejercicio 5
+*En cada uno de los siguientes casos, estudiar si la sucesión de funciones $(f_n)_{n \in \mathbb{N}}$ es monótona, si converge puntualmente, si converge uniformemente, si se puede aplicar el teorema de la convergencia monótona o dominada y si es posible intercambiar el límite y la integral:*
+$$
+\begin{align*}
+\lim_n \int_\mathbb{R} f_n(x) \, dx = \int_\mathbb{R} \lim_n f_n(x) \, dx
+\end{align*}
+$$
+*en los siguientes casos:*
+
+1. $f_n = \mathcal{X}_{[0, n]}$ 
+<DemBox title="Demostración">
+
+Sea $f_n = \mathcal{X}_{[0, n]}$:
+
+- *Monotonía*: La sucesión es claramente monótona creciente ya que:
+$$
+\begin{align*}
+f_n(x) \leq f_{n + 1}(x) \quad \forall x \in \mathbb{R}, \, \forall n \in \mathbb{N}
+\end{align*}
+$$
+- *Convergencia puntual*: La sucesión converge puntualmente a la función:
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+1 & \text{ si } x \geq 0\\
+0 & \text{ si } x < 0
+\end{array}
+\right.
+\end{align*}
+$$
+- *Convergencia uniforme*: La sucesión no converge uniformemente, ya que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - f(x)| = 1 \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Por tanto, no existe $N \in \mathbb{N}$ tal que para todo $n \geq N$ se tenga que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - f(x)| < \varepsilon
+\end{align*}
+$$
+- *Teorema de la convergencia monótona:* Sí, se puede aplicar el teorema de la convergencia monótona ya que la sucesión es monótona creciente y converge puntualmente a una función medible.
+- *Teorema de la convergencia dominada:* No, no se puede aplicar el teorema de la convergencia dominada ya que no existe una función integrable que domine a toda la sucesión.
+- *Intercambio de límite e integral:* Sí, se puede intercambiar el límite y la integral, ya que se cumple:
+$$
+\begin{align*}
+\lim_n \int_\mathbb{R} f_n(x) \, dx & = \lim_n \int_0^n 1 \, dx = \lim_n n = \infty\\[2ex]
+\int_\mathbb{R} \lim_n f_n(x) \, dx & = \int_0^\infty 1 \, dx = \infty
+\end{align*}
+$$
+
+</DemBox>
+2. $f_n = \frac{1}{n} \mathcal{X}_{[0, \infty)}$ 
+<DemBox title="Demostración">
+
+Sea $f_n = \frac{1}{n}\mathcal{X}_{[0, \infty)}$ entonces:
+
+- *Monotonía:* La función se puede descomponer en:
+$$
+\begin{align*}
+f_n(x) = \underbrace{\frac{1}{n}}_{\text{monótona}, \text{decreciente}} \underbrace{\mathcal{X}_{[0, \infty)}}_{\text{cte.}}
+\end{align*}
+$$
+Por lo tanto, la función es monótona decreciente.
+- *Convergencia puntual:* Podemos notar que:
+$$
+\begin{align*}
+f_n(x) = \left\{
+\begin{array}{ll}
+\frac{1}{n} & \text{ si } x \geq 0\\[2ex]
+0 & \text{ si } x < 0
+\end{array}
+\right. \xrightarrow[n \to \infty]{} f(x) = 0
+\end{align*}
+$$
+Por tanto, la función converge puntualmente a 0.
+- *Convergencia uniforme:* La función converge uniformemente a 0, ya que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - 0| = \sup_{x \in \mathbb{R}} |f_n(x)| = \frac{1}{n} \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+Por tanto, para cualquier $\varepsilon > 0$, existe $N \in \mathbb{N}$ tal que para todo $n \geq N$ se tiene que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - 0| < \varepsilon
+\end{align*}
+$$
+- *Teorema de la convergencia monótona:* Sí, se puede aplicar el teorema de la convergencia monótona ya que la sucesión es monótona decreciente y converge puntualmente a una función medible.
+- *Teorema de la convergencia dominada:* La sucesión está dominada por la función $g(x) = 1$, podemos ver si es sumable o no:
+$$
+\begin{align*}
+\int_\mathbb{R} g(x) \, dx = \int_0^\infty 1 \, dx = \infty
+\end{align*}
+$$
+Por lo tanto, no se puede aplicar el teorema de la convergencia dominada.
+- *Intercambio de límite e integral:* Sí, se puede intercambiar el límite y la integral, ya que se cumple:
+$$
+\begin{align*}
+\lim_n \int_\mathbb{R} f_n(x) \, dx & = \lim_n \int_0^\infty \frac{1}{n} \, dx = \lim_n \frac{1}{n} \cdot \infty = 0\\[2ex]
+\int_\mathbb{R} \lim_n f_n(x) \, dx & = \int_0^\infty 0 \, dx = 0
+\end{align*}
+$$
+
+</DemBox>
+3. $f_n = \frac{1}{n} \mathcal{X}_{[0, n]}$ 
+<DemBox title="Demostración">
+
+Sea $f_n = \frac{1}{n} \mathcal{X}_{[0, n]}$:
+
+- *Monotonía:* La función se puede descomponer en:
+$$
+\begin{align*}
+f_n(x) = \underbrace{\frac{1}{n}}_{\text{monótona}, \text{decreciente}} \underbrace{\mathcal{X}_{[0, n]}}_{\text{monótona}, \text{creciente}}
+\end{align*}
+$$
+Por lo tanto, la función no es monótona.
+- *Convergencia puntual:* Podemos notar que:
+$$
+\begin{align*}
+f_n(x) = \left\{
+\begin{array}{ll}
+\frac{1}{n} & \text{ si } 0 \leq x \leq n\\[2ex]
+0 & \text{ si } x < 0 \text{ o } x > n
+\end{array}
+\right. \xrightarrow[n \to \infty]{} f(x) = 0
+\end{align*}
+$$
+Por tanto, la función converge puntualmente a 0.
+- *Convergencia uniforme:* La función converge uniformemente a 0, ya que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - 0| = \sup_{x \in \mathbb{R}} |f_n(x)| = \frac{1}{n} \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+Por tanto, para cualquier $\varepsilon > 0$, existe $N \in \mathbb{N}$ tal que para todo $n \geq N$ se tiene que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - 0| < \varepsilon
+\end{align*}
+$$
+- *Teorema de la convergencia monótona:* No, no se puede aplicar el teorema de la convergencia monótona ya que la sucesión no es monótona.
+- *Teorema de la convergencia dominada:* No, no se puede aplicar el teorema de la convergencia dominada ya que no existe una función integrable que domine a toda la sucesión.
+- *Intercambio de límite e integral:* No, no se puede intercambiar el límite y la integral, ya que se cumple:
+$$
+\begin{align*}
+\lim_n \int_\mathbb{R} f_n(x) \, dx & = \lim_n \int_0^n \frac{1}{n} \, dx = \lim_n \frac{1}{n} \cdot n = 1\\[2ex]
+\int_\mathbb{R} \lim_n f_n(x) \, dx & = \int_0^\infty 0 \, dx = 0
+\end{align*}
+$$
+
+</DemBox>
+4. $f_n = n \mathcal{X}_[\frac{1}{n}, \frac{2}{n}]$ 
+<DemBox title="Demostración">
+
+Sea $f_n = n \mathcal{X}_{[\frac{1}{n}, \frac{2}{n}]}$:
+
+- *Monotonía:* La función no es monótona.
+- *Convergencia puntual:* Podemos notar que:
+$$
+\begin{align*}
+f_n(x) = \left\{
+\begin{array}{ll}
+n & \text{ si } \frac{1}{n} \leq x \leq \frac{2}{n}\\[2ex]
+0 & \text{ si } x < \frac{1}{n} \text{ o } x > \frac{2}{n}
+\end{array}
+\right. \xrightarrow[n \to \infty]{} f(x) = 0
+\end{align*}
+$$
+Por tanto, la función converge puntualmente a 0.
+- *Convergencia uniforme:* La función no converge uniformemente a 0, ya que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - 0| = \sup_{x \in \mathbb{R}} |f_n(x)| = n \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Por tanto, no existe $N \in \mathbb{N}$ tal que para todo $n \geq N$ se tenga que:
+$$
+\begin{align*}
+\sup_{x \in \mathbb{R}} |f_n(x) - 0| < \varepsilon
+\end{align*}
+$$
+- *Teorema de la convergencia monótona:* No, no se puede aplicar el teorema de la convergencia monótona ya que la sucesión no es monótona.
+- *Teorema de la convergencia dominada:* No, no se puede aplicar el teorema de la convergencia dominada ya que no existe una función integrable que domine a toda la sucesión.
+- *Intercambio de límite e integral:* No, no se puede intercambiar el límite y la integral, ya que se cumple:
+$$
+\begin{align*}
+\lim_n \int_\mathbb{R} f_n(x) \, dx & = \lim_n \int_{\frac{1}{n}}^{\frac{2}{n}} n \, dx = \lim_n n \cdot \left(\frac{2}{n} - \frac{1}{n}\right) = \lim_n 1 = 1\\[2ex]
+\int_\mathbb{R} \lim_n f_n(x) \, dx & = \int_0^\infty 0 \, dx = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Para cada $n \in \mathbb{N}$ se considera la función $f_n: [1, \infty] \to \mathbb{R}$ dada por:*
+$$
+\begin{align*}
+f_n (x) = x^{ - 1 - n^{ - 1}}
+\end{align*}
+$$
+*Sea $f: [1, \infty] \to \mathbb{R}$ la función dada por:*
+$$
+\begin{align*}
+f(x) = x^{ - 1}
+\end{align*}
+$$
+*Demuestra que $f_n \in \mathcal{L}_1([1, \infty])$ para todo $n$, que $f \notin \mathcal{L}_1([1, \infty])$ y que $(f_n)_n$ converge uniformemente a $f$ en $[1, \infty]$.*
+
+<DemBox title="Demostración">
+
+Sea $n \in \mathbb{N}$ cualquiera pero fijo, consideremos la función $f_n: [1, \infty) \to \mathbb{R}$ dada por:
+$$
+\begin{align*}
+f_n (x) = x^{ - 1 - n^{ - 1}}
+\end{align*}
+$$
+Para ver que $f_n \in \mathcal{L}_1([1, \infty))$, debemos comprobar que:
+$$
+\begin{align*}
+\int_1^\infty |f_n(x)| \, dx < \infty
+\end{align*}
+$$
+Calculamos la integral impropia:
+$$
+\begin{align*}
+\int_1^\infty x^{ - 1 - n^{ - 1}} \, dx & = \lim_{t \to \infty} \int_1^t x^{ - 1 - n^{ - 1}} \, dx = \lim_{t \to \infty} \left[ \frac{x^{ - n^{ - 1}}}{- n^{ - 1}} \right]_1^t = \lim_{t \to \infty} \left( - n x^{ - n^{ - 1}} \Big|_1^t \right) = \\[2ex]
+& = \lim_{t \to \infty} \left( - n t^{ - n^{ - 1}} + n \right) = n
+\end{align*}
+$$
+Por lo tanto, $f_n \in \mathcal{L}_1([1, \infty))$ para todo $n \in \mathbb{N}$.
+
+Ahora, consideremos la función $f: [1, \infty) \to \mathbb{R}$ dada por:
+$$
+\begin{align*}
+f(x) = x^{ - 1}
+\end{align*}
+$$
+Para ver que $f \notin \mathcal{L}_1([1, \infty))$, debemos comprobar que:
+$$
+\begin{align*}
+\int_1^\infty |f(x)| \, dx = \infty
+\end{align*}
+$$
+Calculamos la integral impropia:
+$$
+\begin{align*}
+\int_1^\infty f \, dx = \lim_{t \to \infty} \int_0^t \frac{1}{x} \, dx = \lim_{t \to \infty} \left[ \ln|x| \right]_1^t = \lim_{t \to \infty} (\ln t - \ln 1) = \infty
+\end{align*}
+$$
+Por lo tanto, $f \notin \mathcal{L}_1([1, \infty))$.
+
+Finalmente, veamos que la sucesión $(f_n)_{n \in \mathbb{N}}$ converge uniformemente a $f$ en $[1, \infty)$. Para ello, debemos comprobar que:
+$$
+\begin{align*}
+\sup_{x \in [1, \infty)} |f_n(x) - f(x)| \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+Calculamos la diferencia:
+$$
+\begin{align*}
+|f_n(x) - f(x)| & = \left| x^{ - 1 - n^{ - 1}} - x^{ - 1} \right| = \left| x^{ - 1} \left( x^{ - n^{ - 1}} - 1 \right) \right| = \frac{1}{x} \left| x^{ - n^{ - 1}} - 1 \right|
+\end{align*}
+$$
+Para $x \geq 1$, tenemos que $x^{ - n^{ - 1}} \leq 1$, por lo que:
+$$
+\begin{align*}
+|f_n(x) - f(x)| & = \frac{1}{x} (1 - x^{ - n^{ - 1}}) \leq 1 - x^{ - n^{ - 1}} \leq 1 - 1 = 0
+\end{align*}
+$$ 
+Por lo tanto, para cualquier $\varepsilon > 0$, existe $N \in \mathbb{N}$ tal que para todo $n \geq N$ se tiene que:
+$$
+\begin{align*}
+\sup_{x \in [1, \infty)} |f_n(x) - f(x)| < \varepsilon
+\end{align*}
+$$
+Así, hemos demostrado que $(f_n)_{n \in \mathbb{N}}$ converge uniformemente a $f$ en $[1, \infty)$.
+
+</DemBox>
+
+### Ejercicio 7
+*Sea la función $f:[a, b] \to \mathbb{R}$ integrable Riemann, demuestra que:*
+$$
+\begin{align*}
+\int_a^b f = \lim_{n \to \infty} \frac{b - a}{n} \sum_{k = 1}^n f\left(a + k \frac{b - a}{n}\right)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $f: [a, b] \to \mathbb{R}$ una función integrable Riemann, entonces por definición de integral de Riemann, tenemos que:
+$$
+\begin{align*}
+\int_a^b f(x) \, dx = \lim_{||P|| \to 0} \sum_{i = 1}^n f(c_i) \Delta x_i
+\end{align*}
+$$
+donde $P = \{x_0, x_1, \ldots, x_n\}$ es una partición de $[a, b]$, $||P||$ es la norma de la partición, $c_i \in [x_{i - 1}, x_i]$ y $\Delta x_i = x_i - x_{i - 1}$.
+
+Consideremos la partición uniforme $P_n$ de $[a, b]$ dada por:
+$$
+\begin{align*}
+x_i = a + i \frac{b - a}{n} \quad \text{ para } i = 0, 1, \ldots, n
+\end{align*}
+$$
+Entonces, la norma de esta partición es:
+$$
+\begin{align*}
+||P_n|| = \max_{1 \leq i \leq n} \Delta x_i = \frac{b - a}{n}
+\end{align*}
+$$
+Por lo tanto, cuando $n \to \infty$, tenemos que $||P_n|| \to 0$.
+
+Ahora, tomando $c_i = x_i$ en la suma de Riemann, obtenemos:
+$$
+\begin{align*}
+\sum_{i = 1}^n f(c_i) \Delta x_i & = \sum_{i = 1}^n f\left(a + i \frac{b - a}{n}\right) \cdot \frac{b - a}{n} = \frac{b - a}{n} \sum_{i = 1}^n f\left(a + i \frac{b - a}{n}\right)
+\end{align*}
+$$
+Por lo tanto, podemos escribir la integral como:
+$$
+\begin{align*}
+\int_a^b f(x) \, dx & = \lim_{n \to \infty} \frac{b - a}{n} \sum_{i = 1}^n f\left(a + i \frac{b - a}{n}\right)
+\end{align*}
+$$
+Así, hemos demostrado que:
+$$
+\begin{align*}
+\int_a^b f = \lim_{n \to \infty} \frac{b - a}{n} \sum_{k = 1}^n f\left(a + k \frac{b - a}{n}\right)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 8
+*Calcula los siguientes límites:*
+
+1. $\displaystyle \lim_{n \to \infty} \left(\dfrac{1}{n} + \dfrac{1}{n + 1} + \ldots + \dfrac{1}{2n}\right)$
+<DemBox title="Demostración">
+
+Podemos notar que la suma se puede escribir como:
+$$
+\begin{align*}
+L = \lim_{n \to \infty} \displaystyle \sum_{k = 0}^{n} \frac{1}{n + k}
+\end{align*}
+$$
+Y queremos que la suma se parezca a una integral de Riemann, es decir, que tenga la forma:
+$$
+\begin{align*}
+\int_a^b f(x) \, dx = \lim_{n \to \infty} \frac{b - a}{n} \sum_{k = 1}^n f\left(a + k \frac{b - a}{n}\right)
+\end{align*}
+$$
+En este caso, podemos notar que $a = 1$, $b = 2$ y $f(x) = \frac{1}{x}$. Por lo tanto, podemos escribir la suma como:
+$$
+\begin{align*}
+L & = \lim_{n \to \infty} \frac{1}{n} \sum_{k = 0}^{n} f\left(1 + \frac{k}{n}\right) = \int_1^2 \frac{1}{x}
+\end{align*}
+$$
+Calculamos la integral:
+$$
+\begin{align*}
+\int_1^2 \frac{1}{x} \, dx & = \left[ \ln|x| \right]_1^2 = \ln 2 - \ln 1 = \ln 2
+\end{align*}
+$$
+
+</DemBox>
+2. $\displaystyle \lim_{n \to \infty} \left(\frac{1}{\sqrt{n^2 - 1}} + \frac{1}{\sqrt{n^2 - 2^2}} + \ldots + \frac{1}{\sqrt{n^2 - (n - 1)^2}}\right)$
+
+<DemBox title="Demostración">
+
+Podemos notar que la suma se puede escribir como:
+$$
+\begin{align*}
+L = \lim_{n \to \infty} \displaystyle \sum_{k = 1}^{n - 1} \frac{1}{\sqrt{n^2 - k^2}}
+\end{align*}
+$$
+Y queremos que se parezca a una integral de Riemann, es decir, que tenga la forma:
+$$
+\begin{align*}
+\int_a^b f(x) \, dx = \lim_{n \to \infty} \frac{b - a}{n} \sum_{k = 1}^n f\left(a + k \frac{b - a}{n}\right)
+\end{align*}
+$$
+Por tanto, podemos escribir la suma como:
+$$
+\begin{align*}
+L & = \lim_{n \to \infty} \frac{1}{n} \sum_{k = 1}^{n - 1} f\left(\frac{k}{n}\right) = \int_0^1 \frac{1}{\sqrt{1 - x^2}} \, dx 
+\end{align*}
+$$
+Calculamos la integral:
+$$
+\begin{align*}
+\int_0^1 \frac{1}{\sqrt{1 - x^2}} \, dx & = \left[ \arcsin x \right]_0^1 = \arcsin 1 - \arcsin 0 = \frac{\pi}{2} - 0 = \frac{\pi}{2}
+\end{align*}
+$$
+
+</DemBox>
+
+## Teorema de Fubini y cambio de variable
+### Ejercicio 1
+#### Apartado 1
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M x^2 y d\mu_2(x, y) \quad \text{ con } M = [0, 1] \times [0, 1]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = x^2y$ es integrable en el conjunto $M = [0, 1] \times [0, 1]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado previo, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M x^2 y \, d\mu_2(x, y) & = \int_0^1 \left( \int_0^1 x^2 y \, dx \right) dy = \int_0^1 \left[ \frac{x^3}{3} y \right]_0^1 dy = \int_0^1 \frac{y}{3} dy = \left[ \frac{y^2}{6} \right]_0^1 = \frac{1}{6}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 2
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M \frac{x^2}{1 + y^2} d\mu_2(x, y) \quad \text{ con } M = [0, 1] \times [0, 1] 
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = \frac{x^2}{1 + y^2}$ es integrable en el conjunto $M = [0, 1] \times [0, 1]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado de clase, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M \frac{x^2}{1 + y^2} \, d\mu_2(x, y) & = \int_0^1 \left( \int_0^1 \frac{x^2}{1 + y^2} \, dx \right) dy = \int_0^1 \left[\frac{x^3}{3(1 + y^3)}\right]_0^1 \, dy = \\[2ex]
+& = \int_0^1 \frac{1}{3(1 + y^2)} \, dy = \left[ \frac{1}{3} \arctan y \right]_0^1 = \frac{\pi}{12}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 3
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M (\log x) y d\mu_2(x, y) \quad \text{ con } M = [1, e] \times [1, e]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = (\log x) y$ es integrable en el conjunto $M = [1, e] \times [1, e]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado de clase, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M (\log x) y \, d\mu_2(x, y) & = \int_1^e \left( \int_1^e (\log x) y \, dx \right) dy
+\end{align*}
+$$
+Veamos cual es la integral del logaritmo integrando por partes:
+$$
+\begin{align*}
+\int \log x \, dx \xlongequal[dv = dx \Rightarrow v = x]{u = \log x \Rightarrow du = \frac{1}{x} dx} x \log x - \int x \frac{1}{x} dx = x \log x - x + C
+\end{align*}
+$$  
+Por tanto:
+$$
+\begin{align*}
+\int_1^e \left( \int_1^e (\log x) y \, dx \right) dy & = \int_1^e y \cdot \left[x \log x - x\right]_1^e \, dy = \\[2ex]
+& = \int_1^e y \cdot \left(e - e - (0 - 1)\right) \, dy = \int_1^e y\, dy = \\[2ex]
+& = \left[\frac{y^2}{2}\right]_1^e = \frac{e^2}{2} - \frac{1}{2} = \frac{e^2 - 1}{2} 
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 4
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M (\log x) y \, d\mu(x, y) \quad \text{ con } M = (0, 1] \times [0, 1]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, el intervalo en el que se define la función no es compacto y, además, no podemos asegurar nada de la acotación de la función ya que:
+$$
+\begin{align*}
+\lim_{x \to 0^ + } \log x = - \infty
+\end{align*}
+$$
+Sin embargo, como la función es negativa en $(0, 1] \times [0, 1]$ ya que $y \geq 0$ y $\log x \leq 0$ en dicho intervalo, por tanto, para ver si es sumable, podemos ver si el valor absoluto de la función es sumable, es decir:
+$$
+\begin{align*}
+\int_M |(\log x) y| \, d\mu(x, y) & = \int_0^1 \left( \int_0^1 |(\log x) y| \, dx \right) dy = \int_0^1 \left( \int_0^1 - (\log x) y \, dx \right) dy = \\[2ex]
+& = \int_0^1 y \cdot \left[ - (x \log x - x) \right]_0^1 \, dy = \int_0^1 y \cdot (0 + 1) \, dy = \left[ \frac{y^2}{2} \right]_0^1 = \frac{1}{2}
+\end{align*}
+$$
+Que claramente es finito, por lo que la función es sumable y podemos calcular la integral original a través del teorema de Fubini:
+$$
+\begin{align*}
+\int_M (\log x) y \, d\mu(x, y) & = \int_0^1 \left( \int_0^1 (\log x) y \, dx \right) dy = \int_0^1 y \cdot \left[ x \log x - x \right]_0^1 \, dy = \\[2ex]
+& = \int_0^1 y \cdot (0 - 1) \, dy = \left[ - \frac{y^2}{2} \right]_0^1 = - \frac{1}{2}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 5
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M x^3 y^3 \, d\mu(x, y) \quad \text{ con } M = [0, 1] \times [0, 1]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = x^3 y^3$ es integrable en el conjunto $M = [0, 1] \times [0, 1]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado de clase, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M x^3 y^3 \, d\mu(x, y) & = \int_0^1 \left( \int_0^1 x^3 y^3 \, dx \right) dy = \int_0^1 y^3 \left[\frac{x^4}{4}\right]_0^1 \, dy = \\[2ex]
+& = \int_0^1 \frac{y^3}{4} \, dy = \left[\frac{y^4}{4 \cdot 4}\right]_0^1 = \frac{1}{16}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 6
+*Calcula la siguiente integral:*
+$$
+\begin{align*}
+\int_M x \log (xy) \, d\mu(x, y) \quad \text{ con } M = [2, 3] \times [1, 2]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = x \log (xy)$ es integrable en el conjunto $M = [2, 3] \times [1, 2]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado de clase, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M x \log (xy) \, d\mu(x, y) & = \int_1^2 \left( \int_2^3 x \log (xy) \, dx \right) dy 
+\end{align*}
+$$
+Veamos cual es la integral de $x$:
+$$
+\begin{align*}
+\int x \log (xy) \, dx \xlongequal[dv = x dx \Rightarrow v = \frac{x^2}{2}]{u = \log (xy) \Rightarrow du = \frac{1}{x} dx} \frac{x^2}{2}\log (xy) - \int \frac{x^2}{2} \frac{1}{x} dx = \frac{x^2}{2} \log (xy) - \frac{x^2}{4}
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+\int_1^2 \left( \int_2^3 x \log (xy) \, dx \right) dy & = \int_1^2 \left[\frac{x^2}{2}\log (xy) - \frac{x^2}{4}\right]_2^3\, dy = \\[2ex]
+& = \int_1^2\left(\frac{3^2}{2} \log (3y) - \frac{3^2}{4} - \left(\frac{2^2}{2}\log (2y) - \frac{2^2}{4}\right)\right)\, dy = \\[2ex]
+& = \int_1^2\left(\frac{3^2}{2} \log (3y) - \frac{3^2}{4} - 2 \log (2y) + 1\right)\, dy = \\[2ex]
+& = \frac{3^2}{2} \int_1^2 \log (3y) \, dy - 2\int_1^2 \log(2y) \, dy + \left(\frac{3^2}{4} + 1\right) \int_1^2 \, dy = \\[2ex]
+& = \frac{9}{2} \left[ y \log(3y) - y \right]_1^2 - 2 \left[ y \log(2y) - y \right]_1^2 + \left(\frac{9}{4} + 1\right) [y]_1^2 = \\[2ex]
+& = \frac{9}{2} (2 \log 6 - 2 - \log 3 + 1) - 2 (2 \log 4 - 2 - \log 2 + 1) + \left(\frac{9}{4} + 1\right) (2 - 1) = \\[2ex]
+& = 9 \log 6 - \frac{9}{2} - \frac{9}{2} \log 3 + \frac{9}{2} - 4 \log 4 + 4 + 2 \log 2 + \frac{13}{4} = \\[2ex]
+& = 9 \log 6 - \frac{9}{2} \log 3 - 4 \log 4 + 2 \log 2 + \frac{13}{4} = \\[2ex]
+& = 9 (\log 2 + \log 3) - \frac{9}{2} \log 3 - 4 (2 \log 2) + 2 \log 2 + \frac{13}{4} = \\[2ex]
+& = 9 \log 2 + 9 \log 3 - \frac{9}{2} \log 3 - 8 \log 2 + 2 \log 2 + \frac{13}{4} = \\[2ex]
+& = 3 \log 2 + \frac{9}{2} \log 3 + \frac{13}{4}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 7
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M(e^{x^2} - e^{y^2}) \, d\mu(x, y) \quad \text{ con } M = [a, b] \times [a, b]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = e^{x^2} - e^{y^2}$ es integrable en el conjunto $M = [a, b] \times [a, b]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado de clase, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M (e^{x^2} - e^{y^2}) \, d\mu(x, y) & = \int_a^b \left( \int_a^b (e^{x^2} - e^{y^2}) \, dx \right) dy = \\[2ex]
+& = \int_a^b \left( \int_a^b e^{x^2} \, dx - \int_a^b e^{y^2} \, dx \right) dy = \\[2ex]
+& = \int_a^b \left( \int_a^b e^{x^2} \, dx - (b - a) e^{y^2} \right) dy
+\end{align*}
+$$
+Ahora, notamos que la integral de $e^{x^2}$ no tiene una primitiva elemental, sin embargo, está definida en un cuadrado perfecto simétrico respecto a la diagonal $y = x$. Además, podemos ver que si intercambiamos las variables $x$ e $y$ en la función $f$, obtenemos:
+$$
+\begin{align*}
+f(y, x) = e^{y^2} - e^{x^2} = - f(x, y)
+\end{align*}
+$$
+Es decir, que la función es antisimétrica respecto a la diagonal $y = x$. Por tanto, la integral sobre el cuadrado perfecto es cero:
+$$
+\begin{align*}
+\int_M (e^{x^2} - e^{y^2}) \, d\mu(x, y) & = 0
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 10
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M e^y \sin\left(\frac{x}{y}\right) d\mu(x, y) \quad \text{ con } M = \left[ - \frac{\pi}{2}, \frac{\pi}{2}\right] \times \left[ - \frac{\pi}{2}, \frac{\pi}{2}\right]
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que la función $f(x, y) = e^y \sin\left(\frac{x}{y}\right)$ es integrable en el conjunto $M = \left[ - \frac{\pi}{2}, \frac{\pi}{2}\right] \times \left[ - \frac{\pi}{2}, \frac{\pi}{2}\right]$ ya que es continua en un conjunto compacto y además está acotada. Por tanto, como $f$ es integrable, entonces por un resultado de clase, $f$ es medible y por tanto podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M e^y \sin\left(\frac{x}{y}\right) d\mu(x, y) & = \int_{ - \frac{\pi}{2}}^{\frac{\pi}{2}} \left( \int_{ - \frac{\pi}{2}}^{\frac{\pi}{2}} e^y \sin\left(\frac{x}{y}\right) \, dx \right) dy 
+\end{align*}
+$$
+Podemos notar que la función $\sin\left(\frac{x}{y}\right)$ es una función impar respecto a $x$, es decir:
+$$
+\begin{align*}
+\sin\left(\frac{-x}{y}\right) = - \sin\left(\frac{x}{y}\right)
+\end{align*}
+$$
+Por tanto, como el intervalo de integración en $x$ es simétrico respecto a cero, tenemos que:
+$$
+\begin{align*}
+\int_{ - \frac{\pi}{2}}^{\frac{\pi}{2}} e^y \sin\left(\frac{x}{y}\right) \, dx & = e^y \int_{ - \frac{\pi}{2}}^{\frac{\pi}{2}} \sin\left(\frac{x}{y}\right) \, dx = 0
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 13
+*Calcula la siguiente integral*:
+$$
+\begin{align*}
+\int_M \frac{1}{(1 + x)^2} \, d\mu(x, y) \quad \text{ con } M = [0, \infty) \times \left[0, \frac{3\pi}{2} \right] 
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, la función es medible ya que es continua en el conjunto $M = [0, \infty) \times \left[0, \frac{3\pi}{2} \right]$. Además, como la función es positiva en dicho conjunto, podemos aplicar el teorema de Tonelli dado que $f$ es medible no negativa. Por tanto, tenemos que:
+$$
+\begin{align*}
+\int_M \frac{1}{(1 + x)^2} \, d\mu(x, y) & = \int_0^{\frac{3\pi}{2}} \left( \int_0^\infty \frac{1}{(1 + x)^2} \, dx \right) dy
+\end{align*}
+$$
+El calculo de la integral impropia interna es:
+$$
+\begin{align*}
+\int_0^\infty \frac{1}{(1 + x)^2} \, dx & = \lim_{t \to \infty} \int_0^t (1 + x)^{ - 2} \, dx = \lim_{t \to \infty} \left[ - \frac{1}{1 + x} \right]_0^t = \\[2ex]
+& = \lim_{t \to \infty} \left( - \frac{1}{1 + b} \right) - \left( - \frac{1}{1 + 0}\right) =\lim_{t \to \infty} 1 - \frac{1}{1 + b} = 1
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+\int_0^{\frac{3\pi}{2}} \left( \int_0^\infty \frac{1}{(1 + x)^2} \, dx \right) dy & = \int_0^{\frac{3\pi}{2}} 1 \, dy = \left[ y \right]_0^{\frac{3\pi}{2}} = \frac{3\pi}{2}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+#### Apartado 1
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M \frac{x}{\sqrt{y}} \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) \in \mathbb{R}^2 : 0 \leq x \leq 1, \, 0 \leq y \leq x\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos notar que el dominio $M$ está delimitado por las rectas $x = 0$, $x = 1$, $y = 0$ y $y = x$,  geométricamente sería:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_0.svg)
+
+Por tanto, la función $f(x, y) = \frac{x}{\sqrt{y}}$ es continua en $M\setminus \{y = 0\}$ donde tiene una discontinuidad de tipo infinito. Sin embargo, podemos ver que la función es positiva en $M$ y podemos calcular aplicando el Teorema de Tonelli la integral. Para ello:
+$$
+\begin{align*}
+\int_M \frac{x}{\sqrt{y}} \, d\mu_2(x, y) & = \int_0^1 \left( \int_0^x \frac{x}{\sqrt{y}} \, dy \right) dx = \int_0^1 \left[2x \sqrt{y} \right]_0^x \, dx = \\[2ex]
+& = \int_0^1 2x \sqrt{x} \, dx = \int_0^1 2x^{\frac{3}{2}} \, dx = \left[2 \cdot \frac{2}{5} x^{\frac{5}{2}} \right]_0^1 = \frac{4}{5}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 2
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M x \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) \in \mathbb{R}^2 : 0 \leq x \leq 1, \, 0 \leq y \leq e^x\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, el dominio de integración $M$ está delimitado por las rectas $x = 0$, $x = 1$, $y = 0$ y la curva $y = e^x$, geométricamente sería:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_1.svg)
+
+En dicho intervalo, tenemos que la función $f(x, y) = x$ es continua y por tanto integrable. Por tanto, podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M x\, d\mu_2(x, y) & = \int_0^1 \left( \int_0^{e^x} x \, dy \right) dx = \int_0^1 x \cdot \left[ y \right]_0^{e^x} \, dx = \int_0^1 x e^x \, dx
+\end{align*}
+$$
+Para calcular la integral, integramos por partes:
+$$
+\begin{align*}
+\int x e^x \, dx \xlongequal[dv = e^xdx \Rightarrow v = e^x]{u = x \Rightarrow du = dx} x e^x - \int e^x dx = x e^x - e^x + C
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+\int_0^1 x e^x \, dx & = \left[ x e^x - e^x \right]_0^1 = (1 \cdot e^1 - e^1) - (0 - 1) = 1
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 3
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M \frac{x^2}{y^2} \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) \in \mathbb{R}^2 : 1 \leq x \leq 2, \, x^{ - 1} \leq y \leq x\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, los límites de integración están dados por las rectas $x = 1$, $x = 2$ y las curvas $y = x^{ - 1}$ y $y = x$, geométricamente sería:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_2.svg)
+
+En dicho intervalo, tenemos que la función $f(x, y) = \frac{x^2}{y^2}$ es continua y por tanto integrable. Por tanto, podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M \frac{x^2}{y^2} \, d\mu_2(x, y) & = \int_1^2 \left(\int_{x^{ - 1}}^x \frac{x^2}{y^2} \, dy \right) \, dx = \int_1^2 \left[ - \frac{x^2}{y}\right]_{x^{ - 1}}^x \, dx = \\[2ex]
+& = \int_1^2 \left( - \frac{x^2}{x} - \left( - \frac{x^2}{\frac{1}{x}}\right)\right) \, dy = \int_1^2 - x + x^3\, dx = \\[2ex]
+& = -\int_1^2 x \, dx + \int_1^2 x^3 \, dx = - \left[\frac{x^2}{2}\right]_1^2 + \left[\frac{x^4}{4}\right]_1^2 = \\[2ex]
+& = - 2 + \frac{1}{2} + 4 - \frac{1}{4} = \frac{9}{4}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 4
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M e^{\frac{x}{y}} \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) \in \mathbb{R}^2 : 0 \leq y \leq 1, \, 0 \leq x \leq y^2\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, los límites de integración están dados por las rectas $y = 0$, $y = 1$ y la curva $x = y^2$, geométricamente sería:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_3.svg)
+
+Podemos notar que en $(0, 0)$ la función puede dar problemas de continuidad, si estudiamos el límite:
+$$
+\begin{align*}
+\lim_{(x, y) \to (0, 0)^+} e^{\frac{x}{y}} & = \lim_{y \to 0^+} e^{\frac{0}{y}} = e^0 = 1
+\end{align*}
+$$
+
+En dicho intervalo, tenemos que la función $f(x, y) = e^{\frac{x}{y}}$ es continua y por tanto integrable. Por tanto, podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M e^{\frac{x}{y}} \, d\mu_2(x, y) & = \int_0^1 \left( \int_0^{y^2} e^{\frac{x}{y}} \, dx \right) dy = \int_0^1 \left[ y e^{\frac{x}{y}} \right]_0^{y^2} \, dy = \\[2ex]
+& = \int_0^1 y \left( e^y - 1 \right) \, dy = \int_0^1 y e^y \, dy - \int_0^1 y \, dy = \\[2ex]
+& \xlongequal[dv = e^y dy \Rightarrow v = e^y]{u = y \Rightarrow du = dy} \left[ y e^y - \int e^y dy \right]_0^1 - \left[\frac{y^2}{2}\right]_0^1 = \\[2ex]
+& = \left[ y e^y - e^y \right]_0^1 - \frac{1}{2} = (1 \cdot e^1 - e^1) - (0 - 1) - \frac{1}{2} = \frac{1}{2}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 5
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M xy^2 \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) \in \mathbb{R}^2 : |y| \leq x \leq 1\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, los límites de integración están dados por las rectas $x = 1$ y las curvas $y = x$ y $y = -x$, geométricamente sería:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_4.svg)
+
+Podemos notar que la función $f(x,y) = xy^2$ es continua en el conjunto $M$ y por tanto integrable. Además, podemos notar que la función es par respecto a la variable $y$, es decir:
+$$
+\begin{align*}
+f(x, -y) = x(-y)^2 = xy^2 = f(x, y)
+\end{align*}
+$$
+Por tanto, podemos notar que la integral en el conjunto $M$ es el doble de la integral en el subconjunto:
+$$
+\begin{align*}
+M^+ = \left\{(x, y) \in \mathbb{R}^2 : 0 \leq y \leq x \leq 1\right\}
+\end{align*}
+$$
+Por tanto, podemos calcular la integral en $M^+$ y luego multiplicar por $2$. Así, aplicando el teorema de Fubini:
+$$
+\begin{align*}
+\int_M xy^2 \, d\mu_2(x, y) & = 2 \int_{M^+} xy^2 \, d\mu_2(x, y) = 2 \int_0^1 \left( \int_0^x xy^2 \, dy \right) dx = \\[2ex]
+& = 2 \int_0^1 x \left[ \frac{y^3}{3} \right]_0^x \, dx = 2 \int_0^1 x \cdot \frac{x^3}{3} \, dx = \\[2ex]
+& = \frac{2}{3} \int_0^1 x^4 \, dx = \frac{2}{3} \left[ \frac{x^5}{5} \right]_0^1 = \frac{2}{15}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 6
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M xy \, d\mu_2(x, y) \quad \text{ con } M \text{ la región delimitada por } y = x \quad \text{ e } y = x^2
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este ejercicio lo más fácil es graficar primero y ver que región tenemos que analizar. Así:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_5.svg)
+
+Por tanto, hay que hallar el punto de intersección de las dos curvas:
+$$
+\begin{align*}
+x = x^2 \implies x^2 - x = 0 \implies x(x - 1) = 0 \implies x = 0 \text{ o } x = 1
+\end{align*}
+$$
+Por tanto, los límites de integración son $x \in [0, 1]$ y $y \in [x^2, x]$. En dicho intervalo, tenemos que la función $f(x, y) = xy$ es continua y por tanto integrable. Por tanto, podemos aplicar el teorema de Fubini para calcular la integral:
+$$
+\begin{align*}
+\int_M xy \, d\mu_2(x, y) & = \int_0^1 \left( \int_{x^2}^x xy \, dy \right) dx = \int_0^1 x \left[ \frac{y^2}{2} \right]_{x^2}^x \, dx = \\[2ex]
+& = \int_0^1 x \left( \frac{x^2}{2} - \frac{x^4}{2} \right) \, dx = \int_0^1 \left( \frac{x^3}{2} - \frac{x^5}{2} \right) \, dx = \\[2ex]
+& = \frac{1}{2} \int_0^1 x^3 \, dx - \frac{1}{2} \int_0^1 x^5 \, dx = \frac{1}{2} \left[ \frac{x^4}{4} \right]_0^1 - \frac{1}{2} \left[ \frac{x^6}{6} \right]_0^1 = \\[2ex]
+& = \frac{1}{8} - \frac{1}{12} = \frac{3 - 2}{24} = \frac{1}{24}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 8
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M 12 - 3x - 4y \, d\mu_2 (x, y) \quad \text{ con } M = \left\{(x, y): \sqrt{x} + \sqrt{y} \geq 1, \, \sqrt{1 - x} + \sqrt{1 - y} \geq 1\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, el dominio está delimitado por dos condiciones:
+
+- $\sqrt{x} + \sqrt{y} \geq 1$ entonces:
+$$
+\begin{align*}
+\sqrt{y} \geq 1 - \sqrt{x} \implies y \geq (1 - \sqrt{x})^2 = 1 - 2\sqrt{x} + x
+\end{align*}
+$$
+- $\sqrt{1 - x} + \sqrt{1 - y} \geq 1$ entonces:
+$$
+\begin{align*}
+\sqrt{1 - y} \geq 1 - \sqrt{1 - x} \implies y \leq 1 - (1 - \sqrt{1 - x})^2 = 2\sqrt{1 - x} - (1 - x)
+\end{align*}
+$$
+
+Si graficamos ambas curvas, tenemos:
+
+![TikZ Graph](/blogs/images/ejercicios-analisis-iii_tikz_6.svg)
+
+Vemos que son simétricas respecto a la recta $y = x$ y se intersectan en los puntos $(0, 1)$ y $(1, 0)$. Por tanto, podemos expresar el dominio $M$ como:
+$$
+\begin{align*}
+M & = \left\{(x, y) : 0 \leq x \leq 1, \, 1 - 2\sqrt{x} + x \leq y \leq 2\sqrt{1 - x} - (1 - x)\right\}
+\end{align*}
+$$
+Por tanto, aplicando el teorema de Fubini:
+$$
+\begin{align*}
+\int_M 12 - 3x - 4y \, d\mu_2 (x, y) & = \int_0^1 \left( \int_{1 - 2\sqrt{x} + x}^{2\sqrt{1 - x} - (1 - x)} 12 - 3x - 4y \, dy \right) dx = \\[2ex]
+& = \int_0^1 \left[ (12 - 3x)y - 2y^2 \right]_{1 - 2\sqrt{x} + x}^{2\sqrt{1 - x} - (1 - x)} \, dx = \\[2ex]
+& = \int_0^1 \left( (12 - 3x) \left( 2\sqrt{1 - x} - (1 - x) \right) - 2 \left( 2\sqrt{1 - x} - (1 - x) \right)^2 \right) \, dx - \\[2ex]
+& \quad - \int_0^1 \left( (12 - 3x) \left( 1 - 2\sqrt{x} + x \right) - 2 \left( 1 - 2\sqrt{x} + x \right)^2 \right) \, dx = \\[2ex]
+& = I_1 - I_2
+\end{align*}
+$$
+Donde:
+$$
+\begin{align*}
+I_1 & = \int_0^1 \left( (12 - 3x) \left( 2\sqrt{1 - x} - (1 - x) \right) - 2 \left( 2\sqrt{1 - x} - (1 - x) \right)^2 \right) \, dx = \\[2ex]
+& = \int_0^1 \left( 24\sqrt{1 - x} - 12(1 - x) - 6x\sqrt{1 - x} + 3x(1 - x) - 8(1 - x) + 8(1 - x)^{3/2} - 2(1 - x)^2 \right) \, dx = \\[2ex]
+& = \int_0^1 \left( 16\sqrt{1 - x} + 8(1 - x)^{3/2} - 20 + 11x - 3x^2 - 6x\sqrt{1 - x} \right) \, dx = \\[2ex]
+& = \left[ -\frac{32}{3} (1 - x)^{3/2} - \frac{16}{5} (1 - x)^{5/2} - 20x + \frac{11}{2} x^2 - x^3 + 4(1 - x)^{5/2} \right]_0^1 = \\[2ex]
+& = \left( 0 - 0 - 20 + \frac{11}{2} - 1 + 0 \right) - \left( -\frac{32}{3} - \frac{16}{5} - 0 + 0 + 0 + 4 \right) = \\[2ex]\, 
+& = -\frac{27}{2} + \frac{32}{3} + \frac{16}{5} + 4 = \frac{319}{30}
+\end{align*}
+$$
+Y:
+$$
+\begin{align*}
+I_2 & = \int_0^1 \left( (12 - 3x) \left( 1 - 2\sqrt{x} + x \right) - 2 \left( 1 - 2\sqrt{x} + x \right)^2 \right) \, dx = \\[2ex]
+& = \int_0^1 \left( 12 - 24\sqrt{x} + 12x - 3x + 6x\sqrt{x} - 3x^2 - 2 + 8\sqrt{x} - 4x + 2x^2 \right) \, dx = \\[2ex]
+& = \int_0^1 \left( 10 - 16\sqrt{x} + 5x + 6x^{3/2} - x^2 \right) \, dx = \\[2ex]
+& = \left[ 10x - \frac{32}{3} x^{3/2} + \frac{5}{2} x^2 + \frac{12}{5} x^{5/2} - \frac{1}{3} x^3 \right]_0^1 = \\[2ex]
+& = \left( 10 - \frac{32}{3} + \frac{5}{2} + \frac{12}{5} - \frac{1}{3} \right) - (0) = \frac{319}{30}
+\end{align*}
+$$
+Por tanto, la integral buscada es:
+$$
+\begin{align*}
+\int_M 12 - 3x - 4y \, d\mu_2 (x, y) & = I_1 - I_2 = \frac{319}{30} - \frac{319}{30} = 0
+\end{align*}
+$$
+Creo que está mal, son demasiadas cuentas como para que no falle alguna...
+
+</DemBox>
+
+### Apartado 9
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_M x \, d\mu_2(x, y) \quad \text{ con } M = \text{subconjunto del semiplano } x \geq 0 \text{ con frontera: } \begin{cases} 
+\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1\\[2ex]
+\frac{x^2}{4a^2} + \frac{y^2}{9b^2} = 1
+\end{cases} 
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Para resolver este ejercicio, la forma más sencilla es hacer un cambio de coordenadas a coordenadas hiperbólicas. Así, definimos el cambio de variable:
+$$
+\begin{align*}
+x & = ar \cos \theta \quad \text{ y } \quad y = br \sin \theta
+\end{align*}
+$$
+Donde $r \geq 0$ y $\theta \in [ - \frac{\pi}{2}, \frac{\pi}{2}]$ para cubrir todo el semiplano $x \geq 0$. Calculamos el Jacobiano:
+$$
+\begin{align*}
+J = \begin{vmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\[2ex]
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix} & = \begin{vmatrix}
+a \cos \theta & - a r \sin \theta \\[2ex]
+b \sin \theta & b r \cos \theta
+\end{vmatrix} = ab r (\cos^2 \theta + \sin^2 \theta) = ab r
+\end{align*}
+$$
+Sustituimos en las ecuaciones de las fronteras para hallar los nuevos límites de integración:
+
+- Primera frontera:
+$$
+\begin{align*}
+\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1 & \implies r^2 \cos^2 \theta - r^2 \sin^2 \theta = 1 \implies r^2 (\cos^2 \theta - \sin^2 \theta) = 1 \implies \\[2ex]
+& \implies r = \frac{1}{\sqrt{\cos^2 \theta - \sin^2 \theta}} = \frac{1}{\sqrt{\cos(2\theta)}}
+\end{align*}
+$$
+- Segunda frontera:
+$$
+\begin{align*}
+\frac{x^2}{4a^2} + \frac{y^2}{9b^2} = 1 & \implies \frac{r^2 \cos^2 \theta}{4} + \frac{r^2 \sin^2 \theta}{9} = 1 \implies r^2 \left( \frac{\cos^2 \theta}{4} + \frac{\sin^2 \theta}{9} \right) = 1 \implies \\[2ex]
+& \implies r = \frac{1}{\sqrt{\frac{\cos^2 \theta}{4} + \frac{\sin^2 \theta}{9}}}
+\end{align*}
+$$
+Por tanto, los límites son:
+
+</DemBox>
+
+## Cambio de variable en integrales dobles
+### Ejercicio 1
+*A través de un cambio de variable adecuado, calcula la siguiente integral doble:*
+$$
+\begin{align*}
+\int_M \cos (x^2 + y^2) \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) : x^2 + y^2 \leq \sqrt{\frac{\pi}{2}}  \right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos ver que:
+
+- $M$ es un conjunto medible
+- La función $f(x, y) = \cos(x^2 + y^2)$ es continua en $M$ y, por tanto, medible.
+- Además, $|f| \leq 1$ y $M$ es de medida finita, entonces $f \in \mathcal{L}_1(M)$
+
+Por tanto, vamos a aplicar el cambio de variable a coordenadas polares. Sea $T : U \subseteq \mathbb{R}^N \to \mathbb{R}^N$ difeomorfismo $\mathcal{C}^1$ con jacobiano $J_T$, entonces para toda función $f \in \mathcal{L}_1(T(U))$ se cumple:
+$$
+\begin{align*}
+\int_{T(U)} f(x) \, d\mu_N(x) = \int_U f(T(u)) |J_T(u)| \, d\mu_N(u)
+\end{align*}
+$$
+En nuestro caso, definimos el cambio de variable:
+$$
+\begin{align*}
+T(r, \theta) = (x, y) = (r \cos \theta, r \sin \theta) \quad \text{ con } (r, \theta) \in (0, \infty) \times (0, 2\pi)
+\end{align*}
+$$
+Calculamos el jacobiano:
+$$
+\begin{align*}
+|J_T(r, \theta)| & = \begin{vmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\[2ex]
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix}
+= \begin{vmatrix}
+\cos \theta & - r \sin \theta \\[2ex]
+\sin \theta & r \cos \theta
+\end{vmatrix} = r (\cos^2 \theta + \sin^2 \theta) = r
+\end{align*}
+$$
+Ahora, los nuevos límites de integración vienen dados por:
+$$
+\begin{align*}
+x^2 + y^2 \leq \sqrt{\frac{\pi}{2}} & \implies r^2 \cos^2 \theta + r^2 \sin^2 \theta \leq \sqrt{\frac{\pi}{2}} \implies\\[2ex]
+& \implies r^2 \leq \sqrt{\frac{\pi}{2}} \implies r \leq \left( \frac{\pi}{2} \right)^{1/4}
+\end{align*}
+$$
+Y por tanto, los nuevos límites son:
+$$
+\begin{align*}
+r \in \left[0, \left( \frac{\pi}{2} \right)^{1/4} \right] \quad \text{ y } \quad \theta \in [0, 2\pi]
+\end{align*}
+$$
+Es decir, que el conjunto $M$ en las nuevas coordenadas es:
+$$
+\begin{align*}
+T^{ - 1}(M) = \left\{(r, \theta) : 0 \leq r \leq \left( \frac{\pi}{2} \right)^{1/4}, \, 0 \leq \theta \leq 2\pi \right\}
+\end{align*}
+$$
+Ahora, aplicando el teorema del cambio de variable:
+$$
+\begin{align*}
+\int_M \cos (x^2 + y^2) \, d\mu_2(x, y) & = \int_{T^{ - 1}(M)} \cos (r^2) \cdot r \, d\mu_2(r, \theta) = \\[2ex]
+& = \int_0^{2\pi} \left(\int_0^{\left( \frac{\pi}{2} \right)^{1/4}} r \cos (r^2) \, dr \right) d\theta 
+\end{align*}
+$$
+Como la función $(r, \theta) \mapsto r \cos r^2$ es continua, entonces es medible y además es integrable en el conjunto $T^{ - 1}(M)$ de medida finita. Por tanto, podemos aplicar el teorema de Fubini y separar las integrales:
+$$
+\begin{align*}
+\int_0^{2\pi} \left(\int_0^{\left( \frac{\pi}{2} \right)^{1/4}} r \cos (r^2) \, dr \right) d\theta & = \left( \int_0^{2\pi} d\theta \right) \cdot \left( \int_0^{\left( \frac{\pi}{2} \right)^{1/4}} r \cos (r^2) \, dr \right) = \\[2ex]
+& = 2\pi \cdot \left[ \frac{\sin (r^2)}{2} \right]_0^{\left( \frac{\pi}{2} \right)^{1/4}} = \\[2ex]
+& = 2\pi \cdot \left( \frac{\sin \left( \left( \frac{\pi}{2} \right)^{1/2} \right)}{2} - 0 \right) = \\[2ex]
+& = \pi \sin \left( \sqrt{\frac{\pi}{2}} \right)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*A través de un cambio de variable adecuado, calcula la siguiente integral doble:*
+$$
+\begin{align*}
+\int_M x(x^2 + y^2) \, d\mu_2(x, y)
+\end{align*}
+$$
+*donde $M$ es el sector de círculo centrado en $(0, 0)$, radio $r$ y lados que forman con el eje $OX$ los ángulos $\frac{\pi}{3}$ y $\frac{\pi}{6}$ radianes respectivamente.*
+<DemBox title="Demostración">
+
+Podemos ver que:
+
+- $M$ es un conjunto medible
+- La función $f(x, y) = x(x^2 + y^2)$ es continua en $M$ y, por tanto, medible.
+- Además, como $M$ es de medida finita y $f$ es continua en un conjunto compacto, entonces $f \in \mathcal{L}_1(M)$
+
+Por tanto, vamos a aplicar el cambio de variable a coordenadas polares. Sea $T: U \subseteq \mathbb{R}^N \to \mathbb{R}^N$ difeomorfismo $\mathcal{C}^1$ con jacobiano $J_T$, entonces para toda función $f \in \mathcal{L}_1(T(U))$ se cumple:
+$$
+\begin{align*}
+\int_{T(U)} f(x) \, d\mu_N(x) = \int_U f(T(u)) |J_T(u)| \, d\mu_N(u)
+\end{align*}
+$$
+Ahora, definimos el cambio de variable:
+$$
+\begin{align*}
+T(r, \theta) = (x, y) = (r\cos \theta, r\sin \theta) \quad \text{ con } (r, \theta) \in [0, \infty) \times [0, 2\pi)
+\end{align*}
+$$
+Calculamos el jacobiano:
+$$
+\begin{align*}
+|J_T(r, \theta)| & = \begin{vmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\[2ex]
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix}
+= \begin{vmatrix}
+\cos \theta & - r \sin \theta \\[2ex]
+\sin \theta & r \cos \theta
+\end{vmatrix} = r (\cos^2 \theta + \sin^2 \theta) = r
+\end{align*}
+$$
+Ahora, los nuevos límites de integración vienen dados por:
+
+- $r$ va desde $0$ hasta el radio $r$ del sector circular.
+- $\theta$ va desde $\frac{\pi}{6}$ hasta $\frac{\pi}{3}$.
+
+Es decir, que el conjunto $M$ en las nuevas coordenadas es:
+$$
+\begin{align*}
+T^{ - 1}(M) = \left\{(r, \theta) : 0 \leq r \leq r, \, \frac{\pi}{6} \leq \theta \leq \frac{\pi}{3} \right\}
+\end{align*}
+$$
+Ahora, aplicando el teorema del cambio de variable:
+$$
+\begin{align*}
+\int_M x(x^2 + y^2) \, d\mu_2(x, y) & = \int_{T^{ - 1}(M)} (r \cos \theta)(r^2) \cdot r \, d\mu_2(r, \theta) = \\[2ex]
+& = \int_{\pi/6}^{\pi/3} \left(\int_0^{r} r^4 \cos \theta \, dr \right) d\theta
+\end{align*}
+$$
+Como la función $(r, \theta) \mapsto r^4 \cos \theta$ es continua, entonces es medible y además es integrable en el conjunto $T^{ - 1}(M)$ de medida finita. Por tanto, podemos aplicar el teorema de Fubini y separar las integrales:
+$$
+\begin{align*}
+\int_{\pi/6}^{\pi/3} \left(\int_0^{r} r^4 \cos \theta \, dr \right) d\theta & = \left( \int_{\pi/6}^{\pi/3} \cos \theta \, d\theta \right) \cdot \left( \int_0^{r} r^4 \, dr \right) = \\[2ex]
+& = \left[ \sin \theta \right]_{\pi/6}^{\pi/3} \cdot \left[ \frac{r^5}{5} \right]_0^{r} = \\[2ex]
+& = \left( \sin \frac{\pi}{3} - \sin \frac{\pi}{6} \right) \cdot \frac{r^5}{5} = \\[2ex]
+& = \left( \frac{\sqrt{3}}{2} - \frac{1}{2} \right) \cdot \frac{r^5}{5} = \\[2ex]
+& = \frac{(\sqrt{3} - 1) r^5}{10}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*A través de un cambio de variable adecuado, calcula la siguiente integral doble:*
+$$
+\begin{align*}
+\int_M \arcsin (x^2 + y^2) \, d\mu_2(x, y)
+\end{align*}
+$$
+*donde $M$ es el conjunto cuya frontera está en coordenadas polares y tiene por ecuación:*
+$$
+\begin{align*}
+\rho = \sqrt{\sin \theta} \quad \text{ con } 0 \leq \theta \leq \frac{\pi}{2}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos ver que:
+
+- $M$ es un conjunto medible
+- La función $f(x, y) = \arcsin(x^2 + y^2)$ es continua en $M$ y, por tanto, medible.
+- Además, como $M$ es de medida finita y $f$ es continua en un conjunto compacto, entonces $f \in \mathcal{L}_1(M)$
+
+Por tanto, vamos a aplicar el cambio de variable a coordenadas polares. Sea $T: U \subseteq \mathbb{R}^N \to \mathbb{R}^N$ difeomorfismo $\mathcal{C}^1$ con jacobiano $J_T$, entonces para toda función $f \in \mathcal{L}_1(T(U))$ se cumple:
+$$
+\begin{align*}
+\int_{T(U)} f(x) \, d\mu_N(x) = \int_U f(T(u)) |J_T(u)| \, d\mu_N(u)
+\end{align*}
+$$
+Ahora, definimos el cambio de variable:
+$$
+\begin{align*}
+T(r, \theta) = (x, y) = (r\cos \theta, r\sin \theta) \quad \text{ con } (r, \theta) \in [0, \infty) \times [0, 2\pi)
+\end{align*}
+$$
+Calculamos el jacobiano:
+$$
+\begin{align*}
+|J_T(r, \theta)| & = \begin{vmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\[2ex]
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix}
+= \begin{vmatrix}
+\cos \theta & - r \sin \theta \\[2ex]
+\sin \theta & r \cos \theta
+\end{vmatrix} = r (\cos^2 \theta + \sin^2 \theta) = r
+\end{align*}
+$$
+Ahora, los nuevos límites de integración vienen dados por:
+
+- $r$ va desde $0$ hasta $\sqrt{\sin \theta}$.
+- $\theta$ va desde $0$ hasta $\frac{\pi}{2}$.
+
+Es decir, que el conjunto $M$ en las nuevas coordenadas es:
+$$
+\begin{align*}
+T^{ - 1}(M) = \left\{(r, \theta) : 0 \leq r \leq \sqrt{\sin \theta}, \, 0 \leq \theta \leq \frac{\pi}{2} \right\}
+\end{align*}
+$$
+Ahora, aplicando el teorema del cambio de variable:
+$$
+\begin{align*}
+\int_M \arcsin (x^2 + y^2) \, d\mu_2(x, y) & = \int_{T^{ - 1}(M)} \arcsin (r^2) \cdot r \, d\mu_2(r, \theta) = \\[2ex]
+& = \int_0^{\pi/2} \left(\int_0^{\sqrt{\sin \theta}} r \arcsin (r^2) \, dr \right) d\theta
+\end{align*}
+$$
+Como la función $(r, \theta) \mapsto r \arcsin (r^2)$ es continua, entonces es medible y además es integrable en el conjunto $T^{ - 1}(M)$ de medida finita. Por tanto, podemos aplicar el teorema de Fubini y separar las integrales:
+$$
+\begin{align*}
+\int_0^{\pi/2} \left(\int_0^{\sqrt{\sin \theta}} r \arcsin (r^2) \, dr \right) d\theta & = \int_0^{\frac{\pi}{2}} \left[ \frac{1}{2} \left( (r^2) \arcsin (r^2) + \sqrt{1 - r^4} \right) \right]_0^{\sqrt{\sin \theta}} d\theta = \\[2ex]
+& = \frac{1}{2} \int_0^{\frac{\pi}{2}} \left( \sin \theta \cdot \arcsin (\sin \theta) + \sqrt{1 - \sin^2 \theta} - 0 - 1 \right) d\theta = \\[2ex]
+& = \frac{1}{2} \int_0^{\frac{\pi}{2}} \left( \sin \theta \cdot \theta + \cos \theta - 1 \right) d\theta = \\[2ex]
+& = \frac{1}{2} \left[ \left( -\theta \cos \theta + \sin \theta \right) + \sin \theta - \theta \right]_0^{\frac{\pi}{2}} = \\[2ex]
+& = \frac{1}{2} \left( \left( -\frac{\pi}{2} \cdot 0 + 1 \right) + 1 - \frac{\pi}{2} - (0 + 0 - 0) \right) = \\[2ex]
+& = \frac{1}{2} \left( 2 - \frac{\pi}{2} \right) = \\[2ex]
+& = 1 - \frac{\pi}{4}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Calcula la siguiente integral doble:*
+$$
+\begin{align*}
+\int_M \sqrt{1 - \frac{x^2}{a^2} - \frac{y^2}{b^2}} \, d\mu_2(x, y) \quad \text{ con } M = \left\{(x, y) : \frac{x^2}{a^2} + \frac{y^2}{b^2} \leq 1 \right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Podemos ver que:
+
+- $M$ es un conjunto medible
+- La función $f(x, y) = \sqrt{1 - \frac{x^2}{a^2} - \frac{y^2}{b^2}}$ es continua en $M$ y, por tanto, medible.
+- Además, como $M$ es de medida finita y $f$ es continua en un conjunto compacto, entonces $f \in \mathcal{L}_1(M)$
+
+Por tanto, vamos a aplicar el cambio de variable a coordenadas elípticas. Sea $T: U \subseteq \mathbb{R}^N \to \mathbb{R}^N$ difeomorfismo $\mathcal{C}^1$ con jacobiano $J_T$, entonces para toda función $f \in \mathcal{L}_1(T(U))$ se cumple:
+$$
+\begin{align*}
+\int_{T(U)} f(x) \, d\mu_N(x) = \int_U f(T(u)) |J_T(u)| \, d\mu_N(u)
+\end{align*}
+$$
+Ahora, definimos el cambio de variable:
+$$
+\begin{align*}
+T(r, \theta) = (x, y) = (ar\cos \theta, br\sin \theta) \quad \text{ con } (r, \theta) \in [0, \infty) \times [0, 2\pi)
+\end{align*}
+$$
+Calculamos el jacobiano:
+$$
+\begin{align*}
+|J_T(r, \theta)| & = \begin{vmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\[2ex]
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix}
+= \begin{vmatrix}
+a\cos \theta & - ar \sin \theta \\[2ex]
+b\sin \theta & br \cos \theta
+\end{vmatrix} = abr
+\end{align*}
+$$
+Ahora, los nuevos límites de integración vienen dados por:
+
+- $r$ va desde $0$ hasta $1$ ya que la frontera es la elipse $\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$ entonces:
+$$
+\begin{align*}
+\frac{(ar\cos \theta)^2}{a^2} + \frac{(br\sin \theta)^2}{b^2} = r^2 (\cos^2 \theta + \sin^2 \theta) = r^2 = 1 \implies r = 1
+\end{align*}
+$$
+- $\theta$ va desde $0$ hasta $2\pi$ ya que la elipse es simétrica respecto a ambos ejes.
+
+Es decir, que el conjunto $M$ en las nuevas coordenadas es:
+$$
+\begin{align*}
+T^{ - 1}(M) = \left\{(r, \theta) : 0 \leq r \leq 1, \, 0 \leq \theta \leq 2\pi \right\}
+\end{align*}
+$$
+Ahora, aplicando el teorema del cambio de variable:
+$$
+\begin{align*}
+\int_M \sqrt{1 - \frac{x^2}{a^2} - \frac{y^2}{b^2}} \, d\mu_2(x, y) & = \int_{T^{ - 1}(M)} \sqrt{1 - r^2} \cdot abr \, d\mu_2(r, \theta) = \\[2ex]
+& = ab \int_0^{2\pi} \left(\int_0^{1} r \sqrt{1 - r^2} \, dr \right) d\theta
+\end{align*}
+$$
+Como la función $(r, \theta) \mapsto r \sqrt{1 - r^2}$ es continua, entonces es medible y además es integrable en el conjunto $T^{ - 1}(M)$ de medida finita. Por tanto, podemos aplicar el teorema de Fubini y separar las integrales:
+$$
+\begin{align*}
+ab \int_0^{2\pi} \left(\int_0^{1} r \sqrt{1 - r^2} \, dr \right) d\theta & = ab \left( \int_0^{2\pi} d\theta \right) \cdot \left( \int_0^{1} r \sqrt{1 - r^2} \, dr \right) = \\[2ex]
+& = ab \cdot 2\pi \cdot \left[ -\frac{1}{3} (1 - r^2)^{3/2} \right]_0^{1} = \\[2ex]
+& = 2\pi ab \cdot \left( 0 + \frac{1}{3} \right) = \\[2ex]
+& = \frac{2\pi ab}{3}
+\end{align*}
+$$
+
+</DemBox>

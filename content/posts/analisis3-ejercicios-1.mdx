@@ -1,0 +1,2089 @@
+---
+title: "Ejercicios Resueltos Análisis III - Parte 1"
+description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo."
+date: "2026-01-12"
+tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebsegue"]
+---
+
+## Ejercicios Medida exterior en $\mathbb{R}^N$
+### Ejercicio 1
+*Sea I un cubo en $\mathbb{R}^N$ abierto y acotado. Demuestra que para todo $\varepsilon > 0$ existen cubos compactos $J$ y $K$ tales que $J \subseteq I \subseteq K$ y $v(K) = v(I) < v(J) + \varepsilon$.*
+
+<DemBox title="Demostración">
+
+Sea $I$ cubo abierto y acotado de $\mathbb{R}^N$ y fijamos $\varepsilon > 0$ cualquiera, podemos escribir $I$ como:
+$$
+\begin{align*}
+I = (a_1, b_1) \times (a_2, b_2) \times \dots \times (a_N, b_N)
+\end{align*}
+$$
+y como es acotado, tenemos que $- \infty < a_i < b_i < \infty$ para todo $i \in \{1, 2, \dots, N\}$.
+
+Si definimos el conjunto $K$ como:
+$$
+\begin{align*}
+K \coloneq [a_1, b_1] \times [a_2, b_2] \times \dots \times [a_N, b_N]
+\end{align*}
+$$
+Tenemos que claramente $I \subseteq K$ y el volumen de $K$ se puede calcular como:
+$$
+\begin{align*}
+v_N(K) = \prod_{i=1}^N (b_i - a_i) = v_N(I)
+\end{align*}
+$$  
+Ahora, para construir $J$ consideramos $\delta > 0$ suficientemente pequeño entonces:
+$$
+\begin{align*}
+J_\delta \coloneq [a_1 + \delta, b_1 - \delta] \times \dots \times [a_N + \delta, b_n - \delta]
+\end{align*}
+$$
+Y, para que no sea degenerado, necesitamos que:
+$$
+\begin{align*}
+\delta < \min_{i \in \{1, \dots , N\}} \frac{b_i - a_i}{2} 
+\end{align*}
+$$
+De esta forma, claramente $J_\delta \subseteq I$ y es compacto. Además, su volumen es:
+$$
+\begin{align*}
+v_N(J_\delta) = \prod_{i = 1}^N (b_i - a_i - 2\delta)
+\end{align*}
+$$
+Si definimos la función $\phi$ tal que:
+$$
+\begin{align*}
+\phi : \mathbb{R} & \longrightarrow \mathbb{R}\\
+\delta & \longmapsto \phi(\delta) =  \prod_{i = 1}^N (b_i - a_i - 2\delta)
+\end{align*}
+$$
+tenemos que está bien definida y es continua en $\delta$ con $\delta \in \left[0, \displaystyle \min_{i = 1, \dots N} \frac{b_i - a_i}{2}\right)$ y además, la función cumple que:
+$$
+\begin{align*}
+\phi(0) = v_N(I)
+\end{align*}
+$$
+Por continuidad de $\phi$ en $0$ existe un $\delta \in \left(0, \displaystyle \min_{i = 1, \dots N} \frac{b_i - a_i}{2}\right)$ tal que:
+$$
+\begin{align*}
+\phi(\delta) > v_N(I) - \varepsilon
+\end{align*}
+$$
+Tomando este delta y definiendo $J \coloneq J_\delta$ obtenemos un cubo compacto $J$ contenido en $I$ y que además:
+$$
+\begin{align*}
+v_N(J) = \phi(\delta) > v_N(I) - \varepsilon \implies v_N(J) + \varepsilon > v_N(I)
+\end{align*}
+$$
+Por lo tanto, hemos encontrado $J, K$ cubos compactos de $\mathbb{R}^N$ tales que $\forall \varepsilon > 0$ se cumple:
+$$
+\begin{align*}
+J \subseteq I \subseteq K \quad \text{ tales que } v_N(K) = v_N(I) < v_N(J) + \varepsilon
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Sea $I$ un cubo de $\mathbb{R}^N$ y sean $E_1, E_2$ los dos semiespacios cerrados de $\mathbb{R}^N$ determinados por el hiperplano $\{(x_i)_{i = 1}^N : x_j = \alpha\}$. Demuestra que $I_1 \coloneq I \cap E_1$ y $I_2 \coloneq I \cap E_2$ son dos cubos tales que:*
+$$
+\begin{align*}
+I = I_1 \cup I_2 \quad \text{y} \quad v_N(I) = v_N(I_1) + v_N(I_2)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Como $I$ es un cubo de $\mathbb{R}^N$, podemos expresarlo como:
+$$
+\begin{align*}
+I = J_1 \times J_2 \times \dots \times J_N \quad \text{ con } J_i \text{ intervalo}
+\end{align*}
+$$
+Como $E_1$ y $E_2$ son dos semiespacios cerrados determinados por el hiperplano $\{(x_i)_{i = 1}^N : x_j = \alpha\}$ entonces, podemos expresarlos como:
+$$
+\begin{align*}
+E_1 & = \left\{x \in \mathbb{R}^N : x_j \leq \alpha\right\} \quad \text{ y } \quad E_2 = \left\{x \in \mathbb{R}^N : x_j \geq \alpha\right\}
+\end{align*}
+$$
+Por tanto, $I_1$ e $I_2$ se pueden expresar como:
+$$
+\begin{align*}
+I_1 & \coloneq I \cap E_1 = J_1 \times \dots \times J_{j - 1} \times J^{(1)}_j \times J_{j + 1} \times \dots \times J_N \quad \text{ con } J^{(1)}_j = J_j \cap ( - \infty, \alpha]\\[2ex]
+I_2 & \coloneq I \cap E_2 = J_1 \times \dots \times J_{j - 1} \times J^{(2)}_j \times J_{j + 1} \times \dots \times J_N \quad \text{ con } J^{(2)}_j = J_j \cap [\alpha, \infty)
+\end{align*}
+$$
+Por lo tanto, la unión de ambos viene dada por:
+$$
+\begin{align*}
+I_1 \cup I_2 & = J_1 \times \dots \times J_{j - 1} \times (J^{(1)}_j \cup J^{(2)}_j) \times J_{j + 1} \times \dots \times J_N = \\[2ex]
+& = J_1 \times \dots \times J_{j - 1} \times (J_j \cap ( - \infty, \alpha] \cup J_j \cap [\alpha, \infty)) \times J_{j + 1} \times \dots \times J_N = \\[2ex]
+& = J_1 \times \dots \times J_{j - 1} \times J_j \times J_{j + 1} \times \dots \times J_N = I
+\end{align*}
+$$
+En cuanto al volumen, tenemos que:
+$$
+\begin{align*}
+v_N(I) = \prod_{i = 1}^N v_1(J_i)
+\end{align*}
+$$
+Como los $J_i$ son iguales en $I_1$ y $I_2$ salvo en $i = j$, tenemos que:
+$$
+\begin{align*}
+v_N(I_1) = \left(\prod_{i = 1, i \neq j}^N v_1(J_i)\right) \cdot v_1\left(J^{(1)}_j\right) \quad \text{ y } \quad v_N(I_2) = \left(\prod_{i = 1, i \neq j}^N v_1(J_i)\right) \cdot v_1\left(J^{(2)}_j\right)
+\end{align*}
+$$
+Entonces, la suma de ambos volúmenes es:
+$$
+\begin{align*}
+v_N(I_1) + v_N(I_2)&  = \left(\prod_{i = 1, i \neq j}^N v_1(J_i)\right) \cdot v_1\left(J^{(1)}_j\right) + \left(\prod_{i = 1, i \neq j}^N v_1(J_i)\right) \cdot v_1\left(J^{(2)}_j\right) =\\[2ex]
+& = \left(\prod_{i = 1, i \neq j}^N v_1(J_i)\right) \cdot \left(v_1\left(J_j^{(1)}\right) + v_1\left(J_j^{(2)}\right)\right) = \\[2ex]
+& = \left(\prod_{i = 1, i \neq j}^N v_1(J_i)\right) \cdot v_1(J_j) = v_N(I)
+\end{align*}
+$$
+Por lo tanto, hemos demostrado que:
+$$
+\begin{align*}
+I = I_1 \cup I_2 \quad \text{ y } \quad v_N(I) = v_N(I_1) + v_N(I_2)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Prueba que si $I$ es un cubo no degenerado de $\mathbb{R}^N$ entonces $I$ tiene cardinal no numerable.*
+
+<DemBox title="Demostración">
+
+Supongamos que $I$ es un cubo no degenerado con cardinal numerable. Podemos escribir $I$ como:
+$$
+\begin{align*}
+I = \{x_1, x_2, x_3, \dots\}
+\end{align*}
+$$
+Por lo que podríamos calcular su volumen como:
+$$
+\begin{align*}
+v_N(I) & = \mu_N^*(I) = \mu_N^*(\{x_1, x_2, x_3\}) = \mu_N^*(\{x_1\} \cup \{x_2\} \cup \{x_3\} \cup \dots ) \overset{\text{subadit}}{\leq} \\[2ex]
+& \leq \sum_{i = 1}^{\infty} \mu_N^*(\{x_i\}) = \sum_{i = 1}^{\infty} 0 = 0
+\end{align*}
+$$ 
+Lo cual es una contradicción, ya que $I$ es un cubo no degenerado y, por tanto, su volumen es mayor que cero. Por lo tanto, $I$ tiene cardinal no numerable.
+
+</DemBox>
+
+### Ejercicio 4
+*Sea $\mathcal{S}$ la colección de todas las $\sigma$-álgebras sobre $\mathbb{R}^N$ que contienen a todos los conjuntos abiertos de $\mathbb{R}^N$ y consideramos la intersección:*
+$$
+\begin{align*}
+\mathcal{B}_N \coloneq \displaystyle \bigcap_{\mathcal{C} \in \mathcal{S}} \mathcal{C}
+\end{align*}
+$$
+*cuyos elementos son aquellos conjuntos que pertenecen a todas las $\sigma$-álgebras que constituyen $\mathcal{S}$. Demuestra que $\mathcal{B}_N$ es la $\sigma$-álgebra más pequeña que contiene a todos los conjuntos abiertos de $\mathbb{R}^N$*.
+
+<DemBox title="Demostración">
+
+Veamos primero que es una $\sigma$-álgebra, para ello:
+
+1. *Ver que $\emptyset \in \mathcal{B}_N$:* Como $\mathcal{B}_N$ se define como la intersección de $\sigma$-álgebras, y todas las $\sigma$-álgebras contienen al vacío, entonces:
+$$
+\begin{align*}
+\emptyset \in \displaystyle \bigcap_{\mathcal{C} \in \mathcal{S}} \mathcal{C}= \mathcal{B}_N
+\end{align*}
+$$
+2. *Ver que es cerrada bajo uniones numerables:* Sea $\{B_i\}_{i \in \mathbb{N}} \subseteq \mathcal{B}_N$, queremos ver:
+$$
+\begin{align*}
+\displaystyle \bigcup_{i \in \mathbb{N}} B_i \in \mathcal{B}_N
+\end{align*}
+$$
+Como $B_i \in \mathcal{B}_N$ y $\mathcal{B}_N$ es la intersección de todas las $\sigma$-álgebras que contienen a todos los abiertos de $\mathbb{R}^N$ entonces para cada $i$ se tiene $B_i \in \mathcal{C}$ para todo $\mathcal{C} \in \mathcal{S}$ y, al ser $\mathcal{C}$ una $\sigma$-álgebra, es cerrada bajo uniones numerables y, por tanto:
+$$
+\begin{align*}
+\displaystyle \bigcup_{i \in \mathbb{N}} B_i \in \mathcal{C} \quad \forall \mathcal{C} \in \mathcal{S} \implies \displaystyle \bigcup_{i \in \mathbb{N}} B_i \in \displaystyle \bigcap_{\mathcal{C} \in \mathcal{S}} \mathcal{C} = \mathcal{B}_N
+\end{align*}
+$$
+3. *Ver que es cerrada bajo complementos:* Sea $B \in \mathcal{B}_N$ queremos ver que:
+$$
+\begin{align*}
+B^c = \mathbb{R}^N \setminus B \in \mathcal{B}_N
+\end{align*}
+$$
+Como $B \in \mathcal{B}_N$ entonces $B \in \mathcal{C}$ para todo $\mathcal{C} \in \mathcal{S}$ por lo que, como cada $\mathcal{C}$ es una $\sigma$-álgebra, entonces son cerradas bajo complementos, es decir:
+$$
+\begin{align*}
+B^c \in \mathcal{C} \quad \forall \mathcal{C} \in \mathcal{S} \implies B^c \in \displaystyle \bigcap_{\mathcal{C} \in \mathcal{S}} \mathcal{C} = \mathcal{B}_N
+\end{align*}
+$$
+
+*Ahora que ya hemos visto que es $\sigma$-álgebra, veamos que $\mathcal{B}_N$ contiene a todos los abiertos de $\mathbb{R}^N$.*
+
+Para ello, basta notar que por la propia definición de $\mathcal{B}_N$, como esta es la intersección de todas las $\sigma$-álgebras que contienen todos los abiertos de $\mathbb{R}^N$, entonces $\mathcal{B}_N$ contendrá también todos los abiertos de $\mathbb{R}^N$.
+
+*Finalmente, veamos que es la más pequeña que contiene a todos los abiertos de $\mathbb{R}^N$, es decir, veamos que dado $B \in \mathcal{B}_N$ entonces $B \in \mathcal{C}$ para todo $\mathcal{C} \in \mathcal{S}$ y, por tanto, $\mathcal{B}_N \subseteq \mathcal{C} \quad \forall \mathcal{C} \in \mathcal{S}$.*
+
+Basta notar que, sea $B \in \mathcal{B}_N$, por la definición de $\mathcal{B}_N$ se tiene que:
+$$
+\begin{align*}
+B \in \mathcal{B}_N = \displaystyle \bigcap_{\mathcal{C} \in \mathcal{S}} \mathcal{C} \implies B \in \mathcal{C}, \quad \forall \mathcal{C} \in \mathcal{S} \implies \mathcal{B} \subseteq \mathcal{C}, \quad \forall \mathcal{C} \in \mathcal{S}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Sea $A = \mathbb{Q} \cap [0, 1]$:*
+
+- *Demuestra que para todo cubrimiento finito de $A$ formado por intervalos abiertos, $\{I_i\}_{i = 1}^n$ se cumple que:*
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} v_1(I_i) \geq 1
+\end{align*}
+$$
+*¿Cuánto vale $\mu_1^*(A)$?*
+
+<DemBox title="Demostración">
+
+Sea $\{I_i\}_{i = 1}^n$ familia de intervalos abiertos de $\mathbb{R}$ que recubre $A = \mathbb{Q} \cap [0, 1]$, si tenemos dos intervalos solapados o contiguos, agrupamos ambos en uno único formado por su unión. Repetimos esto hasta obtener una familia finita de intervalos abiertos disjuntos por parejas:
+$$
+\begin{align*}
+(a_1, b_1), \dots , (a_m, b_m) \quad \text{ con } a_1 < a_2 <\dots < a_m
+\end{align*}
+$$
+Esta nueva familia sigue recubriendo $[0, 1]$ y además:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} v_1(I_i) = \displaystyle \sum_{k = 1}^{m} (b_k - a_k)
+\end{align*}
+$$
+Como $(a_k, b_k)_{k = 1}^{m}$ cubren $[0, 1]$, deben existir índices tales que el más a la izquierda comienza a la izquierda de 0 (o en 0) y el más a la derecha termina más a la derecha de 1 (o en 1). Más formalmente:
+$$
+\begin{align*}
+a_1 \leq 0 \quad \text{ y } b_m \geq 1
+\end{align*}
+$$
+Entonces, la suma de longitudes satisface:
+$$
+\begin{align*}
+\displaystyle \sum_{k = 1}^{m} (b_k - a_k) = (b_m - a_1) - \displaystyle \sum_{k = 1}^{m - 1} (a_{k + 1} - b_k)
+\end{align*}
+$$
+Los términos $(a_{k + 1} - b_k)$ son no negativos por lo tanto:
+$$
+\begin{align*}
+\displaystyle \sum_{k = 1}^{m} (b_k - a_k) \geq b_m - a_1 \geq 1 - 0 = 1
+\end{align*}
+$$
+En consecuencia:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} v_1(I_i) = \displaystyle \sum_{k = 1}^{m} (b_k - a_k) \geq 1
+\end{align*}
+$$
+Por lo que ya hemos demostrado la primera parte.
+
+Dado que la medida exterior de $A$, es decir, $\mu_1^*(A)$ se define como el ínfimo de las sumas de las longitudes de los recubrimientos abiertos numerables de $A$ y sabiendo que estos son $\geq 1$ entonces:
+$$
+\begin{align*}
+\mu_1^*(A) \geq 1
+\end{align*}
+$$
+Por otro lado, sea $\varepsilon > 0$ cualquiera, podemos recubrir el intervalo $[0, 1]$ con un único intervalo abierto $I = \left( - \frac{\varepsilon}{2}, 1 + \frac{\varepsilon}{2}\right)$ cuya longitud es:
+$$
+\begin{align*}
+v_1(I) = 1 + \varepsilon
+\end{align*}
+$$
+Como el $\varepsilon$ es arbitrario, tenemos que para todo $\varepsilon > 0$ existe un recubrimiento abierto (incluso un solo intervalo) de $A$ con suma de longitudes menor que $1 + \varepsilon$ y, por tanto, tomando $\varepsilon \to 0$ se obtiene el ínfimo sobre todos los recubrimientos abiertos de $A$:
+$$
+\begin{align*}
+\mu_1^*(A) = 1
+\end{align*}
+$$
+
+</DemBox>
+- *Deduce del apartado anterior que $A$ no es compacto.*
+<DemBox title="Demostración">
+
+Supongamos $A$ compacto, entonces todo recubrimiento abierto de $A$ tiene un subrecubrimiento finito. En particular, el recubrimiento abierto formado por todos los intervalos abiertos con extremos racionales que contienen a $A$ tendrá un subrecubrimiento finito $\{I_i\}_{i = 1}^n$. Pero esto contradice lo demostrado en el apartado anterior, ya que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} v_1(I_i) \geq 1
+\end{align*}
+$$
+Por lo tanto, $A$ no es compacto.
+
+</DemBox>
+- *Demuestra que la aplicación $\mathscr{m}$ definida sobre la $\sigma$-álgebra de Borel de $\mathbb{R}^N$ como:*
+$$
+\begin{align*}
+\mathscr{m}(A) = \inf \left\{\displaystyle \sum_{i = 1}^{n} v(I_i) : n \in \mathbb{N}, \quad A \subseteq \displaystyle \bigcup_{i = 1}^{n} I_i, \quad I_i \text{ intervalos abiertos de } \mathbb{R}^N\right\}
+\end{align*}
+$$
+*no es una medida.*
+<DemBox title="Demostración">
+
+Consideremos el conjunto $A = \mathbb{Q} \cap [0, 1]$ del apartado anterior, tenemos que $\mathscr{m}(A) = 1$. Por otro lado, podemos escribir $A$ como la unión numerable de conjuntos unitarios:
+$$
+\begin{align*}
+A = \displaystyle \bigcup_{q \in A} \{q\}
+\end{align*}
+$$
+Pero, para cada conjunto unitario se tiene que:
+$$
+\begin{align*}
+\mathscr{m}(\{q\}) = 0
+\end{align*}
+$$
+Por lo que, si $\mathscr{m}$ fuera una medida, se tendría que:
+$$
+\begin{align*}
+\mathscr{m}(A) = \mathscr{m}\left(\displaystyle \bigcup_{q \in A} \{q\}\right) = \displaystyle \sum_{q \in A} \mathscr{m}(\{q\}) = 0
+\end{align*}
+$$
+Lo cual es una contradicción, ya que hemos visto que $\mathscr{m}(A) = 1$. Por lo tanto, la aplicación $\mathscr{m}$ no es una medida.
+
+</DemBox>
+
+### Ejercicio 6
+*Demuestra que existe un conjunto abierto $O$ en $\mathbb{R}$ y un $\varepsilon > 0$ tal que para todo cubrimiento finito de $O$ formado por intervalos abiertos $\{J_i\}_{i = 1}^n$, se cumple que:*
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i = 1}^{n} J_i \setminus O\right) > \varepsilon
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Buscamos un $O \in \tau_\mathbb{R}$ y $\varepsilon > 0$ tal que, dado $\{J_i\}_{i = 1}^n$ recubrimiento finito y abierto se tenga que:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i = 1}^{n} J_i \setminus O\right) > \varepsilon
+\end{align*}
+$$
+Necesitamos un $O$ que tenga infinitos conjuntos de tal forma que se necesite algún conjunto $J_i$ infinito para recubrirlo al completo. Por ejemplo:
+$$
+\begin{align*}
+O = \displaystyle \bigcup_{k \in \mathbb{Z}} (2k, 2k + 1)
+\end{align*}
+$$
+Donde claramente $O$ es abierto ya que $(2k, 2k + 1)$ son abiertos y la unión numerable de abiertos es abierta. Además, tenemos que cada intervalo es de longitud 1 y entre cada dos componentes hay un hueco:
+$$
+\begin{align*}
+\dots\cup ( - 2, - 1) \overset{[ - 1, 0]}{\cup }(0, 1) \overset{[1, 2]}{\cup} (2, 3) \cup \dots 
+\end{align*}
+$$
+Y estos ``huecos'' son de longitud 1 también.
+
+Como $\{J_i\}_{i = 1}^n$ finita y recubren $O$, para cada $i$ consideramos:
+$$
+\begin{align*}
+\mathcal{S}_i \coloneq \{k \in \mathbb{Z} : (2k, 2k + 1) \subseteq J_i\}
+\end{align*}
+$$
+Como debe recubrir todo $O$ tenemos que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{i = 1}^{n} \mathcal{S}_i = \mathbb{Z}
+\end{align*}
+$$
+Pero entonces algún $S_i$ tiene que ser infinito, ya que no puede ser que la unión no finita de intervalos no finitos de un conjunto infinito. Por tanto, $\exists j \in \mathbb{N}$ con $\mathcal{S}_j$ infinito.
+
+Ahora, si $\mathcal{S}_j$ infinito, entonces abarca infinitas componentes $(2k, 2k + 1)$. Como los $k$ son distintos y las componentes son disjuntas (separadas por huecos de longitud 1), el intervalo $J_j$ contiene también infinitos de esos huecos disjuntos y cada uno tiene medida 1. Por lo tanto:
+$$
+\begin{align*}
+\mu(J_j\setminus O) \geq \displaystyle \sum_{k \text{ tq } (2k, 2k + 1) \subseteq J_j} \mu((2k + 1, 2k + 2)) = \displaystyle \sum_{m = 1}^{\infty} 1 = \infty
+\end{align*}
+$$
+En particular, $\mu(J_j \setminus O ) = \infty$ por lo que, aplicando monotonía:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{i = 1}^{n} J_i \setminus O\right) \geq \mu(J_j \setminus O) = \infty > \varepsilon \quad \forall \varepsilon > 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Sea $A$ un subconjunto de $\mathbb{R}^N$ demuestra que todo cubrimiento abierto de $A$ contiene un subrecubrimiento numerable.*
+
+<DemBox title="Demostración">
+
+Sea $\{I_\alpha\}_{\alpha \in \Lambda}$ un cubrimiento abierto de $A$, es decir:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{\alpha \in \Lambda} I_\alpha
+\end{align*}
+$$
+Donde cada $I_\alpha$ es un conjunto abierto de $\mathbb{R}^N$. Como cada $I_\alpha$ es abierto, para cada $x \in I_\alpha$ existe un cubo $J_{x, \alpha}$ con extremos racionales tal que:
+$$
+\begin{align*}
+x \in J_{x, \alpha} \subseteq I_\alpha
+\end{align*}
+$$
+Por tanto, podemos escribir:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{\alpha \in \Lambda} I_\alpha = \displaystyle \bigcup_{\alpha \in \Lambda} \displaystyle \bigcup_{x \in I_\alpha} J_{x, \alpha}
+\end{align*}
+$$
+Ahora, consideremos la familia de todos los cubos con extremos racionales:
+$$
+\begin{align*}
+\mathcal{J} = \{J \subseteq \mathbb{R}^N : J \text{ es un cubo con extremos racionales}\}
+\end{align*}
+$$
+Esta familia es numerable, ya que se puede establecer una biyección entre los extremos racionales y $\mathbb{Q}^{2N}$ que es numerable. Por tanto, podemos escribir:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{J \in \mathcal{J}} J
+\end{align*}
+$$
+Finalmente, definimos la familia:
+$$
+\begin{align*}
+\mathcal{J}_A = \{J \in \mathcal{J} : J \cap A \neq \emptyset\}
+\end{align*}
+$$
+Que es numerable al ser subconjunto de $\mathcal{J}$ y que además cubre a $A$:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{J \in \mathcal{J}_A} J
+\end{align*}
+$$
+Por lo tanto, hemos encontrado un subrecubrimiento numerable de $A$.
+
+</DemBox>
+
+### Ejercicio 8
+*Responder a las siguientes cuestiones de forma justificada:*
+
+- **a)** *Sea $\sum_{i = 1}^\infty x_i$ serie de términos no negativos. Demostrar que es convergente si y solo si existe un real $s$ tal que para todo $\varepsilon > 0$ existe un subconjunto finito $I \subseteq \mathbb{N}$ tal que para todo subconjunto finito $H \supseteq I$ se cumple:*
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{i \in H} x_i\right| < \varepsilon
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+- **$\Rightarrow$)** Sea $\sum_{i = 1}^\infty x_i$ serie de términos no negativos convergente, por definición sabemos que es convergente a $s$ si $\exists n_0 \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{i = 1}^{n} x_i\right| < \varepsilon \quad \forall n \geq n_0
+\end{align*}
+$$
+Sea $H \supseteq \{1, \dots, n_0\}$ entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n_0} x_i \leq \displaystyle \sum_{i \in H} x_i \leq s
+\end{align*}
+$$
+Al ser los términos negativos y $s$ la suma total, por tanto:
+$$
+\begin{align*}
+0 \leq s - \displaystyle \sum_{i \in H} x_i \leq s - \displaystyle \sum_{i = 1}^{n_0} x_i < \varepsilon
+\end{align*}
+$$
+- **$\Leftarrow$)** Sea $\sum_{i = 1}^\infty x_i$ serie de términos no negativos tal que $\exists s \in \mathbb{R}$ con la propiedad dada. Consideremos la sucesión de sumas parciales:
+$$
+\begin{align*}
+S_n = \displaystyle \sum_{i = 1}^{n} x_i
+\end{align*}
+$$
+Dicha sucesión es monótonamente creciente, ya que los términos son no negativos. Por tanto, si demostramos que está acotada superiormente, entonces será convergente. Sea $\varepsilon = 1$, por hipótesis existe un subconjunto finito $I \subseteq \mathbb{N}$ tal que para todo subconjunto finito $H \supseteq I$ se cumple:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{i \in H} x_i\right| < 1
+\end{align*}
+$$
+Sea $n_0 = \max(I)$, entonces para todo $n \geq n_0$ se tiene:
+$$
+\begin{align*}
+\left|s - S_n\right| = \left|s - \displaystyle \sum_{i = 1}^{n} x_i\right| < 1 \implies s - 1 < S_n < s + 1
+\end{align*}
+$$
+Por tanto, la sucesión $\{S_n\}_{n = 1}^\infty$ está acotada superiormente por $s + 1$ y, por tanto, es convergente.
+
+</DemBox>
+
+### Ejercicio 9
+*Demuestra que para todo cubo degenerado $C$ de $\mathbb{R}^N$ se cumple que $\mu_N^*(C) = 0$.*
+
+<DemBox title="Demostración">
+
+Un cubo $C$ de $\mathbb{R}^N$ es degenerado si contiene algún intervalo degenerado, es decir:
+$$
+\begin{align*}
+C = I_1 \times \dots \times I_N
+\end{align*}
+$$
+con $I_i$ intervalo degenerado. Supongamos sin pérdida de generalidad que $I_1 = \{a\}$, por tanto, $I_1$ degenerado. Sea $\varepsilon > 0$ cualquiera, consideremos el cubo abierto:
+$$
+\begin{align*}
+J_\varepsilon = (a - \varepsilon, a + \varepsilon) \times (b_2, c_2) \times \dots \times (b_N, c_N)
+\end{align*}
+$$
+Donde $I_i = [b_i, c_i]$ para $i = 2, \dots, N$. Claramente $C \subseteq J_\varepsilon$ y:
+$$
+\begin{align*}
+v_N(J_\varepsilon) & = v_1((a - \varepsilon, a + \varepsilon)) \cdot \displaystyle \prod_{i = 2}^{N} v_1((b_i, c_i)) = \\[2ex]
+& = (2\varepsilon) \cdot \displaystyle \prod_{i = 2}^{N} (c_i - b_i) \xrightarrow[\varepsilon \to 0]{} 0
+\end{align*}
+$$
+Por tanto, por la definición de medida exterior:
+$$
+\begin{align*}
+\mu_N^*(C) & = \inf \left\{\displaystyle \sum_{i = 1}^{\infty} v_N(J_i) : C \subseteq \displaystyle \bigcup_{i = 1}^{\infty} J_i, \quad J_i \text{ cubos abiertos de } \mathbb{R}^N\right\} \leq \\[2ex]
+& \leq v_N(J_\varepsilon) = (2\varepsilon) \cdot \displaystyle \prod_{i = 2}^{N} (c_i - b_i) \quad \forall \varepsilon > 0
+\end{align*}
+$$
+Tomando $\varepsilon \to 0$ se obtiene:
+$$
+\begin{align*}
+\mu_N^*(C) = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 10
+*Demuestra que la medida exterior de Lebesgue es invariante por translaciones, es decir, que para todo $A \subseteq \mathbb{R}^N$ y todo $p \in \mathbb{R}^N$ se tiene:*
+$$
+\begin{align*}
+\mu_N^*(A) = \mu_N^*(p + A)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $A \subseteq \mathbb{R}^N$ y $p \in \mathbb{R}^N$ cualquiera pero fijo, por definición de medida exterior sabemos que:
+$$
+\begin{align*}
+\mu_N^*(A) = \inf \left\{\displaystyle \sum_{i = 1}^{\infty} v_N(J_i) : \{J_i\}_{i \in \mathbb{N}} \text{ colección cubos abiertos tq: } A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} J_i\right\}
+\end{align*}
+$$
+Si consideramos una colección cualquiera de cubos abiertos $\{J_i\}_{i \in \mathbb{N}}$ que recubra $A$ y trasladamos el recubrimiento con el vector $p$ obtenemos:
+$$
+\begin{align*}
+p + A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} (p + J_i)
+\end{align*}
+$$
+Podemos notar que cada conjunto $p + J_i$ es un nuevo cubo de $\mathbb{R}^N$ y además tenemos que:
+$$
+\begin{align*}
+v_N(p + J_i) = \prod_{i = 1}^{N} |p + b_i - (p + a_i)| = \prod_{i = 1}^N |b_i - a_i| = v_N(J_i) 
+\end{align*}
+$$
+Por tanto, el volumen de los cubos es invariante bajo traslaciones y, en consecuencia, como $\{p + J_i\}_{i \in \mathbb{N}}$ es recubrimiento de $p + A$ y sus volúmenes coinciden con los del recubrimiento de $A$ se obtiene tomando ínfimos que:
+$$
+\begin{align*}
+\mu_N^*(p + A) \leq \mu_N^*(A) 
+\end{align*}
+$$
+Y de forma análoga se obtiene la desigualdad opuesta con lo que queda demostrado el ejercicio.
+
+</DemBox>
+
+### Ejercicio 11
+*Demostrar que $\mu_N^*(A)$ es igual a cualquiera de los siguientes valores:*
+$$
+\begin{align*}
+(1) & \inf\left\{\displaystyle \sum_{i = 1}^{\infty} v_n(I_i) : I_i \text{ cubos abiertos tq: } A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} I_i\right\}\\[2ex]
+(2) & \inf\left\{\displaystyle \sum_{i = 1}^{\infty} v_N(I_i) : I_i \text{ cubos abiertos acotados tq: } A \subseteq \displaystyle \bigcup_{i = 1}^{\infty}I_i\right\}\\[2ex]
+(3) & \inf\left\{\displaystyle \sum_{i = 1}^{\infty} v_N(I_i) : I_i \text{ cubos compactos tq: } A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} I_i\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+- **(1)** Es la propia definición de medida exterior de Lebesgue, no hay nada que demostrar.
+- **(2)** Se consideran los dos contenidos:
+
+- **$1 \leq 2$)** Trivial, toda familia de cubos abiertos acotados es, en particular, una familia de cubos abiertos.
+- **$2 \leq 1$)** Sea $\varepsilon > 0$ cualquiera, por definición de medida exterior, existe una familia de cubos abiertos $\{I_i\}_{i \in \mathbb{N}}$ no necesariamente acotados tal que:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} I_i \quad \text{ y } \quad \displaystyle \sum_{i = 1}^{\infty} v_N(I_i) \leq  \mu_N^*(A) + \varepsilon
+\end{align*}
+$$
+Ahora, si un cubo abierto tuviera volumen infinito, entonces dicha suma sería infinita. En dicho caso, se dan dos posibilidades:
+
+- **(3)** Se consideran los dos contenidos:
+
+- **$2 \leq 3$)** Trivial, todo cubo compacto es, en particular, acotado y su interior es un cubo abierto con el mismo volumen.
+- **$3 \leq 2$)** Sea $\varepsilon > 0$ cualquiera, por definición de medida exterior, existe una familia de cubos abiertos acotados $\{I_i\}_{i \in \mathbb{N}}$ tal que:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} I_i \quad \text{ y } \quad \displaystyle \sum_{i = 1}^{\infty} v_N(I_i) \leq  \mu_N^*(A) + \varepsilon
+\end{align*}
+$$
+Ahora, para cada $i \in \mathbb{N}$ consideremos el cubo compacto $J_i = \overline{I_i}$ (el cierre de $I_i$). Entonces, tenemos que:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} J_i \quad \text{ y } \quad v_N(J_i) = v_N(I_i)
+\end{align*}
+$$
+Por tanto, se tiene que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{\infty} v_N(J_i) = \displaystyle \sum_{i = 1}^{\infty} v_N(I_i) \leq \mu_N^*(A) + \varepsilon
+\end{align*}
+$$
+Lo cual demuestra que el ínfimo sobre cubos compactos es menor o igual que $\mu_N^*(A)$. Como $\varepsilon > 0$ es arbitrario, queda demostrado.
+
+</DemBox>
+
+## Conjuntos medibles en $\mathbb{R}^N$
+### Ejercicio 1
+*Sea $\{E_n\}_{n = 1}^\infty$ sucesión de conjuntos medibles en $\mathbb{R}^N$ definimos:*
+$$
+\begin{align*}
+\limsup_n E_n \coloneq \displaystyle \bigcap_{n = 1}^{\infty} \displaystyle \bigcup_{k = n}^{\infty} E_k \quad \text{ y } \quad \liminf_n E_n \coloneq \displaystyle \bigcup_{n = 1}^{\infty} \displaystyle \bigcap_{k = n}^{\infty} E_k
+\end{align*}
+$$
+
+- *Probar las siguientes igualdades:*
+$$
+\begin{align*}
+\liminf_n E_n & = \left\{x \in \mathbb{R}^N : \exists k_x \in \mathbb{N} \text{ tq } x \in E_n, \quad \forall n \geq k_x\right\}\\
+\limsup_n E_n & = \left\{x \in \mathbb{R}^N : \exists \text{ infinitos } n \in \mathbb{N} \text{ tq } x \in E_n\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+- **$\subseteq$)** Sea $x \in \liminf_n E_n$, por definición de $\liminf$ tenemos que:
+$$
+\begin{align*}
+x \in \displaystyle \bigcup_{n = 1}^{\infty} \displaystyle \bigcap_{k = n}^{\infty} E_k
+\end{align*}
+$$
+Por tanto, $\exists n \in \mathbb{N}$ tal que $x \in E_k$ para todo $k \geq n$. Basta $k_x \coloneq n$ y $n \coloneq k$.
+- **$\supseteq$)** Sea $x_0 \in \left\{x \in \mathbb{R}^N : \exists k_x \in \mathbb{N} \text{ tq } x \in E_n, \quad \forall n \geq k_x\right\}$ entonces tenemos que para $x_0$ existe $k_{x_0} \in \mathbb{N}$ tal que $x \in E_n$ para cualquier $n \geq k_{x_0}$, por tanto:
+$$
+\begin{align*}
+x_0 \in \displaystyle \bigcap_{n = k_{x_0}}^{\infty} E_n \implies x_0 \in \bigcup_{m = 1}^\infty \displaystyle \bigcap_{n = m}^{\infty} E_n \implies x_0 \in \liminf_n E_n
+\end{align*}
+$$
+
+Para el caso de $\limsup$:
+
+- **$\subseteq$)** Sea $x \in \limsup_n E_n$, por definición de $\limsup$ tenemos que:
+$$
+\begin{align*}
+x \in \displaystyle \bigcap_{n = 1}^{\infty} \displaystyle \bigcup_{k = n}^{\infty} E_k
+\end{align*}
+$$
+Por tanto, para todo $n \in \mathbb{N}$ existe $k_n \geq n$ tal que $x \in E_{k_n}$. Por lo tanto, existen infinitos $n$ tales que $x \in E_n$.
+- **$\supseteq$)** Sea $x_0 \in \left\{x \in \mathbb{R}^N : \exists \text{ infinitos } n \in \mathbb{N} \text{ tq } x \in E_n\right\}$, entonces existen infinitos $n_k$ tales que $x_0 \in E_{n_k}$. Por tanto, para cada $m \in \mathbb{N}$ existe algún $n_k \geq m$ tal que $x_0 \in E_{n_k}$, es decir:
+$$
+\begin{align*}
+x_0 \in \displaystyle \bigcup_{k = m}^{\infty} E_k \quad \forall m \in \mathbb{N} \implies x_0 \in \displaystyle \bigcap_{m = 1}^{\infty} \displaystyle \bigcup_{k = m}^{\infty} E_k = \limsup_n E_n
+\end{align*}
+$$
+
+</DemBox>
+- *Demuestra que $\liminf_n E_n \subseteq \limsup_n E_n$.*
+<DemBox title="Demostración">
+
+Sea $x \in \liminf_n E_n$ entonces tenemos que:
+$$
+\begin{align*}
+\exists k_x \in \mathbb{N} \text{ tq } x \in E_n, \quad \forall n \geq k_x \implies \exists \text{ infinitos } n \text{ tq } x \in E_n \implies x \in \limsup_n E_n
+\end{align*}
+$$
+
+</DemBox>
+- *Demuestra que los conjuntos $\liminf_n E_n$ y $\limsup_n E_n$ son medibles.*
+<DemBox title="Demostración">
+
+Veamos el caso del límite inferior, el superior es análogo. Basta notar que las uniones e intersecciones numerables de medibles son medibles, entonces:
+$$
+\begin{align*}
+E_n \text{ medible } \implies \displaystyle \bigcap_{k = n}^{\infty} E_k \text{ medible } \implies \displaystyle \bigcup_{n = 1}^{\infty} \displaystyle \bigcap_{k = n}^{\infty} E_k \quad \text{ medible}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Sea $A \in \mathcal{M}_N$ con $\mu(A) < \infty$ y $\varepsilon > 0$. Prueba que existe un conjunto compacto $K \subseteq A$ tal que $\mu(A \setminus K) < \varepsilon$. ¿Es cierta la afirmación si $\mu(A) = \infty$?*
+
+<DemBox title="Demostración">
+
+Fijamos $\varepsilon > 0$ cualquiera y consideramos el conjunto $A \in \mathcal{M}_N$ con $\mu(A) < \infty$. Ahora, definimos los conjuntos:
+$$
+\begin{align*}
+A_n \coloneq A \cap [ - n, n]^N \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Por lo tanto, podemos expresar $A$ como:
+$$
+\begin{align*}
+A = \displaystyle \bigcup_{n = 1}^{\infty} A_n
+\end{align*}
+$$
+Como $A_n \subseteq A_{n + 1}$ para todo $n$, tenemos que:
+$$
+\begin{align*}
+\mu(A) = \mu \left(\displaystyle \bigcup_{n = 1}^{\infty} A_n\right) = \lim_{n \to \infty} \mu(A_n)
+\end{align*}
+$$
+Como $\mu(A_n) \to \mu(A)$ entonces $\exists n_0 \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\mu(A) - \mu(A_{n_0}) < \frac{\varepsilon}{2}
+\end{align*}
+$$
+Aplicando la caracterización topológica de los conjuntos medibles, existe un conjunto cerrado $C \subseteq A_{n_0}$ tal que:
+$$
+\begin{align*}
+C \subseteq A_{n_0} \quad \text{ y } \quad \mu(A_{n_0} \setminus C) < \frac{\varepsilon}{2}
+\end{align*}
+$$
+Como $C \subseteq A_{n_0} \subseteq [ - n_0, n_0]^N$ entonces $C$ es acotado y cerrado, por lo que es compacto. Por lo tanto, si tomamos $K \coloneq C$ se tiene que:
+$$
+\begin{align*}
+\mu(A \setminus K) & = \mu((A \setminus A_{n_0}) \cup (A_{n_0} \setminus C)) \overset{\text{subadit}}{\leq} \mu(A \setminus A_{n_0}) + \mu(A_{n_0} \setminus C) < \\[2ex]
+& < \mu(A \setminus A_{n_0}) + \frac{\varepsilon}{2} \overset{\mu(A) < \infty}{ = } (\mu(A) - \mu(A_{n_0})) + \frac{\varepsilon}{2} < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon
+\end{align*}
+$$
+Sin embargo, si $\mu(A) = \infty$ la afirmación no es cierta. Por ejemplo, consideremos el conjunto $A = \mathbb{R}^N$ y tomemos cualquier compacto $K \subseteq A$, entonces $K$ es acotado y cerrado, por lo que existe $M > 0$ tal que:
+$$
+\begin{align*}
+K \subseteq [ - M, M]^N
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+\mu(A \setminus K) \geq \mu(\mathbb{R}^N \setminus [ - M, M]^N) = \infty
+\end{align*}
+$$
+Por lo que no existe compacto $K \subseteq A$ tal que $\mu(A \setminus K) < \varepsilon$ para ningún $\varepsilon > 0$.
+
+</DemBox>
+
+### Ejercicio 3
+*Sea $A \in \mathcal{M}_N$, ¿son ciertas las siguientes afirmaciones?*
+
+- $\overset{\circ}{A} \neq \emptyset \implies \mu(A) = 0$
+<DemBox title="Demostración">
+
+Falso, basta notar que dado un conjunto abierto cualquiera en $\mathbb{R}$, como puede ser $A \coloneq (1, 2)$ tenemos que claramente $\overset{\circ}{A} = (1, 2)$ y su medida es:
+$$
+\begin{align*}
+\mu(A) = v_n(A) = 2 - 1 = 1 \neq 0
+\end{align*}
+$$
+
+</DemBox>
+- $\overset{\circ}{A} = \emptyset \implies \mu(A) = 0$
+<DemBox title="Demostración">
+
+Falso, basta notar que el conjunto $A = \mathbb{Q} \cap [0, 1]$ tiene interior vacío pero su medida es:
+$$
+\begin{align*}
+\mu(A) = 1 \neq 0
+\end{align*}
+$$
+
+</DemBox>
+- *$A$ abierto entonces $\mu(\text{Fr}(A)) = 0$*
+<DemBox title="Demostración">
+
+Falso, podemos considerar el conjunto grueso de Cantor que se define como el conjunto complementario en $[0, 1]$ del conjunto de Cantor clásico. Este conjunto es abierto y su frontera es el propio conjunto de Cantor, que tiene medida positiva:
+$$
+\begin{align*}
+\mu(\text{Fr}(A)) = \mu(\text{Conjunto de Cantor}) = \frac{1}{2} > 0
+\end{align*}
+$$
+
+</DemBox>
+- *$A$ no numerable entonces $\mu(A) > 0$*
+<DemBox title="Demostración">
+
+Falso, basta considerar el conjunto de Cantor clásico que es no numerable pero su medida es:
+$$
+\begin{align*}
+\mu(A) = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Demuestra que el hiperplano de $\mathbb{R}^N$ es medible. ¿Cuál es su medida?*
+<DemBox title="Demostración">
+
+Sea $H$ un hiperplano de $\mathbb{R}^N$, sin pérdida de generalidad podemos suponer que:
+$$
+\begin{align*}
+H = \{(x_1, \dots, x_N) \in \mathbb{R}^N : x_N = 0\}
+\end{align*}
+$$
+Cualquier otro hiperplano es traslación o rotación de este.
+
+Consideramos el cubo abierto arbitrario:
+$$
+\begin{align*}
+Q = ( - a, a)^N \quad a > 0 \implies H \cap Q = ( - a, a)^{N - 1} \times \{0\}
+\end{align*}
+$$
+Por tanto, el conjunto $H \cap Q$ es un cubo degenerado en $\mathbb{R}^N$ y, por el ejercicio 9, tenemos que su medida exterior es nula:
+$$
+\begin{align*}
+\mu_N^*(H \cap Q) = 0
+\end{align*}
+$$
+Ahora, por la caracterización topológica de los conjuntos medibles, para cualquier $\varepsilon > 0$ existe un conjunto abierto $A_\varepsilon$ tal que:
+$$
+\begin{align*}
+H \cap Q \subseteq A_\varepsilon \quad \text{ y } \quad \mu_N^*(A_\varepsilon \setminus (H \cap Q)) < \varepsilon
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+\mu_N^*(A_\varepsilon) & = \mu_N^*((A_\varepsilon \setminus (H \cap Q)) \cup (H \cap Q)) \leq \\[2ex]
+& \leq \mu_N^*(A_\varepsilon \setminus (H \cap Q)) + \mu_N^*(H \cap Q) < \varepsilon + 0 = \varepsilon
+\end{align*}
+$$
+Lo cual implica que:
+$$
+\begin{align*}
+\mu_N^*(H \cap Q) = 0
+\end{align*}
+$$
+Finalmente, como $Q$ era un cubo abierto arbitrario, se tiene que $H$ es medible y su medida es:
+$$
+\begin{align*}
+\mu_N(H) = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Demostrar que para $A \in \mathcal{M}_1$ con $\mu(A) < \infty$ y cada $\varepsilon > 0$ existe una colección finita de intervalos disjuntos y abiertos $\{I_i\}_{i = 1}^n$ tal que:*
+$$
+\begin{align*}
+\mu\left(A \bigtriangleup \displaystyle \bigcup_{i = 1}^n I_i\right) < \varepsilon
+\end{align*}
+$$
+*donde $A \bigtriangleup B = (A \setminus B) \cup (B \setminus A)$ denota la diferencia simétrica entre $A$ y $B$.*
+
+<DemBox title="Demostración">
+
+Sea $A \in \mathcal{M}_1$ con $\mu(A) < \infty$ y $\varepsilon > 0$ cualquiera. Por la caracterización topológica de los conjuntos medibles, existe un conjunto abierto $U \supseteq A$ tal que:
+$$
+\begin{align*}
+\mu(U \setminus A) < \frac{\varepsilon}{2}
+\end{align*}
+$$
+Como $U$ es abierto en $\mathbb{R}$, podemos expresar $U$ como una unión numerable de intervalos abiertos disjuntos:
+$$
+\begin{align*}
+U = \displaystyle \bigcup_{i = 1}^{\infty} J_i
+\end{align*}
+$$
+Donde cada $J_i$ es un intervalo abierto. Ahora, como la medida de $A$ es finita, tenemos que:
+$$
+\begin{align*}
+\mu(U) = \mu(A) + \mu(U \setminus A) < \infty
+\end{align*}
+$$
+Por lo tanto, la serie:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{\infty} v_1(J_i) = \mu(U)
+\end{align*}
+$$
+Converge y, por tanto, existe $n_0 \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = n_0 + 1}^{\infty} v_1(J_i) < \frac{\varepsilon}{2}
+\end{align*}
+$$
+Si tomamos la colección finita de intervalos abiertos disjuntos:
+$$
+\begin{align*}
+I_i = J_i \quad i = 1, \dots, n_0
+\end{align*}
+$$
+Entonces, tenemos que:
+$$
+\begin{align*}
+A \bigtriangleup \displaystyle \bigcup_{i = 1}^{n_0} I_i & = (A \setminus U) \cup (U \setminus A) \cup \left(U \setminus \displaystyle \bigcup_{i = 1}^{n_0} J_i\right) = \\[2ex]
+& = (U \setminus A) \cup \displaystyle \bigcup_{i = n_0 + 1}^{\infty} J_i
+\end{align*}
+$$
+Por lo tanto, por la subaditividad de la medida de Lebesgue, se tiene que:
+$$
+\begin{align*}
+\mu\left(A \bigtriangleup \displaystyle \bigcup_{i = 1}^{n_0} I_i\right) & \leq \mu(U \setminus A) + \mu\left(\displaystyle \bigcup_{i = n_0 + 1}^{\infty} J_i\right) \leq \\[2ex]
+& \leq \mu(U \setminus A) + \displaystyle \sum_{i = n_0 + 1}^{\infty} v_1(J_i) < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Sea $A \in \mathcal{M}_N$ y $p \in \mathbb{R}^N$. Demuestra que $p + A \in \mathcal{M}_N$*
+
+<DemBox title="Demostración">
+
+Sea $A \in \mathcal{M}_N$ y $p \in \mathbb{R}^N$, por la caracterización topológica de los conjuntos medibles, para cualquier $\varepsilon > 0$ existe un conjunto abierto $U_\varepsilon$ tal que:
+$$
+\begin{align*}
+A \subseteq U_\varepsilon \quad \text{ y } \quad \mu_N^*(U_\varepsilon \setminus A) < \varepsilon
+\end{align*}
+$$
+Ahora, consideramos el conjunto $p + U_\varepsilon$, que es abierto ya que es la traslación de un conjunto abierto. Además, se tiene que:
+$$
+\begin{align*}
+p + A \subseteq p + U_\varepsilon
+\end{align*}
+$$
+Por otro lado, tenemos que:
+$$
+\begin{align*}
+(p + U_\varepsilon) \setminus (p + A) = p + (U_\varepsilon \setminus A)
+\end{align*}
+$$
+Y, por la propiedad de traslación de la medida exterior de Lebesgue, se tiene que:
+$$
+\begin{align*}
+\mu_N^*((p + U_\varepsilon) \setminus (p + A)) = \mu_N^*(p + (U_\varepsilon \setminus A)) = \mu_N^*(U_\varepsilon \setminus A) < \varepsilon
+\end{align*}
+$$
+Por lo tanto, por la caracterización topológica de los conjuntos medibles, $p + A$ es medible.
+
+</DemBox>
+
+## Existencia de conjuntos no medibles
+### Ejercicio 1
+*Para cada par de números reales $x, y \in [0, 1]$ establecemos la relación $x \sim y$ cuando $x - y \in \mathbb{Q}$. Demostrar los siguientes hechos:*
+
+1. *Demuestra que $\sim$ es una relación de equivalencia.*
+<DemBox title="Demostración">
+
+Veamos que cumple las tres propiedades de la relación de equivalencia:
+
+- *Reflexividad:* Sea $x \in [0, 1]$ entonces tenemos que:
+$$
+\begin{align*}
+x - x = 0 \in \mathbb{Q}
+\end{align*}
+$$
+- *Simetría:* Sea $x, y \in [0, 1]$ tales que $x \sim y$, es decir:
+$$
+\begin{align*}
+x - y \in \mathbb{Q}
+\end{align*}
+$$
+Entonces tenemos que:
+$$
+\begin{align*}
+y - x = - \underbrace{(x - y)}_{\in \mathbb{Q}} \in \mathbb{Q} \implies  y \sim x
+\end{align*}
+$$
+- *Transitividad:* Sea $x, y, z \in [0, 1]$ con $x \sim y$ y $y \sim z$ entonces:
+$$
+\begin{align*}
+x - y \in \mathbb{Q} \quad \text{y} \quad y - z \in \mathbb{Q}
+\end{align*}
+$$
+Entonces, podemos ver que:
+$$
+\begin{align*}
+x - z = x - y + y - z = \underbrace{(x - y)}_{\in \mathbb{Q}} + \underbrace{(y - z)}_{in \mathbb{Q}} \in \mathbb{Q}
+\end{align*}
+$$
+
+</DemBox>
+2. *En cada clase de equivalencia $A$ determinada por $\sim$ tomamos un único elemento, que denotaremos $x_A$. Justifica que:*
+$$
+\begin{align*}
+D = \{x_A : A \sim \text{ - clase de equivalencia}\}
+\end{align*}
+$$
+*es un conjunto*
+
+<DemBox title="Demostración">
+
+Sea $A$ una clase de equivalencia dada por $\sim$ y sea $x_A \in A$, sabemos que, dado $x \in [0, 1]$:
+
+- $x$ pertenece a una única clase $[x]$
+- Dos clases distintas son disjuntas
+- La unión de todas las clases es $[0, 1]$
+
+Esto implica que existe una correspondencia entre ser elemento de $[0, 1]$ y las clases de equivalencia. Cada clase de equivalencia es no vacía, ya que tiene al menos un elemento que la representa (al menos contiene el elemento que la define). Aplicando el axioma de elección, podemos seleccionar un único elemento $x_A$ de cada clase de equivalencia $A$. Por lo tanto, el conjunto:
+$$
+\begin{align*}
+D = \{x_A : A \sim \text{ - clase de equivalencia}\}
+\end{align*}
+$$
+Es un conjunto bien definido y contiene un único representante de cada clase de equivalencia.
+
+Para ver que es un conjunto, basta notar que $D \subseteq [0, 1]$ donde $[0, 1]$ es un conjunto y, por tanto, $D$ es una subfamilia de $[0, 1]$ definida por el axioma de elección. Así, por el axioma de separación, $D$ es un conjunto.
+
+</DemBox>
+3. *Sea $(q_n)_n$ la sucesión de todos los racionales en $[ - 1, 1]$, con $q_n \neq q_m$ si $n \neq m$. Para cada $n \in \mathbb{N}$ definimos el conjunto:*
+$$
+\begin{align*}
+A_n = q_n + D
+\end{align*}
+$$
+*Demuestra que los $A_n$ son disjuntos dos a dos y que $\mu^*(A_n) = \mu^*(D)$.*
+<DemBox title="Demostración">
+
+Sea $n, m \in \mathbb{N}$ con $n \neq m$. Supongamos que existe $x \in A_n \cap A_m$, entonces existen $d_n, d_m \in D$ tales que:
+$$
+\begin{align*}
+x = q_n + d_n = q_m + d_m
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+d_n - d_m = q_m - q_n \in \mathbb{Q}
+\end{align*}
+$$
+Lo cual implica que $d_n$ y $d_m$ pertenecen a la misma clase de equivalencia, es decir, $d_n \sim d_m$. Pero como $D$ contiene un único representante por clase de equivalencia, se tiene que $d_n = d_m$. Por tanto:
+$$
+\begin{align*}
+q_n + d_n = q_m + d_n \implies q_n = q_m
+\end{align*}
+$$
+Al ser $q_n \neq q_m$ para $n \neq m$, llegamos a una contradicción. Por lo tanto, los conjuntos $A_n$ son disjuntos dos a dos.
+
+Ahora, para ver que $\mu^*(A_n) = \mu^*(D)$, basta notar que $A_n$ es una traslación de $D$ por el racional $q_n$. Por la propiedad de traslación de la medida exterior de Lebesgue, se tiene que:
+$$
+\begin{align*}
+\mu^*(A_n) = \mu^*(q_n + D) = \mu^*(D)
+\end{align*}
+$$
+
+</DemBox>
+4. *Comprueba las siguientes relaciones:*
+$$
+\begin{align*}
+[0, 1] \subseteq \displaystyle \bigcup_{m = 1}^{\infty} A_m \subseteq [ - 1, 2] \quad \text{ y } \quad 1 \leq \mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) \leq 3
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $x \in [0, 1]$ entonces tenemos que $x$ pertenece a una única clase de equivalencia $[x]$ y, por tanto, existe un único representante $d_x \in D$ tal que $d_x \sim x$. Por lo tanto, existe $q_n \in \mathbb{Q}$ tal que:
+$$
+\begin{align*}
+x - d_x = q_n \implies x = q_n + d_x \in A_n
+\end{align*}
+$$
+Por lo tanto, $x \in \displaystyle \bigcup_{m = 1}^{\infty} A_m$ y, por tanto, se tiene que:
+$$
+\begin{align*}
+[0, 1] \subseteq \displaystyle \bigcup_{m = 1}^{\infty} A_m
+\end{align*}
+$$
+Ahora, para ver que $\displaystyle \bigcup_{m = 1}^{\infty} A_m \subseteq [ - 1, 2]$, basta notar que para cualquier $x \in A_m$ existe $d_m \in D$ tal que:
+$$
+\begin{align*}
+x = q_m + d_m
+\end{align*}
+$$
+Dado que $q_m \in [ - 1, 1]$ y $d_m \in [0, 1]$, se tiene que:
+$$
+\begin{align*}
+-1 + 0 \leq x \leq 1 + 1 \implies x \in [ - 1, 2]
+\end{align*}
+$$
+Por lo tanto, se cumple que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{m = 1}^{\infty} A_m \subseteq [ - 1, 2]
+\end{align*}
+$$
+Finalmente, por la monotonicidad y subaditividad de la medida exterior de Lebesgue, se tiene que:
+$$
+\begin{align*}
+1 = \mu^*([0, 1]) \leq \mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) \leq \mu^*([ - 1, 2]) = 3
+\end{align*}
+$$
+
+</DemBox>
+5. *Deduce que $\mu^*(D) > 0$.*
+<DemBox title="Demostración">
+
+Supongamos por contradicción que $\mu^*(D) = 0$. Entonces, por el apartado (3), se tiene que:
+$$
+\begin{align*}
+\mu^*(A_n) = \mu^*(D) = 0 \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Por lo tanto, por la subaditividad numerable de la medida exterior de Lebesgue, se tendría que:
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) \leq \displaystyle \sum_{m = 1}^{\infty} \mu^*(A_m) = 0
+\end{align*}
+$$
+Lo cual contradice la desigualdad obtenida en el apartado (4):
+$$
+\begin{align*}
+1 \leq \mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right)
+\end{align*}
+$$
+Por lo tanto, se concluye que:
+$$
+\begin{align*}
+\mu^*(D) > 0
+\end{align*}
+$$
+
+</DemBox>
+6. *Demuestra que:*
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) \neq \displaystyle \sum_{m = 1}^{\infty} \mu^*(A_m)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Supongamos por contradicción que:
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) = \displaystyle \sum_{m = 1}^{\infty} \mu^*(A_m)
+\end{align*}
+$$
+Entonces, por el apartado (3), se tendría que:
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) = \displaystyle \sum_{m = 1}^{\infty} \mu^*(D)
+\end{align*}
+$$
+Como hemos visto en el apartado (5) que $\mu^*(D) > 0$, la serie del lado derecho diverge a infinito, es decir:
+$$
+\begin{align*}
+\displaystyle \sum_{m = 1}^{\infty} \mu^*(D) = +\infty
+\end{align*}
+$$
+Lo cual contradice la desigualdad obtenida en el apartado (4):
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) \leq 3
+\end{align*}
+$$
+Por lo tanto, se concluye que:
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) \neq \displaystyle \sum_{m = 1}^{\infty} \mu^*(A_m)
+\end{align*}
+$$
+
+</DemBox>
+7. *Es $D$ medible? Justifica la respuesta.*
+<DemBox title="Demostración">
+
+Supongamos por contradicción que $D$ es medible, entonces por la **propiedad de la medida de conjuntos disjuntos numerables** se tendría que:
+$$
+\begin{align*}
+\mu^*\left(\displaystyle \bigcup_{m = 1}^{\infty} A_m\right) = \displaystyle \sum_{m = 1}^{\infty} \mu^*(A_m)
+\end{align*}
+$$
+Lo cual contradice el resultado obtenido en el apartado (6). Por lo tanto, se concluye que $D$ no es medible.
+
+</DemBox>
+8. *¿Es cierto que la unión arbitraria de medibles es medible?*
+<DemBox title="Demostración">
+
+No, no es cierto. El conjunto $D$ del apartado anterior es un contraejemplo. Consideremos la colección de conjuntos:
+$$
+\begin{align*}
+\mathcal{C} = \{A_n : n \in \mathbb{N}\}
+\end{align*}
+$$
+Donde cada $A_n$ es medible ya que es una traslación del conjunto $D$ por un número racional $q_n$. Sin embargo, la unión numerable de estos conjuntos es:
+$$
+\begin{align*}
+\displaystyle \bigcup_{n = 1}^{\infty} A_n
+\end{align*}
+$$
+Que no es medible, como se demostró en el apartado (7). Por lo tanto, la unión arbitraria de conjuntos medibles no necesariamente es medible.
+
+</DemBox>
+
+### Ejercicio 2
+*Sea $(\mathbb{R}^N, \mathcal{M}, \mu)$ espacio de Börel-Lebesgue habitual, y consideramos un segundo espacio de medida $(\mathbb{R}^N, \mathcal{M}, m)$ con $m$ la mediad con la propiedad:*
+$$
+\begin{align*}
+m\left((a_1, b_1) \times \dots \times (a_N, b_N)\right) = \displaystyle \prod_{i = 1}^N (b_i - a_i)
+\end{align*}
+$$
+*para todo par de $N$-tuplas de números reales $(a_1, \dots, a_N), (b_1, \dots, b_N)$ verificando que $a_i < b_i$ para todo $i = 1,\dots, N$. Demuestra que la única medida posible que cumple la anterior propiedad es la medida de Lebesgue $\mu$.*
+
+*Pista: para probar que $\mu(A) = m(A)$ para todo $A \in \mathcal{M}$ demuéstralo paulatinamente siguiendo este orden:*
+
+1. *Cuando $A$ es un cubo acotado degenerado.*
+<DemBox title="Demostración">
+
+Sea $A$ un cubo acotado degenerado en $\mathbb{R}^N$, es decir, existe al menos una dimensión $i$ tal que $a_i = b_i$. Entonces, el volumen de $A$ es
+$$
+\begin{align*}
+v_N(A) = \displaystyle \prod_{i = 1}^N (b_i - a_i) = 0
+\end{align*}
+$$
+Por lo tanto, tanto la medida de Lebesgue como la medida $m$ asignan medida nula a $A$:
+$$
+\begin{align*}
+\mu(A) = 0 \quad \text{ y } \quad m(A) = 0
+\end{align*}
+$$
+Por lo tanto, se cumple que $\mu(A) = m(A)$.
+
+</DemBox>
+2. *Cuando $A$ es un cubo acotado.*
+<DemBox title="Demostración">
+
+Por un resultado de clase, hemos visto que sea $A$ un cubo acotado entonces:
+$$
+\begin{align*}
+v_N(C) = \mu_N(C)
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+m(A) = v_N(A) = \mu_N(A)
+\end{align*}
+$$
+
+</DemBox>
+3. *Cuando $\mu(A) = 0$*.
+<DemBox title="Demostración">
+
+Sea $A \in \mathcal{M}_N$ tal que $\mu_N(A) = 0$, fijamos un $\varepsilon > 0$ cualquiera y sabemos que $\exists \{I_i\}_{i \in \mathbb{N}}$ colección de cubos abiertos tales que:
+$$
+\begin{align*}
+A \subseteq \displaystyle \bigcup_{i = 1}^{\infty} I_i \quad \text{y}\quad \mu_N(A) + \varepsilon > \displaystyle \sum_{i = 1}^{\infty} v_N(I_i)
+\end{align*}
+$$
+Como $\mu(A) = 0$ entonces:
+$$
+\begin{align*}
+\varepsilon > \displaystyle \sum_{i = 1}^{\infty} v_N(I_i)
+\end{align*}
+$$
+Y como $v_N(I_i) \geq 0$ entonces:
+$$
+\begin{align*}
+0 \leq \displaystyle \sum_{i = 1}^{\infty} v_N(I_i) < \varepsilon \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} v_N(I_i) = 0 = \mu_N(A)
+\end{align*}
+$$
+
+</DemBox>
+4. *Cuando $A$ es un conjunto abierto*.
+<DemBox title="Demostración">
+
+Sea $A$ un abierto cualquiera de $\mathbb{R}^N$ existe una colección de cubos abiertos $C_i$ disjuntos tales que:
+$$
+\begin{align*}
+A = \displaystyle \bigcup_{i = 1}^{\infty} C_i
+\end{align*}
+$$
+Y como estos cubos son acotados, sabemos por el apartado 3 que:
+$$
+\begin{align*}
+\mu_N(C_i) = v_N(C_i)
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+\mu_N(A) & = \mu_N\left(\displaystyle \bigcup_{i = 1}^{\infty} C_i\right) = \displaystyle \sum_{i = 1}^{\infty} \mu_N(C_i) =\\[2ex]
+& = \displaystyle \sum_{i = 1}^{\infty} v_N(C_i) = \displaystyle \sum_{i = 1}^{\infty} m(C_i) = m\left(\displaystyle \bigcup_{i = 1}^{\infty} C_i\right) = m(A)
+\end{align*}
+$$
+
+</DemBox>
+5. *Cuando $A$ es un conjunto medible acotado.*
+<DemBox title="Demostración">
+
+Si $A$ es medible acotado, de la forma:
+$$
+\begin{align*}
+A = I_1 \times \dots \times I_N
+\end{align*}
+$$
+Si los $I_i$ son abiertos está aplicando el apartado anterior, supongamos que no lo son y que son cerrados, entonces sea $\varepsilon > 0$ cualquiera pero fijo, tenemos que:
+$$
+\begin{align*}
+I_i = [a_i, b_i] \subseteq (a_i - \varepsilon, b_i + \varepsilon) = I_i^{(\varepsilon)}
+\end{align*}
+$$
+Definimos $A^{(\varepsilon)}$ como:
+$$
+\begin{align*}
+A^{(\varepsilon)} \coloneq I_1^{(\varepsilon)} \times \dots \times I_N^{(\varepsilon)}
+\end{align*}
+$$
+Y tenemos claramente que $A \subseteq A^{(\varepsilon)}$ por tanto:
+$$
+\begin{align*}
+\mu_N(A) \leq \mu_N(A^{(\varepsilon)})
+\end{align*}
+$$
+Y como $A^{(\varepsilon)}$ es abierto, aplicando el apartado anterior tenemos que:
+$$
+\begin{align*}
+\mu_N(A) &\leq \mu_N(A^{(\varepsilon)}) = m(A^{(\varepsilon)}) = \prod_{i = 1}^{N} (b_i - a_i + 2\varepsilon) =\\[2ex]
+& = \prod_{i = 1}^N (b_i - a_i) + (2 \varepsilon)^N = m(A) + 2^N \varepsilon^N \xrightarrow{\varepsilon \to 0^ + } m(A)
+\end{align*}
+$$
+Por tanto, $\mu_N(A) \leq m(A)$. Ahora, para la otra desigualdad, sea $\varepsilon > 0$ cualquiera pero fijo, existe un conjunto abierto $U$ tal que:
+$$
+\begin{align*}
+A \subseteq U \quad \text{ y } \quad \mu_N(U \setminus A) < \varepsilon
+\end{align*}
+$$
+Y por el apartado anterior tenemos que:
+$$
+\begin{align*}
+m(A) & \leq m(U) = \mu_N(U) = \mu_N(A) + \mu_N(U \setminus A) < \mu_N(A) + \varepsilon \xrightarrow{\varepsilon \to 0^ + } \mu_N(A)
+\end{align*}
+$$
+Por tanto, $m(A) \leq \mu_N(A)$ y en consecuencia:
+$$
+\begin{align*}
+\mu_N(A) = m(A)
+\end{align*}
+$$
+
+</DemBox>
+6. *Cuando $A$ es un conjunto medible cualquiera*
+<DemBox title="Demostración">
+
+Sea $A \in \mathcal{M}_N$ un conjunto medible cualquiera, existe una sucesión de conjuntos medibles acotados $(A_k)_{k \in \mathbb{N}}$ tal que:
+$$
+\begin{align*}
+A_k \subseteq A_{k + 1} \quad \text{ y } \quad \displaystyle \bigcup_{k = 1}^{\infty} A_k = A
+\end{align*}
+$$
+Por el apartado anterior, tenemos que:
+$$
+\begin{align*}
+\mu_N(A_k) = m(A_k) \quad \forall k \in \mathbb{N}
+\end{align*}
+$$
+Ahora, por un resultado de clase sabemos que:
+$$
+\begin{align*}
+\mu_N(A) & = \lim_{k \to \infty} \mu_N(A_k) = \lim_{k \to \infty} m(A_k) = m(A)
+\end{align*}
+$$
+Por lo tanto, se concluye que para todo conjunto medible $A$:
+$$
+\begin{align*}
+\mu_N(A) = m(A)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Demuestra que no existe ninguna medida sobre $\mathcal{P}(\mathbb{R})$ que preserve la longitud de los intervalos.*
+<DemBox title="Demostración">
+
+Supongamos por contradicción que existe una medida que preserva la longitud de los intervalos:
+$$
+\begin{align*}
+\mu : \mathcal{P}(\mathbb{R}) \to [0, +\infty]
+\end{align*}
+$$
+que cumple las propiedades siguientes:
+
+1. Es $\sigma$-aditiva.
+2. $\mu(\emptyset ) = 0$.
+3. $\mu((a, b)) = b - a$ para todo $a, b \in \mathbb{R}$ con $a < b$.
+
+Consideramos la relación de equivalencia en $[0, 1]$ definida por:
+$$
+\begin{align*}
+x \sim y \iff x - y \in \mathbb{Q}
+\end{align*}
+$$
+Y tomamos un conjunto $D$ que contiene un único representante de cada clase de equivalencia. Definimos los conjuntos:
+$$
+\begin{align*}
+V_q \coloneq V + q = \{x + q : x \in V\} \quad \forall q \in \mathbb{Q} \cap [ - 1, 1]
+\end{align*}
+$$
+Estos conjuntos cumplen que:
+
+- Son disjuntos dos a dos. Sea $v_1 + q_1 = v_2 + q_2$ entonces:
+$$
+\begin{align*}
+v_1 - v_2 = q_2 - q_1 \in \mathbb{Q}
+\end{align*}
+$$
+Por tanto, $v_1 = v_2$ y, por definición de $V$, $q_1 = q_2$.
+- Se tiene que:
+$$
+\begin{align*}
+[0, 1] \subseteq \displaystyle \bigcup_{q \in \mathbb{Q} \cap [ - 1, 1]} V_q \subseteq [ - 1, 2]
+\end{align*}
+$$
+
+Ahora, aplicando la medida $\mu$ a la inclusión anterior, tenemos que:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{q \in \mathbb{Q} \cap [ - 1, 1]} V_q\right) = \displaystyle \sum_{q \in \mathbb{Q} \cap [ - 1, 1]} \mu(V_q) = \displaystyle \sum_{q \in \mathbb{Q} \cap [ - 1, 1]} \mu(V)
+\end{align*}
+$$
+Como el conjunto $\mathbb{Q} \cap [ - 1, 1]$ es numerable infinito, tenemos dos casos:
+$$
+\begin{align*}
+\displaystyle \sum_{q \in \mathbb{Q} \cap [ - 1, 1]} m = \begin{cases}
+0 & \text{ si } m = 0\\
++\infty & \text{ si } m > 0
+\end{cases}
+\end{align*}
+$$
+Además, como $\mu$ es una medida que preserva la longitud de los intervalos, tenemos que:
+$$
+\begin{align*}
+\mu([0, 1]) = 1 \quad \text{ y } \quad \mu([ - 1, 2]) = 3
+\end{align*}
+$$
+Pero tenemos que:
+$$
+\begin{align*}
+1 = \mu([0, 1]) \leq \mu\left(\displaystyle \bigcup_{q \in \mathbb{Q} \cap [ - 1, 1]} V_q\right) \leq \mu([ - 1, 2]) = 3
+\end{align*}
+$$
+Lo que implica que:
+$$
+\begin{align*}
+\mu\left(\displaystyle \bigcup_{q \in \mathbb{Q} \cap [ - 1, 1]} V_q\right) \in [1, 3]
+\end{align*}
+$$
+Pero hemos visto que $\mu\left(\displaystyle \bigcup_{q \in \mathbb{Q} \cap [ - 1, 1]} V_q\right)$ es o bien $0$ o bien $+\infty$, lo cual es una contradicción. Por lo tanto, no existe ninguna medida sobre $\mathcal{P}(\mathbb{R})$ que preserve la longitud de los intervalos.
+
+</DemBox>
+
+## El conjunto de Cantor
+### Construcción del conjunto de Cantor
+*Eliminamos del intervalo $[0, 1]$ el tercio central, es decir, el intervalo:*
+$$
+\begin{align*}
+I_1^1 = \left(\frac{1}{3}, \frac{2}{3}\right)
+\end{align*}
+$$
+*Eliminamos de cada uno de los intervalos restantes:*
+$$
+\begin{align*}
+\left[0, \frac{1}{3}\right] \quad \text{ y } \quad \left[\frac{2}{3}, 1\right]
+\end{align*}
+$$
+*Los tercios centrales, es decir:*
+$$
+\begin{align*}
+I_1^2 = \left(\frac{1}{9}, \frac{2}{9}\right) \quad \text{ y } \quad I_2^2 = \left(\frac{7}{9}, \frac{8}{9}\right)
+\end{align*}
+$$
+*Y se prosigue de la misma forma. Sea:*
+$$
+\begin{align*}
+I = \displaystyle \bigcup_{n = 1}^{\infty} \displaystyle \bigcup_{i = 1}^{2^{n - 1}} I_i^n
+\end{align*}
+$$
+*El conjunto $\Delta \coloneq [0, 1] \setminus I$ se llama conjunto de Cantor.*
+
+### Ejercicio 1
+*Demuestra las siguientes propiedades del conjunto de cantor:*
+
+1. $\Delta$ es compacto no vacío:
+<DemBox title="Demostración">
+
+Para ver que es compacto, tenemos que ver que es cerrado y acotado:
+
+- *Acotación*: Trivialmente está acotado ya que:
+$$
+\begin{align*}
+\Delta \subseteq [0, 1] \text{ es acotado}
+\end{align*}
+$$
+- *Cerradura*: Sabemos que la unión numerable de cerrados es cerrada bajo la topología usual de $\mathbb{R}$ y como cada $I_i^n$ es cerrado, entonces:
+$$
+\begin{align*}
+\Delta = \displaystyle \bigcup_{n = 1}^{\infty} \displaystyle \bigcup_{i = 1}^{2^{n - 1}} I_i^n \quad \text{ es cerrado}
+\end{align*}
+$$
+
+Para ver que es no vacío, basta notar que los puntos $0$ y $1$ pertenecen a $\Delta$ ya que en ningún paso de la construcción se eliminan estos puntos. Por lo tanto, $\Delta$ es compacto y no vacío.
+
+</DemBox>
+2. *$\Delta$ tiene interior vacío y carece de puntos aislados*.
+<DemBox title="Demostración">
+
+Veamos que:
+
+- *Interior vacío*: Supongamos por contradicción que existe un intervalo abierto $(a, b) \subseteq \Delta$. Entonces, en algún paso de la construcción del conjunto de Cantor, se eliminaría un intervalo que interseca a $(a, b)$, lo cual es una contradicción. Por lo tanto, $\Delta$ tiene interior vacío.
+- *Carece de puntos aislados:* Sea $x \in \Delta$ un punto cualquiera y sea $\varepsilon > 0$ cualquiera. Entonces, existe un $n \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\frac{1}{3^n} < \varepsilon
+\end{align*}
+$$
+En el paso $n$ de la construcción del conjunto de Cantor, el punto $x$ pertenece a uno de los $2^n$ intervalos restantes, digamos $J$, que tiene longitud $\frac{1}{3^n}$. Como $\frac{1}{3^n} < \varepsilon$, entonces $J \subseteq (x - \varepsilon, x + \varepsilon)$. Además, $J$ contiene infinitos puntos de $\Delta$ ya que en los pasos posteriores se eliminan tercios centrales de los intervalos restantes. Por lo tanto, cualquier vecindad de $x$ contiene infinitos puntos de $\Delta$, lo que implica que $x$ no es un punto aislado. Como $x$ era arbitrario, concluimos que $\Delta$ carece de puntos aislados.
+
+</DemBox>
+3. *$\text{Fr.} \Delta = \Delta$*.
+<DemBox title="Demostración">
+
+Recordemos que la frontera de un conjunto $A$ se define como:
+$$
+\begin{align*}
+\text{Fr.} A = \overline{A} \setminus \text{Int}(A)
+\end{align*}
+$$
+Donde $\overline{A}$ es el cierre de $A$ y $\text{Int}(A)$ es el interior de $A$. En el caso del conjunto de Cantor $\Delta$, ya hemos visto que es cerrado, por lo que:
+$$
+\begin{align*}
+\overline{\Delta} = \Delta
+\end{align*}
+$$
+Además, hemos demostrado que $\Delta$ tiene interior vacío, es decir:
+$$
+\begin{align*}
+\text{Int}(\Delta) = \emptyset
+\end{align*}
+$$
+Por lo tanto, la frontera de $\Delta$ es:
+$$
+\begin{align*}
+\text{Fr.} \Delta = \overline{\Delta} \setminus \text{Int}(\Delta) = \Delta \setminus \emptyset = \Delta
+\end{align*}
+$$
+Así, concluimos que:
+$$
+\begin{align*}
+\text{Fr.} \Delta = \Delta
+\end{align*}
+$$
+
+</DemBox>
+4. *$\mu(\Delta) = 0$*.
+<DemBox title="Demostración">
+
+Recordemos que la medida de Lebesgue $\mu$ es una medida completa y cuenta con la propiedad de ser $\sigma$-aditiva. En cada paso de la construcción del conjunto de Cantor, se eliminan intervalos cuya longitud total es:
+$$
+\begin{align*}
+\sum_{n = 1}^{\infty} \frac{2^{n - 1}}{3^n} = \frac{1}{3} + \frac{2}{9} + \frac{4}{27} + \dots
+\end{align*}
+$$
+Esta serie geométrica tiene razón $\frac{2}{3}$ y su suma es:
+$$
+\begin{align*}
+S = \frac{\frac{1}{3}}{1 - \frac{2}{3}} = 1
+\end{align*}
+$$
+Por lo tanto, la longitud total de los intervalos eliminados es $1$. Dado que el intervalo original $[0, 1]$ tiene longitud $1$, la medida del conjunto de Cantor $\Delta$ es:
+$$
+\begin{align*}
+\mu(\Delta) = \mu([0, 1]) - \sum_{n = 1}^{\infty} \frac{2^{n - 1}}{3^n} = 1 - 1 = 0
+\end{align*}
+$$
+
+</DemBox>
+5. *$\Delta$ tiene cardinal no numerable*.
+<DemBox title="Demostración">
+
+Para demostrar que el conjunto de Cantor $\Delta$ tiene cardinal no numerable, podemos establecer una correspondencia entre los puntos de $\Delta$ y las secuencias binarias infinitas. Cada punto en $\Delta$ puede ser representado en base $3$ utilizando solo los dígitos $0$ y $2$. Esto se debe a que en cada paso de la construcción del conjunto de Cantor, se eliminan los intervalos que contienen el dígito $1$ en su representación ternaria.
+
+Por ejemplo, el punto $0$ se representa como $0.000\dots_3$, el punto $\frac{1}{3}$ como $0.200\dots_3$, el punto $\frac{2}{3}$ como $0.220\dots_3$, y así sucesivamente. Cada dígito $0$ en la representación ternaria corresponde a un $0$ en la secuencia binaria, y cada dígito $2$ corresponde a un $1$.
+
+Dado que las secuencias binarias infinitas tienen cardinal no numerable (ya que corresponden al conjunto de todos los subconjuntos de los números naturales, que es no numerable), concluimos que el conjunto de Cantor $\Delta$ también tiene cardinal no numerable.
+
+</DemBox>
+
+### Ejercicio 2
+*Encuentra un subconjunto medible de $[0, 1]$ cuyo interior tenga medida 0 y la medida de su frontera sea estrictamente positiva.*
+<DemBox title="Demostración">
+
+Consideremos el conjunto de Cantor $\Delta \subseteq [0, 1]$. Sabemos que $\Delta$ es un conjunto compacto y no vacío, y que su interior es vacío, es decir:
+$$
+\begin{align*}
+\text{Int}(\Delta) = \emptyset
+\end{align*}
+$$
+Por lo tanto, la medida del interior de $\Delta$ es:
+$$
+\begin{align*}
+\mu(\text{Int}(\Delta)) = \mu(\emptyset) = 0
+\end{align*}
+$$
+Ahora, consideremos la frontera de $\Delta$. Hemos demostrado que:
+$$
+\begin{align*}
+\text{Fr.} \Delta = \Delta
+\end{align*}
+$$
+Y sabemos que la medida de Lebesgue de $\Delta$ es:
+$$
+\begin{align*}
+\mu(\Delta) = 0
+\end{align*}
+$$
+Sin embargo, podemos modificar el conjunto de Cantor para obtener un conjunto cuya frontera tenga medida estrictamente positiva. Consideremos el conjunto:
+$$
+\begin{align*}
+A = \Delta \cup [0, 1] \setminus \bigcup_{n=1}^{\infty} I_n
+\end{align*}
+$$
+Donde $I_n$ son los intervalos eliminados en la construcción del conjunto de Cantor. La frontera de $A$ incluye todos los puntos de los intervalos eliminados, que tienen una medida total positiva. Por lo tanto, la medida de la frontera de $A$ es estrictamente positiva:
+$$
+\begin{align*}
+\mu(\text{Fr.} A) > 0
+\end{align*}
+$$
+En resumen, el conjunto $A$ es un subconjunto medible de $[0, 1]$ cuyo interior tiene medida $0$ y la medida de su frontera es estrictamente positiva.
+
+</DemBox>
+
+### Ejercicio 3
+*Inspirándote en el conjunto ternario de Cantor, construye un cerrado y contenido en $[0, 1]$, cuyo interior tenga medida 0 y la medida de su frontera sea estrictamente mayor que cero.*
+
+<DemBox title="Demostración">
+
+Consideremos el conjunto $C$ construido de la siguiente manera:
+
+- Comenzamos con el intervalo $[0, 1]$.
+- En el primer paso, eliminamos el tercio central, es decir, el intervalo $\left(\frac{1}{3}, \frac{2}{3}\right)$.
+- En el segundo paso, eliminamos los tercios centrales de los intervalos restantes, es decir, eliminamos $\left(\frac{1}{9}, \frac{2}{9}\right)$ y $\left(\frac{7}{9}, \frac{8}{9}\right)$.
+- Continuamos este proceso indefinidamente, eliminando en cada paso los tercios centrales de los intervalos restantes.
+
+El conjunto $C$ resultante es un conjunto cerrado contenido en $[0, 1]$. Ahora, veamos las propiedades que cumple:
+
+- *Interior con medida 0*: En cada paso del proceso de construcción, se eliminan intervalos cuya longitud total es:
+$$
+\begin{align*}
+\sum_{n=1}^{\infty} \frac{2^{n-1}}{3^n} = 1
+\end{align*}
+$$
+Por lo tanto, la medida del conjunto $C$ es:
+$$
+\begin{align*}
+\mu(C) = 1 - 1 = 0
+\end{align*}
+$$
+Dado que $C$ es cerrado y no contiene ningún intervalo abierto, su interior es vacío:
+$$
+\begin{align*}
+\text{Int}(C) = \emptyset
+\end{align*}
+$$
+Por lo tanto, la medida del interior de $C$ es:
+$$
+\begin{align*}
+\mu(\text{Int}(C)) = 0
+\end{align*}
+$$
+- *Medida de la frontera estrictamente mayor que cero*: La frontera de $C$ incluye todos los puntos que fueron eliminados en cada paso del proceso de construcción. La medida total de estos puntos eliminados es:
+$$
+\begin{align*}
+\mu(\text{Fr.} C) = 1
+\end{align*}
+$$
+Por lo tanto, la medida de la frontera de $C$ es estrictamente mayor que cero.
+
+En resumen, el conjunto $C$ es un conjunto cerrado contenido en $[0, 1]$ cuyo interior tiene medida $0$ y la medida de su frontera es estrictamente mayor que cero.
+
+</DemBox>
+
+### Ejercicio 4
+*Encuentra un subconjunto de $\mathbb{R}^2$ no numerable y medible de medida 0*.
+
+<DemBox title="Demostración">
+
+Consideremos el conjunto de Cantor $\Delta \subseteq [0, 1]$ en la recta real. Sabemos que $\Delta$ es un conjunto no numerable y medible con medida de Lebesgue $\mu(\Delta) = 0$.
+
+Ahora, definimos el conjunto $A$ en $\mathbb{R}^2$ como el producto cartesiano de $\Delta$ consigo mismo:
+$$
+\begin{align*}
+A = \Delta \times \Delta = \{(x, y) : x \in \Delta, y \in \Delta\}
+\end{align*}
+$$
+
+Veamos las propiedades de $A$:
+
+- *No numerable*: Dado que $\Delta$ es no numerable, el producto cartesiano $\Delta \times \Delta$ también es no numerable. Esto se debe a que podemos establecer una correspondencia entre los puntos de $A$ y las parejas ordenadas de puntos en $\Delta$, lo que implica que $A$ tiene cardinalidad al menos igual a la cardinalidad de $\Delta$.
+- *Medible con medida 0*: La medida de Lebesgue en $\mathbb{R}^2$ se define como el producto de las medidas en cada dimensión. Dado que la medida de Lebesgue de $\Delta$ es $0$, tenemos:
+$$
+\begin{align*}
+\mu_2(A) = \mu_1(\Delta) \cdot \mu_1(\Delta) = 0 \cdot 0 = 0
+\end{align*}
+$$
+Por lo tanto, $A$ es un conjunto medible en $\mathbb{R}^2$ con medida de Lebesgue igual a $0$.
+
+En conclusión, el conjunto $A = \Delta \times \Delta$ es un subconjunto no numerable y medible de $\mathbb{R}^2$ con medida $0$.
+
+</DemBox>
+
+## Productos de conjuntos medibles
+*El objetivo de esta sección de ejercicios es la demostración del siguiente resultado paso a paso. A partir de aquí, se adopta el convenio de:*
+$$
+\begin{align*}
+0 \cdot \infty = 0
+\end{align*}
+$$
+*siempre y cuando 0 o $\infty$ vengan de una medida.*
+
+*El teorema dice lo siguiente: Sean $p, q \in \mathbb{N}$ y $A \in \mathcal{M}_p$, $B \in \mathcal{M}_q$ dos conjuntos medibles. Entonces, $A \times B \in \mathcal{M}_{p + q}$ y:*
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+
+### Ejercicio 1
+*Sea $\mu_p(A) = 0$ y $\mu_q(B) < \infty$ entonces:*
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q} \quad \text{ y } \quad \mu_{p + q}(A \times B) = 0
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $\varepsilon > 0$, dado que $A$ es un conjunto medible en $\mathbb{R}^p$ con medida cero, podemos cubrir $A$ con una colección numerable de cubos abiertos $(C_i)_{i \in \mathbb{N}}$ tal que:
+$$
+\begin{align*}
+A \subseteq \bigcup_{i = 1}^{\infty} C_i \quad \text{ y } \quad \sum_{i = 1}^{\infty} v_p(C_i) < \varepsilon
+\end{align*}
+$$
+
+Ahora, consideremos el conjunto $A \times B$. Podemos cubrir $A \times B$ con la colección de conjuntos:
+$$
+\begin{align*}
+C_i \times B, \quad i \in \mathbb{N}
+\end{align*}
+$$
+Entonces, tenemos:
+$$
+\begin{align*}
+A \times B \subseteq \bigcup_{i = 1}^{\infty} (C_i \times B)
+\end{align*}
+$$
+
+La medida de Lebesgue en el espacio producto se calcula como:
+$$
+\begin{align*}
+\mu_{p + q}(C_i \times B) = v_p(C_i) \cdot \mu_q(B)
+\end{align*}
+$$
+Por lo tanto, la medida de $A \times B$ se puede estimar como:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) &\leq \sum_{i = 1}^{\infty} \mu_{p + q}(C_i \times B) =\\[2ex]
+&= \sum_{i = 1}^{\infty} v_p(C_i) \cdot \mu_q(B) = \mu_q(B) \cdot \sum_{i = 1}^{\infty} v_p(C_i) < \mu_q(B) \cdot \varepsilon
+\end{align*}
+$$
+Dado que $\varepsilon > 0$ es arbitrario, podemos hacer que $\mu_{p + q}(A \times B)$ sea tan pequeño como queramos. Por lo tanto, concluimos que:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) = 0
+\end{align*}
+$$
+Y como su medida es nula, entonces:
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Sea $\mu_p(A) = 0$ y $B \in \mathcal{M}_q$ entonces:*
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q} \quad \text{ y } \quad \mu_{p + q}(A \times B) = 0
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Tenemos que:
+$$
+\begin{align*}
+B = \displaystyle \bigcup_{n = 1}^{\infty} B_n \quad \text{ con } B_n \coloneq B \cap [ - n, n]^q \in \mathcal{M}_q
+\end{align*}
+$$
+Así, tenemos que claramente:
+$$
+\begin{align*}
+\mu_q(B_n) \leq \mu_q([ - n, n]) < \infty
+\end{align*}
+$$
+Entonces, aplicando el apartado anterior, tenemos:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B_n) = 0
+\end{align*}
+$$
+Y como se tiene:
+$$
+\begin{align*}
+A \times B \subseteq \displaystyle \bigcup_{n = 1}^{\infty} \underbrace{(A \times B_n)}_{\in \mathcal{M}_{p + q}} \in \mathcal{M}_{p + q}
+\end{align*}
+$$
+Además:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) & \leq \mu_{p + q} \left(\displaystyle \bigcup_{n = 1}^{\infty} (A \times B_n)\right) \leq \displaystyle \sum_{n = 1}^{\infty} \mu_{p + q}(A \times B_n) =\\[2ex]
+& = \displaystyle \sum_{n = 1}^{\infty} \mu_p(A) \cdot \mu_q(B_n) = \displaystyle \sum_{n = 1}^{\infty} 0 = 0
+\end{align*}
+$$
+Entonces se tiene:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) = 0
+\end{align*}
+$$
+Entonces, como su medida es nula:
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Si $A$ es abierto en $\mathbb{R}^p$ y $B$ es abierto en $\mathbb{R}^q$ entonces:*
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q} \quad \text{ y } \quad \mu_{p + q}(A \times B) = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Por el teorema de descomposición, tenemos que existen colecciones numerables de cubos abiertos disjuntos $\{A_i\}_{i \in \mathbb{N}}, \{B_i\}_{i \in \mathbb{N}}$ tales que:
+$$
+\begin{align*}
+A = \displaystyle \bigcup_{n = 1}^{\infty} A_i \quad \text{ y } \quad B = \displaystyle \bigcup_{i = 1}^{\infty} B_i
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+A \times B = \displaystyle \bigcup_{i, j \in \mathbb{N}} (A_i \times B_j)
+\end{align*}
+$$
+Y como cada $A_i \times B_j$ es un cubo abierto en $\mathbb{R}^{p + q}$, tenemos que:
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q}
+\end{align*}
+$$
+Además, se tiene:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) & = \mu_{p + q} \left(\displaystyle \bigcup_{i, j \in \mathbb{N}} (A_i \times B_j)\right) = \displaystyle \sum_{i, j \in \mathbb{N}} \mu_{p + q}(A_i \times B_j) =\\[2ex]
+& = \displaystyle \sum_{i, j \in \mathbb{N}} \mu_p(A_i) \cdot \mu_q(B_j) = \left(\displaystyle \sum_{i \in \mathbb{N}} \mu_p(A_i)\right) \cdot \left(\displaystyle \sum_{j \in \mathbb{N}} \mu_q(B_j)\right) =\\[2ex]
+& = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+Así, concluimos que:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Si $\mu_p(A) < \infty$ y $\mu_q(B) < \infty$ entonces:*
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q} \quad \text{ y } \quad \mu_{p + q}(A \times B) = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Por la caracterización topológica de los conjuntos medibles, como $A$ y $B$ son medibles entonces existen conjuntos $G_A \subseteq \mathbb{R}^p$ y $G_B \subseteq \mathbb{R}^q$ abiertos tales que:
+$$
+\begin{align*}
+A \subseteq G_A \quad \text{ y } \quad B \subseteq G_B
+\end{align*}
+$$
+Y además:
+$$
+\begin{align*}
+\mu_p(G_A \setminus A) < \varepsilon \quad \text{ y } \quad \mu_q(G_B \setminus B) < \varepsilon
+\end{align*}
+$$
+Podemos hacer que $\varepsilon \to 0$ entonces:
+$$
+\begin{align*}
+\mu_p(G_A) \to \mu_p(A) \quad \text{ y } \quad \mu_q(G_B) \to \mu_q(B)
+\end{align*}
+$$
+Por tanto, podemos escribir:
+$$
+\begin{align*}
+A & = G_A \setminus N_A \quad \text{ con } N_A \coloneq G_A \setminus A \in \mathcal{M}_p \quad \text{ y } \quad \mu_p(N_A) = 0\\
+B & = G_B \setminus N_B \quad \text{ con } N_B \coloneq G_B \setminus B \in \mathcal{M}_q \quad \text{ y } \quad \mu_q(N_B) = 0
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}
+A \times B & = (G_A \setminus N_A) \times (G_B \setminus N_B) =\\[2ex]
+& = (G_A \times G_B) \setminus (N_A \times G_B) \setminus (G_A \times N_B) \cup (N_A \times N_B)
+\end{align*}
+$$
+Y como $G_A \times G_B$ es abierto en $\mathbb{R}^{p + q}$ y los otros tres conjuntos tienen medida nula por los apartados anteriores, tenemos que:
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q}
+\end{align*}
+$$
+Ahora, por la descomposición anterior, tenemos:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) = \mu_{p + q}(G_A \times G_B)
+\end{align*}
+$$
+Ahora, sea $G_A \coloneq \cap_{n = 1}^\infty U_n$ donde $\{U_n\}_{n \in \mathbb{N}}$ es una sucesión decreciente de abiertos de $\mathbb{R}^p$ con $\mu_p(U_1) < \infty$ y, de forma análoga, $G_B \coloneq \cap_{n = 1}^\infty V_n$. Entonces:
+$$
+\begin{align*}
+G_A \times G_B = \left(\displaystyle \bigcap_{n = 1}^\infty U_n\right) \times \left(\displaystyle \bigcap_{n = 1}^\infty V_n\right) = \displaystyle \bigcap_{n = 1}^\infty (U_n \times V_n)
+\end{align*}
+$$
+Y como $\mu_{p + q}(U_1 \times V_1) = \mu_p(U_1) \cdot \mu_q(V_1) < \infty$, entonces:
+$$
+\begin{align*}
+\mu_{p + q}(G_A \times G_B) & = \lim_{n \to \infty} \mu_{p + q}(U_n \times V_n) = \lim_{n \to \infty} \mu_p(U_n) \cdot \mu_q(V_n) =\\[2ex]
+& = \lim_{n \to \infty} \mu_p(U_n) \cdot \lim_{n \to \infty} \mu_q(V_n) = \mu_p(G_A) \cdot \mu_q(G_B) \to \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Sea $A \in \mathcal{M}_p$ y $B \in \mathcal{M}_q$ entonces:*
+$$
+\begin{align*}
+A \times B \in \mathcal{M}_{p + q} \quad \text{ y } \quad \mu_{p + q}(A \times B) = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Se considera la sucesión de conjuntos:
+$$
+\begin{align*}
+K_n = [ - n, n]^p \quad \text{ y } \quad L_n = [ - n, n]^q
+\end{align*}
+$$
+Entonces, para cada $n \in \mathbb{N}$ se tiene:
+$$
+\begin{align*}
+A_n = A \cap K_n \in \mathcal{M}_p \quad \text{ y } \quad B_n = B \cap L_n \in \mathcal{M}_q
+\end{align*}
+$$
+Así, tanto $A_n$ como $B_n$ tienen medida finita y son una sucesión creciente de conjuntos tales que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{n = 1}^\infty A_n = A \quad \text{ y } \quad \displaystyle \bigcup_{n = 1}^\infty B_n = B
+\end{align*}
+$$
+Así, cada $A_n \times B_n$ cumple las condiciones del apartado anterior, por lo que:
+$$
+\begin{align*}
+A_n \times B_n \in \mathcal{M}_{p + q} \quad \text{ y } \quad \mu_{p + q}(A_n \times B_n) = \mu_p(A_n) \cdot \mu_q(B_n)
+\end{align*}
+$$
+Y podemos escribir:
+$$
+\begin{align*}
+A \times B = \displaystyle \bigcup_{n = 1}^\infty (A_n \times B_n) \in \mathcal{M}_{p + q}
+\end{align*}
+$$
+Por otra parte:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) & = \mu_{p + q} \left(\lim_{n \to \infty} (A_n \times B_n)\right) =\\[2ex]
+& =  \lim_{n \to \infty} \mu_{p + q}(A_n \times B_n) = \lim_{n \to \infty} \mu_p(A_n) \cdot \mu_q(B_n)
+\end{align*}
+$$
+Así, se dan 3 casos:
+
+1. $A$ o $B$ tienen medida nula, supongamos sin pérdida de generalidad que $\mu_p(A) = 0$. Entonces:
+$$
+\begin{align*}
+\mu_{p}(A_n) = 0 \quad \forall n \in \mathbb{N} \implies \mu_{p + q}(A \times B) = 0 = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+2. $A$ y $B$ tienen medida finita. Entonces es lo que ya hemos demostrado en el apartado anterior.
+3. Si alguno de los dos conjuntos tiene medida infinita, supongamos sin pérdida de generalidad que $\mu_p(A) = \infty$ y $\mu_q(B) = c > 0$ entonces:
+$$
+\begin{align*}
+\mu_{p}(A_n) \to \infty \quad \text{ y } \quad \mu_q(B_n) \to c
+\end{align*}
+$$
+Y por tanto:
+$$
+\begin{align*}
+\mu_{p + q}(A \times B) & = \lim_{n \to \infty} \mu_p(A_n) \cdot \mu_q(B_n) =\\[2ex]
+& = \lim_{n \to \infty} \mu_p(A_n) \cdot c = \infty = \mu_p(A) \cdot \mu_q(B)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Dando por hecho que para todo intervalo abierto $I$ en $\mathbb{R}$ se tiene que $\mu_1(I) = v_1(I)$, demuestra que para todo $n \in \mathbb{N}$ y todo cubo abierto $C$ de $\mathbb{R}^N$ se tiene que $\mu_N(C) = v_N(C)$.*
+
+<DemBox title="Demostración">
+
+Sea $C$ cubo abierto en $\mathbb{R}^N$ podemos escribirlo como el producto cartesiano de $N$ intervalos abiertos en $\mathbb{R}$:
+$$
+\begin{align*}
+C = I_1 \times I_2 \times \cdots \times I_N \quad \text{ con } I_k = (a_k, b_k) \subseteq \mathbb{R} \quad \forall k = 1, 2, \ldots, N
+\end{align*}
+$$
+Queremos demostrar que:
+$$
+\begin{align*}
+\mu_N(C) = \prod_{k = 1}^N (b_k - a_k)
+\end{align*}
+$$
+Procedemos por inducción sobre $N$:
+
+- *Caso $N = 1$:* por hipótesis del enunciado, se tiene que para cualquier intervalo abierto $I = (a, b) \subseteq \mathbb{R}$:
+$$
+\begin{align*}
+\mu_1(I) = v_1(I) = b - a
+\end{align*}
+$$
+- *Hipótesis de inducción:* supongamos que es cierto para $N = K$, es decir, que sea $C_K \subseteq \mathbb{R}^K$ un cubo abierto, entonces:
+$$
+\begin{align*}
+\mu_K(C_K) = v_K(C_K)
+\end{align*}
+$$
+- *Paso inductivo $N = K + 1$:* Sea $C_{K + 1} \subseteq \mathbb{R}^{K + 1}$ cubo abierto, podemos expresar este cubo como el producto cartesiano de un cubo en $\mathbb{R}^K$ y un intervalo en $\mathbb{R}$:
+$$
+\begin{align*}
+C_{K + 1} = \underbrace{(a_1, b_1) \times (a_2, b_2) \times \cdots \times (a_K, b_K)}_{C_K \subseteq \mathbb{R}^K} \times \underbrace{(a_{K + 1}, b_{K + 1})}_{I \subseteq \mathbb{R}}
+\end{align*}
+$$
+Ahora, por el teorema demostrado en los ejercicios anteriores, tenemos que:
+
+</DemBox>

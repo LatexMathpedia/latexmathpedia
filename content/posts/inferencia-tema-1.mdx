@@ -1,0 +1,984 @@
+---
+title: "Inferencia - Tema 1"
+description: "Estadígrafos de orden y sus propiedades en inferencia estadística. Definiciones y teoremas clave para el análisis de muestras ordenadas."
+date: "2026-01-12"
+tags: ["inferencia estadística", "Estadígrafos de orden", "Muestras ordenadas"]
+---
+
+## Estadígrafos de orden
+En inferencia estadística, uno de los objetivos comunes es estimar el valor de cierto parámetro $\theta$ que caracteriza una cierta característica de interés, $X$, de una población. 
+
+Esta variable $X$ seguirá una distribución de probabilidad $F_\theta$ dependiente de $\theta$. Además, este parámetro $\theta$ pertenece a un conjunto $\Theta \subseteq \mathbb{R}^k$ llamado espacio paramétrico. 
+
+Habitualmente, para obtener el valor del parámetros se obtiene una muestra aleatoria $(X_1, \dots, X_n)$ de tamaño $n$ de la población que ``resuma'' la información sobre $X$ utilizando transformaciones medibles que llamamos estadígrafos.
+
+### Estadígrafo. Definición
+Llamamos **estadígrafo** a cualquier función medible de la muestra aleatoria $(X_1, \dots, X_n)$ de la forma:
+$$
+\begin{align*}
+T : (X_1, \dots, X_n) \longrightarrow T(X_1, \dots, X_n) \in \mathbb{R}^p
+\end{align*}
+$$
+donde $p \leq n$.
+
+<EjBox title="Observación">
+
+El objetivo de los estadígrafos es simplificar la estructura de la muestra de $\mathbb{R}^n$ a $\mathbb{R}^p$ (habitualmente $p = 1$ o $p = 2$), facilitando así el análisis de los datos.
+
+</EjBox>
+
+### Estimador. Definición
+Llamamos **estimador** a un estadígrafo que toma valores en el espacio paramétrico $\Theta$, i.e.:
+$$
+\begin{align*}
+T : (X_1, \dots, X_n) \longrightarrow T(X_1, \dots, X_n) \in \Theta \subseteq \mathbb{R}^k
+\end{align*}
+$$
+
+### Muestra ordenada. Definición
+Sea $(X_1, \dots, X_n)$ muestra aleatoria simple de tamaño $n$, se pueden ordenar sus componentes de forma no decreciente obteniendo $X_{(1)} \leq X_{(2)} \leq \dots \leq X_{(n)}$. Así, llamamos **muestra ordenada** a la aplicación:
+
+$$
+\begin{array}{rccl}
+X_{(\cdot)} : & \mathbb{R}^n & \longrightarrow & \mathbb{R}^n \\
+& (x_1, \dots, x_n) & \longmapsto & (x_{(1)}, \dots, x_{(n)})
+\end{array}
+$$
+
+<EjBox title="Nota">
+
+La importancia de las muestras ordenadas radica en que permitirán definir estadígrafos de orden, que son especialmente útiles para estimar parámetros que tengan que ver con el máximo, el mínimo, etc.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Esto es tan intuitivo como puede parecer. Si tenemos una muestra de datos:
+$$
+\begin{align*}
+(x_1, x_2, x_3, x_4) = (10, 3, 5, 2)
+\end{align*}
+$$
+Entonces, la muestra ordenada será:
+$$
+\begin{align*}
+(x_{(1)}, x_{(2)}, x_{(3)}, x_{(4)}) = (2, 3, 5, 10)
+\end{align*}
+$$
+Y la notación $x_{(i)}$ simplemente sirve para diferenciar entre el valor original $x_i$ y su posición en la muestra ordenada. Por lo tanto, la aplicación $X_{(\cdot)}$ en este caso vendría dada por:
+$$
+\begin{align*}
+X_{(1)} = 2, \quad X_{(2)} = 3, \quad X_{(3)} = 5, \quad X_{(4)} = 10
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+Notar que esta aplicación no es inyectiva, ya que podemos tener varios vectores iniciales distintos que den lugar a la misma muestra ordenada, por ejemplo:
+$$
+\begin{align*}
+(10, 3, 5, 2) \quad \text{y} \quad (3, 2, 10, 5)
+\end{align*}
+$$
+Ambos vectores dan lugar a la misma muestra ordenada $(2, 3, 5, 10)$.
+
+En particular, estaríamos hablando de $n!$ vectores distintos que dan lugar a la misma muestra ordenada ya que son permutaciones distintas con $n$ elementos.
+
+</EjBox>
+
+### Estadígrafos de orden. Definición
+Llamamos **estadígrafo de orden $k$** a la aplicación:
+
+$$
+\begin{array}{rccl}
+X_{(k)} : & \mathbb{R}^n & \longrightarrow & \mathbb{R} \\
+& (x_1, \dots, x_n) & \longmapsto & x_{(k)}
+\end{array}
+$$
+
+que nos da la $k$-ésima componente de la muestra ordenada.
+
+<EjemBox title="Ejemplo">
+
+Intuitivamente, podemos pensar en los dos estadígrafos de orden más simples:
+
+- **Mínimo**: $X_{(1)} = \min \{X_1, \dots, X_n\}$
+- **Máximo**: $X_{(n)} = \max \{X_1, \dots, X_n\}$
+
+De hecho, podemos notar que los estadígrafos siguen la siguiente cadena de desigualdades:
+$$
+\begin{align*}
+\min_{i = 1}^n X_i = X_{(1)} \leq X_{(2)} \leq \dots \leq X_{(n-1)} \leq X_{(n)} = \max_{i = 1}^n X_i
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Observación">
+
+Pese a que la observación muestral $(X_1, \dots, X_n)$ pueda ser independiente e idénticamente distribuida, las componentes del estadígrafo de orden $(X_{(1)}, \dots, X_{(n)})$ no son independientes entre sí, ya que están relacionadas por la condición de ordenación, y tampoco son idénticamente distribuidas.
+
+</EjBox>
+
+### Propiedades de los estadígrafos de orden. Proposición
+Sea $X$ variable aleatoria con función de distribución $F$ de la que obtenemos una muestra aleatoria simple $(X_1, \dots, X_n)$ de tamaño $n$ entonces se verifica que:
+
+1. $F_{X_{(n)}}(x) = [F (x)]^n$
+2. $F_{X_{(1)}}(x) = 1 - [1 - F(x)]^n$
+3. $F_{X_{(k)}}(x) = \displaystyle \sum_{j = k}^{n} \binom{n}{j} [F(x)]^j[1 - F(x)]^{n - j}$
+
+<DemBox title="Demostración">
+
+1. Basta notar que $X_{(n)} \leq x$ si y sólo si $X_i \leq x$ para todo $i = 1, \dots, n$. Por tanto:
+$$
+\begin{align*}
+F_{X_{(n)}}(x) & = P(X_{(n)} \leq x) = P(X_1 \leq x, \dots, X_n \leq x) = \\[2ex] 
+& = P\left((X_1 \leq x) \cap \dots \cap (X_n \leq x)\right) =  \prod_{i = 1}^n P(X_i \leq x) = [F(x)]^n
+\end{align*}
+$$
+2. De forma análoga, $X_{(1)} \leq x$ si y sólo si existe algún $i$ tal que $X_i \leq x$ así:
+$$
+\begin{align*}
+F_{X_{(1)}}(x) & = P(X_{(1)} \leq x) = 1 - P(X_{(1)} > x) = 1 - P(X_1 > x, \dots, X_n > x) = \\[2ex]
+& = 1 - P\left((X_1 > x) \cap \dots \cap (X_n > x)\right) = 1 - \prod_{i = 1}^n P(X_i > x) = \\[2ex]
+& = 1 - \prod_{i = 1}^n [1 - P(X_i \leq x)] = 1 - [1 - F(x)]^n
+\end{align*}
+$$
+3. Este caso ya no es tan directo, para ello:
+$$
+\begin{align*}
+F_{X_{(k)}}(x) = P(X_{(k)} \leq x)
+\end{align*}
+$$
+Aquí, podemos notar que $P(X_{(k)} \leq x)$ es precisamente la probabilidad de que al menos $k$ valores muestrales sean menores o iguales a $x$. Así, podemos entender esto como una variable aleatoria binomial $\mathcal{B}(n, F(x))$ que nos da el número de éxitos (valores menores o iguales a $x$) en $n$ ensayos independientes. 
+
+Por tanto:
+$$
+\begin{align*}
+F_{X_{(k)}}(x) & = P(X_{(k)} \leq x) = P(\text{al menos } k \text{ valores } X_i \leq x) = \\[2ex]
+& = \sum_{j = k}^{n} P((\text{nº de observaciones muestrales } \leq x) = j) = \\[2ex]
+& = \sum_{j = k}^{n} \binom{n}{j} [F(x)]^j [1 - F(x)]^{n - j}
+\end{align*}
+$$
+
+</DemBox>
+
+<EjemBox title="Ejemplo">
+
+A partir de estas propiedades y las definiciones previas, podemos ver el comportamiento de los estadígrafos de orden más simples. Supongamos una variable aleatoria $X$ con distribución uniforme $\mathcal{U}(0, 1)$. Entonces:
+$$
+\begin{align*}
+F_{X_{(n)}}(x) & = \begin{cases}
+0 & x < 0 \\
+x^n & 0 \leq x \leq 1 \\
+1 & x > 1
+\end{cases} \implies X_{(n)} \rightsquigarrow \text{Beta}(n, 1) \\[2ex]
+\end{align*}
+$$
+De hecho, si considerásemos $Y \rightsquigarrow \mathcal{U}(0, \theta)$ tendríamos:
+$$
+\begin{align*}
+F_{(Y_{(n)})}(y) & = \begin{cases}
+0 & y < 0 \\
+\left(\frac{y}{\theta}\right)^n & 0 \leq y \leq \theta \\
+1 & y > \theta
+\end{cases} \implies Y_{(n)} \rightsquigarrow \text{Beta}(n, 1) \cdot \theta
+\end{align*}
+$$
+
+Otro estadígrafo de orden interesante es el **rango** o **recorrido** muestral que viene dado por:
+$$
+\begin{align*}
+R = X_{(n)} - X_{(1)}
+\end{align*}
+$$
+
+</EjemBox>
+
+### Función de densidad del estadígrafo de orden $k$. Proposición
+Sea $X$ una variable aleatoria continua con función de densidad $f$ y función de distribución $F$ de la que obtenemos una muestra aleatoria simple $(X_1, \dots, X_n)$ de tamaño $n$. Entonces, la función de densidad del estadígrafo de orden $k$, $X_{(k)}$ viene dada por:
+$$
+\begin{align*}
+f_{X_{(k)}}(x) = n! \frac{[F(x)]^{k - 1}}{(k - 1)!} f(x) \frac{[1 - F(x)]^{n - k}}{(n - k)!} 
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Para obtener la función de densidad, procederemos por derivación de la función de distribución. Para una muestra aleatoria $(X_1, \dots, X_n)$ de tamaño $n$ de una variable aleatoria continua $X$ con función de distribución $F$ y función de densidad $f$, la función de distribución del estadígrafo de orden $k$, por la proposición anterior, viene dada por:
+$$
+\begin{align*}
+F_{X_{(k)}}(x) = P(X_{(k)} \leq x) = \displaystyle \sum_{j = k}^{n} \binom{n}{j} [F(x)]^j[1 - F(x)]^{n - j}
+\end{align*}
+$$
+Por lo tanto, derivando respecto a $x$ obtenemos:
+$$
+\begin{align*}
+f_{X_{(k)}} (x) & = \frac{d}{dx} F_{X_{(k)}}(x) = \frac{d}{dx} \left(\displaystyle \sum_{j = k}^{n} \binom{n}{j} [F(x)]^j [1 - F(x)]^{n - j}\right)
+\end{align*}
+$$
+Tenemos que la derivada del término general de la suma es:
+$$
+\begin{align*}
+& \frac{d}{dx} \left(\binom{n}{j} [F(x)]^j [1 - F(x)]^{n - j}\right) = \binom{n}{j} \frac{d}{dx} \left([F(x)]^j [1 - F(x)]^{n - j}\right) = \\[2ex]
+&  = \binom{n}{j} \left(j [F(x)]^{j - 1} f(x)[1 - F(x)]^{n - j} + [F(x)]^j( - (n - j)[F(x)]^{n - j - 1})f(x)\right) = \\[2ex]
+&  = \binom{n}{j} f(x) \left[j[F(x)]^{j - 1}[1 - F(x)]^{n - j} - (n - j)[F(x)]^j[F(x)]^{n - j - 1}\right]
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+f_{X_{(k)}}(x) & = f(x) \sum_{j = k}^{n} \binom{n}{j} \left[j[F(x)]^{j - 1}[1 - F(x)]^{n - j} - (n - j)[F(x)]^j[F(x)]^{n - j - 1}\right]
+\end{align*}
+$$
+Ahora, podemos emplear las entidades binomiales siguientes:
+$$
+\begin{align*}
+\binom{n}{j} \cdot j = n \cdot \binom{n - 1}{j - 1} \quad \text{y} \quad \binom{n}{j} \cdot (n - j) = n \cdot \binom{n - 1}{j}
+\end{align*}
+$$
+Por lo que, reescribiendo la suma anterior llegamos a:
+$$
+\begin{align*}
+f(x) \displaystyle \sum_{j = k}^{n} \left[n \binom{n - 1}{j - 1} [F(x)]^{j - 1}[1 - F(x)]^{n - j} - n \binom{n - 1}{j}[F(x)]^j[F(x)]^{n - j - 1}\right]
+\end{align*}
+$$
+Donde podemos sacar factor común a $n$:
+$$
+\begin{align*}
+f_{X_{(k)}}(x) & = n f(x) \displaystyle \sum_{i = 1}^{n} \left[\binom{n - 1}{j - 1} [F(x)]^{j - 1}[1 - F(x)]^{n - j} - \binom{n - 1}{j}[F(x)]^j[F(x)]^{n - j - 1}\right]
+\end{align*}
+$$
+
+Y ahora, notando que la suma anterior es una suma telescópica, ya que:
+
+- Si $j = k$ entonces:
+$$
+\begin{align*}
+\binom{n - 1}{k - 1} [F(x)]^{k - 1}[1 - F(x)]^{n - k} - \binom{n - 1}{k}[F(x)]^k[F(x)]^{n - k - 1}
+\end{align*}
+$$
+- Si $j = k + 1$ entonces:
+$$
+\begin{align*}
+\binom{n - 1}{k} [F(x)]^k[1 - F(x)]^{n - k - 1} - \binom{n - 1}{k + 1}[F(x)]^{k + 1}[F(x)]^{n - k - 2}
+\end{align*}
+$$
+- \dots
+- Si $j = n$ entonces:
+$$
+\begin{align*}
+\underbrace{\binom{n - 1}{n - 1}}_{ = 1} [F(x)]^{n - 1}\underbrace{[1 - F(x)]^0}_{ = 1} - \cancel{\underbrace{\binom{n - 1}{n}}_{ =\, 0}[F(x)]^n[F(x)]^{-1}} = [F(x)]^{n - 1}
+\end{align*}
+$$
+
+Por lo que, al sumar todos los términos, obtenemos:
+$$
+\begin{align*}
+f_{X_{(k)}}(x) & = n f(x) \left[\binom{n - 1}{k - 1} [F(x)]^{k - 1}[1 - F(x)]^{n - k} - 0 \right] = \\[2ex]
+& = n \binom{n - 1}{k - 1} [F(x)]^{k - 1}[1 - F(x)]^{n - k} f(x) = \\[2ex]
+& = n \cdot \frac{(n - 1)!}{(k - 1)!(n - k)!} [F(x)]^{k - 1}[1 - F(x)]^{n - k} f(x) = \\[2ex]
+& = n! \frac{[F(x)]^{k - 1}}{(k - 1)!} f(x) \frac{[1 - F(x)]^{n - k}}{(n - k)!}
+\end{align*}
+$$
+
+Los casos particulares de $X_{(1)}$ y $X_{(n)}$ se obtienen sustituyendo $k = 1$ y $k = n$:
+$$
+\begin{align*}
+f_{X_{(1)}}(x) & = n! \frac{[F(x)]^{0}}{0!} f(x) \frac{[1 - F(x)]^{n - 1}}{(n - 1)!} = n [1 - F(x)]^{n - 1} f(x) \\[2ex]
+f_{X_{(n)}}(x) & = n! \frac{[F(x)]^{n - 1}}{(n - 1)!} f(x) \frac{[1 - F(x)]^{0}}{0!} = n [F(x)]^{n - 1} f(x)
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Notar que esto solo se da en caso de emplear notación ``estándar'', en el caso de la española, tendríamos que:
+$$
+\begin{align*}
+f_{X_{(k)}}(x) = \text{¡}n! \frac{[F(x)]^{k - 1}}{\text{¡}(k - 1)!} f(x) \frac{[1 - F(x)]^{n - k}}{\text{¡}(n - k)!}
+\end{align*}
+$$
+
+</EjBox>
+
+### Densidad conjunta de la muestra ordenada. Teorema
+Sea $X$ variable aleatoria continua con función de densidad $f$, se extrae una muestra aleatoria simple de tamaño $n$, entonces la función de densidad conjunta de la muestra ordenada es:
+$$
+\begin{align*}
+f_{X_{(\cdot)}}(x_1, \dots, x_n) = n! \displaystyle \prod_{i = 1}^n f(x_i) I (x_1 \leq x_2 \leq \dots \leq x_n)
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+A lo largo de los apuntes, se pueden emplear diferentes notaciones para el caso de las funciones indicadores/indicatrices:
+$$
+\begin{align*}
+I (A), \quad I_A, \quad \chi_A
+\end{align*}
+$$
+Al final, lo que tenemos es que la expresión anterior vale $1$ si se cumple la condición $A$ y $0$ en caso contrario:
+$$
+\begin{align*}
+f_{X_{(\cdot)}}(x_1, \dots, x_n) = \begin{cases}
+n! \displaystyle \prod_{i = 1}^n f(x_i) & x_1 \leq x_2 \leq \dots \leq x_n \\
+0 & \text{en otro caso}
+\end{cases}
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Hay que notar que, cada muestra ordenada $(x_{(1)}, \dots, x_{(n)})$ puede ser obtenida a partir de $n!$ permutaciones distintas de la muestra original $(x_1, \dots, x_n)$, es decir, que tiene $n!$ posibles resultados. 
+
+Podemos ver un ejemplo sencillo con $n = 2$. Supongamos que tenemos $X_1$ y $X_2$ dos variables aleatorias independientes e idénticamente distribuidas y dos realizaciones muestrales $(x_1, x_2)$ y $(x_1', x_2')$ tales que:
+$$
+\begin{align*}
+x_1 < x_2 \quad \text{ y } \quad x_2' < x_1' \quad y \quad (x_1, x_2) = (x_2', x_1')
+\end{align*}
+$$
+Esto gráficamente sería:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_0.svg)
+
+Por lo tanto, al ordenar ambas muestras, obtenemos la misma muestra ordenada:
+$$
+\begin{align*}
+(x_{(1)}, x_{(2)}) = (x_1, x_2) = (x_2', x_1')
+\end{align*}
+$$
+Que gráficamente sería:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_1.svg)
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+La demostración de este resultado se puede abordar de dos formas distintas:
+
+- Empleando el Teorema de Cambio de Variable
+- Mediante el cálculo de la distribución conjunta y derivando
+
+En este caso, se opta por la primera opción, por lo que empleamos el Teorema del Cambio de Variable:
+<EjBox title="Teorema del Cambio de Variable">
+
+Sean:
+
+- $X$ continua en $S = \bigcup_{i \in I} A_i$ con $I$ numerable y $A_i$ disjuntos.
+- $g$ diferenciable y con $g^{ - 1}_i$ inversa en cada $A_i$
+
+Entonces se tiene que $Y = g(X)$ tiene densidad:
+$$
+\begin{align*}
+f_Y(y) = \displaystyle \sum_{i \in I} f_X(g_i^{ - 1}(y)) \left| \frac{d}{dy} g_i^{ - 1}(y) \right| \quad y \in g(S)
+\end{align*}
+$$
+
+</EjBox>
+
+En nuestro caso, tenemos que hacer la partición del espacio $\mathbb{R}^n$ en $n!$ regiones $A_1, \dots, A_{n!}$ donde cada región $A_i$ corresponde a una permutación distinta del orden de las variables:
+$$
+\begin{align*}
+A_1 & = \left\{(x_1, \dots, x_n) \in \mathbb{R}^n \mid x_1 < x_2 \dots < x_{n - 1} < x_n\right\}\\
+A_2 & = \left\{(x_1, \dots, x_n) \in \mathbb{R}^n \mid x_2 < x_1 < x_3 < \dots < x_{n - 1} < x_n\right\}\\
+&  \vdots \\
+A_{n!} & = \left\{(x_1, \dots, x_n) \in \mathbb{R}^n \mid x_n < x_{n - 1} < \dots < x_2 < x_1\right\}
+\end{align*}
+$$
+En cada $A_i$ la muestra ordenada será una permutación distinta con jacobiano $1$ o $-1$ (dependiendo de si la permutación es par o impar). Por tanto, aplicando el Teorema del Cambio de Variable:
+$$
+\begin{align*}
+f_{X_{(\cdot)}} (x_1, \dots, x_n) & = \displaystyle \sum_{i = 1}^{n!} \prod_{j = 1}^n f(x_j) \underbrace{\left|J_{g_i^{ - 1}}(x_1, \dots, x_n)\right|}_{ = 1} I((x_1, \dots, x_n) \in A_i)
+\end{align*}
+$$
+Como el producto $\prod_{j = 1}^n f(x_j)$ es constante y $|J_{g_i^{ - 1}}| = 1$, esta suma se puede simplificar como:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n!} \prod_{j = 1}^n f(x_j) = n! \prod_{j = 1}^n f(x_j) I ((x_1, \dots, x_n) \in A_i)
+\end{align*}
+$$
+Ahora, veamos que se cumple en $n = 2$, $n = 3$ y luego se generaliza:
+
+- Si $n = 2$ entonces la función de distribución conjunta es:
+$$
+\begin{align*}
+F_{X_{(1)}, X_{(2)}} (a, b) & = P(X_{(1)} \leq a, X_{(2)} \leq b) = \\[2ex]
+& =P(X_1 \leq a \cap X_2 \leq b \cap X_1 \leq X_2) + \\
+&  + P(X_2 \leq a \cap X_1 \leq b \cap X_2 < X_1) = \\[2ex]
+& = \int_{ - \infty}^a \int_{x_1}^b f(x_2)f(x_1) \, dx_2 \, dx_1 + \int_{ - \infty}^a \int_{x_2}^b f(x_1)f(x_2) \, dx_1 \, dx_2 = \\[2ex]
+& = \int_{ - \infty}^a [F(b) - F(x_1)] f(x_1) \, dx_1 + \int_{ - \infty}^a [F(b) - F(x_2)] f(x_2) \, dx_2 = \\[2ex]
+& = \left[ - \frac{1}{2} [F(b) - F(x_1)]^2\right]_{ - \infty}^{a} + \left[ - \frac{1}{2} [F(b) - F(x_2)]^2\right]_{ - \infty}^{a} = \\[2ex]
+& = F(b)^2 - [F(b) - F(a)]^2
+\end{align*}
+$$
+Por lo que, derivando:
+$$
+\begin{align*}
+f_{X_{(1)}, X_{(2)}} (x_1, x_2) & = \frac{\partial^2}{\partial x_1 \partial x_2} F_{X_{(1)}, X_{(2)}} (x_1, x_2) = \\[2ex]
+& = \frac{\partial}{\partial x_2} \left(2[F(x_2) - F(x_1)] f(x_1)\right)  = 2 f(x_2) f(x_1)
+\end{align*}
+$$
+- Para $n = 3$ tenemos:
+$$
+\begin{align*}
+F_{X_{(1)}, X_{(2)}, X_{(3)}} (a, b, c) & = P(X_{(1)} \leq a, X_{(2)} \leq b, X_{(3)} \leq c) = \\[2ex]
+& = 3! P(X_1 \leq a \cap X_2 \leq b \cap X_3 \leq c \cap X_1 \leq X_2 \leq X_3) = \\[2ex]
+& = 6 \int_{ - \infty}^a \int_{x_1}^b \int_{x_2}^c f(x_3)f(x_2)f(x_1) \, dx_3 \, dx_2 \, dx_1 = \\[2ex]
+& = 6 \int_{ - \infty}^a \int_{x_1}^b [F(c) - F(x_2)] f(x_2) f(x_1) \, dx_2 \, dx_1 = \\[2ex]
+& = 6 \int_{ - \infty}^a \left[ - \frac{1}{2} [F(c) - F(x_2)]^2\right]_{x_2 = x_1}^{x_2 = b} f(x_1) \, dx_1 = \\[2ex]
+& = 3 \int_{ - \infty}^a \left([F(c) - F(x_1)]^2 - [F(c) - F(b)]^2\right) f(x_1) \, dx_1 = \\[2ex]
+& = 3 \left[ - \frac{1}{3} [F(c) - F(x_1)]^3 + [F(c) - F(b)]^2 F(x_1)\right]_{ - \infty}^{a} = \\[2ex]
+& = \left[ - \left(F(c) - F(x_1)\right)^3\right]_{x_1 = - \infty}^{x_1 = a} - 3 [F(c) - F(b)]^2 F(a) = \\[2ex]
+& = F(c)^3 - [F(c) - F(a)]^3 - 3 [F(c) - F(b)]^2 F(a)
+\end{align*}
+$$
+Por lo que, derivando:
+$$
+\begin{align*}
+f_{X_{(1)}, X_{(2)}, X_{(3)}} (x_1, x_2, x_3) & = \frac{\partial^3}{\partial x_1 \partial x_2 \partial x_3} F_{X_{(1)}, X_{(2)}, X_{(3)}} (x_1, x_2, x_3) = \\[2ex]
+& = \dots = 6f(x_3)f(x_2)f(x_1)
+\end{align*}
+$$
+- Para un $n$ cualquiera, la función de distribución conjunta de los estadísticos de orden involucra $n!$ términos, cada uno correspondiente con una permutación de las variables. Al derivar $n$ veces con respecto a todas las variables, se obtiene la densidad conjunta que es precisamente:
+$$
+\begin{align*}
+f_{X_{(\cdot)}}(x_1, \dots, x_n) = n! \prod_{i = 1}^n f(x_i) I (x_1 \leq x_2 \leq \dots \leq x_n)
+\end{align*}
+$$
+
+</DemBox>
+
+## Ojiva empírica
+La función de distribución empírica o **ojiva empírica** es un estadígrafo funcional que permite aproximar la función de distribución de una variable aleatoria a partir de una muestra muestral.
+
+### Ojiva empírica. Definición
+Sea $(X_1, \dots, X_n)$ una muestra aleatoria simple $X$ variable aleatoria con función de distribución $F$. Se define la **ojiva empírica de $X$ asociada a la muestra aleatoria simple $(X_1, \dots, X_n)$** como la función $F_n : \mathbb{R} \to [0, 1]$ que asocia a cada $x \in \mathbb{R}$ el valor:
+$$
+\begin{align*}
+F_n(x) = \dfrac{\text{Card } \{X_i \leq x\}}{n} = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} I_{ (- \infty, x]} (X_i) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} I_{[X_i, \infty)} (x)
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Esta función se puede entender también como:
+$$
+\begin{align*}
+F_n(x) = \left\{
+\begin{array}{cl}
+0 & \text{ si } x < X_{(1)} \\
+\frac{i}{n} & \text{ si } X_{(i)} \leq x < X_{(i + 1)} \text{ para algún } i = 1, \dots, n - 1 \\
+1 & \text{ si } x \geq X_{(n)}
+\end{array}
+\right.
+\end{align*}
+$$
+Por lo que, a cada realización muestral le asocia una función escalonada que es función de distribución. Así, para cada muestra, la ojiva empírica cambia (salvo que la muestra simplemente cambie el orden de los datos).
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea la muestra de tamaño $n = 5$ dada por $(2.1, 3.5, 1.8, 4.2, 2.7)$ de una variable aleatoria $X$. Entonces, la ojiva empírica asociada a esta muestra es:*
+
+Los estadísticos de orden de la muestra son:
+$$
+\begin{align*}
+X_{(1)} = 1.8, \quad X_{(2)} = 2.1, \quad X_{(3)} = 2.7, \quad X_{(4)} = 3.5, \quad X_{(5)} = 4.2
+\end{align*}
+$$
+Así, la ojiva empírica asociada a esta muestra es:
+$$
+\begin{align*}
+F_n(x) = \left\{
+\begin{array}{cl}
+0 & \text{ si } x < 1.8 \\[1ex]
+\frac{1}{5} & \text{ si } 1.8 \leq x < 2.1 \\[1ex]
+\frac{2}{5} & \text{ si } 2.1 \leq x < 2.7 \\[1ex]
+\frac{3}{5} & \text{ si } 2.7 \leq x < 3.5 \\[1ex]
+\frac{4}{5} & \text{ si } 3.5 \leq x < 4.2 \\[1ex]
+1 & \text{ si } x \geq 4.2
+\end{array}
+\right.
+\end{align*}
+$$
+
+Gráficamente, la ojiva empírica asociada a esta muestra es:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_2.svg)
+
+</EjemBox>
+
+### Propiedades de la ojiva empírica. Proposición
+Algunas propiedades de la ojiva empírica $F_n$ son:
+
+1. Sea $x \in \mathbb{R}$ fijo, entonces la ojiva empírica $F_n$ puede expresarse como:
+$$
+\begin{align*}
+F_n(x) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} I_{(-\infty, x]} (X_i) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} I_{[X_i, \infty)} (x)
+\end{align*}
+$$
+2. La ojiva empírica $F_n$ es un estimador insesgado de la función de distribución $F$ de la variable aleatoria $X$.
+
+<DemBox title="Demostración">
+
+Sea $x \in \mathbb{R}$ fijo, se definen las variables aleatorias:
+$$
+\begin{align*}
+Y_i = I_{[X_i, \infty)} (x) = \begin{cases}
+1 & X_i \leq x \\
+0 & X_i > x
+\end{cases} \quad i = 1, \dots, n
+\end{align*}
+$$
+que son variables aleatorias de Bernoulli ya que indican si la observación $X_i$ cae por debajo del valor $x$ o no. Por lo tanto, $Y_i \rightsquigarrow \mathcal{B}(p)$. Dado que son variables aleatorias independientes e idénticamente distribuidas, se tiene que:
+$$
+\begin{align*}
+P(Y_i = 1) = P(X_i \leq x) = F_{X_i}(x) = F(x) = p
+\end{align*}
+$$
+Por lo tanto, $Y_i \rightsquigarrow \mathcal{B}(F(x))$ y por reproductividad de la distribución binomial, se tiene que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} Y_i \rightsquigarrow \mathcal{B}(n, F(x))
+\end{align*}
+$$
+Para $x \in \mathbb{R}$ fijo tenemos que la ojiva empírica viene dada por:
+$$
+\begin{align*}
+F_n(x) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} Y_i
+\end{align*}
+$$
+Es decir, que es el promedio muestral de las variables aleatorias $Y_i$ de Bernoulli. Por lo que, si calculamos la esperanza de $F_n(x)$:
+$$
+\begin{align*}
+E(F_n(x)) & = E\left(\frac{1}{n} \displaystyle \sum_{i = 1}^{n}Y_i\right) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} E(Y_i) = \frac{1}{n} \cdot n \cdot F(x) = F(x)
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Además, si calculamos la varianza de $F_n(x)$:
+$$
+\begin{align*}
+Var(F_n(x)) & = Var\left(\frac{1}{n} \displaystyle \sum_{i = 1}^{n} Y_i\right) = \frac{1}{n^2} \displaystyle \sum_{i = 1}^{n} Var(Y_i) = \\[2ex]
+& = \frac{1}{n^2} \cdot n \cdot F(x)(1 - F(x)) = \frac{F(x)(1 - F(x))}{n}
+\end{align*}
+$$
+que es una parábola que alcanza su valor máximo en $F(x) = 0.5$, por lo que:
+
+- Cuando $F(x) = 0$ o $F(x) = 1$ entonces $Var(F_n(x)) = 0$
+- Cuando $F(x) = 0.5$ entonces $Var(F_n(x)) = \frac{1}{4n}$ es máxima
+
+De esta forma, la estimación es más precisa en las colas de la distribución que en el centro.
+
+</EjBox>
+3. Por la ley de los grandes números se tiene que:
+$$
+\begin{align*}
+F_n(x) \xrightarrow[n \to \infty]{\text{c.s.}} F(x) \quad \forall x \in \mathbb{R}
+\end{align*}
+$$
+4. Por el Teorema del Límite Central se tiene que:
+$$
+\begin{align*}
+\dfrac{F_n(x) - F(x)}{\sqrt{F(x)(1 - F(x)) / n}} \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}(0, 1) \quad \forall x \in \mathbb{R}
+\end{align*}
+$$
+
+### Teorema de Glivenko-Cantelli
+Sea $(X_n)_{n \in \mathbb{N}}$ sucesión de variables aleatorias independientes e idénticamente distribuidas con función de distribución común $F$. Sean $(X_1, \dots, X_n)$ las $n$ primeras componentes de la sucesión y $F_n$ la ojiva empírica asociada a la muestra aleatoria simple $(X_1, \dots, X_n)$. Entonces la aplicación:
+
+$$
+\begin{array}{rcl}
+\Delta_n : (X_1, \dots , X_n) & \longrightarrow & \mathbb{R} \\
+(x_1, \dots, x_n) & \longmapsto & D_\infty(F_n, F) = \displaystyle  \sup_{x \in \mathbb{R}} |F_n(x) - F(x)|
+\end{array}
+$$
+
+cumple que:
+$$
+\begin{align*}
+\Delta_n \xrightarrow[n \to \infty]{\text{c.s.}} 0
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Podemos observar que, al definir $\Delta_n$ como la distancia máxima entre la ojiva empírica y la función de distribución, el Teorema de Glivenko-Cantelli nos dice que la distancia entre ambas funciones tiende a $0$ casi seguramente cuando el tamaño muestral tiende a infinito. Es decir, que la ojiva empírica es un estimador consistente de la función de distribución.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+*Veamos un par de ideas clave que se usarán en la demostración:*
+
+Sea $x \in \mathbb{R}$ fijo, consideramos las variables aleatorias:
+$$
+\begin{align*}
+Y_i = I_{( - \infty, x]} (X_i) \quad i = 1, \dots, n
+\end{align*}
+$$
+que son variables aleatorias de Bernoulli ya que indican si la observación $X_i$ cae por debajo del valor $x$ o no. 
+
+Por lo tanto, $Y_i \rightsquigarrow \mathcal{B}(p)$. Dado que son variables aleatorias independientes e idénticamente distribuidas y cumplen que sus medias y varianzas son finitas, por la Ley Fuerte de los Grandes Números se tiene que:
+$$
+\begin{align*}
+F_n(x) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} I_{( - \infty, x]} (X_i) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} Y_i \xrightarrow[n \to \infty]{\text{c.s.}} E(Y_i) = F(x)
+\end{align*}
+$$
+Análogamente, para el caso general, se podría ver que:
+$$
+\begin{align*}
+F_n(x^ - ) = \dfrac{\text{Card}(X_i < x)}{n} = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} I_{( - \infty, x)} (X_i) \xrightarrow[n \to \infty]{\text{c.s.}} F(x^ - )
+\end{align*}
+$$
+donde se tiene que:
+$$
+\begin{align*}
+F(x^{ - }) = \lim_{c \to x^{ - }} F(c)
+\end{align*}
+$$
+Por las propiedades de la probabilidad, la intersección finita o numerable de sucesos $A_i$ tales que $P(A_i) = 1$ para todo $i$ también tiene probabilidad $1$:
+$$
+\begin{align*}
+P\left(cap_{i = 1}^{\infty} A_i\right) = 1 - P\left(\bigcup_{i = 1}^{\infty} A_i^c\right) \geq 1 - \displaystyle \sum_{i = 1}^{\infty} P(A_i^c) = 1
+\end{align*}
+$$
+Para el resto de la demostración, hay que considerar el caso de variables discretas con un número finito de posibles resultados y el caso general. En este caso, solo vamos a ver el **caso discreto finito**.
+
+Sea $X$ variable aleatoria discreta que toma los valores $x_1 < x_2 < \dots < x_k$ con sus respectivas probabilidades $p_i = P(X = x_i) > 0$ para $i = 1, \dots, k$.
+
+Notar que, de esta forma, tanto la función de distribución $F$ como la ojiva empírica asociada a cada muestra $F_n(w)$ son funciones escalonadas, con saltos en los puntos $x_i$ para $i = 1, \dots, k$. Por tanto:
+$$
+\begin{align*}
+\Delta_n(w) = D_\infty(F_n(w), F) = \sup_{x \in \mathbb{R}} |F_n(x, w) - F(x)| = \max_{x_i, i = 1, \dots, k} |F_n(x_i, w) - F(x_i)|
+\end{align*}
+$$
+Para cada $x_j$ fijo, definimos:
+$$
+\begin{align*}
+A_j \coloneq \left\{w : \lim_{n \to \infty} F_n(x_j, w) = F(x_j)\right\}
+\end{align*}
+$$
+Por la Ley Fuerte de los Grandes Números se tiene que:
+$$
+\begin{align*}
+F_n(x_j) \xrightarrow[n \to \infty]{\text{c.s.}} F(x_j) \quad \implies \quad P(A_j) = 1
+\end{align*}
+$$
+Por lo tanto, considerando la intersección finita de los sucesos $A_j$:
+$$
+\begin{align*}
+A = \displaystyle \bigcap_{j = 1}^{k} A_j \implies P(A) = 1
+\end{align*}
+$$
+Finalmente, para cada $w \in A$ se tiene $w \in A_j$ por tanto, $\forall \varepsilon > 0$ existe $n_{j,\varepsilon}$ tal que:
+$$
+\begin{align*}
+n > n_{j, \varepsilon} \implies |F_n(x_j, w) - F(x_j)| < \varepsilon
+\end{align*}
+$$
+Por tanto, si tomamos $n_\varepsilon = \max_{j = 1, \dots, k} n_{j, \varepsilon}$ se tiene que:
+$$
+\begin{align*}
+n > n_\varepsilon \implies \Delta_n(w) = \max_{i = 1, \dots, k} |F_n(x_i, w) - F(x_i)| < \varepsilon
+\end{align*}
+$$
+Es decir, que $\Delta_n(w) \to 0$ cuando $n \to \infty$ para todo $w \in A$ y como $P(A) = 1$, se tiene que:
+$$
+\begin{align*}
+\Delta_n \xrightarrow[n \to \infty]{\text{c.s.}} 0
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+A través de este resultado, podemos ver que en un conjunto de muestras cualquiera de probabilidad 1, la función de distribución $F$ está determinada por la ojiva empírica de la forma siguiente:
+$$
+\begin{align*}
+F_n(x) - \varepsilon < F(x) < F_n(x) + \varepsilon \quad \forall \varepsilon > 0, \quad \forall x \in \mathbb{R}
+\end{align*}
+$$
+Es decir, que se puede estimar la función de distribución $F$ a partir de la ojiva empírica $F_n$ con un error arbitrariamente pequeño cuando el tamaño muestral es suficientemente grande.
+
+</EjBox>
+
+## Simulación
+La simulación es una técnica que permite generar valores aleatorios de un estadístico cualquiera, a partir de los cuales se puede aproximar la función de distribución del estadístico mediante la ojiva empírica.
+
+### Generación de números aleatorios con distribución uniforme
+Uno de los pasos básicos en la simulación es la generación de números aleatorios (o pseudo-aleatorios) con una distribución $\mathcal{U}(0, 1)$.
+
+<EjBox title="Nota">
+
+Se dicen números pseudo-aleatorios a aquellos números que son generados mediante un algoritmo que, conociendo la semilla inicial, siempre generan la misma secuencia de números.
+
+</EjBox>
+
+La mayoría de lenguajes de programación, calculadoras y software estadístico incluyen funciones para generar números pseudo-aleatorios con distribución uniforme en el intervalo $(0, 1)$, como puede ser `runif` en `R`. Estos emplean algoritmos congruenciales tales que:
+$$
+\begin{align*}
+n_{i + 1} = (a \cdot n_i + c) \mod m
+\end{align*}
+$$
+Lo que genera una secuencia de números enteros $n_i \in [0, m - 1]$ que se pueden pasar al intervalo $[0, 1)$ dividiendo entre $m$. La semilla inicial sería $n_0$ y los parámetros $a, c$ y $m$.
+
+### Generación de valores aleatorios con distribución arbitraria
+Para generar valores aleatorios con una distribución arbitraria $F$ se pueden emplear diversos métodos, que a menudo se combinan entre sí.
+
+#### Método de Montecarlo
+Esta técnica se basa en la generación de valores aleatorios de distribuciones a partir de generados aleatorios con distribución $\mathcal{U}(0, 1)$. Para ello, sea $X$ una variable aleatoria que toma los valores $x_1, x_2, \dots, x_k$ con probabilidades $p_1, p_2, \dots, p_k$, tales que $p_i > 0$ y $\sum_{i = 1}^{k} p_i = 1$, para generar cada valor aleatorio de $X$ se sigue el siguiente procedimiento:
+
+1. Partición de $[0, 1]$ en $k$ subintervalos $C_1, \dots, C_k$ de longitudes $p_1, \dots, p_k$ respectivamente.
+2. Generación de un número aleatorio $u$ con distribución $U(0, 1)$.
+3. Ver en que subintervalo $C_i$ está $u$, así:
+$$
+\begin{align*}
+u \in C_j \implies \text{ valor generado de } X \text{ es } x_j
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+También es válido para variables aleatorias discretas no finitas, ya que en ese caso se puede considerar una partición infinita numerable de $[0, 1]$.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Se considera la variable aleatoria discreta $X$ tal que:*
+$$
+\begin{align*}
+P(X = 1) = \frac{1}{2}, \qquad P(X = 1.5) = \frac{1}{3} , \qquad P(X = 3) = \frac{1}{6}
+\end{align*}
+$$
+Para generar una muestra aleatoria de tamaño $5$ los pasos son:
+
+1. Generar la partición del intervalo en 3 subintervalos con longitudes que correspondan con las probabilidades, es decir: $\frac{1}{2}$, $\frac{1}{3}$ y $\frac{1}{6}$:
+$$
+\begin{align*}
+C_1 = \left[0, \frac{1}{2}\right), \quad C_2 = \left[\frac{1}{2}, \frac{5}{6}\right), \quad C_3 = \left[\frac{5}{6}, 1\right)
+\end{align*}
+$$
+Lo que gráficamente se representa como:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_3.svg)
+2. Generar 5 números aleatorios $u_1, \dots, u_5$ con distribución $\mathcal{U}(0, 1)$. Supongamos que los números generados son:
+$$
+\begin{align*}
+u_1 = 0.23, \quad u_2 = 0.67, \quad u_3 = 0.91, \quad u_4 = 0.45, \quad u_5 = 0.12
+\end{align*}
+$$
+3. Ver en que subintervalo cae cada número generado:
+
+$$
+\begin{array}{c|c|c}
+u_i & Subintervalo C_j & Valor generado de X \\
+\hline
+u_1 = 0.23 & C_1 & 1 \\
+u_2 = 0.67 & C_2 & 1.5 \\
+u_3 = 0.91 & C_3 & 3 \\
+u_4 = 0.45 & C_1 & 1 \\
+u_5 = 0.12 & C_1 & 1
+\end{array}
+$$
+
+Lo que gráficamente se representa como:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_4.svg)
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+Este procedimiento se puede aplicar en `R` con las distribuciones discretas más comunes mediante las funciones `rbinom`, `rpois`, `rgeom`, etc.
+
+</EjBox>
+
+#### Método de transformación
+Otra técnica para generar valores aleatorios con una distribución arbitraria $F$ continua es el método de transformación. Este método se basa en los generadores de números aleatorios con distribución $\mathcal{U}(0, 1)$ y la función inversa de la función de distribución $F$.
+
+Por el teorema de la la transformación de la distribución acumulada tenemos que si $X$ es continua entonces $F(X) \equiv \mathcal{U}(0, 1)$. Por tanto, se genera un valor $u$ de $\mathcal{U}(0, 1)$ y se aplica la función inversa de la función de distribución $F$ para obtener el correspondiente valor de $X$, es decir:
+$$
+\begin{align*}
+x = F^{ - 1}(u)
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Se considera la variable aleatoria $X \rightsquigarrow \mathcal{E}(\lambda)$ cuya función de distribución es:*
+$$
+\begin{align*}
+F(x) = \left(1 - e^{ - \lambda x}\right) \cdot I_{[0, \infty)} (x)
+\end{align*}
+$$
+Ahora, para generar valores aleatorios de $X$ mediante el método de transformación, se sigue el siguiente procedimiento:
+
+1. Generar un número aleatorio $u$ con distribución $\mathcal{U}(0, 1)$.
+2. Calcular la función inversa de la función de distribución $F$:
+$$
+\begin{align*}
+y = F(x) = 1 - e^{ - \lambda x}  &\iff e^{ - \lambda x} = 1 - y \iff \\[2ex]
+& \iff - \lambda \cdot x = \log (1 - y) \iff x = - \frac{\log (1 - n)}{\lambda} 
+\end{align*}
+$$
+3. Aplicar la función inversa al número aleatorio generado:
+$$
+\begin{align*}
+x = F^{ - 1} (u) = - \frac{1}{\lambda} \ln(1 - u)
+\end{align*}
+$$
+
+Gráficamente, este procedimiento se representa como:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_5.svg)
+
+</EjemBox>
+
+#### Transformación de Box-Muller
+Aunque el método de transformación es aplicable a cualquier distribución continua, algunas distribuciones no tienen función inversa explícita, como es el caso de la normal. Para estos casos, se pueden emplea la transformación de Box-Muller.
+
+Sean $U_1, U_2 \rightsquigarrow \mathcal{U}(0, 1)$ variables aleatorias independientes entonces:
+$$
+\begin{align*}
+X = \sqrt{ - 2 \log (U_1)} \cdot \cos (2\pi U_2) \quad \text{ y } \quad Y = \sqrt{ - 2 \log (U_1)} \cdot \sin (2\pi U_2)
+\end{align*}
+$$
+son variables aleatorias independientes con distribución $\mathcal{N}(0, 1)$.
+
+<EjBox title="Nota">
+
+En `R` existen funciones para la generación de valores de las distribuciones continuas más comunes, como son `rnorm`, `rexp`, `runif`, etc.
+
+</EjBox>
+
+#### Método de aceptación rechazo
+Otro método para generar valores aleatorios de una distribución continua que no necesita la función inversa $F^{ - 1}$ es el método de aceptación-rechazo. Para este caso, se require de la función de densidad $f$ de la variable aleatoria $X$ y una acotación superior dada por $C \cdot g$ donde $g$ es otra función de densidad asociada a una variable aleatoria $Y$ de la que se puede calcular fácilmente la inversa de su función de distribución $G^{ - 1}$. Es decir, que se necesita:
+$$
+\begin{align*}
+f(x) \leq C \cdot g(x) \quad \forall x \in \mathbb{R}, \quad C > 0
+\end{align*}
+$$
+El procedimiento para generar un valor aleatorio de $X$ es el siguiente:
+
+1. Generación de un valor de $Y$ a través de su función inversa empleando el método de transformación:
+$$
+\begin{align*}
+a = G^{ - 1} (u_1) \quad \text{ con } u_1 \rightsquigarrow \mathcal{U}(0, 1)
+\end{align*}
+$$
+2. Calculo de $f(a)$ y $C \cdot g(a)$.
+3. Generación de otro número aleatorio $b$ a través de $\mathcal{U}(0, C g(a))$
+4. Si $b < f(a)$ se acepta $a$ como valor generado de $X$, en caso contrario se rechaza y se vuelve al paso 1.
+
+Gráficamente, este procedimiento se representa como:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-y-simulacion_tikz_6.svg)
+
+#### Validez del método de aceptación-rechazo. Proposición
+Sea $X$ variable aleatoria con función de densidad $f$, el método de aceptación-rechazo genera valores de una variable con función de densidad $f$.
+
+<DemBox title="Demostración">
+
+Calculemos la función de distribución de la variable aleatoria generada:
+$$
+\begin{align*}
+X = Y |_{\text{No rechazo}}
+\end{align*}
+$$
+Así, tenemos que:
+$$
+\begin{align*}
+f\left(Y = x|_{\text{No rechazo}}\right) = \frac{P(\text{No rechazo}|_{Y = x})g(x)}{P(\text{No rechazo})}
+\end{align*}
+$$
+Entonces, como la probabilidad de no rechazo es:
+$$
+\begin{align*}
+P(\text{No rechazo}) = \int_{ - \infty}^{\infty} P(\text{No rechazo}|_{Y = x}) g(x) \, dx = \int_{ - \infty}^{\infty} \frac{f(x)}{C \cdot g(x)} g(x) \, dx = \frac{1}{C} 
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}
+f\left(Y = x|_{\text{No rechazo}}\right) & = \frac{P(\text{No rechazo}|_{Y = x})g(x)}{P(\text{No rechazo})} = \frac{\frac{f(x)}{C \cdot g(x)} g(x)}{\frac{1}{C}} = f(x)
+\end{align*}
+$$
+es decir, la función de densidad de la variable aleatoria generada es $f$.
+
+</DemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $X$ variable aleatoria normal estándar, es decir, $X \rightsquigarrow \mathcal{N}(0, 1)$ con función de densidad:*
+$$
+\begin{align*}
+f(x) = \frac{1}{\sqrt{2\pi}} e^{ - \frac{x^2}{2}} \quad x \in \mathbb{R}
+\end{align*}
+$$
+Se sabe sabe que la función de distribución no tiene una expresión implícita y, por tanto, tampoco su inversa. Sin embargo, sabemos que la función de densidad alcanza su máximo en $x^* = \mu = 0$, donde vale:
+$$
+\begin{align*}
+f(x^*) = f(0) = \frac{1}{\sqrt{2\pi}} 
+\end{align*}
+$$
+Además, si $x \notin [ - 1, 1]$ entonces:
+$$
+\begin{align*}
+x^2 > |x| \implies f(x) < \frac{1}{\sqrt{2\pi}} e^{ - \frac{|x|}{2}}
+\end{align*}
+$$
+Por lo que, podemos acotar $f$ mediante la función $g_1$ definida como:
+$$
+\begin{align*}
+g_1(x) = \left\{
+\begin{array}{ll}
+\dfrac{1}{\sqrt{2\pi}} & \text{ si } x \in [ - 1, 1] \\[4ex]
+\dfrac{1}{\sqrt{2\pi}} e^{ - \frac{|x|}{2}} & \text{ si } x \notin [ - 1, 1]
+\end{array}
+\right.
+\end{align*}
+$$
+Que cumple:
+
+- $f(x) \leq g_1(x)$ para todo $x \in \mathbb{R}$
+- La integral de $g$ es finita:
+$$
+\begin{align*}
+\int_{ - \infty}^{\infty} g(x) \, dx = \sqrt{\frac{2}{\pi}} \cdot \left(2e^{ - \frac{1}{2}} + 1\right) \approx 1.766 = C
+\end{align*}
+$$
+Por lo tanto, definimos la función de densidad $g$ como:
+$$
+\begin{align*}
+g \coloneq \frac{1}{C} g_1
+\end{align*}
+$$
+- La función inversa de la función de distribución $G$ asociada a $g$ es:
+$$
+\begin{align*}
+G^{ - 1}(y) = \left\{
+\begin{array}{ll}
+\log \left(\dfrac{\pi}{2} y^2\right) & \text{ si } y \in \left(0, \sqrt{\frac{2}{\pi e}}\right)\\[4ex]
+\sqrt{2\pi} - \dfrac{2}{\sqrt{e}} - 1 & \text{ si } y \in \left[\sqrt{\frac{2}{\pi e}}, \sqrt{\frac{2}{\pi e}} + \sqrt{\frac{2}{\pi}}\right]\\[4ex]
+- 2 \log \left(1 + \dfrac{2}{\sqrt{e}} - \sqrt{\dfrac{2}{\pi}} y\right) & \text{ si } y \in \left(\sqrt{\frac{2}{\pi e}} + \sqrt{\frac{2}{\pi}}, 1\right)
+\end{array}
+\right.
+\end{align*}
+$$
+
+Por tanto, se puede generar valores aleatorios de la distribución normal estándar mediante el método de aceptación-rechazo con $g$ y $C$ definidos anteriormente.
+
+</EjemBox>

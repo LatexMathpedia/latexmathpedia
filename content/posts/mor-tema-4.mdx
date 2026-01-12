@@ -1,0 +1,1200 @@
+---
+title: "MOR - Tema 4"
+description: "Flujos en redes y flujo máximo en una red. Definiciones y proposiciones. Algoritmo de Ford-Fulkerson."
+date: "2026-01-12"
+tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"]
+---
+
+## Flujo en redes
+### Red estándar. Definición
+Sea $R_{FS} = (V, A, p)$ red, decimos que es una **red estándar** si cumple:
+
+- $G = (V, A)$ es un grafo orientado débilmente conexo
+- Los pesos $p_{ij}$ para cada arco $(i, j) \in A$ son positivos ($p_{ij} > 0$) y se les denomina **capacidad del arco** (máxima capacidad del arco)
+- Existe un único vértice $F \in V$ tal que $\Gamma^{ - }(F) = \emptyset$ denominado **fuente**
+- Existe un único vértice $S \in V$ tal que $\Gamma^{ + }(S) = \emptyset$ denominado **sumidero**
+
+### Flujo en redes. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, se dice que $f = \{f_{ij}: (i, j ) \in A\}$ colección de reales es un **flujo** en $R_{FS}$ si cumple:
+
+- **Acotación:** $0 \leq f_{ij} \leq p_{ij} \quad \forall (i, j) \in A$
+- **Conservación de flujo:** para cada $i \in V$ con $i \neq F, S$:
+$$
+\begin{align*}
+\displaystyle \sum_{j \in \Gamma^{ + }(i)} f_{ij} - \displaystyle \sum_{k \in \Gamma^{ - }(i)} f_{ki} = 0
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar que, lo que estamos pidiendo en la conservación de flujo es que, para cada nodo que no sea fuente o sumidero, el flujo que entra es igual al flujo que sale.
+
+</EjBox>
+
+### Valor del flujo. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar y $f = \{f_{ij}: (i, j ) \in A\}$ un flujo en $R_{FS}$, se define el **valor del flujo** como:
+$$
+\begin{align*}
+v_f = \displaystyle \sum_{j \in \Gamma^{ + }(F)} f_{Fj}
+\end{align*}
+$$
+Y en caso de que no haya ambigüedad, es decir, estemos trabajando con una única red y un único flujo, se denota simplemente como $v$.
+
+<EjemBox title="Ejemplo">
+
+*A continuación, se muestra un ejemplo de red estándar con un flujo asociado.*
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_0.svg)
+
+Podemos observar que el flujo cumple las condiciones de acotación ya que:
+
+- $0 \leq f_{FA} = 10 \leq 15 = p_{FA}$
+- $0 \leq f_{FB} = 5 \leq 10 = p_{FB}$
+- $0 \leq f_{AC} = 10 \leq 10 = p_{AC}$
+- $0 \leq f_{BC} = 5 \leq 10 = p_{BC}$
+- $0 \leq f_{CS} = 15 \leq 20 = p_{CS}$
+
+Además, también cumple la conservación de flujo:
+
+- Para el nodo A: $f_{FA} - f_{AC} = 10 - 10 = 0$
+- Para el nodo B: $f_{FB} - f_{BC} = 5 - 5 = 0$
+- Para el nodo C: $f_{AC} + f_{BC} - f_{CS} = 10 + 5 - 15 = 0$
+
+Finalmente, el valor del flujo es:
+$$
+\begin{align*}
+v_f = f_{FA} + f_{FB} = 10 + 5 = 15
+\end{align*}
+$$
+
+</EjemBox>
+
+### Existencia de un flujo. Proposición
+Sea $R_{FS} = (V, A , p)$ una red estándar, entonces existe al menos un flujo en $R_{FS}$.
+
+<DemBox title="Demostración">
+
+Basta notar que $f = \{f_{ij} = 0: (i, j) \in A\}$ es un flujo en $R_{FS}$ ya que:
+
+- **Acotación:** $0 \leq f_{ij} = 0 \leq p_{ij} \quad \forall (i, j) \in A$
+- **Conservación de flujo:** para cada $i \in V$ con $i \neq F, S$:
+$$
+\begin{align*}
+\displaystyle \sum_{j \in \Gamma^{ + }(i)} f_{ij} - \displaystyle \sum_{k \in \Gamma^{ - }(i)} f_{ki} = 0 - 0 = 0
+\end{align*}
+$$
+
+Por lo tanto, $f$ es un flujo en $R_{FS}$.
+
+</DemBox>
+
+### Existencia de camino de $F$ a $S$. Proposición
+Sea $R_{FS} = (V, A , p)$ una red estándar y $f = \{f_{ij}: (i, j) \in A\}$ un flujo en $R_{FS}$ con valor $v_f > 0$. Entonces, existe al menos un camino elemental de $F$ a $S$ en $R_{FS}$.
+
+<DemBox title="Demostración">
+
+Si $\pi$ es el camino elemental de mayor longitud que comienza en $F$ y tal que $f_{ij} > 0$ para cada $(i, j) \in \pi$, al menos es de longitud 1 ya que:
+
+- $v_f > 0$
+- La red es débilmente conexa
+- $\Gamma^{ - }(F) = \emptyset$
+
+Si $\pi$ llega a $S$ ya estaría. Supongamos que no llega a $S$ y acaba en $j \neq S$. Por la ley de conservación del flujo, tendría que existir un arco $(j, k) \in A$ tal que $f_{jk} > 0$. Pero entonces podríamos alargar $\pi$ con el arco $(j, k)$, contradiciendo la maximalidad de la longitud de $\pi$. Por lo tanto, $\pi$ tiene que llegar a $S$.
+
+</DemBox>
+
+## Flujo máximo en una red
+### Conjunto de flujos en una red. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, se define el **conjunto de flujos** en $R_{FS}$ como:
+$$
+\begin{align*}
+\mathcal{F} = \{g : g \text{ es un flujo en } R_{FS}\}\\
+\end{align*}
+$$
+
+### Flujo máximo en una red. Definición
+Sea una red estándar $R_{FS} = (V, A, p)$, la búsqueda del flujo máximo consiste en enviar la cantidad máxima de flujo posible desde la fuente $F$ hasta el sumidero $S$ de forma que se satisfagan las condiciones de acotación y conservación de flujo.
+
+Formalmente, consiste en encontrar un flujo $f* = \{f_{ij}^*: (i, j) \in A\}$ en $R_{FS}$ tal que:
+$$
+\begin{align*}
+V_{f*} = \max \{v_f: f \in \mathcal{F}\}\\
+\end{align*}
+$$
+
+### Cuasicamino. Definición
+Sea $R_{FS} = (V, A , P)$ red estándar, un **cuasicamino** de $i$ a $j$ en $R_{FS}$ es una sucesión alternada de vértices y arcos que forman una cadena elemental en el grafo subyacente de $(V, A)$. Es decir, un cuasicamino $\pi_{ij}$ de $i$ a $j$ es:
+$$
+\begin{align*}
+\pi_{ij} = i \, e_1 \, i_1 \, e_2 \, i_2 \, \dots i_{k - 1} \, e_k \, i_k \, \dots i_{r - 1} \, e_r \, j\\
+\end{align*}
+$$
+
+### Arco positivo y negativo. Definición
+Sea $R_{FS} = (V, A , P)$ red estándar, dado un cuasicamino $\pi_{ij}$  de $i$ a $j$ en $R_{FS}$, un arco $e_k$ con $k \neq 1, r$ diremos que es:
+
+- **Arco positivo**: si está orientado desde $i_{k - 1}$ hacia $i_k$, es decir, $e_k = (i_{k - 1}, i_k) \in A$
+- **Arco negativo**: si está orientado desde $i_k$ hacia $i_{k - 1}$, es decir, $e_k = (i_k, i_{k - 1}) \in A$
+
+<EjemBox title="Ejemplo">
+
+*Supongamos la siguiente red estándar:*
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_1.svg)
+
+Podemos notar que, como el flujo máximo que sale de la fuente es 7 y el flujo máximo que entra al sumidero es 7, el flujo máximo de la red es 7.
+
+Ahora, si consideramos el cuasicamino dado por:
+$$
+\begin{align*}
+F \xrightarrow{2|5} 1 \xleftarrow{2|2} 2 \xrightarrow{3|8} S
+\end{align*}
+$$
+
+Si añadimos dos unidades más al flujo que pasa de $F$ a $1$ (y por tanto, tenemos que restar dos unidades al flujo que pasa de $2$ a $1$ para mantener la conservación de flujo), obtenemos el siguiente cuasicamino:
+$$
+\begin{align*}
+F \xrightarrow{4|5} 1 \xleftarrow{0|2} 2 \xrightarrow{3|8} S
+\end{align*}
+$$
+Además, habrá que hacer que las dos unidades que hemos restado al flujo que pasa de $2$ a $1$ se sumen al flujo que pasa de $2$ a $S$. Por tanto, la red quedaría de la siguiente forma:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_2.svg)
+
+En este caso, el flujo total de la red será 9, que es mayor que el flujo máximo inicial de 7.
+
+**No vale modificar cualquier cuasicamino para aumentar el flujo total de la red, hay que emplear los cuasicaminos de flujo aumentable, que se verán más adelante.**
+
+</EjemBox>
+
+### Arco saturado. Definición
+Sea $R_{FS} = (V, A , P)$ red estándar y $f = \{f_{ij}: (i, j) \in A\}$ un flujo en $R_{FS}$. Un arco $(i, j) \in A$ se dice que está **saturado** si $f_{ij} = p_{ij}$.
+
+### Arco de flujo nulo o libre. Definición
+Sea $R_{FS} = (V, A , P)$ red estándar y $f = \{f_{ij}: (i, j) \in A\}$ un flujo en $R_{FS}$. Un arco $(i, j) \in A$ se dice que es de **flujo nulo o libre** si $f_{ij} = 0$.
+
+### Cuasicamino de flujo aumentable. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en $R_{FS}$ y $\pi_{ij} = i \, e_1 \, i_1 \, e_2  \dots i_{k - 1} \, e_k \, i_k \, \dots i_{r - 1} \, e_r \, j$ un cuasicamino de $i$ a $j$ en $R_{FS}$. Decimos que $\pi_{ij}$ es un **cuasicamino de flujo aumentable** o **cuasicamino $f$-aumentable** si se cumplen las siguientes condiciones:
+$$
+\begin{align*}
+\left\{
+\begin{array}{ll}
+f_e < p_e & \forall \text{ arco positivo } e \in \pi_{ij} \, \,(\text{i.e. no está saturado})\\
+f_e > 0 & \forall \text{ arco negativo } e \in \pi_{ij} \, \, (\text{i.e. no es nulo})
+\end{array}
+\right.
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar que un cuasicamino puede ser aumentable para un flujo $f$ y no serlo para otro flujo $g$. A continuación, se muestra un ejemplo de cuasicamino aumentable.
+$$
+\begin{align*}
+F \xrightarrow{2|5} 1 \xleftarrow{2|2} 2 \xrightarrow{3|8} S
+\end{align*}
+$$
+No obstante, si cambiamos el flujo en el arco $(2, 1)$ a $f_{21} = 0$ y hacemos las modificaciones pertinentes en los demás arcos para mantener la conservación de flujo, el cuasicamino ya no sería aumentable:
+$$
+\begin{align*}
+F \xrightarrow{4|5} 1 \xleftarrow{0|2} 2 \xrightarrow{5|8} S
+\end{align*}
+$$
+
+</EjBox>
+
+### Cuasicamino de flujo aumentable desde $F$ a $S$. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en $R_{FS}$, prestaremos especial atención a los cuasicaminos de flujo aumentable que van desde la fuente $F$ hasta el sumidero $S$. Estos se denotan como $\pi_{FS}$.
+
+### Holgura de un arco. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en $R_{FS}$ y $\pi_{FS}$ cuasicamino de flujo aumentable desde $F$ a $S$ en $R_{FS}$. Se define la **holgura** de $e \in \pi_{FS}$ como:
+$$
+\begin{align*}
+\Delta_e = \left\{
+\begin{array}{ll}
+p_e - f_e & \forall \text{ arco positivo } e \in \pi_{FS}\\
+f_e & \forall \text{ arco negativo } e \in \pi_{FS}
+\end{array}
+\right.\\
+\end{align*}
+$$
+
+### Holgura de un cuasicamino de flujo aumentable. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en $R_{FS}$ y $\pi_{FS}$ cuasicamino de flujo aumentable desde $F$ a $S$ en $R_{FS}$. Se define la **holgura** de $\pi_{FS}$ como:
+$$
+\begin{align*}
+\Delta_{\pi_{FS}} = \min_{e \in \pi_{FS}} \{\Delta_e\}\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Por la propiedad de la conservación del flujo, el cambio en el flujo de los arcos de un cuasicamino tiene que ser de la misma cantidad en todos los arcos del cuasicamino. Por tanto, la holgura de un cuasicamino nos indica la cantidad máxima que podemos aumentar el flujo a lo largo de todo el cuasicamino sin violar las condiciones de acotación.
+
+</EjBox>
+
+### Proposición 4.1
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en $R_{FS}$ y $\pi_{FS}$ cuasicamino de flujo aumentable desde $F$ a $S$ en $R_{FS}$ tal que la holgura mínima de sus arcos es $\Delta_{\pi_{FS}}$. Si se considera la aplicación:
+$$
+\begin{align*}
+\widehat{f} : A & \longrightarrow \mathbb{R}^{ + }\\
+e & \longmapsto \widehat{f_e} = \left\{
+\begin{array}{ll}
+f_e + \Delta_{\pi_{FS}} & \text{si } e \text{ es arco positivo en } \pi_{FS}\\
+f_e - \Delta_{\pi_{FS}} & \text{si } e \text{ es arco negativo en } \pi_{FS}\\
+f_e & \text{si } e \notin \pi_{FS}
+\end{array}
+\right.
+\end{align*}
+$$
+entonces la colección $\widehat{f} = \{\widehat{f_e}: e \in A\}$ es un flujo en $R_{FS}$ con valor $v_{\widehat{f}} = v_f + \Delta_{\pi_{FS}}$.
+
+<DemBox title="Demostración">
+
+*Veamos que $\widehat{f*$ es un flujo en $R_{FS}$:}
+
+- *Acotación:* Se dan dos casos:
+
+- *Conservación del flujo*: Sea $v \in V$ cualquiera con $v \neq F, S$. Se dan dos casos:
+
+- Si $v \notin \pi_{FS}$ entonces tanto el flujo que llega como el que sale no se ven modificados, por lo que siguen siendo iguales por ser un flujo $f$, es decir:
+$$
+\begin{align*}
+\displaystyle \sum_{j \in \Gamma^{ + }(v)} \widehat{f_{vj}} = \displaystyle \sum_{j \in \Gamma^{ + }(v)} f_{vj} = \displaystyle \sum_{k \in \Gamma^{ - }(v)} \widehat{f_{kv}} = \displaystyle \sum_{k \in \Gamma^{ - }(v)} f_{kv}\\
+\end{align*}
+$$
+- Si $v \in \pi_{FS}$, como la cadena generada por el cuasicamino es elemental, cada vértice está solo una vez, por lo que se dan 4 subcasos:
+
+- *Valor del flujo*: Por definición de valor del flujo, tenemos que:
+$$
+\begin{align*}
+v_{\widehat{f}} & = \displaystyle \sum_{j \in \Gamma^{ + }(F)} \widehat{f_{Fj}} = \left(\displaystyle \sum_{j \in \Gamma^{ + }(F) \cap \pi_{FS}^c} f_{Fj}\right) + f_e + \Delta_{\pi_{FS}} = v_f + \Delta_{\pi_{FS}}
+\end{align*}
+$$
+donde $e$ es el arco positivo (ya que $\Gamma^{ - }(F) \neq \emptyset$) que sale de $F$ en $\pi_{FS}$.
+
+</DemBox>
+
+### Corte en una red. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $\{B, B^c\}$ partición de $V$ tal que $F \in B$ y $S \in B^c$ (separa el vértice fuente del sumidero). Al subconjunto de arcos formado por los arcos con origen en $B$ y destino en $B^c$ se le denomina **corte** y se denota como:
+$$
+\begin{align*}
+\delta^{ + }(B) = \{(i, j) \in A: i \in B, j \in B^c\}
+\end{align*}
+$$
+Análogamente, podemos definir el conjunto inverso que no cumple las condiciones de corte dado por:
+$$
+\begin{align*}
+\delta^{ - }(B) = \{(i, j) \in A: i \in B^c, j \in B\}\\
+\end{align*}
+$$
+
+### Conjunto de cortes en una red. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, se define el **conjunto de cortes** en $R_{FS}$ como:
+$$
+\begin{align*}
+\mathcal{D}^{ + } = \{\delta^{ + }(B): B \subseteq V, F \in B, S \in B^c\}
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Podemos observar que cualquier red estándar tiene al menos un corte, basta considerar $B_F = \{F\}$ y $B_S = V \setminus \{S\}$, entonces:
+$$
+\begin{align*}
+\delta^{ + }(B_F), \delta^{ + }(B_S) \in \mathcal{D}^{ + }
+\end{align*}
+$$
+
+</EjBox>
+
+### Capacidad de un corte. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f = \{f_{ij}: (i, j) \in A\}$ flujo y $\delta^{ + }(B)$ corte de dicha red, se define la **capacidad** del corte $\delta^{ + }(B)$ como la suma de las capacidades de los arcos que forman el corte:
+$$
+\begin{align*}
+p(\delta^{ + }(B)) = \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} p_{ij} = \displaystyle \sum_{i \in B, j\in B^c \cap \Gamma(i)} p_{ij}\\
+\end{align*}
+$$
+
+### Flujo neto a través de un corte. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f = \{f_{ij}: (i, j) \in A\}$ flujo y $\delta^{ + }(B)$ corte de dicha red, se define el **flujo neto a través del corte** $\delta^{ + }(B)$ como:
+$$
+\begin{align*}
+f(\delta^{ + }(B)) = \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} f_{ij} - \displaystyle \sum_{(i, j) \in \delta^{ + }(B^c)} f_{ij} = \displaystyle \sum_{i \in B, j\in B^c \cap \Gamma(i)} f_{ij} - \displaystyle \sum_{i \in B^c, j\in B \cap \Gamma(i)} f_{ij}\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+En palabras simples, la capacidad de un corte nos indica la cantidad máxima de flujo que puede pasar a través del corte, mientras que el flujo neto a través del corte nos indica la cantidad de flujo que realmente pasa a través del corte.
+
+Además, podemos notar que para una misma red, dados dos cortes distintos y un mismo flujo, el flujo neto a través de ambos cortes es el mismo. Esto se debe a que el flujo que entra en $B^c$ desde $B$ menos el flujo que entra en $B$ desde $B^c$ es igual al flujo total que sale de la fuente $F$ y llega al sumidero $S$, independientemente del corte que consideremos.
+
+</EjBox>
+
+### Proposición 4.2
+Sea $R_{FS} = (V, A, p)$ red estándar, $f = \{f_{ij}: (i, j) \in A\}$ flujo en $R_{FS}$ y $\delta^{ + }(B)$ corte de dicha red. Entonces, el flujo neto a través del corte es igual al valor del flujo, es decir:
+$$
+\begin{align*}
+v_f = f(\delta^{ + }(B))\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sea $f$ flujo en dicha red estándar, por definición se tiene que:
+$$
+\begin{align*}
+v_f = \displaystyle \sum_{j \in \Gamma^{ + }(F)} f_{Fj}
+\end{align*}
+$$
+Pero como $\Gamma^{ - }(F) = \emptyset$ entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{j \in \Gamma^{ - }(F)} f_{jF} = 0
+\end{align*}
+$$
+Y por tanto, le valor del flujo se puede reescribir como:
+$$
+\begin{align*}
+v_f = \displaystyle \sum_{j \in \Gamma^{ + }(F)} f_{Fj} - \displaystyle \sum_{j \in \Gamma^{ - }(F)} f_{jF}
+\end{align*}
+$$
+Ahora, por la propiedad de conservación del flujo, se tiene que:
+$$
+\begin{align*}
+\displaystyle \sum_{j \in \Gamma^{ + }(i)} f_{ij} - \displaystyle \sum_{j \in \Gamma^{ - }(i)} f_{ji} = 0 \qquad \forall i \in B \setminus \{F\}
+\end{align*}
+$$
+Por tanto, si sumamos ambas expresiones para todos los vértices $i \in B$, obtenemos:
+$$
+\begin{align*}
+v_f & = \displaystyle \sum_{i \in B} \left( \displaystyle \sum_{j \in \Gamma^{ + }(i)} f_{ij} - \displaystyle \sum_{j \in \Gamma^{ - }(i)} f_{ji} \right) \xlongequal[]{\{B, B^c\} \text{ partición}}\\[2ex]
+& = \displaystyle \sum_{i \in B} \left( \displaystyle \sum_{j \in \Gamma^{ + }(i) \cap B} f_{ij} + \displaystyle \sum_{j \in \Gamma^{ + }(i) \cap B^c} f_{ij} - \displaystyle \sum_{j \in \Gamma^{ - }(i) \cap B} f_{ji} - \displaystyle \sum_{j \in \Gamma^{ - }(i) \cap B^c} f_{ji} \right) = \\[2ex]
+& = \left(\displaystyle \sum_{i \in B, j \in \Gamma^{ + }(i) \cap B} f_{ij} - \displaystyle \sum_{i \in B, j \in \Gamma^{ - }(i) \cap B} f_{ji}\right) + \left(\displaystyle \sum_{i \in B, j \in \Gamma^{ + }(i) \cap B^c} f_{ij} - \displaystyle \sum_{i \in B, j \in \Gamma^{ - }(i) \cap B^c} f_{ji}\right)
+\end{align*}
+$$
+Por definición de flujo neto a través de un corte, tenemos que:
+$$
+\begin{align*}
+v_f = \left(\displaystyle \sum_{i \in B, j \in \Gamma^{ + }(i) \cap B} f_{ij} - \displaystyle \sum_{i \in B, j \in \Gamma^{ - }(i) \cap B} f_{ji}\right) + f(\delta^{ + }(B))
+\end{align*}
+$$
+Podemos notar que los dos sumatorios entre paréntesis representan exactamente el mismo valor, ya que ambos representan el flujo que entra y sale de los vértices en $B$ (exceptuando $F$), por lo que:
+$$
+\begin{align*}
+\displaystyle \sum_{i \in B, j \in \Gamma^{ + }(i) \cap B} f_{ij} - \displaystyle \sum_{i \in B, j \in \Gamma^{ - }(i) \cap B} f_{ji} = 0 \implies v_f = f(\delta^{ + }(B))
+\end{align*}
+$$
+
+</DemBox>
+
+### Proposición 4.3
+Sea $R_{FS} = (V, A, p)$ red estándar, $f = \{f_{ij}: (i, j) \in A\}$ flujo en $R_{FS}$ y $\delta^{ + }(B)$ corte de dicha red, se verifican:
+
+1. El valor del flujo $f$ está acotado superiormente por la capacidad del corte, es decir:
+$$
+\begin{align*}
+v_f \leq p(\delta^{ + }(B))
+\end{align*}
+$$
+2. Además, se cumple que:
+$$
+\begin{align*}
+v_f = p(\delta^{ + }(B)) \iff \left\{
+\begin{array}{ll}
+f_{ij} = p_{ij} & \forall (i, j) \in \delta^{ + }(B)\\
+f_{ij} = 0 & \forall (i, j) \in \delta^{ + }(B^c)
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+1. Por la proposición anterior $v_f = f(\delta^{ + }(B))$, y tenemos que:
+$$
+\begin{align*}
+f(\delta^ + (B)) = \displaystyle \sum_{i \in B, j\in B^c \cap \Gamma(i)} f_{ij} - \displaystyle \sum_{i \in B, j \in B^c \cap \Gamma^{ - }(i)} f_{ji}
+\end{align*}
+$$
+Como $f_{ji} \geq 0$ para todo $(i, j) \in A$ (por ser un flujo), entonces:
+$$
+\begin{align*}
+v_f = f(\delta^ + (B)) & = \displaystyle \sum_{i \in B, j\in B^c \cap \Gamma(i)} f_{ij} - \displaystyle \sum_{i \in B, j \in B^c \cap \Gamma^{ - }(i)} f_{ji} \leq \\[2ex]
+& \leq \displaystyle \sum_{i \in B, j\in B^c \cap \Gamma(i)} f_{ij} \leq \displaystyle \sum_{i \in B, j\in B^c \cap \Gamma(i)} p_{ij} = p(\delta^{ + }(B))
+\end{align*}
+$$
+2. Por lo que hemos visto en el apartado anterior, se tiene que:
+$$
+\begin{align*}
+v_f = f(\delta^ + (B)) & = \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} f_{ij} - \displaystyle \sum_{(j, i) \in \delta^{ + }(B^c)} f_{ji} \leq \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} p_{ij} = p(\delta^{ + }(B))
+\end{align*}
+$$
+Con lo que la igualdad se cumple si y solo si:
+$$
+\begin{align*}
+\displaystyle \sum_{(i, j) \in \delta^{ + }(B)} f_{ij} - \displaystyle \sum_{( j, i) \in \delta^{ + }(B^c)} f_{ij} = \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} p_{ij}
+\end{align*}
+$$
+Lo cual ocurre si y solo si:
+$$
+\begin{align*}
+- \displaystyle \sum_{(j, i) \in \delta^{ + }(B^c)} f_{ij} = \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} (p_{ij} - f_{ij}) \geq 0
+\end{align*}
+$$
+Ahora, como $f_{ij} \leq p_{ij}$ y $f_{ij} \geq 0$ por la acotación del flujo, se tiene que ambas expresiones son iguales a cero, con lo que la igualdad se cumple si y solo si:
+$$
+\begin{align*}
+\displaystyle \sum_{(j, i) \in \delta^{ + }(B^c)} f_{ij} = 0 \qquad \text{y} \qquad \displaystyle \sum_{(i, j) \in \delta^{ + }(B)} (p_{ij} - f_{ij}) = 0
+\end{align*}
+$$
+Como en ambos casos estamos sumando términos no negativos, esto es equivalente a que:
+$$
+\begin{align*}
+f_{ij} = 0 & \forall (j, i) \in \delta^{ + }(B^c)\\
+f_{ij} = p_{ij} & \forall (i, j) \in \delta^{ + }(B)
+\end{align*}
+$$
+
+</DemBox>
+
+### Corte mínimo en una red. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar y $\delta^{ + }(B)$ un corte, se dice que es **corte mínimo** si:
+$$
+\begin{align*}
+p(\delta^{ + }(B)) \leq p(\delta^{ + }(D)) \qquad \forall \delta^{ + }(D) \in \mathcal{D}^{ + }\\
+\end{align*}
+$$
+
+### Flujo máximo en una red. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, se dice que un flujo $f$ en $R_{FS}$ es **flujo máximo** si:
+$$
+\begin{align*}
+v_f \geq v_g \qquad \forall g \text{ flujo en } R_{FS}\\
+\end{align*}
+$$
+
+### Corolario 4.4
+Sea $R_{FS} = (V, A, p)$ red estándar, si $\delta^{ + }(B)$ y $f$ son un corte y un flujo en $R_{FS}$ respectivamente, tales que:
+$$
+\begin{align*}
+v_f = p(\delta^{ + }(B)) \implies f \text{ es flujo máximo y } \delta^{ + }(B) \text{ es corte mínimo}\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sea $f'$ otro flujo en $R_{FS}$, por la proposición 4.3 se tiene que:
+$$
+\begin{align*}
+v_{f'} \leq p(\delta^{ + }(B) ) = v_f \implies f \text{ es flujo máximo}
+\end{align*}
+$$
+Sea $\delta^{ + }(D)$ otro corte en $R_{FS}$, por la proposición 4.3 se tiene que:
+$$
+\begin{align*}
+p(\delta^{ + }(B)) = v_{f} \leq p(\delta^{ + }(D)) \implies \delta^{ + }(B) \text{ es corte mínimo}
+\end{align*}
+$$
+
+</DemBox>
+
+### Teorema 4.5
+Sea $R_{FS} = (V, A, p)$ red estándar y $f$ flujo en $R_{FS}$. Entonces se cumplen:
+$$
+\begin{align*}
+f \text{ flujo máximo} \iff \nexists \pi_{FS} \text{ cuasicamino de flujo aumentable desde } F \text{ a } S \text{ en } R_{FS}\\
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+- **$\Rightarrow$)** Sea $f$ flujo máximo, supongamos que existe un cuasicamino de flujo aumentable $\pi_{FS}$. Entonces tenemos que $\Delta_{\pi_{FS}} > 0$. Si consideramos el flujo $\widehat{f}$ definido en la proposición 4.1, tenemos que:
+$$
+\begin{align*}
+v_{\widehat{f}} = v_f + \Delta_{\pi_{FS}} > v_f \quad \#
+\end{align*}
+$$
+- **$\Leftarrow$)** Sea $B$ el conjunto de vértices formado por:
+$$
+\begin{align*}
+B \coloneq \{F\} \cup \{i \in V : \exists \pi_{Fi} \text{ cuasicamino de flujo aumentable}\}
+\end{align*}
+$$
+Por hipótesis $S \notin B$, con lo cual $\{B, B^c\}$ es partición de $V$ con $F \in B$ y $S \in B^c$. Consideremos el corte $\delta^{ + }(B)$. Veamos que:
+
+</DemBox>
+
+### Algoritmo de Ford-Fulkerson
+El objetivo de este algoritmo es encontrar un flujo máximo $f$, para ello, la idea es ir saturando cuasicaminos de flujo aumentable hasta que no queden más. Sea $R_{FS} = (V, A, p)$ red estándar, el algoritmo es el siguiente:
+
+1. Sea el flujo $f$ definido como $f_e = 0$ para todo $e \in A$.
+2. Etiquetado:
+
+1. Para el cuasicamino $f$-aumentable $\pi_{FS}$ formado por los arcos entre vértices etiquetados, obtener $\Delta_{\pi_{FS}}$ y con ese valor, obtener el nuevo flujo $\widehat{f}$ según la proposición 4.1.
+2. Volver al paso 2 borrando todas las etiquetas.
+
+<EjemBox title="Ejemplo">
+
+*Aplicación del algoritmo de Ford-Fulkerson a la siguiente red estándar:*
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_3.svg)
+
+*Primera iteración:* Aplicamos el etiquetado de la siguiente forma:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_4.svg)
+
+El cuasicamino $f$-aumentable es $\pi_{FS} = \{(F, 1), (1, 2), (2, S)\}$ y su incremento es:
+$$
+\begin{align*}
+\Delta_{\pi_{FS}} = \min\{2 - 0, 3 - 0, 2 - 0\} = 2
+\end{align*}
+$$
+Por tanto, el nuevo flujo es:
+$$
+\begin{align*}
+\widehat{f_{F1}} & = f_{F1} + \Delta_{\pi_{FS}} = 0 + 2 = 2\\
+\widehat{f_{12}} & = f_{12} + \Delta_{\pi_{FS}} = 0 + 2 = 2\\
+\widehat{f_{2S}} & = f_{2S} + \Delta_{\pi_{FS}} = 0 + 2 = 2
+\end{align*}
+$$
+
+*Segunda iteración:* Aplicamos el etiquetado de la siguiente forma:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_5.svg)
+
+El cuasicamino $f$-aumentable es $\pi_{FS} = \{(F, 2), (2, 1), (1, 3), (3, S)\}$ y su incremento es:
+$$
+\begin{align*}
+\Delta_{\pi_{FS}} = \min\{3 - 0, 2, 4 - 0, 1 - 0\} = 1
+\end{align*}
+$$
+Por tanto, el nuevo flujo es:
+$$
+\begin{align*}
+\widehat{f_{F2}} & = f_{F2} + \Delta_{\pi_{FS}} = 0 + 1 = 1\\
+\widehat{f_{21}} & = f_{21} - \Delta_{\pi_{FS}} = 2 - 1 = 1\\
+\widehat{f_{13}} & = f_{13} + \Delta_{\pi_{FS}} = 0 + 1 = 1\\
+\widehat{f_{3S}} & = f_{3S} + \Delta_{\pi_{FS}} = 0 + 1 = 1
+\end{align*}
+$$
+
+*Tercera iteración:* Aplicamos el etiquetado de la siguiente forma:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_6.svg)
+
+En este caso, no es posible etiquetar el vértice $S$, por lo que el flujo actual es máximo y el algoritmo termina aquí. El flujo máximo obtenido es:
+$$
+\begin{align*}
+v_f = \widehat{f_{F1}} + \widehat{f_{F2}} = 2 + 1 = 3
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Porposición 4.6
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo máximo y $\delta^{ + }(B)$ corte mínimo, entonces:
+$$
+\begin{align*}
+v_f = p(\delta^{ + }(B))\\
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea cualquier flujo y cualquier corte, aplicando la proposición 4.3 se tiene que:
+$$
+\begin{align*}
+v_f \leq p(\delta^{ + }(B))
+\end{align*}
+$$
+Por otra parte, si $f$ es flujo máximo, por el teorema 4.5 no existe ningún cuasicamino $f$-aumentable desde $F$ a $S$. Definiendo:
+$$
+\begin{align*}
+D = \{F\} \cup \{i \in V : \exists \pi_{Fi} \text{ cuasicamino de flujo aumentable}\}
+\end{align*}
+$$
+por la demostración del teorema 4.5, sabemos que determina un corte $\delta^{ + }(D)$ tal que:
+$$
+\begin{align*}
+f_{ij} = p_{ij} \quad \forall (i, j) \in \delta^{ + }(D) \qquad \text{y} \qquad f_{ij} = 0 \quad \forall (i, j) \in \delta^{ + }(D^c)
+\end{align*}
+$$
+Aplicando la proposición 4.3, tenemos que:
+$$
+\begin{align*}
+v_f = p(\delta^{ + }(D))
+\end{align*}
+$$
+Como $\delta^{ + }(B)$ es corte mínimo, se tiene que:
+$$
+\begin{align*}
+p(\delta^{ + }(B)) \leq p(\delta^{ + }(D)) = v_f \implies v_f = p(\delta^{ + }(B))
+\end{align*}
+$$
+
+</DemBox>
+
+#### Corolario 4.7
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo y $\delta^{ + }(B)$ corte de dicha red. Son equivalentes:
+
+1. $f$ es flujo máximo y $\delta^{ + }(B)$ es corte mínimo.
+2. $v_f = p(\delta^{ + }(B))$.
+3. Todo arco de $\delta^ + (B)$ es saturado y todo arco de $\delta^ + (B^c)$ es libre
+
+<DemBox title="Demostración">
+
+Esta demostración es consecuencia de las previas:
+
+- **$1 \Rightarrow 2$)** Por la proposición 4.6.
+- **$2 \Rightarrow 3$)** Por la proposición 4.3.
+- **$3 \Rightarrow 1$)** Por el corolario 4.4.
+
+</DemBox>
+
+### Consecuencias del teorema de Ford-Fulkerson
+A partir del algoritmo de Ford-Fulkerson no solo obtenemos un flujo máximo, si no que también podemos obtener el corte mínimo. Este último es generado por todos los vértices etiquetados en la última iteración, es decir, los vértices alcanzables desde $F$ mediante cuasicaminos de flujo aumentable.
+
+<EjemBox title="Ejemplo">
+
+*Continuando con el ejemplo anterior, en la última iteración:*
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_6.svg)
+
+Podemos notar que no existen cuasicaminos de flujo aumentable desde $F$ a $S$. No obstante, el cuasicamino de flujo aumentable que encontramos es:
+$$
+\begin{align*}
+\pi_{F3} \equiv F \longrightarrow 2 \longleftarrow 1 \longrightarrow 3
+\end{align*}
+$$
+Y por tanto, el corte mínimo será generado por:
+$$
+\begin{align*}
+B = \{F, 2, 1, 3\} \implies B^c = \{S\}
+\end{align*}
+$$
+Con lo que el corte mínimo es:
+$$
+\begin{align*}
+\delta^{ + }(B) = \{(2, S), (3, S)\}
+\end{align*}
+$$
+Además, su capacidad es:
+$$
+\begin{align*}
+p(\delta^{ + }(B)) & = p_{2S} + p_{3S} = 2 + 1 = 3 = v_f
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+El flujo de valor máximo no es único, además, el corte mínimo tampoco lo es.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+La convergencia del algoritmo de Ford-Fulkerson está garantizada si las capacidades son números enteros. No obstante, su eficiencia puede estar comprometida en función de las elecciones que se hagan en el proceso de etiquetado.
+
+Para solucionar esto, se puede modificar el algoritmo en el paso de etiquetado exigiendo que se elija el cuasicamino con el menor número de arcos. Por tanto, el algoritmo quedaría igual, pero el paso 2 se modificaría a:
+
+1. Hacer $d(F) = 0$ y $d(i) = - 1$ para cada $i \neq F$ y $k = 1$:
+2. Para $u \in V$ con $d(u) = k - 1$, hacer $d(w) = k$ para todo $w \in V$ con $d(w) = - 1$ y además $f_{uw} < p_{uw}$ o $f_{wu} > 0$.
+
+- Si $d(S) \neq - 1$ considerar el cuasicamino $f$-aumentable de $F$ a $S$ que se forma yendo para atrás desde $S$ hasta $F$ siguiendo los vértices con etiquetas decrecientes. Continuar al paso 3.
+- Si se han etiquetado nuevos vértices y $d(S) = - 1$, hacer $k = k + 1$ y repetir el paso 2.
+- Si no se puede asignar nuevas etiquetas y $d(S) = - 1$, el flujo es máximo y se termina el algoritmo.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Se considera la siguiente red, aplicar el algoritmo de Ford-Fulkerson con la modificación del paso de etiquetado:*
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_8.svg)
+
+*Primera iteración:* A partir del flujo nulo, tenemos que cada vértice tiene asociado el siguiente valor de $d$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_9.svg)
+
+Sea $k = 1$ y entonces $d(i) = k - 1 = 0$ solo para $i = F$. Y a partir de $F$ tenemos que etiquetar $1$ y $2$ con $d(1) = d(2) = k = 1$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_10.svg)
+
+Ahora, incrementamos $k$ a $2$ y consideramos los vértices con $d(i) = k - 1 = 1$, que son $1$ y $2$. Desde $1$ podemos etiquetar $S$ con $d(S) = 2$ y desde $2$ no podemos etiquetar ningún vértice nuevo:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_11.svg)
+
+El cuasicamino $f$-aumentable es $\pi_{FS} = \{(F, 1), (1, S)\}$ y su incremento es:
+$$
+\begin{align*}
+\Delta_{\pi_{FS}} = \min\{1000 - 0, 1000 - 0\} = 1000
+\end{align*}
+$$
+Por tanto, el nuevo flujo es:
+$$
+\begin{align*}
+\widehat{f_{F1}} & = f_{F1} + \Delta_{\pi_{FS}} = 0 + 1000 = 1000\\
+\widehat{f_{1S}} & = f_{1S} + \Delta_{\pi_{FS}} = 0 + 1000 = 1000
+\end{align*}
+$$
+
+*Segunda iteración:* A partir del flujo actual, tenemos que cada vértice tiene asociado el siguiente valor de $d$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_12.svg)
+
+Sea $k = 1$ y entonces $d(i) = k - 1 = 0$ solo para $i = F$. Y a partir de $F$ tenemos que etiquetar $2$ con $d(2) = k = 1$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_13.svg)
+
+Ahora, incrementamos $k$ a $2$ y consideramos los vértices con $d(i) = k - 1 = 1$, que es solo $2$. Desde $2$ podemos etiquetar $1$ con $d(1) = 2$ y $S$ con $d(S) = 2$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_14.svg)
+
+El cuasicamino $f$-aumentable es $\pi_{FS} = \{(F, 2), (2, S)\}$ y su incremento es:
+$$
+\begin{align*}
+\Delta_{\pi_{FS}} = \min\{1000 - 0, 1000 - 0\} = 1000
+\end{align*}
+$$
+Por tanto, el nuevo flujo es:
+$$
+\begin{align*}
+\widehat{f_{F2}} & = f_{F2} + \Delta_{\pi_{FS}} = 0 + 1000 = 1000\\
+\widehat{f_{2S}} & = f_{2S} + \Delta_{\pi_{FS}} = 0 + 1000 = 1000
+\end{align*}
+$$
+
+*Tercera iteración:* A partir del flujo actual, tenemos que cada vértice tiene asociado el siguiente valor de $d$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_15.svg)
+
+Sea $k = 1$ y entonces $d(i) = k - 1 = 0$ solo para $i = F$. Y a partir de $F$ no podemos etiquetar ningún vértice nuevo ya que ambos arcos están saturados:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_15.svg)
+
+Por tanto, el flujo actual es máximo y el algoritmo termina aquí. El flujo máximo obtenido es:
+$$
+\begin{align*}
+v_f = \widehat{f_{F1}} + \widehat{f_{F2}} = 1000 + 1000 = 2000
+\end{align*}
+$$
+
+</EjemBox>
+
+## Flujo de costo mínimo
+El objetivo del flujo de coste mínimo es determinar los flujos en los diferentes arcos que minimicen el coste total del flujo de la red y, simultáneamente, conservan el flujo y satisfacen las capacidades de los arcos.
+
+### Coste del flujo. Definición
+Sea $R_{FS} = (V, A, p, c)$ una red estándar con función de costes $c : A \to \mathbb{R}$. El coste total asociado a un flujo $f$ en la red $R_{FS}$ viene dado por:
+$$
+\begin{align*}
+c_f = \displaystyle \sum_{(i, j) \in A} c_{ij} f_{ij}\\
+\end{align*}
+$$
+
+### Coste mínimo. Definición
+Sea $R_{FS} = (V, A, p, c)$ una red estándar con función de costes $c : A \to \mathbb{R}$. Un flujo $f$ en la red $R_{FS}$ es un flujo de coste mínimo si:
+$$
+\begin{align*}
+c_f = \min_{f \in \mathcal{F}_v(R_{FS})} c_f
+\end{align*}
+$$
+donde $\mathcal{F}_v(R_{FS}) = \left\{f : f \text{ es flujo de valor } v \text{ en } R_{FS}\right\}$.
+
+<EjBox title="Nota">
+
+Aunque el problema se podría resolver hallando todos los flujos de valor $v$ y seleccionando el de coste mínimo, esto tiene un coste computacional muy elevado. Por tanto, hay que emplear otros métodos alternativos.
+
+</EjBox>
+
+### Cuasicircuito. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, un cuasicircuito es un cuasicamino en el que el primer y último vértice coinciden.
+
+### Cuasicircuito $f$-aumentable. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar y $f$ flujo en dicha red. Un cuasicircuito es $f$-aumentable si todo arco positivo no está saturado y todo arco negativo no es libre.
+
+<EjBox title="Nota">
+
+Notar que un cuasicircuito puede ser aumentable en un sentido y no en el otro.
+
+</EjBox>
+
+### Holgura del cuasicircuito. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en dicha red y $\phi$ un cuasicircuito $f$-aumentable. La holgura del cuasicircuito $\phi$ viene dada por:
+$$
+\begin{align*}
+\Delta = \min_{e \in \phi} \Delta_e\\
+\end{align*}
+$$
+
+### Proposición 4.8
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo en dicha red y $\phi$ cuasicircuito $f$-aumentable tal que la holgura mínima de sus arcos es $\Delta_\phi$, si consideramos la aplicación:
+$$
+\begin{align*}
+\widehat{f_{ij}} = \begin{cases}
+f_{ij} + \Delta_\phi & \text{si } (i, j) \in \phi \text{ es arco positivo}\\
+f_{ij} - \Delta_\phi & \text{si } (i, j) \in \phi \text{ es arco negativo}\\
+f_{ij} & \text{en otro caso}
+\end{cases}
+\end{align*}
+$$
+se tiene que la colección $\widehat{f} = \{\widehat{f_{ij}} : (i, j) \in A\}$ es un flujo en la red $R_{FS}$ con el mismo valor que $f$.
+
+<EjBox title="Nota">
+
+Notar que los cuasicircuitos de flujo aumentable en realidad, no aumentan el valor de flujo, sino que lo mantienen constante.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+La demostración es análoga a la de la proposición 4.1. El cambio viene dado en el valor de $\widehat{f}$ que, en este caso es:
+$$
+\begin{align*}
+v_{\widehat{f}} & = \displaystyle \sum_{j \in \Gamma^{ + }(F)} \widehat{f_{Fj}}
+\end{align*}
+$$
+y podemos considerar dos casos:
+
+- Si $F \notin \phi$ entonces:
+$$
+\begin{align*}
+v_{\widehat{f}} = \displaystyle \sum_{j \in \Gamma^{ + }(F)} \widehat{f_{Fj}} = \displaystyle \sum_{j \in \Gamma^{ + }(F)} f_{Fj} = v_f
+\end{align*}
+$$
+- SI $F \in \phi$ entonces:
+$$
+\begin{align*}
+v_{\widehat{f}} = \displaystyle \sum_{j \in \Gamma^{ + }(F)} \widehat{f_{Fj}} = \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \notin \phi} \widehat{f_{Fj}} + \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \in \phi} \widehat{f_{Fj}} & = \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \notin \phi} f_{Fj} + \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \in \phi} \widehat{f_{Fj}}
+\end{align*}
+$$
+
+Pero como $\phi$ cuasicircuito, no repite vértices, con lo que $F$ solo está una vez en $\phi$ y además $\Gamma^{ - }(F) = \emptyset$, entones, si $\exists j, k \in V$ tales que $(F, j), (F, k) \in \phi$ entonces uno de los dos arcos será negativo y otro positivo, es decir:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_17.svg)
+
+Por lo tanto,
+$$
+\begin{align*}
+\displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \in \phi} \widehat{f_{Fj}} & = \widehat{f_{Fj}} + \widehat{f_{Fk}} = (f_{Fj} + \Delta_\phi) + (f_{Fk} - \Delta_\phi) = \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \in \phi} f_{Fj}
+\end{align*}
+$$ 
+Por lo tanto, sustituyendo en la ecuación  se tiene que:
+$$
+\begin{align*}
+v_{\widehat{f}} & = \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \notin \phi} f_{Fj} + \displaystyle \sum_{j \in \Gamma^{ + }(F), (F, j) \in \phi} f_{Fj} = \displaystyle \sum_{j \in \Gamma^{ + }(F)} f_{Fj} = v_f
+\end{align*}
+$$
+
+</DemBox>
+
+### Red asociada al flujo. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar y $f$ un flujo en dicha red, se define la red asociada al flujo $f$ como la red $R_f = (V, A_f, p)$ con:
+$$
+\begin{align*}
+A_f = \left\{(i, j) : (i, j) \in A \lor (j, i) \in A \text{ con } u_{ij} > 0\right\}
+\end{align*}
+$$
+donde definimos $u_{ij}$ como:
+$$
+\begin{align*}
+u_{ij} = \begin{cases}
+p_{ij} - f_{ij} & \text{si } (i, j) \in A\\
+f_{ji} & \text{si } (j, i) \in A
+\end{cases}
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Así, se pueden dar tres casos para una arista $(i, j)$ en la red asociada al flujo $f$:
+
+- Si $0 < f_{ij} < p_{ij}$ entonces $(i, j)$ es un arco positivo y $(j, i)$ es un arco negativo.
+- Si $f_{ij} = 0$ entonces $(i, j)$ es un arco positivo
+- Si $f_{ij} = p_{ij}$ entonces $(j, i)$ es un arco negativo.
+
+</EjBox>
+
+### Proposición 4.9
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ flujo y $R_f = (V, A_f, p)$ red asociada al flujo $f$, se cumple que:
+$$
+\begin{align*}
+\phi \text{ cuasicircuito } f\text{-aumentable en } R_{FS} \iff \text{arcos de } \phi \text{ generan circuito elemental } \beta\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+- **$\Leftarrow$)** Sea $\phi$ cuasicircuito $f$-aumentable en $R_{FS}$. Entonces, estará formado por arcos positivos y negativos:
+
+- **$\Rightarrow$)** Sea $\beta$ circuito elemental en $R_f$, como $\phi$ está formado por los arcos de $\beta$ con misma o distinta orientación, entonces $\phi$ es un cuasicircuito en $R_{FS}$.
+
+Ahora, como todos los arcos de $\beta$ tienen peso positivo, entonces:
+$$
+\begin{align*}
+u_{ij} > 0 \quad \forall (i, j) \in \beta
+\end{align*}
+$$
+Si ese arco proviene de un arco positivo de $\phi$ entonces:
+$$
+\begin{align*}
+u_{ij} = p_{ij} - f_{ij} > 0 \implies f_{ij} < p_{ij} \implies (i, j) \text{ es arco positivo en } \phi
+\end{align*}
+$$
+Si ese arco proviene de un arco negativo de $\phi$ entonces:
+$$
+\begin{align*}
+u_{ij} = f_{ji} > 0 \implies f_{ji} > 0 \implies (i, j) \text{ es arco negativo en } \phi
+\end{align*}
+$$
+Por lo tanto, $\phi$ es un cuasicircuito $f$-aumentable en $R_{FS}$.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Notar que aunque el flujo se mantenga constante al aumentar por un cuasicircuito $f$-aumentable, el coste del flujo puede variar. Además, esta variación del coste puede ser positiva, negativa o nula. Por tanto, no todo cuasicircuito $f$-aumentable es útil para minimizar el coste del flujo.
+
+</EjBox>
+
+### Selección de circuitos elementales de $R_f$. Idea
+Intuitivamente buscamos cuasicircuitos de flujo aumentable que reduzcan el coste del flujo. Podemos notar que si el cuasicircuito de flujo aumentable $\phi$ verifica que:
+$$
+\begin{align*}
+\displaystyle \sum_{e \text{ pos}} c_e - \displaystyle \sum_{e \text{ neg}} c_e < 0
+\end{align*}
+$$
+entonces el coste del nuevo flujo es menor (veremos que esto es cierto en general). 
+
+### Red residual. Definición
+Sea $R_{FS} = (V, A, p, c)$ red estándar y $f$ flujo en dicha red, se define la red residual asociada al flujo $f$ como la red $R_f = (V, A_f, u, r)$ donde:
+$$
+\begin{align*}
+A_f = \left\{(i, j) : (i, j) \in A \lor (j, i) \in A \text{ con } u_{ij} > 0\right\}
+\end{align*}
+$$
+donde se definen:
+$$
+\begin{align*}
+u_{ij} = \begin{cases}
+p_{ij} - f_{ij} & \text{si } (i, j) \in A\\
+f_{ji} & \text{si } (j, i) \in A
+\end{cases}\qquad \text{y} \qquad r_{ij} = \begin{cases}
+c_{ij} & \text{si } (i, j) \in A\\
+-c_{ji} & \text{si } (j, i) \in A
+\end{cases}
+\end{align*}
+$$
+
+<EjemBox title="Nota">
+
+Así, se pueden dar tres casos para una arista $(i, j)$ en la red residual $R_f$:
+
+- Si $0 < f_{ij} < p_{ij}$ entonces:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_18.svg)
+- Si $f_{ij} = 0$ entonces:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_19.svg)
+- Si $f_{ij} = p_{ij}$ entonces:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_20.svg)
+
+Notar que la red residual es similar a la red asociada al flujo, pero en este caso los arcos tienen asociados tanto una capacidad residual como un coste asociado. De esta forma, mantenemos toda la información necesaria para poder trabajar con los cuasicircuitos $f$-aumentables.
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+En las redes residuales, los parámetros que tenemos miden:
+
+- $u_{ij}$: lo que podemos aumentar el flujo de ese arco (o lo que podemos reducirlo si está en sentido contrario).
+- $r_{ij}$: el coste por unidad de flujo que se incrementa (o decrementa si está en sentido contrario).
+
+Así, dado un cuasicircuito $f$-aumentable $\phi$, consideramos $\beta$ como el circuito elemental generado por los arcos de $\phi$ en la red residual $R_f$. Entonces, el coste asociado a aumentar el flujo en el cuasicircuito $\phi$ es:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta} r_e
+\end{align*}
+$$
+Y se dan dos casos:
+
+- Si $\sum r_e < 0$ entonces aumentar el flujo en el cuasicircuito $\phi$ reduce el coste total del flujo. Además, sabemos que permitirá distribuir $\Delta$ unidades de flujo, donde $\Delta$ es la holgura del cuasicircuito $\phi$ ahorrando un coste total de $\sum r_e$ por cada unidad de flujo aumentada. Es decir, el ahorro total será:
+$$
+\begin{align*}
+\Delta \cdot \displaystyle \sum_{e \in \beta} r_e
+\end{align*}
+$$
+- Si $\sum r_e \geq 0$ entonces aumentar el flujo en el cuasicircuito $\phi$ no reduce el coste total del flujo, por lo que no es interesante. Es el caso contrario al anterior.
+
+</EjBox>
+
+### Proposición 4.10
+Sea $R_{FS} = (V, A, p, c)$ red estándar, $f$ flujo en dicha red, $\phi$ cuasicircuito $f$-aumentable y $\beta$ el circuito elemental generado por los arcos de $\phi$ en la red residual $R_f$. Si consideramos el flujo $\hat{f}$ definido en la proposición 4.8, entonces:
+$$
+\begin{align*}
+c_{\hat{f}} = c_f + \Delta_\phi \cdot \displaystyle \sum_{e \in \beta} r_e\\
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Basta notar que:
+$$
+\begin{align*}
+c_{\hat{f}} & = \displaystyle \sum_{e \in A, e \notin \phi} c_e \widehat{f_e} + \displaystyle \sum_{e \in A, e \in \phi} c_e \widehat{f_e} = \\[2ex]
+& = \displaystyle \sum_{e \in A, e \notin \phi} c_e f_e + \displaystyle \sum_{e \in A, e \in \phi \text{ pos}} c_e (f_e + \Delta_\phi) + \displaystyle \sum_{e \in A, e \in \phi \text{ neg}} c_e (f_e - \Delta_\phi) = \\[2ex]
+& = \displaystyle \sum_{e \in A} c_e f_e + \Delta_{\phi} \left(\displaystyle \sum_{e \in A, e \in \phi \text{ pos}} c_e - \displaystyle \sum_{e \in A, e \in \phi \text{ neg}} c_e\right) = c_f + \Delta_\phi \cdot \displaystyle \sum_{e \in \beta} r_e
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Notar que por la definición de red residual es directo que:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta} r_e = \displaystyle \sum_{e \in \phi\text{ pos}} c_e - \displaystyle \sum_{e \in \phi\text{ neg}} c_e
+\end{align*}
+$$
+Es decir, el coste asociado a aumentar el flujo en el cuasicircuito $\phi$ es igual a la suma de los costes de los arcos positivos menos la suma de los costes de los arcos negativos. Con lo cual, si queremos disminuir el coste total del flujo, debemos buscar cuasicircuitos $f$-aumentables tales que:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta} r_e < 0
+\end{align*}
+$$
+Y además, por definición tenemos que:
+$$
+\begin{align*}
+\Delta_{\phi} = \min\left\{\min_{e \in\phi \text{ pos}} (p_e - f_e), \min_{e \in \phi \text{ neg}} f_e\right\} = \min_{e \in \beta} u_e
+\end{align*}
+$$
+
+</EjBox>
+
+### Corolario 4.11
+Sea $f$ flujo de valor $v_f$ en la red estándar $R_{FS} = (V, A, p, c)$. Si $f$ es un flujo de coste mínimo, entonces no existe ningún circuito elemental $\beta$ en $R_f$ con:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta} r_e < 0\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Supongamos que existe $\beta$ circuito elemental en $R_f$ con $\sum r_e < 0$. Entonces, por la proposición 4.9 existe un cuasicircuito $f$-aumentable $\phi$ en $R_{FS}$ que genera el circuito elemental $\beta$. Si consideramos el flujo $\hat{f}$ definido en la proposición 4.8, entonces por la proposición 4.10 se tiene que:
+$$
+\begin{align*}
+c_{\hat{f}} = c_f + \Delta_\phi \cdot \displaystyle \sum_{e \in \beta} r_e < c_f
+\end{align*}
+$$
+pero esto contradice que $f$ es un flujo de coste mínimo. Por tanto, no puede existir tal circuito elemental $\beta$.
+
+</DemBox>
+
+### Red de pesos asociada a una red estándar. Definición
+Sea $R_{FS} = (V, A, p)$ red estándar y $f, f^*$ dos flujos en dicha red con $v_{f} = v_{f^*}$, se define la red de pesos $R_{ff^*} = (V, A_{ff^*}, f^* - f)$ tal que:
+
+- Tiene los mismos vértices que $R_{FS}$.
+- Los arcos son:
+$$
+\begin{align*}
+A_{ff^*} = \left\{(i, j) : (i, j) \in A \text{ con } f_{ij} < f^*_{ij} \lor (j, i) \in A \text{ con } f_{ji} > f^*_{ji}\right\}
+\end{align*}
+$$
+es decir, están los mismos arcos que en $A$ si su flujo en $f^*$ es mayor que en $f$ y los arcos que están en sentido contrario si su flujo en $f^*$ es menor que en $f$.
+- El peso de cualquier arco $(i, j) \in A_{ff^*}$ es:
+$$
+\begin{align*}
+(f^* - f)_{ij} = \begin{cases}
+f^*_{ij} - f_{ij} & \text{si } (i, j) \in A \text{ con } f_{ij} < f^*_{ij}\\
+f_{ji} - f^*_{ji} & \text{si } (j, i) \in A \text{ con } f_{ji} > f^*_{ji}
+\end{cases}
+\end{align*}
+$$
+
+### Lema 4.12
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ y $f^*$ dos flujos diferentes con $v_f = v_{f^*}$ y $R_{ff^*} = (V, A_{ff^*}, f^* - f)$ entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{j: (i, j) \in A_{ff^*}} (f^* - f)_{ij} = \displaystyle \sum_{j: (j, i) \in A_{ff^*}} (f^* - f)_{ji} \quad \forall i \in V\\
+\end{align*}
+$$
+
+### Lema 4.13
+Sea $R_{FS} = (V, A, p)$ red estándar, $f$ y $f^*$ dos flujos diferentes con $v_f = v_{f^*}$ entonces existe una colección $r$ de circuitos $\mathcal{B} = \{\beta_1, \dots , \beta_r\}$ en la red de pesos $R_{ff^*}$ con $r \leq |A|$ tales que:
+$$
+\begin{align*}
+(f^* - f)_{ij} = \displaystyle \sum_{\beta_k \in \mathcal{B}: (i, j) \in \beta_k} \Lambda_{\beta_k} \quad \forall (i, j) \in A_{ff^*}
+\end{align*}
+$$
+donde $\Lambda_{\beta_k} = \displaystyle \min_{(i, j) \in \beta_k} (f^* - f)_{ij}$.
+
+<EjBox title="Nota">
+
+Lo que nos dice este lema es que la diferencia entre dos flujos de igual valor se puede expresar como la suma de flujos en circuitos elementales en la red de pesos asociada.
+
+</EjBox>
+
+### Teorema 4.14
+Sea $f$ flujo de valor $v_f$ en la red estándar $R_{FS} = (V, A, p, c)$. Si no existe ningún circuito elemental $\beta$ en $R_f$ con:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta} r_e < 0
+\end{align*}
+$$
+entonces $f$ es un flujo de coste mínimo en $R_{FS}$.
+
+### Corolario 4.15
+Un flujo $f$ de valor $v_f$ en una red estándar con costes $R_{FS} = (V, A, p, c)$ es un flujo de coste mínimo si y solo si no existe ningún circuito elemental $\beta$ en $R_f$ con:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta} r_e < 0\\
+\end{align*}
+$$
+
+### Algoritmo de Klein
+El objetivo del algoritmo es encontrar un flujo $f$ de manera que cualquier otro flujo $f^*$ con $v_f = v_{f^*}$ se tiene que cumplir que $c_f \leq c_{f^*}$. El algoritmo es el siguiente:
+
+1. Hacer $t = 0$ y asignar $f^0 > 0$ de valor $v$ a la red $R_{FS} = (V, A, p, c)$.
+2. Construir la red residual $R_{f^t} = (V, A_{f^t}, u, r)$ asociada a $R_{FS}$ y al flujo $f^t$.
+3. Buscar en $R_{f^t}$ un circuito elemental $\beta_t$ con:
+$$
+\begin{align*}
+\displaystyle \sum_{e \in \beta_t} r_e < 0
+\end{align*}
+$$
+Si existe ir al paso 4, si no $f^t$ es flujo de valor $v$ y coste mínimo $c_{f^t}$
+4. Calcular $\Delta_t = \min_{(i, j) \in \beta_t} u_{ij}$ y definir el flujo $f^{t + 1}$ como:
+$$
+\begin{align*}
+f_{ij}^{t + 1} = \begin{cases}
+f_{ij}^t + \Delta_t & \text{si } (i, j) \in \phi_t \text{ es arco positivo}\\
+f_{ij}^t - \Delta_t & \text{si } (i, j) \in \phi_t \text{ es arco negativo}\\
+f_{ij}^t & \text{en otro caso}
+\end{cases}
+\end{align*}
+$$
+donde $\phi_t$ es el cuasicircuito en $R_{FS}$ asociado a $\beta_t$. Hacer $t = t + 1$ y volver al paso 2.
+
+<EjemBox title="Ejemplo">
+
+*Sea la siguiente red estándar con costes:*
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_21.svg)
+
+**Iteración 1:** sea $t = 0$ y $f^0$ flujo inicial como el de la figura, entonces:
+$$
+\begin{align*}
+v_{f^0} & = 4 + 5 + 3 = 12\\
+c_{f^0} & = 4 \cdot 6 + 3 \cdot 3 + 1 \cdot 2 + 1 \cdot 4 + 5 \cdot 5 + 2 \cdot 3 + 3 \cdot 3 + 6 \cdot 6 + 3 \cdot 6 = 133
+\end{align*}
+$$
+Construimos la red residual $R_{f^0}$:
+
+![TikZ Graph](/blogs/images/tema-4-redes-de-flujo_tikz_22.svg)
+
+... Repetir mucho que no me da la vida ...
+
+</EjemBox>

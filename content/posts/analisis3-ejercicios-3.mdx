@@ -1,0 +1,1325 @@
+---
+title: "Ejercicios Resueltos Análisis III - Parte 3"
+description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo."
+date: "2026-01-12"
+tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebsegue"]
+---
+
+## Derivación bajo el signo de integral
+### Ejercicio 1
+#### Apartado 1
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_0^\infty \dfrac{1 - e^{ - x^2}}{x^2} \, dx
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Se quiere calcular la integral impropia:
+$$
+\begin{align*}
+I \coloneq \int_0^\infty \dfrac{1 - e^{ - x^2}}{x^2} \, dx
+\end{align*}
+$$
+Pero podemos notar que, por un lado el integrando no está definido para $0$ y además el intervalo de integración es infinito. Por tanto, definimos la integral como el límite:
+$$
+\begin{align*}
+\int_0^\infty \frac{1 - e^{ - x^2}}{x^2} \, dx = \lim_{R \to \infty} \lim_{\varepsilon \to 0^+} \int_\varepsilon^R \frac{1 - e^{ - x^2}}{x^2} \, dx
+\end{align*}
+$$
+en caso de que el límite exista y sea finito. Ahora, para poder calcular la integral, introducimos la familia de funciones parametrizadas por $t > 0$:
+$$
+\begin{align*}
+F(t) \coloneq \int_0^\infty \frac{1 - e^{ - tx^2}}{x^2} \, dx
+\end{align*}
+$$
+Podemos notar que $I = F(1)$ y que la función $F(t)$ está bien definida ya que para cada $t > 0$:
+$$
+\begin{align*}
+f_t(x) = \frac{1 - e^{ - tx^2}}{x^2} \quad x > 0
+\end{align*}
+$$
+Usando un desarrollo en serie de Taylor de $e^{ - tx^2}$ alrededor de $0$:
+$$
+\begin{align*}
+e^{ - tx^2} = 1 - tx^2 + o(x^2) \quad \text{ cuando } x \to 0
+\end{align*}
+$$
+Entonces, podemos ver que:
+$$
+\begin{align*}
+f_t(x) = \frac{tx^2 + o(x^2)}{x^2} = t + \frac{o(x^2)}{x^2} \quad \text{ cuando } x \to 0
+\end{align*}
+$$
+Por lo tanto, $f_t$ es localmente integrable cerca de 0. Ahora, como $0 \leq 1 - e^{ - tx^2} \leq 1$ entonces:
+$$
+\begin{align*}
+0 \leq f_t(x) \leq \frac{1}{x^2}
+\end{align*}
+$$
+Y como $\frac{1}{x^2} \in \mathcal{L}_1((1, \infty))$ entonces:
+$$
+\begin{align*}
+f_t \in \mathcal{L}_1((0, \infty))
+\end{align*}
+$$
+Por lo tanto, $F(t)$ está bien definida para todo $t > 0$. Ahora, vamos a derivar $F(t)$ bajo el signo de integral. Para ello, definimos:
+$$
+\begin{align*}
+g(t, x) \coloneq \frac{1 - e^{ - tx^2}}{x^2}
+\end{align*}
+$$
+Entonces:
+
+- $g(\cdot, x) \in \mathcal{C}^1$ para todo $x > 0$
+- La derivada parcial es:
+$$
+\begin{align*}
+\frac{\partial g}{\partial t} (t, x) = e^{ - tx^2}
+\end{align*}
+$$
+
+Podemos ver que para cada $t > 0$:
+$$
+\begin{align*}
+\left| \frac{\partial g}{\partial t} (t, x) \right| = e^{ - tx^2} \leq e^{ - x^2}
+\end{align*}
+$$
+Y como $e^{ - x^2} \in \mathcal{L}_1((0, \infty))$ entonces podemos aplicar el teorema de derivación bajo el signo de integral y obtener:
+$$
+\begin{align*}
+F'(t) & = \int_0^\infty e^{ - tx^2} \, dx \xlongequal[du = \sqrt{t}dx]{u = \sqrt{t}x} \int_0^\infty e^{ - u^2} \frac{du}{\sqrt{t}} = \frac{1}{\sqrt{t}} \int_0^\infty e^{ - u^2} \, du = \frac{\sqrt{\pi}}{2\sqrt{t}}
+\end{align*}
+$$
+Por tanto, si integramos $F'(t)$ obtenemos:
+$$
+\begin{align*}
+F(t) = \int F'(t) \, dt = \int \frac{\sqrt{\pi}}{2\sqrt{t}} \, dt = \sqrt{\pi} \sqrt{t} + C
+\end{align*}
+$$
+Para calcular la constante $C$, calculamos el límite cuando $t \to 0^+$:
+$$
+\begin{align*}
+F(0) = \lim_{t \to 0^ + } F(t) = \lim_{t \to 0^ + } \int_0^\infty \frac{1 - e^{ - tx^2}}{x^2} \, dx = \int_0^\infty \lim_{t \to 0^ + } \frac{1 - e^{ - tx^2}}{x^2} \, dx = 0
+\end{align*}
+$$
+Por lo tanto, $C = 0$ y:
+$$
+\begin{align*}
+F(1) = \sqrt{\pi}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Apartado 2
+*Calcula la siguiente integral*
+$$
+\begin{align*}
+\int_0^{\frac{\pi}{2}} \dfrac{\log (1 + \sin^2 x)}{\sin^2 x} \, dx
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Se quiere calcular la integral impropia:
+$$
+\begin{align*}
+I = \int_0^{\frac{\pi}{2}} \dfrac{\log (1 + \sin^2 x)}{\sin^2 x} \, dx
+\end{align*}
+$$
+Podemos notar que el integrando no está definido para $0$ ya que $\sin 0 = 0$ y se anula el denominador. Por tanto, queremos introducir un parámetro para poder derivar bajo el signo de integral. Para ello, definimos la familia de funciones parametrizadas por $t > 0$:
+$$
+\begin{align*}
+F(t) = \int_0^{\frac{\pi}{2}} \dfrac{\log (1 + t \sin^2 x)}{\sin^2 x} \, dx
+\end{align*}
+$$
+De esta forma, podemos ver que $I = F(1)$. Además, para cada $t > 0$:
+$$
+\begin{align*}
+f_t(x) = \dfrac{\log (1 + t \sin^2 x)}{\sin^2 x} \quad x \in \left(0, \frac{\pi}{2}\right)
+\end{align*}
+$$
+Ahora, usando un desarrollo en serie de Taylor de $\log (1 + t \sin^2 x)$ alrededor de $0$:
+$$
+\begin{align*}
+\log (1 + t \sin^2 x) = t \sin^2 x + o(\sin^2 x) \quad \text{ cuando } x \to 0
+\end{align*}
+$$
+Entonces, podemos ver que:
+$$
+\begin{align*}
+f_t(x) = \frac{t \sin^2 x + o(\sin^2 x)}{\sin^2 x} = t + \frac{o(\sin^2 x)}{\sin^2 x} \quad \text{ cuando } x \to 0
+\end{align*}
+$$
+Por lo tanto, $f_t$ es localmente integrable cerca de 0. Además, podemos notar que:
+$$
+\begin{align*}
+\log (1 + t \sin^2 x) \leq t\sin^2 x \implies 0 \leq f_t(x) \leq t
+\end{align*}
+$$
+Por lo que $f_t$ es acotada en $\left(0, \frac{\pi}{2}\right)$ y podemos dominarla por una función integrable en dicho intervalo. Por tanto:
+$$
+\begin{align*}
+f_t \in \mathcal{L}_1\left(\left(0, \frac{\pi}{2}\right)\right)
+\end{align*}
+$$
+Por lo tanto, $F(t)$ está bien definida para todo $t > 0$. Ahora, vamos a derivar $F(t)$ bajo el signo de integral. Para ello, definimos:
+$$
+\begin{align*}
+g(t, x) \coloneq \dfrac{\log (1 + t \sin^2 x)}{\sin^2 x}
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}
+\frac{\partial g}{\partial t} (t, x) = \frac{1}{1 + t \sin^2 x}
+\end{align*}
+$$
+Podemos ver que para cada $t > 0$:
+$$
+\begin{align*}
+\left| \frac{\partial g}{\partial t} (t, x) \right| = \frac{1}{1 + t \sin^2 x} \leq 1
+\end{align*}
+$$
+Y como $1 \in \mathcal{L}_1\left(\left(0, \frac{\pi}{2}\right)\right)$ entonces podemos aplicar el teorema de derivación bajo el signo de integral y obtener:
+$$
+\begin{align*}
+F'(t) & = \int_0^{\frac{\pi}{2}} \frac{1}{1 + t \sin^2 x} \, dx \xlongequal[u = \tan x]{du = \sec^2 x \, dx} \int_0^\infty \frac{1}{1 + t \frac{u^2}{1 + u^2}} \cdot \frac{1}{1 + u^2} \, du = \\[2ex]
+& = \int_0^\infty \frac{1 + u^2}{1 + u^2 + t u^2} \cdot \frac{1}{1 + u^2} \, du = \int_0^\infty \frac{1}{1 + (1 + t) u^2} \, du = \\[2ex]
+& = \frac{1}{\sqrt{1 + t}} \int_0^\infty \frac{1}{1 + v^2} \, dv = \frac{1}{\sqrt{1 + t}} \cdot \left[ \arctan v \right]_0^\infty  = \frac{\pi}{2\sqrt{1 + t}}
+\end{align*}
+$$
+Por tanto, si integramos $F'(t)$ obtenemos:
+$$
+\begin{align*}
+F(t) = \int F'(t) \, dt = \int \frac{\pi}{2\sqrt{1 + t}} \, dt = \pi \sqrt{1 + t} + C
+\end{align*}
+$$
+Para calcular la constante $C$, calculamos el límite cuando $t \to 0^+$:
+$$
+\begin{align*}
+F(0) = \lim_{t \to 0^ + } F(t) = \lim_{t \to 0^ + } \int_0^{\frac{\pi}{2}} \dfrac{\log (1 + t \sin^2 x)}{\sin^2 x} \, dx = \int_0^{\frac{\pi}{2}} \lim_{t \to 0^ + } \dfrac{\log (1 + t \sin^2 x)}{\sin^2 x} \, dx = 0
+\end{align*}
+$$
+Por lo tanto, $C = -\pi$ y:
+$$
+\begin{align*}
+F(1) = \pi (\sqrt{2} - 1)
+\end{align*}
+$$
+
+</DemBox>
+
+## Espacios $L^p$
+### Ejercicio 2
+*Demuestra que si $I$ es un intervalo acotado entonces el conjunto de funciones $\mathcal{L}_p(I)$ está estrictamente contenido en $\mathcal{L}_q(I)$ para $1 \leq q \leq p \leq \infty$*
+
+<DemBox title="Demostración">
+
+Queremos ver que, dado $1 \leq q \leq p \leq \infty$ entonces:
+$$
+\begin{align*}
+\mathcal{L}_p(I) \subsetneq \mathcal{L}_q(I)
+\end{align*}
+$$
+Para ello, haremos dos pasos:
+
+- *Contenido: $\mathcal{L}_p(I) \subset \mathcal{L}^q(I)$.* Sea $f \in \mathcal{L}_p(I)$ queremos ver que $f \in \mathcal{L}_q(I)$, es decir:
+$$
+\begin{align*}
+\|f\|_q = \left( \int_I |f(x)|^q \, d\mu(x) \right)^{1/q} < \infty
+\end{align*}
+$$
+Pero como $I$ es un intervalo acotado, entonces $\mu(I) < \infty$ y podemos aplicar la desigualdad de Hölder. Para ello, definimos los exponentes conjugados:
+$$
+\begin{align*}
+r = \frac{p}{q}
+\end{align*}
+$$
+Como $p \geq q$ entonces $r \geq  1$. Así, ea $s$ el exponente conjugado de $r$ tal que:
+$$
+\begin{align*}
+\frac{1}{r} + \frac{1}{s} = 1 \iff \frac{1}{s} = 1 - \frac{q}{p} = \frac{p - q}{p} \implies s = \frac{p}{p - q}
+\end{align*}
+$$
+Aplicando la desigualdad de Hölder con las funciones $|f|^p$ y $1$ obtenemos:
+$$
+\begin{align*}
+\int_I |f(x)|^q \, d\mu(x) \leq \left( \int_I \left(|f(x)|^q\right)^{\frac{p}{q}}\, d\mu(x) \right)^{\frac{q}{p}} \cdot \left( \int_I 1^s \, d\mu(x) \right)^{\frac{p - q}{p}}
+\end{align*}
+$$
+Pero podemos ver que:
+$$
+\begin{align*}
+\left( \int_I \left(|f(x)|^q\right)^{\frac{p}{q}}\, d\mu(x) \right)^{\frac{q}{p}} & = \left( \int_I |f(x)|^p \, d\mu(x) \right)^{\frac{q}{p}} = \|f\|_p^q < \infty
+\end{align*}
+$$
+Y además:
+$$
+\begin{align*}
+\left( \int_I 1^s \, d\mu(x) \right)^{\frac{p - q}{p}} & = \left( \mu(I) \right)^{\frac{p - q}{p}} < \infty
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+\int_I |f(x)|^q \, d\mu(x) < \infty
+\end{align*}
+$$
+Y por tanto, $f \in \mathcal{L}_q(I)$.
+- *No igualdad: $\mathcal{L}_p(I) \neq \mathcal{L}_q(I)$.* Supongamos que $I = (0, b]$ y definimos la función:
+$$
+\begin{align*}
+f(x) = \frac{1}{x^\alpha}
+\end{align*}
+$$
+Sabemos que esta función tiene integral de Riemann y, por tanto, de Lebesgue y converge en el origin si y solo si $\alpha < 1$:
+
+</DemBox>
+
+## Funciones de variación acotada
+### Ejercicio 1
+*Demuestra que la función $f: [a, b] \to \mathbb{R}$ es de variación acotada si y solo si sus semi-variaciones positiva y negativa son ambas finitas*.
+
+<DemBox title="Demostración">
+
+Sea $f: [a, b] \to \mathbb{R}$ una función y definimos sus semi-variaciones positiva y negativa como:
+$$
+\begin{align*}
+V^ + (f, P) = \displaystyle \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ +}| \quad \text{ y } \quad V^ - (f, P) = \displaystyle \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ -}|
+\end{align*}
+$$
+Así, sea $P = \{a = t_0 < t_1 < \ldots < t_n = b\}$ una partición de $[a, b]$ veamos que:
+
+- **$\Rightarrow$** Si $f$ es de variación acotada, entonces existe $M > 0$ tal que para toda partición $P$ de $[a, b]$:
+$$
+\begin{align*}
+V(f, P) = \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})| \leq M
+\end{align*}
+$$
+Pero podemos notar que:
+$$
+\begin{align*}
+|f(t_i) - f(t_{i - 1})| & = |f(t_i) - f(t_{i - 1})^{ +} + f(t_i) - f(t_{i - 1})^{ -}| \leq \\[2ex]
+& \leq |f(t_i) - f(t_{i - 1})^{ +}| + |f(t_i) - f(t_{i - 1})^{ -}|
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+V(f, P) & = \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})| \leq \\[2ex]
+& \leq \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ +}| + \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ -}| = \\[2ex]
+& = V^ + (f, P) + V^ - (f, P) \leq M
+\end{align*}
+$$
+Por lo que $V^+ (f) \leq M$ y $V^- (f) \leq M$ y ambas son finitas.
+- **$\Leftarrow$** Si $V^+ (f)$ y $V^- (f)$ son finitas, entonces existen $M_1, M_2 > 0$ tales que para toda partición $P$ de $[a, b]$:
+$$
+\begin{align*}
+V^+ (f, P) \leq M_1 \quad \text{ y } \quad V^- (f, P) \leq M_2
+\end{align*}
+$$
+Pero podemos notar que:
+$$
+\begin{align*}
+|f(t_i) - f(t_{i - 1})| & = |f(t_i) - f(t_{i - 1})^{ +} + f(t_i) - f(t_{i - 1})^{ -}| \leq \\[2ex]
+& \leq |f(t_i) - f(t_{i - 1})^{ +}| + |f(t_i) - f(t_{i - 1})^{ -}|
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+V(f, P) & = \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})| \leq \\[2ex]
+& \leq \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ +}| + \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ -}| = \\[2ex]
+& = V^ + (f, P) + V^ - (f, P) \leq M_1 + M_2
+\end{align*}
+$$
+Por lo que $f$ es de variación acotada.
+
+</DemBox>
+
+### Ejercicio 3
+*Demuestra que toda función de variación acotada $f$ sobre $[a, b]$ puede descomponerse en $f = g_1 - g_2$ con $g_1, g_2$ funciones crecientes y acotadas sobre $[a, b]$.*
+<DemBox title="Demostración">
+
+Sea $f: [a, b] \to \mathbb{R}$ una función de variación acotada. Definimos las funciones $g_1, g_2: [a, b] \to \mathbb{R}$ como:
+$$
+\begin{align*}
+g_1(x) = V^+ (f, [a, x]) \quad \text{ y } \quad g_2(x) = V^- (f, [a, x])
+\end{align*}
+$$
+Podemos notar que $g_1$ y $g_2$ son funciones crecientes ya que si $x_1 < x_2$ entonces:
+$$
+\begin{align*}
+g_1(x_2) - g_1(x_1) & = V^+ (f, [a, x_2]) - V^+ (f, [a, x_1]) = \\[2ex]
+& = V^+ (f, [x_1, x_2]) \geq 0
+\end{align*}
+$$
+Y de forma análoga:
+$$
+\begin{align*}
+g_2(x_2) - g_2(x_1) & = V^- (f, [a, x_2]) - V^- (f, [a, x_1]) = \\[2ex]
+& = V^- (f, [x_1, x_2]) \geq 0
+\end{align*}
+$$
+Además, como $f$ es de variación acotada entonces $V^+ (f)$ y $V^- (f)$ son finitas y por tanto $g_1$ y $g_2$ son acotadas. Ahora, veamos que $f = g_1 - g_2$. Para ello, sea $x \in [a, b]$ y consideremos una partición $P = \{a = t_0 < t_1 < \ldots < t_n = x\}$ de $[a, x]$. Entonces:
+$$
+\begin{align*}
+f(x) - f(a) & = \sum_{i = 1}^{n} (f(t_i) - f(t_{i - 1})) = \\[2ex]
+& = \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ +}| - \sum_{i = 1}^{n} |f(t_i) - f(t_{i - 1})^{ -}| = \\[2ex]
+& = V^+ (f, P) - V^- (f, P)
+\end{align*}
+$$
+Si tomamos el supremo sobre todas las particiones $P$ de $[a, x]$ obtenemos:
+$$
+\begin{align*}
+f(x) - f(a) = V^+ (f, [a, x]) - V^- (f, [a, x]) = g_1(x) - g_2(x)
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+f(x) = g_1(x) - g_2(x) + f(a)
+\end{align*}
+$$
+Definiendo $g_2'(x) = g_2(x) - f(a)$ obtenemos la descomposición buscada:
+$$
+\begin{align*}
+f(x) = g_1(x) - g_2'(x)
+\end{align*}
+$$
+
+</DemBox>
+
+## Funciones que fallan las condiciones de Dini/Jordan
+### Ejercicio 1
+*Considera la función:*
+$$
+\begin{align*}
+f : \mathbb{R} & \longrightarrow \mathbb{R} \\[1ex]
+x & \longmapsto f(x) = \begin{cases} 
+x \sin \left( \frac{1}{x} \right) & \text{ si } x \in [ - \pi, \pi]\setminus \{0\} \\[2ex]
+0 & \text{ si } x = 0
+\end{cases} 
+\end{align*}
+$$
+*que se extiende periódicamente al resto de su dominio con periodo $2\pi$. Demuestra que $f$ es continua en todo $\mathbb{R}$ y no verifica las condiciones de Jordan en $x = 0$ pero sí las de Dini.*
+
+<DemBox title="Demostración">
+
+Se define la función $f : \mathbb{R} \to \mathbb{R}$ dada y se extiende periódicamente con periodo $2\pi$. Por periodicidad, basta con estudiar la continuidad en el intervalo $[ - \pi, \pi]$ y, en particular, en $x = 0$ que es el punto problemático.
+
+- Si $x \neq 0$, entonces $f$ es composición de funciones continuas (producto y seno) y por tanto, es continua en todo punto $x \neq 0$.
+- En $x = 0$:
+$$
+\begin{align*}
+\lim_{x \to 0} f(x) & = \lim_{x \to 0} x \sin \left( \frac{1}{x} \right)
+\end{align*}
+$$
+Podemos notar que:
+$$
+\begin{align*}
+\left| x \sin \left( \frac{1}{x} \right) \right| \leq |x|
+\end{align*}
+$$
+Y por tanto, por el teorema del sándwich:
+$$
+\begin{align*}
+\lim_{x \to 0} x \sin \left( \frac{1}{x} \right) = 0 = f(0)
+\end{align*}
+$$
+
+Por tanto, $f$ es continua en todo $\mathbb{R}$.
+
+Veamos que no cumple la condición de Jordán, es decir, $f$ no es de variación acotada en ningún intervalo que contenga a $0$. Para ello, construimos la sucesión:
+$$
+\begin{align*}
+x_n = \frac{1}{n\pi} \quad n \in \mathbb{N} \implies f(x_n) = \frac{1}{n\pi} \sin (n\pi) = 0
+\end{align*}
+$$
+Y en los puntos intermedios:
+$$
+\begin{align*}
+y_n = \frac{1}{\left(n + \frac{1}{2}\right)\pi} \implies f(y_n) = \frac{1}{\left(n + \frac{1}{2}\right)\pi} \sin \left( \left(n + \frac{1}{2}\right)\pi \right) = \frac{(-1)^n}{\left(n + \frac{1}{2}\right)\pi}
+\end{align*}
+$$
+Así, la función realiza oscilaciones en cada intervalo:
+$$
+\begin{align*}
+\left[\frac{1}{(n + 1)\pi}, \frac{1}{n\pi}\right] \quad n \in \mathbb{N}
+\end{align*}
+$$
+cuyo salto es:
+$$
+\begin{align*}
+|f(y_n) - f(x_n)| + |f(y_n) - f(x_{n + 1})| = 2 \cdot \frac{1}{\left(n + \frac{1}{2}\right)\pi} 
+\end{align*}
+$$
+Por tanto, si hacemos la suma de las oscilaciones tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} 2 \cdot \frac{1}{\left(n + \frac{1}{2}\right)\pi} = \frac{2}{\pi} \displaystyle \sum_{n = 1}^{\infty} \frac{1}{n + \frac{1}{2}} = \infty
+\end{align*}
+$$
+Por lo tanto, $f$ no es de variación acotada en ningún intervalo que contenga a $0$ y por tanto, no cumple la condición de Jordan en $x = 0$.
+
+Ahora, veamos que $f$ cumple las condiciones de Dini en $x = 0$. Para ello, definimos la función:
+$$
+\begin{align*}
+g(t) = \dfrac{f(t) + f( - t)}{2} = \dfrac{t \sin \left( \frac{1}{t} \right) + ( - t) \sin \left( \frac{1}{ - t} \right)}{2} = \dfrac{t \sin \left( \frac{1}{t} \right) - t \sin \left( \frac{1}{t} \right)}{2} = t \sin \left( \frac{1}{t} \right)
+\end{align*}
+$$
+Entonces, calculamos el límite cuando $t \to 0^+$:
+$$
+\begin{align*}
+\lim_{t \to 0^+} g(t) = \lim_{t \to 0^+} t \sin \left( \frac{1}{t} \right) = 0
+\end{align*}
+$$
+Queremos estudiar ahora:
+$$
+\begin{align*}
+\dfrac{g(t) - g(0^ + )}{t} = (t\sin \left( \frac{1}{t} \right) - 0) \cdot \frac{1}{t} = \sin \left( \frac{1}{t} \right)
+\end{align*}
+$$
+Y claramente es una función acotada, medible e integrable sobre cualquier intervalo finito, en particular:
+$$
+\begin{align*}
+\sin \left(\frac{1}{t}\right) \in L_1([0, \delta]) \quad \forall \delta > 0
+\end{align*}
+$$
+Por lo tanto, $f$ cumple las condiciones de Dini en $x = 0$.
+
+</DemBox>
+
+### Ejercicio 2
+*Considera la función*
+$$
+\begin{align*}
+f : \mathbb{R} & \longrightarrow \mathbb{R} \\[1ex]
+x & \longmapsto f(x) = \begin{cases}
+\frac{1}{\log\left(\frac{1}{|x|}\right)} & \text{ si } x \in [ - \pi], \pi]\setminus \{0\} \\[2ex]
+0 & \text{ si } x = 0
+\end{cases}
+\end{align*}
+$$
+*Y se extiende periódicamente al resto de su dominio con periodo $2\pi$. Demuestra que $f$ es continua en todo $\mathbb{R}$ y que verifica las condiciones de Jordan en $x = 0$ pero no las de Dini.*
+<DemBox title="Demostración">
+
+Sea la función descrita en el enunciado extendida periódicamente con periodo $2\pi$. Por periodicidad, basta con estudiar la continuidad en el intervalo $[ - \pi, \pi]$ y, en particular, en $x = 0$ que es el punto problemático.
+
+- Si $x \neq 0$ entonces $f$ es composición de funciones continuas (logaritmo y valor absoluto) y por tanto, es continua en todo punto $x \neq 0$.
+- En $x = 0$:
+$$
+\begin{align*}
+\lim_{x \to 0} f(x) & = \lim_{x \to 0} \frac{1}{\log\left(\frac{1}{|x|}\right)} = \lim_{x \to 0} \frac{1}{\log (1) - \log (|x|)} = \lim_{x \to 0} \frac{1}{ - \log (|x|)}
+\end{align*}
+$$
+Podemos notar que cuando $x \to 0$, $|x| \to 0^+$ y por tanto, $\log (|x|) \to -\infty$. Por lo tanto:
+$$
+\begin{align*}
+\lim_{x \to 0} \frac{1}{ - \log (|x|)} = 0 = f(0)
+\end{align*}
+$$
+
+Por lo tanto, $f$ es continua en todo $\mathbb{R}$.
+
+Veamos que $f$ cumple la condición de Jordan en $x = 0$, es decir, $f$ es de variación acotada en algún intervalo que contenga a $0$. Podemos notar que la función es monótona en el intervalo $- [\delta, 0]$ con $\delta < 1$ por tanto, es de variación acotada en dicho intervalo. De forma análoga, es monótona en $[0, \delta]$ y por tanto, es de variación acotada en dicho intervalo. Por lo tanto, $f$ es de variación acotada en $[ - \delta, \delta]$ y cumple la condición de Jordan en $x = 0$.
+
+Además, converge en particular a:
+$$
+\begin{align*}
+\lim_{x \to 0^ + } \dfrac{f(x + t) + f(x - t)}{2} = \lim_{t \to 0^ + } \dfrac{1}{\log\left(\frac{1}{t}\right)} = 0
+\end{align*}
+$$
+
+Ahora, para ver que no cumple las condiciones de Dini, estudiamos la función:
+$$
+\begin{align*}
+g(t) = \dfrac{f(t) + f( - t)}{2} = \dfrac{1}{\log\left(\frac{1}{t}\right)}
+\end{align*}
+$$
+Entonces, calculamos el límite cuando $t \to 0^+$:
+$$
+\begin{align*}
+\lim_{t \to 0^+} g(t) = \lim_{t \to 0^+} \dfrac{1}{\log\left(\frac{1}{t}\right)} = 0
+\end{align*}
+$$
+Queremos estudiar ahora:
+$$
+\begin{align*}
+\dfrac{g(t) - g(0^ + )}{t} = \dfrac{\frac{1}{\log\left(\frac{1}{t}\right)} - 0}{t} = \frac{1}{t \log\left(\frac{1}{t}\right)}
+\end{align*}
+$$
+Y podemos ver que la integral en cualquier intervalo $[0, \delta]$ es:
+$$
+\begin{align*}
+\int_0^\delta \frac{1}{t} \frac{1}{\log \dfrac{1}{t}} \, dt \xlongequal[u = \log \frac{1}{t}]{du = -\frac{1}{t} \, dt} \int_{\log \frac{1}{\delta}}^\infty \frac{1}{u} \, du = \left[ \log |u| \right]_{\log \frac{1}{\delta}}^\infty = \infty
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Considera la función $h(x) = f(x) \cdot \sin^2\left(\frac{1}{x}\right)$ donde $f$ es la función del ejercicio anterior. ¿Es continua en todo su dominio? ¿Verifica las condiciones de Jordan? ¿Y las de Dini?*
+
+<DemBox title="Demostración">
+
+La función en cuestión es:
+$$
+\begin{align*}
+h: \mathbb{R} & \longrightarrow \mathbb{R} \\[1ex]
+x & \longmapsto h(x) = \begin{cases}
+\frac{1}{\log\left(\frac{1}{|x|}\right)} \cdot \sin^2\left(\frac{1}{x}\right) & \text{ si } x \in [ - \pi, \pi]\setminus \{0\} \\[2ex]
+0 & \text{ si } x = 0
+\end{cases}
+\end{align*}
+$$
+Extendida periódicamente con periodo $2\pi$. Por periodicidad, basta con estudiar la continuidad en el intervalo $[ - \pi, \pi]$. En particular, el punto problemático es $x = 0$.
+
+- Si $x \neq 0$ entonces $h$ es composición de funciones continuas (logaritmo, valor absoluto, seno y producto) y por tanto, es continua en todo punto $x \neq 0$.
+- En $x = 0$:
+$$
+\begin{align*}
+\lim_{x \to 0} h(x) & = \lim_{x \to 0} \frac{1}{\log\left(\frac{1}{|x|}\right)} \cdot \sin^2\left(\frac{1}{x}\right)
+\end{align*}
+$$
+Como $\sin^2\left(\frac{1}{x}\right)$ está acotada entre $0$ y $1$, podemos usar el teorema del sándwich:
+$$
+\begin{align*}
+0 \leq \left| \frac{1}{\log\left(\frac{1}{|x|}\right)} \cdot \sin^2\left(\frac{1}{x}\right) \right| \leq \left| \frac{1}{\log\left(\frac{1}{|x|}\right)} \right|
+\end{align*}
+$$
+Y como ya hemos visto en el ejercicio anterior:
+$$
+\begin{align*}
+\lim_{x \to 0} \frac{1}{\log\left(\frac{1}{|x|}\right)} = 0
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\lim_{x \to 0} h(x) = 0 = h(0)
+\end{align*}
+$$
+Además, la función es simétrica ya que:
+$$
+\begin{align*}
+h( - x) = \frac{1}{\log\left(\frac{1}{| - x|}\right)} \cdot \sin^2\left(\frac{1}{ - x}\right) & = \frac{1}{\log\left(\frac{1}{|x|}\right)} \cdot \sin^2\left( - \frac{1}{x}\right) = \\[2ex]
+& = \frac{1}{\log\left(\frac{1}{|x|}\right)} \cdot \sin^2\left(\frac{1}{x}\right) = h(x)
+\end{align*}
+$$
+Por lo tanto, $h$ es continua en todo $\mathbb{R}$.
+
+Ahora, veamos si cumple las condiciones de Jordan en $x = 0$. Podemos notar que la función no es monótona en ningún intervalo que contenga a $0$ debido a las oscilaciones de $\sin^2\left(\frac{1}{x}\right)$. Además, podemos construir una sucesión de oscilaciones similares a las del ejercicio 1:
+$$
+\begin{align*}
+x_n = \frac{1}{n\pi} \quad n \in \mathbb{N} & \implies h(x_n) = \frac{1}{\log (n\pi)} \cdot \sin^2 (n\pi) = 0\\[2ex]
+y_n = \frac{1}{\left(n + \frac{1}{2}\right)\pi} \quad n \in \mathbb{N} & \implies h(y_n) = \frac{1}{\log\left(\left(n + \frac{1}{2}\right)\pi\right)} \cdot \sin^2\left(\left(n + \frac{1}{2}\right)\pi\right) = \frac{1}{\log\left(\left(n + \frac{1}{2}\right)\pi\right)}
+\end{align*}
+$$
+Así, la función realiza oscilaciones en cada intervalo:
+$$
+\begin{align*}
+\left[\frac{1}{(n + 1)\pi}, \frac{1}{n\pi}\right] \quad n \in \mathbb{N}
+\end{align*}
+$$
+cuyo salto es:
+$$
+\begin{align*}
+|h(y_n) - h(x_n)| + |h(y_n) - h(x_{n + 1})| = 2 \cdot \frac{1}{\log\left(\left(n + \frac{1}{2}\right)\pi\right)}
+\end{align*}
+$$
+Por tanto, si hacemos la suma de las oscilaciones tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} 2 \cdot \frac{1}{\log\left(\left(n + \frac{1}{2}\right)\pi\right)} = 2 \displaystyle \sum_{n = 1}^{\infty} \frac{1}{\log\left(\left(n + \frac{1}{2}\right)\pi\right)}\geq 2 \displaystyle \sum_{n = n_0}^{\infty} \frac{1}{n} = \infty
+\end{align*}
+$$
+Por que para $n_0$ suficientemente grande, $\log\left(\left(n + \frac{1}{2}\right)\pi\right) < n$. Por lo tanto, $h$ no es de variación acotada en ningún intervalo que contenga a $0$ y por tanto, no cumple la condición de Jordan en $x = 0$.
+
+Finalmente, veamos si cumple las condiciones de Dini en $x = 0$. Definimos la función:
+$$
+\begin{align*}
+g(t) = \dfrac{h(t) + h( - t)}{2} = \dfrac{1}{\log\left(\frac{1}{t}\right)} \cdot \sin^2\left(\frac{1}{t}\right) = h(t)
+\end{align*}
+$$
+Entonces, calculamos el límite cuando $t \to 0^+$:
+$$
+\begin{align*}
+\lim_{t \to 0^+} g(t) = \lim_{t \to 0^+} \dfrac{1}{\log\left(\frac{1}{t}\right)} \cdot \sin^2\left(\frac{1}{t}\right) = 0
+\end{align*}
+$$
+Queremos estudiar ahora:
+$$
+\begin{align*}
+\dfrac{g(t) - g(0^ + )}{t} = \dfrac{\frac{1}{\log\left(\frac{1}{t}\right)} \cdot \sin^2\left(\frac{1}{t}\right) - 0}{t} = \frac{1}{t \log\left(\frac{1}{t}\right)} \cdot \sin^2\left(\frac{1}{t}\right)
+\end{align*}
+$$
+Y podemos ver que la integral en cualquier intervalo $[0, \delta]$ es:
+$$
+\begin{align*}
+\int_0^\delta \frac{1}{t} \frac{1}{\log \dfrac{1}{t}} \cdot \sin^2\left(\frac{1}{t}\right) \, dt \xlongequal[u = \log \frac{1}{t}]{du = -\frac{1}{t} \, dt} \int_{\log \frac{1}{\delta}}^\infty \frac{\sin^2(e^u)}{u} \, du = \infty
+\end{align*}
+$$
+Ya que $\sin^2(e^u)$ no tiende a cero cuando $u \to \infty$. Por lo tanto, $h$ no cumple las condiciones de Dini en $x = 0$.
+
+</DemBox>
+
+## Series de Fourier trigonométricas
+### Ejercicio 2
+*Demuestra que las expansiones en serie son válidas en el intervalo indicado:*
+$$
+\begin{align*}
+x = \pi - 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\sin nx}{n} \quad \text{ con } 0 < x < 2\pi
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Consideremos la función definida como:
+$$
+\begin{align*}
+f(x) = \pi - x \quad \text{ con } 0 < x < 2\pi
+\end{align*}
+$$
+Podemos extenderla periódicamente con periodo $2\pi$ y observar que es una función de variación acotada en $[0, 2\pi]$. Por lo tanto, podemos calcular su serie de Fourier. Sabemos que la serie de Fourier de una función $f$ con periodo $2\pi$ viene dada por:
+$$
+\begin{align*}
+S_f(x) = \frac{a_0}{2} + \displaystyle \sum_{n = 1}^{\infty} (a_n \cos nx + b_n \sin nx)
+\end{align*}
+$$
+donde:
+$$
+\begin{align*}
+a_0 & = \frac{1}{\pi} \int_0^{2\pi} f(t) \, dt = \frac{1}{\pi} \int_0^{2\pi} (\pi - t) \, dt = \frac{1}{\pi} \left[\pi t - \frac{t^2}{2} \right]_0^{2\pi} = \frac{1}{\pi} \left(2\pi^2 - 2\pi^2\right) = 0\\[4ex]
+a_n & = \frac{1}{\pi} \int_0^{2\pi} f(t) \cos nt \, dt = \frac{1}{\pi} \int_0^{2\pi} (\pi - t) \cos nt \, dt = 0 \quad \forall n \geq 1\\[4ex]
+b_n & = \frac{1}{\pi} \int_0^{2\pi} f(t) \sin nt \, dt = \frac{1}{\pi} \int_0^{2\pi} (\pi - t) \sin nt \, dt \xlongequal[dv = \sin nt \Rightarrow v = - \frac{\cos nx}{n} ]{u = \pi - t \Rightarrow du = - dt} \\[2ex]
+& = \frac{1}{\pi} \left[ - \frac{(\pi - t) \cos nt}{n} \right]_0^{2\pi} + \frac{1}{\pi} \int_0^{2\pi} \frac{\cos nt}{n} \, dt = \\[2ex]
+& = \frac{1}{\pi} \left( - \dfrac{(\pi - 2\pi) \cos (2n \pi)}{n} + \dfrac{\pi \cos 0}{n} \right) + \frac{1}{n} \left[ \frac{\sin nt}{n} \right]_0^{2\pi} = \\[2ex]
+& = \frac{1}{\pi} \left( - \dfrac{( - \pi) \cdot 1}{n} + \dfrac{\pi \cdot 1}{n} \right) + 0 = \frac{2}{n}
+\end{align*}
+$$
+Por lo tanto, la serie de Fourier de $f$ es:
+$$
+\begin{align*}
+S_f(x) & = \frac{0}{2} + \displaystyle \sum_{n = 1}^{\infty} \left(0 \cdot \cos nx + \frac{2}{n} \sin nx\right) = 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\sin nx}{n}
+\end{align*}
+$$
+Ahora, por el teorema de Dirichlet, la serie de Fourier converge a $f(x)$ al ser $f$ de variación acotada y continua en $(0, 2\pi)$. Por lo tanto, en el abierto $(0, 2\pi)$ la función $f(x)$ converge exactamente a su serie de Fourier:
+$$
+\begin{align*}
+f(x) = \pi - x = S_f(x) = 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\sin nx}{n}
+\end{align*}
+$$
+Y por tanto:
+$$
+\begin{align*}
+x = \pi - 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\sin nx}{n} \quad \text{ con } 0 < x < 2\pi
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+$$
+\begin{align*}
+\frac{\pi}{4} = \displaystyle \sum_{n = 1}^{\infty} \dfrac{\sin (2n - 1)x}{2n - 1} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+*Y emplearlo para deducir que:*
+$$
+\begin{align*}
+\frac{\pi^2}{6} = \displaystyle \sum_{n = 1}^{\infty} \frac{1}{n^2}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea la función:
+$$
+\begin{align*}
+f(x) = \frac{\pi}{4} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+Y para extenderla con periodo $2\pi$ definimos:
+$$
+\begin{align*}
+\hat{f}(x) = \begin{cases}
+\frac{\pi}{4} & \text{ si } 0 < x < \pi \\[2ex]
+- \frac{\pi}{4} & \text{ si } -\pi < x < 0
+\end{cases}
+\end{align*}
+$$
+Podemos observar que $\hat{f}$ es una función impar y de variación acotada en $[ - \pi, \pi]$. Por lo tanto, podemos calcular su serie de Fourier. Sabemos que la serie de Fourier de una función $f$ con periodo $2\pi$ viene dada por:
+$$
+\begin{align*}
+S_f(x) = \frac{a_0}{2} + \displaystyle \sum_{n = 1}^{\infty} (a_n \cos nx + b_n \sin nx)
+\end{align*}
+$$
+Calculamos los coeficientes:
+$$
+\begin{align*}
+a_0 & \frac{1}{\pi} \int_{ - \pi}^\pi \hat{f}(t) \, dt = 0\\[4ex]
+a_n & = \frac{1}{\pi} \int_{ - \pi}^\pi \hat{f}(t) \cos nt \, dt = 0 \quad \forall n \geq 1\\[4ex]
+b_n & = \frac{1}{\pi} \int_{ - \pi}^\pi \hat{f}(t) \sin nt \, dt = \frac{2}{\pi} \int_0^\pi \frac{\pi}{4} \sin nt \, dt \xlongequal[dv = \sin nt \Rightarrow v = - \frac{\cos nt}{n} ]{u = \frac{\pi}{4} \Rightarrow du = 0} \\[2ex]
+& = \frac{2}{\pi} \cdot \frac{\pi}{4} \left[ - \frac{\cos nt}{n} \right]_0^\pi = \frac{1}{2} \cdot \frac{1}{n} (1 - ( - 1)^n) = \begin{cases}
+\dfrac{1}{n} & \text{ si } n \text{ impar} \\[2ex]
+0 & \text{ si } n \text{ par}
+\end{cases}
+\end{align*}
+$$
+Por lo tanto, la serie de Fourier de $\hat{f}$ es:
+$$
+\begin{align*}
+S_{\hat{f}}(x) & = \frac{0}{2} + \displaystyle \sum_{n = 1}^{\infty} \left(0 \cdot \cos nx + b_n \sin nx\right) = \displaystyle \sum_{k = 1}^{\infty} \frac{\sin (2k - 1)x}{2k - 1}
+\end{align*}
+$$
+Donde hemos sustituido $n$ por $2k - 1$ para considerar solo los términos impares. Ahora, por el teorema de Dirichlet, la serie de Fourier converge a $\hat{f}(x)$ al ser $\hat{f}$ de variación acotada y continua en $( - \pi, \pi)$. Por lo tanto, en el abierto $(0, \pi)$ la función $f(x)$ converge exactamente a su serie de Fourier:
+$$
+\begin{align*}
+f(x) = \frac{\pi}{4} = S_{\hat{f}}(x) = \displaystyle \sum_{k = 1}^{\infty} \frac{\sin (2k - 1)x}{2k - 1}
+\end{align*}
+$$
+Y por tanto:
+$$
+\begin{align*}
+\frac{\pi}{4} = \displaystyle \sum_{n = 1}^{\infty} \dfrac{\sin (2n - 1)x}{2n - 1} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio extra
+*Usa la serie del ejercicio anterior para demostrar que:*
+$$
+\begin{align*}
+\frac{\pi^2}{8} = \displaystyle \sum_{n = 1}^{\infty} \frac{1}{(2n - 1)^2}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Partimos de la serie del ejercicio anterior:
+$$
+\begin{align*}
+\frac{\pi}{4} = \displaystyle \sum_{n = 1}^{\infty} \dfrac{\sin (2n - 1)x}{2n - 1} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+Ahora, integramos ambos lados desde $0$ hasta $\frac{\pi}{2}$:
+$$
+\begin{align*}
+\int_0^{\frac{\pi}{2}} \frac{\pi}{4} \, dx & = \int_0^{\frac{\pi}{2}} \displaystyle \sum_{n = 1}^{\infty} \dfrac{\sin (2n - 1)x}{2n - 1} \, dx
+\end{align*}
+$$
+Podemos intercambiar la integral y la suma ya que la serie converge uniformemente en $[0, \frac{\pi}{2}]$. Por lo tanto:
+$$
+\begin{align*}
+\frac{\pi}{4} \cdot \frac{\pi}{2} & = \displaystyle \sum_{n = 1}^{\infty} \int_0^{\frac{\pi}{2}} \dfrac{\sin (2n - 1)x}{2n - 1} \, dx
+\end{align*}
+$$
+Calculamos la integral:
+$$
+\begin{align*}
+\int_0^{\frac{\pi}{2}} \dfrac{\sin (2n - 1)x}{2n - 1} \, dx & \xlongequal[dv = \sin (2n - 1)x \Rightarrow v = - \frac{\cos (2n - 1)x}{2n - 1} ]{u = \frac{1}{2n - 1} \Rightarrow du = 0} \\[2ex]
+& = \frac{1}{2n - 1} \left[ - \frac{\cos (2n - 1)x}{2n - 1} \right]_0^{\frac{\pi}{2}} = \frac{1}{(2n - 1)^2} \left(1 - \cos\left((2n - 1) \cdot \frac{\pi}{2}\right)\right)
+\end{align*}
+$$
+Podemos notar que:
+$$
+\begin{align*}
+\cos\left((2n - 1) \cdot \frac{\pi}{2}\right) = 0 \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\int_0^{\frac{\pi}{2}} \dfrac{\sin (2n - 1)x}{2n - 1} \, dx & = \frac{1}{(2n - 1)^2}
+\end{align*}
+$$
+Así, tenemos:
+$$
+\begin{align*}
+\frac{\pi^2}{8} & = \displaystyle \sum_{n = 1}^{\infty} \frac{1}{(2n - 1)^2}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Demuestra que:*
+$$
+\begin{align*}
+x = \frac{\pi}{2} - \frac{4}{\pi} \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (2n - 1)x}{(2n - 1)^2} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+En este caso, consideramos la función:
+$$
+\begin{align*}
+f(x) = x \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+Y para extenderla con periodo $2\pi$ definimos:
+$$
+\begin{align*}
+\hat{f}(x) = \begin{cases}
+x & \text{ si } 0 < x < \pi \\[2ex]
+- x & \text{ si } -\pi < x < 0
+\end{cases}
+\end{align*}
+$$
+Podemos observar que $\hat{f}$ es una función par y de variación acotada en $[ - \pi, \pi]$. Por lo tanto, podemos calcular su serie de Fourier. Sabemos que la serie de Fourier de una función $f$ con periodo $2\pi$ viene dada por:
+$$
+\begin{align*}
+S_f(x) = \frac{a_0}{2} + \displaystyle \sum_{n = 1}^{\infty} (a_n \cos nx + b_n \sin nx)
+\end{align*}
+$$
+Calculamos los coeficientes:
+$$
+\begin{align*}
+a_0 & = \frac{1}{\pi} \int_{ - \pi}^\pi \hat{f}(t) \, dt = \frac{1}{\pi}\int_{ - \pi}^0 ( - t) \, dt + \frac{1}{\pi}\int_0^\pi t \, dt = \\[2ex]
+& = \frac{1}{\pi}\left[ - \frac{t^2}{2} \frac{1}{\pi}\right]_{ - \pi}^0 + \frac{1}{\pi}\left[ \frac{t^2}{2} \right]_0^\pi = \frac{1}{\pi}\frac{\pi^2}{2} + \frac{1}{\pi}\frac{\pi^2}{2} = \pi\\[4ex]
+a_n & = \frac{1}{\pi} \int_{ - \pi}^\pi \hat{f}(t) \cos nt \, dt = \frac{2}{\pi} \int_0^\pi t \cos nt \, dt \xlongequal[dv = \cos nt \Rightarrow v = \frac{\sin nt}{n} ]{u = t \Rightarrow du = dt} \\[2ex]
+& = \frac{2}{\pi} \left[ \frac{t \sin nt}{n} \right]_0^\pi - \frac{2}{\pi} \int_0^\pi \frac{\sin nt}{n} \, dt = 0 - \frac{2}{\pi} \cdot \frac{1}{n} \left[ - \frac{\cos nt}{n} \right]_0^\pi = \\[2ex]
+& = \frac{2}{\pi} \cdot \frac{1}{n^2} (1 - ( - 1)^n) = \begin{cases}
+\dfrac{4}{\pi n^2} & \text{ si } n \text{ impar} \\[2ex]
+0 & \text{ si } n \text{ par}
+\end{cases}\\[4ex]
+b_n & = \frac{1}{\pi} \int_{ - \pi}^\pi \hat{f}(t) \sin nt \, dt = 0 \quad \forall n \geq 1
+\end{align*}
+$$
+Por lo tanto, la serie de Fourier de $\hat{f}$ es:
+$$
+\begin{align*}
+S_{\hat{f}}(x) & = \frac{\pi}{2} + \displaystyle \sum_{n = 1}^{\infty} \left(a_n \cos nx + 0 \cdot \sin nx\right) = \frac{\pi}{2} + \displaystyle \sum_{k = 1}^{\infty} \frac{4}{\pi (2k - 1)^2} \cos (2k - 1)x
+\end{align*}
+$$
+Donde hemos sustituido $n$ por $2k - 1$ para considerar solo los términos impares. Ahora, por el teorema de Dirichlet, la serie de Fourier converge a $\hat{f}(x)$ al ser $\hat{f}$ de variación acotada y continua en $( - \pi, \pi)$. Por lo tanto, en el abierto $(0, \pi)$ la función $f(x)$ converge exactamente a su serie de Fourier:
+$$
+\begin{align*}
+f(x) = x = S_{\hat{f}}(x) = \frac{\pi}{2} + \displaystyle \sum_{k = 1}^{\infty} \frac{4}{\pi (2k - 1)^2} \cos (2k - 1)x
+\end{align*}
+$$
+Y por tanto:
+$$
+\begin{align*}
+x = \frac{\pi}{2} - \frac{4}{\pi} \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (2n - 1)x}{(2n - 1)^2} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio extra
+*Usa la serie del ejercicio anterior para demostrar que:*
+$$
+\begin{align*}
+\frac{\pi^2}{8} = \displaystyle \sum_{n = 1}^{\infty} \frac{1}{(2n - 1)^2}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Partimos de la serie del ejercicio anterior:
+$$
+\begin{align*}
+x = \frac{\pi}{2} - \frac{4}{\pi} \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (2n - 1)x}{(2n - 1)^2} \quad \text{ con } 0 < x < \pi
+\end{align*}
+$$
+Ahora, evaluamos en $x = 0$:
+$$
+\begin{align*}
+0 = \frac{\pi}{2} - \frac{4}{\pi} \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (2n - 1) \cdot 0}{(2n - 1)^2}
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\frac{4}{\pi} \displaystyle \sum_{n = 1}^{\infty} \frac{1}{(2n - 1)^2} = \frac{\pi}{2} \implies \displaystyle \sum_{n = 1}^{\infty} \frac{1}{(2n - 1)^2} = \frac{\pi^2}{8}
+\end{align*}
+$$
+
+</DemBox>
+
+## Algunas soluciones de ejercicios propuestos
+### Teorema de Vitali
+*Demuestre que existe un subconjunto de $\mathbb{R}$ que no es medible en el sentido de Lebesgue.*
+
+<DemBox title="Demostración">
+
+Consideremos el intervalo $I = [0, 1] \subseteq \mathbb{R}$ y definimos sobre dicho intervalo la relación de equivalencia siguiente:
+$$
+\begin{align*}
+x \sim y \iff x - y \in \mathbb{Q}
+\end{align*}
+$$
+Es trivial comprobar que es relación de equivalencia, basta ver:
+
+- *Reflexiva:* $x - x = 0 \in \mathbb{Q}$ para todo $x \in I$.
+- *Simétrica:* Si $x \sim y$, entonces $x - y \in \mathbb{Q}$, por lo que:
+$$
+\begin{align*}
+y - x = - (x - y) \in \mathbb{Q} \implies y \sim x
+\end{align*}
+$$
+- *Transitiva:* Si $x \sim y$ y $y \sim z$, entonces $x - y \in \mathbb{Q}$ y $y - z \in \mathbb{Q}$, por lo que:
+$$
+\begin{align*}
+x - z = (x - y) + (y - z) \in \mathbb{Q} \implies x \sim z
+\end{align*}
+$$
+
+Podemos notar además que esta relación de equivalencia particiona el intervalo $[0, 1]$ en clases de equivalencia disjuntas de la forma:
+$$
+\begin{align*}
+E_x = \{x + q : q \in \mathbb{Q}\} \cap [0, 1]
+\end{align*}
+$$
+Ahora, por el axioma de elección, definimos el conjunto $V \subseteq [0, 1]$ que contiene exactamente un representante de cada clase de equivalencia, es decir:
+
+- Para cada $x \in [0, 1]$ existe $v \in V$ tal que $v \sim x$
+- Si $v_1, v_2 \in V$ y $v_1 \neq v_2$ entonces $v_1 \not\sim v_2$
+
+Ahora, consideramos $\mathcal{Q} = \mathbb{Q} \cap [ - 1, 1]$ el conjunto de los racionales entre $- 1$ y $1$ que es numerable, es decir, podemos escribir:
+$$
+\begin{align*}
+\mathcal{Q} = \{q_1, q_2, q_3, \ldots\}
+\end{align*}
+$$
+Ahora, para cada $q_k \in \mathcal{Q}$ definimos el conjunto:
+$$
+\begin{align*}
+V_k = V + q_k = \{v + q_k : v \in V\}
+\end{align*}
+$$
+Podemos notar que los conjuntos $V_k$ cumplen las siguientes propiedades:
+
+- *Disjuntos dos a dos*: supongamos $z \in V_k \cap V_j$ entonces:
+$$
+\begin{align*}
+z = v_k + q_k = v_j + q_j \quad \text{ con } v_k, v_j \in V \implies v_k - v_j = q_j - q_k \in \mathbb{Q}
+\end{align*}
+$$
+Por lo que $v_k \sim v_j$ y, por construcción de $V$, $v_k = v_j$ y por tanto $q_k = q_j$ y $k = j$ que es una contradicción.
+- *Contención:* Podemos ver que:
+$$
+\begin{align*}
+[0, 1] \subseteq \bigcup_{k = 1}^\infty V_k \subseteq [ - 1, 2]
+\end{align*}
+$$
+Sea $x \in [0, 1]$ entonces existe $v \in V$ tal que $x - v = q \in \mathbb{Q}$. Como $x, v \in [0, 1]$ entonces:
+$$
+\begin{align*}
+q = x - v \in [ - 1, 1] \implies q \in \mathcal{Q} \implies x = v + q \in V_k \text{ para algún } k
+\end{align*}
+$$
+Por otro lado, como $V \subseteq [0, 1]$ y $q_k \in [ - 1, 1]$ entonces:
+$$
+\begin{align*}
+V_k = V + q_k \subseteq [ - 1, 2]
+\end{align*}
+$$
+
+Ahora, supongamos que $V$ es medible en el sentido de Lebesgue. Como dicha medida es invariante por traslaciones, tenemos que:
+$$
+\begin{align*}
+\mu(V_k) = \mu(V + q_k) = \mu(V) \quad \forall k \in \mathbb{N}
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}  
+\mu\left(\bigcup_{k = 1}^\infty V_k\right) & = \sum_{k = 1}^\infty \mu(V_k) = \sum_{k = 1}^\infty \mu(V)
+\end{align*}
+$$
+Por otro lado, por monotonía de la medida de Lebesgue, tenemos que:
+$$
+\begin{align*}
+\mu([0, 1]) \leq \mu\left(\bigcup_{k = 1}^\infty V_k\right) \leq \mu([ - 1, 2])
+\end{align*}
+$$
+Entonces, juntando esto con la ecuación , tenemos:
+$$
+\begin{align*}
+1 \leq \sum_{k = 1}^\infty \mu(V) \leq 3
+\end{align*}
+$$
+Ahora, hay dos casos posibles de acuerdo al valor de $\mu(V)$:
+
+- Si $\mu(V) = 0$, entonces la suma infinita es 0, lo cual es una contradicción:
+$$
+\begin{align*}
+1 \leq 0 \leq 3
+\end{align*}
+$$
+- Si $\mu(V) > 0$, lo cual es una contradicción:
+$$
+\begin{align*}
+1 \leq \infty \leq 3
+\end{align*}
+$$
+
+</DemBox>
+
+## Algunas soluciones de exámenes
+### Ejercicio
+*Calcula el volumen del conjunto:*
+$$
+\begin{align*}
+V = \left\{(x, y, z) \in \mathbb{R}^3 : x^2 + 4y^2 + 9z^2 \leq 1\right\}
+\end{align*}
+$$
+*justificando todos los detalles.*
+<DemBox title="Demostración">
+
+La idea sería llevar estos coeficientes a $1$ mediante un cambio de variable. Consideremos el siguiente cambio de variable:
+$$
+\begin{align*}
+\begin{cases}
+x = u\\[2ex]
+y = \dfrac{v}{2}\\[2ex]
+z = \dfrac{w}{3}
+\end{cases} \quad \Longleftrightarrow \quad \begin{cases}
+u = x\\[2ex]
+v = 2y\\[2ex]
+w = 3z
+\end{cases}
+\end{align*}
+$$
+Entonces, tenemos que la expresión del conjunto $V$ en las nuevas variables es:
+$$
+\begin{align*}
+x^2 + 4y^2 + 9z^2 = u^2 + 4 \cdot \left(\frac{v}{2}\right)^2 + 9 \cdot \left(\frac{w}{3}\right)^2 = u^2 + v^2 + w^2 \leq 1
+\end{align*}
+$$
+Así, el conjunto $V$ en las nuevas variables es:
+$$
+\begin{align*}
+B = \left\{(u, v, w) \in \mathbb{R}^3 : u^2 + v^2 + w^2 \leq 1\right\}
+\end{align*}
+$$
+Calculamos el Jacobiano del cambio de variable:
+$$
+\begin{align*}
+|J| = \begin{vmatrix}
+\dfrac{\partial x}{\partial u} & \dfrac{\partial x}{\partial v} & \dfrac{\partial x}{\partial w}\\[4ex]
+\dfrac{\partial y}{\partial u} & \dfrac{\partial y}{\partial v} & \dfrac{\partial y}{\partial w}\\[4ex]
+\dfrac{\partial z}{\partial u} & \dfrac{\partial z}{\partial v} & \dfrac{\partial z}{\partial w}
+\end{vmatrix} = \begin{vmatrix}
+1 & 0 & 0\\[4ex]
+0 & \dfrac{1}{2} & 0\\[4ex]
+0 & 0 & \dfrac{1}{3}
+\end{vmatrix} = \frac{1}{6}
+\end{align*}
+$$
+Ahora, tenemos que:
+$$
+\begin{align*}
+dx \, dy \, dz = |J| \, du \, dv \, dw = \frac{1}{6} \, du \, dv \, dw
+\end{align*}
+$$
+Por tanto, el volumen del conjunto $V$ es:
+$$
+\begin{align*}
+\iiint_V 1 \, dx \, dy \, dz & = \iiint_B 1 \cdot \frac{1}{6} \, du \, dv \, dw = \frac{1}{6} \iiint_B 1 \, du \, dv \, dw
+\end{align*}
+$$
+El conjunto $B$ es la bola unidad en $\mathbb{R}^3$ cuyo volumen es conocido y vale $\frac{4}{3} \pi$. No obstante, podemos calcularlo mediante coordenadas esféricas:
+$$
+\begin{align*}
+\iiint_B 1 \, du \, dv \, dw & \xlongequal[{\rho \in [0, 1], \theta \in [0, 2\pi], \phi \in [0, \pi]}]{u = \rho \sin \phi \cos \theta, v = \rho \sin \phi \sin \theta, w = \rho \cos \phi} \\[2ex]
+& = \int_0^{2\pi} \int_0^\pi \int_0^1 \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta = \\[2ex]
+& = \int_0^{2\pi} d\theta \int_0^\pi \sin \phi \, d\phi \int_0^1 \rho^2 \, d\rho = \\[2ex]
+& = (2\pi) (2) \left[\frac{\rho^3}{3}\right]_0^1 = \frac{4\pi}{3}
+\end{align*}
+$$
+Por lo tanto, el volumen del conjunto $V$ es:
+$$
+\begin{align*}
+\iiint_V 1 \, dx \, dy \, dz & = \frac{1}{6} \cdot \frac{4\pi}{3} = \frac{2\pi}{9}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio
+*Demuestra que el conjunto siguiente es un subconjunto medible Lebesgue en $\mathbb{R}^3$ y que su medida es 0:*
+$$
+\begin{align*}
+A = \left\{\left(x, y, \frac{1}{x^2 + y}\right) : (x, y) \in \mathbb{R}^2 \setminus \{0, 0\}\right\}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Consideremos la función:
+$$
+\begin{align*}
+f: \mathbb{R}^2 \setminus \{0, 0\} & \longrightarrow \mathbb{R}^3\\[2ex]
+(x, y) & \longmapsto \left(x, y, \frac{1}{x^2 + y}\right)
+\end{align*}
+$$
+Podemos notar que es continua en su dominio que es un abierto de $\mathbb{R}^2$, por lo tanto, es medible en el sentido de Lebesgue. Ahora, definimos la sección de $A$ para cada $(x, y) \in \mathbb{R}^2 \setminus \{0, 0\}$:
+$$
+\begin{align*}
+A_{(x, y)} = \left\{z \in \mathbb{R} : (x, y, z) \in A\right\} = \begin{cases} 
+\left\{\frac{1}{x^2 + y}\right\} & \text{ si } (x, y) \in \mathbb{R}^2 \setminus \{0, 0\}\\[2ex]
+\emptyset & \text{ si } (x, y) = (0, 0)
+\end{cases} 
+\end{align*}
+$$
+Por lo tanto, la medida de Lebesgue de cada sección es:
+$$
+\begin{align*}
+\mu_1(A_{(x, y)}) = 0 \quad \forall (x, y) \in \mathbb{R}^2
+\end{align*}
+$$
+Ahora, por el teorema de Fubini-Tonelli, tenemos que:
+$$
+\begin{align*}
+\mu_3(A) & = \iint_{\mathbb{R}^2} \mu_1(A_{(x, y)}) \, d(x, y) = \iint_{\mathbb{R}^2} 0 \, d(x, y) = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio
+*Dadas $0 < a < b < c < \infty$ demuestra que:*
+$$
+\begin{align*}
+E = \left\{(x, y, z) \in \mathbb{R}^3: \frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} = 1\right\} 
+\end{align*}
+$$
+*es un conjunto medible en el sentido de Lebesgue y su medida es cero.*
+<DemBox title="Demostración">
+
+Definimos la función:
+$$
+\begin{align*}
+\varphi : \mathbb{R}^3 & \longrightarrow \mathbb{R}\\[2ex]
+(x, y, z) & \longmapsto \frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2}
+\end{align*}
+$$
+Podemos notar que es continua en $\mathbb{R}^3$ y además:
+$$
+\begin{align*}
+E = \varphi^{-1}(\{1\})
+\end{align*}
+$$
+Por lo tanto, $E$ es medible en el sentido de Lebesgue al ser el conjunto $\{1\}$ medible en $\mathbb{R}$ y la función $\varphi$ medible.
+
+Por otra parte, si consideramos el cambio de coordenadas dado por:
+$$
+\begin{align*}
+T : \mathbb{R}^3 & \longrightarrow \mathbb{R}^3\\[2ex]
+(u, v, w) & \longmapsto (au, bv, cw)
+\end{align*}
+$$
+Entonces, tenemos que:
+$$
+\begin{align*}
+T(S^2) = E \quad \text{ con } S^2 = \left\{(u, v, w) : u^2 + v^2 + w^2 = 1 \right\}
+\end{align*}
+$$
+Podemos expresar $S^2$ como:
+$$
+\begin{align*}
+S^2 = \left\{(x, y, \sqrt{1 - x^2 - y^2}): x^2 + y^2 \leq 1\right\}
+\end{align*}
+$$
+Así, tenemos que si consideramos las secciones de $E$:
+$$
+\begin{align*}
+E_{(x, y)} = \left\{z \in \mathbb{R} : (x, y, z) \in E\right\} = \begin{cases}
+\left\{\sqrt{c^2\left(1 - \frac{x^2}{a^2} - \frac{y^2}{b^2}\right)}, -\sqrt{c^2\left(1 - \frac{x^2}{a^2} - \frac{y^2}{b^2}\right)}\right\} & \text{ si } \frac{x^2}{a^2} + \frac{y^2}{b^2} \leq 1\\[4ex]
+\emptyset & \text{ en otro caso}
+\end{cases}
+\end{align*}
+$$
+Por lo tanto, la medida de Lebesgue de cada sección es:
+$$
+\begin{align*}
+\mu_1(E_{(x, y)}) = 0 \quad \forall (x, y) \in \mathbb{R}^2
+\end{align*}
+$$
+Ahora, por el teorema de Fubini-Tonelli, tenemos que:
+$$
+\begin{align*}
+\mu_3(E) & = \iint_{\mathbb{R}^2} \mu_1(E_{(x, y)}) \, d(x, y) = \iint_{\mathbb{R}^2} 0 \, d(x, y) = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio
+*Demuestra que para todo $A \in \mathcal{M}_1$ con $\mu_1(A) > 0$ existe un subconjunto $B \subseteq A$ que no es medible en el sentido de Lebesgue.*
+<DemBox title="Demostración">
+
+Se considera el conjunto de Vitali en el intervalo $[0, 1]$ construido como:
+
+- Definimos la relación de equivalencia siguiente:
+$$
+\begin{align*}
+x \sim y \iff x - y \in \mathbb{Q}
+\end{align*}
+$$
+- Esta relación particiona $\mathbb{R}$ en clases de equivalencia disjuntas
+- Usando el axioma de elección, definimos el conjunto $V \subseteq [0, 1]$ que contiene exactamente un representante de cada clase de equivalencia
+
+Ahora, si $̣̣̣\{r_k\}_{k = 1}^\infty$ es una enumeración de los racionales en $[ - 1, 1]$, consideramos los conjuntos:
+$$
+\begin{align*}
+V_k = V + r_k = \{v + r_k : v \in V\}
+\end{align*}
+$$
+Podemos notar que los conjuntos $V_k$ cumplen las siguientes propiedades:
+
+- *Disjuntos dos a dos*: supongamos $z \in V_k \cap V_j$ entonces:
+$$
+\begin{align*}
+z = v_k + r_k = v_j + r_j \quad \text{ con } v_k, v_j \in V \implies v_k - v_j = r_j - r_k \in \mathbb{Q}
+\end{align*}
+$$
+Por lo que $v_k \sim v_j$ y, por construcción de $V$, $v_k = v_j$ y por tanto $r_k = r_j$ y $k = j$ que es una contradicción.
+- *Contención:* Podemos ver que:
+$$
+\begin{align*}
+[0, 1] \subseteq \bigcup_{k = 1}^\infty V_k \subseteq [ - 1, 2]
+\end{align*}
+$$
+Sea $x \in [0, 1]$ entonces existe $v \in V$ tal que $x - v = q \in \mathbb{Q}$. Como $x, v \in [0, 1]$ entonces:
+$$
+\begin{align*}
+q = x - v \in [ - 1, 1] \implies q \in \{r_k\}_{k = 1}^\infty \implies x = v + q \in V_k \text{ para algún } k
+\end{align*}
+$$
+Por otro lado, como $V \subseteq [0, 1]$ y $r_k \in [ - 1, 1]$ entonces:
+$$
+\begin{align*}
+V_k = V + r_k \subseteq [ - 1, 2]
+\end{align*}
+$$
+
+Ahora, supongamos que todo subconjunto de $A$ es medible en el sentido de Lebesgue. Sea $V$ el conjunto de Vitali definido anteriormente, para cada $q \in \mathbb{Q}$ consideramos:
+$$
+\begin{align*}
+A_q = A \cap (V + q)
+\end{align*}
+$$
+Entonces, $A_q$ debe de ser medible ya que es subconjunto de $A$. Además, los conjuntos $A_q$ son disjuntos dos a dos ya que los conjuntos $V + q$ lo son. Además, como $V$ contiene un representante de cada clase de equivalencia de $\mathbb{R}$ entonces cualquier real se puede escribir como $v + q$ con $v \in V$ y $q \in \mathbb{Q}$. Por lo tanto:
+$$
+\begin{align*}
+A = \displaystyle \bigcup_{q \in \mathbb{Q}} (A \cap (V + q)) = \displaystyle \bigcup_{q \in \mathbb{Q}} A_q
+\end{align*}
+$$
+Como la medida de Lebesgue es invariante por traslaciones, sea $B_q = A_q - q$ notemos que:
+$$
+\begin{align*}
+B \subseteq V \implies \mu_1(B) \leq \mu_1(V)
+\end{align*}
+$$
+Como todos los $A_q$ son medibles, entonces:
+$$
+\begin{align*}
+\mu_1(A_q) > 0 \implies \mu_1(V \cap (A_q - q)) = \mu_1(B_q) > 0
+\end{align*}
+$$
+Pero si el conjunto $V$ teiene medida positiva, llegamos a una contradicción ya que el conjunto de Vitali no es medible en el sentido de Lebesgue. Por lo tanto, existe al menos un subconjunto $B \subseteq A$ que no es medible en el sentido de Lebesgue.
+
+</DemBox>
