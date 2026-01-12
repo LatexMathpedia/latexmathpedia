@@ -144,7 +144,7 @@ export default function ContactUsPage() {
 
                                     <Button
                                         type="submit"
-                                        className="w-full md:w-auto"
+                                        className="w-full md:w-auto cursor-pointer"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? "Enviando..." : "Enviar mensaje"}
