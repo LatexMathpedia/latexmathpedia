@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/auth-context';
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type PDFCardProps = {
     title: string;
@@ -22,7 +23,7 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
         let mainPart = '';
         let secondaryPart = '';
         let tertiaryPart = '';
-        
+
         // Verificar si hay palabras clave especiales
         for (const keyword of specialKeywords) {
             if (title.includes(keyword)) {
@@ -33,7 +34,7 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
                 break;
             }
         }
-        
+
         // Si no hay palabras clave especiales, dividir por guiones
         if (!mainPart) {
             const parts = title.split('-').map(part => part.trim());
@@ -41,16 +42,16 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
             secondaryPart = parts.length > 1 ? parts[1] : '';
             tertiaryPart = parts.length > 2 ? parts.slice(2).join(' - ') : '';
         }
-        
+
         return {
             main: mainPart,
             secondary: secondaryPart,
             tertiary: tertiaryPart
         };
     };
-    
+
     const titleParts = getTitleParts();
-    
+
     const generateBackgroundColor = () => {
         const colors = [
             'bg-blue-100 dark:bg-blue-900',
@@ -61,7 +62,7 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
             'bg-indigo-100 dark:bg-indigo-900',
             'bg-pink-100 dark:bg-pink-900',
         ];
-        
+
         // Usar el tag si está disponible, de lo contrario usar el título
         const textToUse = tag || title;
         const index = textToUse.charCodeAt(0) % colors.length;
@@ -116,9 +117,13 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
                                 Ver PDF
                             </a>
                         ) : (
-                            <span onClick={handleClick} className="cursor-pointer">
+                            <Link
+                                href="/auth/login"
+                                onClick={handleClick}
+                                className="cursor-pointer"
+                            >
                                 Iniciar sesión para ver PDF
-                            </span>
+                            </Link>
                         )}
                     </Button>
                 </div>
