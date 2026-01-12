@@ -19,8 +19,6 @@ export default function ContactUsPage() {
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    console.log("API URL:", apiUrl);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({
             ...formData,
