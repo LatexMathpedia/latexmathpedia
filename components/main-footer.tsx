@@ -91,13 +91,9 @@ export function MainFooter() {
                             <Link href="/dashboard/contact/contact-us" className="text-muted-foreground hover:text-foreground transition-colors w-fit">
                                 Contáctanos
                             </Link>
-                            <a 
-                                href="mailto:mathtexpedia@mathtexpedia.es" 
-                                className="text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"
-                            >
-                                <Mail className="w-4 h-4" />
-                                Soporte
-                            </a>
+                            <Link href="/dashboard/contact/faq" className="text-muted-foreground hover:text-foreground transition-colors w-fit">
+                                FAQ
+                            </Link>
                         </nav>
                     </div>
 
