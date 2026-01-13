@@ -61,7 +61,6 @@ export default function ProfilePage() {
       toast.info("Correo de restablecimiento de contraseña enviado")
       
       await logout()
-      router.push('/auth/pwd-email-sent')
     } catch (error) {
       toast.error("Error al enviar el correo de restablecimiento de contraseña")
     } finally {
@@ -71,8 +70,19 @@ export default function ProfilePage() {
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true)
+
     try {
-      // Aquí iría la lógica de eliminación de cuenta
+      const res = await fetch(`${apiUrl}/auth/delete-account`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to delete account')
+      }
       toast.success("Cuenta eliminada exitosamente")
       await logout()
       router.push('/')
