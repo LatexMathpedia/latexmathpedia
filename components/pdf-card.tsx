@@ -3,7 +3,6 @@ import { useAuth } from '@/contexts/auth-context';
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type PDFCardProps = {
