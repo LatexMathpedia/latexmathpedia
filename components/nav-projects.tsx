@@ -43,12 +43,14 @@ export function NavProjects({
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
+            <Link href={item.url}>
+              <SidebarMenuButton asChild>
+                <div className="flex flex-row items-center gap-2">
+                  <item.icon />
+                  <span>{item.name}</span>
+                </div>
+              </SidebarMenuButton>
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
@@ -79,10 +81,14 @@ export function NavProjects({
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem>
-          <SidebarMenuButton>
-            <MoreHorizontal />
-            <Link href="/dashboard/blog">Ver todos</Link>
-          </SidebarMenuButton>
+          <Link href="/dashboard/blog">
+            <SidebarMenuButton>
+              <div className="flex flex-row items-center gap-2">
+                <MoreHorizontal size={16}/>
+                Ver todos
+              </div>
+            </SidebarMenuButton>
+          </Link>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>

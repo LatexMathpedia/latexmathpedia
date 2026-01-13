@@ -8,6 +8,8 @@ import { Mail, MessageSquare, Github, Instagram, Twitter } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
 export default function ContactUsPage() {
     const [formData, setFormData] = useState({
         name: "",
@@ -28,16 +30,29 @@ export default function ContactUsPage() {
         e.preventDefault()
         setIsSubmitting(true)
 
-        // Simulación de envío (aquí puedes integrar tu API de envío de emails)
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1500))
-            toast.success("¡Mensaje enviado con éxito! Te responderemos pronto.")
-            setFormData({ name: "", email: "", subject: "", message: "" })
-        } catch (error) {
-            toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
-        } finally {
-            setIsSubmitting(false)
+        const fromDataToSend = {
+            from: formData.email,
+            subject: `[MathTexPedia] ${formData.subject}`,
+            body: `Nombre: ${formData.name}\nEmail: ${formData.email}\n\nMensaje:\n${formData.message}`
         }
+        await fetch(`${apiUrl}/mail/send`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(fromDataToSend),
+        }).then((response) => {
+            if (response.ok) {
+                toast.success("Mensaje enviado con éxito. ¡Gracias por contactarnos!")
+                setFormData({ name: "", email: "", subject: "", message: "" })
+            } else {
+                toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
+            }
+        }).catch(() => {
+            toast.error("Error al enviar el mensaje. Por favor, intenta nuevamente.")
+        }).finally(() => {
+            setIsSubmitting(false)
+        })
     }
 
     return (
@@ -123,7 +138,7 @@ export default function ContactUsPage() {
 
                                     <Button
                                         type="submit"
-                                        className="w-full md:w-auto"
+                                        className="w-full md:w-auto cursor-pointer"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? "Enviando..." : "Enviar mensaje"}

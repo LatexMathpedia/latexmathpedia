@@ -1,0 +1,1398 @@
+---
+title: "Análisis 3 - Tema 7"
+description: "Series de Fourier y sistemas ortonormales en espacios de Hilbert. Teorema de Óptima Aproximación, Identidad de Parseval y Teorema de Riesz-Fischer."
+date: "2026-01-12"
+tags: ["Análisis III", "Series de Fourier", "Espacios de Hilbert", "Sistemas Ortonormales"]
+---
+
+
+## Series de Fourier
+Recordemos que:
+$$
+\begin{align*}
+L_2(X, \mathbb{K}) \equiv \dfrac{\mathcal{L}_2(X, \mathbb{K})}{N}
+\end{align*}
+$$
+donde $f \sim g \iff f \equiv g \, \mu$-a.e. es un espacio de Hilbert con el producto escalar:
+$$
+\begin{align*}
+\langle f, g \rangle = \int_X \overline{f} \cdot g \, d\mu \quad \text{ con norma } \|f\|^2 = \langle f, f\rangle
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Recordar que $\mathcal{L}_2$ no es espacio de Hilbert pero $L_2$ si lo es, ya que el producto escalar no distingue entre funciones que difieren en un conjunto de medida nula.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Para aquellos cuyo itinerario académico lo diseñó un troglodita y, por tanto, hace que no cursan nada que emplee números complejos desde antes de la universidad, recordemos que:
+$$
+\begin{align*}
+\overline{z} = a - ib \quad \text{ si } z = a + ib \quad a, b \in \mathbb{R}
+\end{align*}
+$$
+Es decir, el conjugado de un número complejo se obtiene cambiando el signo de la parte imaginaria. Por tanto, la idea de $\overline{f}$ es aplicar el conjugado a cada valor que toma la función $f$.
+
+</EjBox>
+
+La idea es poder aproximar mediante una función $f \in L_2(X, \mathbb{K})$ mediante una suma de funciones más elementales. En particular, a partir de aquí en adelante, consideramos que $X = I = [0, 2\pi]$ y $\mathbb{K} = \mathbb{R}$ o $\mathbb{C}$. La función $f \in L_2([0, 2\pi], \mathbb{K})$ será periódica de periodo $2\pi$.
+
+### Sistema ortonormal. Definición
+Sea un espacio pre-Hilbert $V$, se dice sistema ortonormal en $V$ a un conjunto $\{\varphi_n\}_{n \in \mathbb{N}} \subseteq V$ o $\{\varphi_n\}_{n \in \mathbb{Z}} \subseteq V$ que cumple:
+$$
+\begin{align*}
+\langle \varphi_n, \varphi_m \rangle = \delta_{nm} = \left\{
+\begin{array}{ll}
+1 & \text{ si } n = m\\
+0 & \text{ si } n \neq m
+\end{array}
+\right.
+\end{align*}
+$$
+<EjBox title="Nota">
+
+La noción de ortonormalidad es el análogo funcional a los vectores $e_1, \dots , e_n \in \mathbb{R}^N$ pero que cumplen que son ortogonales (``no se mezclan'') y de norma uno (no hay que reescalar nada).
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $\mathbb{K} = \mathbb{R}$ y $V = L_2([0, 2\pi], \mathbb{R})$, el sistema dado por:*
+$$
+\begin{align*}
+\{\varphi_n\}_{n \in \mathbb{N}} = \left\{
+\begin{array}{ll}
+\varphi_i (t) = \frac{1}{\sqrt{2\pi}} & \text{ si } n = 0\\[1ex]
+\varphi_{2n - 1}(t) = \frac{\cos nt}{\sqrt{\pi}} & \text{ si } n \geq 1\\[1ex]
+\varphi_{2n}(t) = \frac{\sin nt}{\sqrt{\pi}} & \text{ si } n \geq 1
+\end{array}
+\right.
+\end{align*}
+$$
+*es un sistema ortonormal en $L_2([0, 2\pi], \mathbb{R})$.*
+
+Notar que las constantes de normalización vienen dadas por:
+$$
+\begin{align*}
+\int_0^{2\pi} \cos^2 (n t) \, dt = \int_0^{2\pi} \sin^2 (n t) \, dt = \pi \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Y por tanto, para que la norma sea uno, hay que dividir entre $\sqrt{\pi}$. Por otra parte:
+$$
+\begin{align*}
+\int_0^{2\pi} 1^2 \, dt = 2\pi
+\end{align*}
+$$
+luego, para que la norma sea uno, hay que dividir entre $\sqrt{2\pi}$.
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $\mathbb{K} = \mathcal{C}$ y $V = L_2([0, 2\pi], \mathcal{C})$, el sistema dado por:*
+$$
+\begin{align*}
+\{\varphi_n\}_{n \in \mathbb{Z}} = \left\{\varphi_n(t) = \frac{e^{int}}{\sqrt{2\pi}} \quad n \in \mathbb{Z}\right\}
+\end{align*}
+$$
+*es un sistema ortonormal en $L_2([0, 2\pi], \mathcal{C})$.*
+
+</EjemBox>
+
+### Teorema de Óptima Aproximación. Teorema
+Sea $V$ espacio pre-Hilbert, $\{\varphi_0, \dots , \varphi_n\} \subseteq V$ sistema ortonormal en $V$ y $f \in V$, si $W \equiv K\langle\{\varphi_0, \dots , \varphi_n\}\rangle$, el elemento de $W$ que mejor aproxima $f$ (en el sentido de que minimiza la norma) entre los $W$ es:
+$$
+\begin{align*}
+S_n(x) = \displaystyle \sum_{k = 0}^{n} \underbrace{\langle f, \varphi_k\rangle}_{c_k} \varphi_k
+\end{align*}
+$$
+Es decir, dado $t_n = \displaystyle \sum_{k = 0}^{n} b_k \varphi_k \in W$ entonces:
+$$
+\begin{align*}
+\|f - S_n(x)\| \leq \|f - t_n\| \quad \forall t_n \in W
+\end{align*}
+$$
+<EjBox title="Nota">
+
+En términos simples, lo que dice este resultado es que si se tiene un subespacio finito $W$ generado por vectores ortonormales, la mejor aproximación de $f$ es su proyección ortogonal sobre $W$. Es decir, si solo se pueden emplear combinaciones de $\varphi_0, \dots, \varphi_n$ para aproximar $f$, la mejor opción es usar los coeficientes dados por el producto escalar $\langle f, \varphi_k\rangle$.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Podemos notar que:
+$$
+\begin{align*}
+\|f - t_n\|^2 & = \langle f - t_n, f - t_n\rangle = \langle f, f \rangle - \langle f, t_n \rangle - \langle t_n, f \rangle + \langle t_n, t_n \rangle = \\[2ex]
+& = \|f\|^2 - \left\langle f , \displaystyle \sum_{k = 0}^{n} b_k \varphi_k\right\rangle - \left\langle \displaystyle \sum_{k = 0}^{n} b_k \varphi_k, f\right\rangle + \left\langle \displaystyle \sum_{k = 0}^{n} b_k \varphi_k, \displaystyle \sum_{k = 0}^{n} b_k \varphi_k\right\rangle = \\[2ex]
+& = \|f\|^2 - \displaystyle \sum_{k = 0}^{n} b_k \langle f, \varphi_k\rangle - \displaystyle \sum_{k = 0}^{n} \overline{b_k} \langle \varphi_k, f\rangle + \displaystyle \sum_{k = 0}^{n} \overline{b_k} b_k = \\[2ex]
+& = \|f\|^2 - \displaystyle \sum_{k = 0}^{n} \left[ - b_k c_k - \overline{b_k} \overline{c_k} + \overline{b_k} b_k \right] = \\[2ex]
+& = \|f\|^2 + \displaystyle \sum_{k = 0}^{n} \underbrace{(b_k - c_k)(\overline{b_k} - \overline{c_k})}_{|b_k - c_k|^2} - \displaystyle \sum_{k = 0}^{n} |c_k|^2 = \\[2ex]
+& = \|f\|^2 - \displaystyle \sum_{k = 0}^{n} |c_k|^2 + \underbrace{\displaystyle \sum_{k = 0}^{n} |b_k - c_k|^2}_{\geq 0} \geq \|f\|^2 - \displaystyle \sum_{k = 0}^{n} |c_k|^2 = \|f - S_n(x)\|^2
+\end{align*}
+$$
+Por tanto, $\|f - t_n\| \geq \|f - S_n(x)\|$.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Observamos que a partir de este resultado buscamos aproximar $f$ por una combinación lineal infinita de funciones de un sistema ortonormal. El problema ahora es ver si, al dejar que $n \to \infty$, esta aproximación realmente converge a $f$ y bajo qué condiciones.
+
+</EjBox>
+
+### Coeficiente $n$-ésimo de Fourier. Definición
+Sea $f \in L_2([0, 2\pi], \mathbb{K})$ función y $\{\varphi_n\}_{n \in \mathbb{N}}$ sistema ortonormal de $L_2([0, 2\pi], \mathbb{K})$, se define el **coeficiente $n$-ésimo de Fourier de $f$ respecto a $\{\varphi_n\}_{n \in \mathbb{N}}$** como:
+$$
+\begin{align*}
+C_n = \langle f, \varphi_n\rangle = \int_0^{2\pi} \overline{f(t)} \varphi_n(t) \, dt \quad \forall n \in \mathbb{N}\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Al final, lo que estamos haciendo es ver cuánto de la dirección de $\varphi_n$ tiene $f$, es decir, proyectar $f$ sobre $\varphi_n$.
+
+</EjBox>
+
+### Suma parcial $n$-ésima de Fourier. Definición
+Sea $f \in L_2([0, 2\pi], \mathbb{K})$ función y $\{\varphi_n\}_{n \in \mathbb{N}}$ sistema ortonormal de $L_2([0, 2\pi], \mathbb{K})$, se define la **suma parcial $n$-ésima de Fourier de $f$ respecto a $\{\varphi_n\}_{n \in \mathbb{N}}$** como:
+$$
+\begin{align*}
+S_n(x) = \displaystyle \sum_{k = 0}^{n} C_k \varphi_k(x) = \displaystyle \sum_{k = 0}^{n} \langle f, \varphi_k\rangle \varphi_k(x) \quad \forall n \in \mathbb{N}\\
+\end{align*}
+$$
+
+### Serie de Fourier. Definición
+Sea $f \in L_2([0, 2\pi], \mathbb{K})$ función y $\{\varphi_n\}_{n \in \mathbb{N}}$ sistema ortonormal de $L_2([0, 2\pi], \mathbb{K})$, se define la **serie de Fourier de $f$ respecto a $\{\varphi_n\}_{n \in \mathbb{N}}$** como:
+$$
+\begin{align*}
+S(x) = \displaystyle \sum_{k = 0}^{\infty} C_k \varphi_k(x) = \displaystyle \sum_{k = 0}^{\infty} \langle f, \varphi_k\rangle \varphi_k(x)
+\end{align*}
+$$
+Además, está bien definida ya que existe un elemento $S(x) \in L_2([0, 2\pi], \mathbb{K})$ tal que:
+$$
+\begin{align*}
+\|S - S_n(x)\| \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Basta ver que:
+$$
+\begin{align*}
+\|S_p(x) - S_q(x)\|^2 & = \left\| \displaystyle \sum_{k = p + 1}^{q} \langle f, \varphi_k\rangle \varphi_k \right\|^2 = \left\langle \displaystyle \sum_{k = p + 1}^{q} \langle f, \varphi_k\rangle \varphi_k, \, \displaystyle \sum_{k = p + 1}^{q} \langle f, \varphi_k\rangle \varphi_k \right\rangle = \\[2ex]
+& \displaystyle \sum_{k = p + 1}^{q} |\langle f, \varphi_k\rangle|^2 = | a_q (x) - a_p (x) |
+\end{align*}
+$$
+donde tenemos:
+$$
+\begin{align*}
+a_n (x) = \displaystyle \sum_{k = 0}^{n} |\langle f, \varphi_k\rangle|^2
+\end{align*}
+$$
+La serie dada por $a(x) = \sum_{k = 0}^\infty |\langle f, \varphi_k\rangle|^2$ es convergente ya que por el Teorema de Óptima Aproximación:
+$$
+\begin{align*}
+\|f - S_n\|^2 = \|f\|^2 - \underbrace{\displaystyle \sum_{k = 0}^{n} \left|\langle f, \varphi_k\rangle\right|^2}_{a_n(x)} \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{k = 0}^{n} \left|\langle f, \varphi_k\rangle\right|^2 \leq \|f\|^2 \quad \forall n \in \mathbb{N} \implies \displaystyle \sum_{k = 0}^{\infty} \left|\langle f, \varphi_k\rangle\right|^2 \leq \|f\|^2
+\end{align*}
+$$
+Por lo tanto, la sucesión $\{a_n(x)\}_{n = 0}^\infty$ es de Cauchy, luego $\{S_n(x)\}_{n = 0}^\infty$ es también de Cauchy y, como $L_2([0, 2\pi], \mathbb{K})$ es completo, existe $S(x) \in L_2([0, 2\pi], \mathbb{K})$ tal que:
+$$
+\begin{align*}
+\|S - S_n(x)\| \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+A la desigualdad obtenida durante la demostración se le llama **Desigualdad de Bessel**:
+$$
+\begin{align*}
+\displaystyle \sum_{k = 0}^{\infty} \left|\langle f, \varphi_k\rangle\right|^2 \leq \|f\|^2
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Ahora, lo que sería deseable es que la serie de Fourier convergiera a $f$ en norma:
+$$
+\begin{align*}
+\|f - S_n(x)\| \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+</EjBox>
+
+### Identidad de Parseval. Teorema
+Sea $f \in L_2(I, \mathbb{K})$ función, $\{\varphi_n\}_{n = 0}^\infty \subseteq L_2(I, \mathbb{K})$ sistema ortonormal y $C_n \equiv \langle f, \varphi_n\rangle$ para todo $n \in \mathbb{N}$ entonces:
+$$
+\begin{align*}
+\|f - S_n(x)\| \xrightarrow[n \to \infty]{} 0 \iff \displaystyle \sum_{k = 0}^{\infty} |C_k|^2 = \|f\|^2
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Aplicando el Teorema de Óptima Aproximación tenemos que:
+$$
+\begin{align*}
+\|f - S_n\|^2 = \|f\|^2 - \displaystyle \sum_{k = 0}^{n} |C_k|^2 \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Por tanto, si hacemos que $n \to \infty$ obtenemos:
+$$
+\begin{align*}
+\|f - S_n\|^2 \xrightarrow[n \to \infty]{} 0 \iff \|f\|^2 - \displaystyle \sum_{k = 0}^{\infty} |C_k|^2 = 0 \iff \displaystyle \sum_{k = 0}^{\infty} |C_k|^2 = \|f\|^2
+\end{align*}
+$$
+
+</DemBox>
+
+### Sistema completo. Definición
+Sea $\mathcal{H}$ un espacio de Hilbert, decimos que un sistema ortonormal $\{\varphi_n\}_{n = 0}^\infty \subseteq \mathcal{H}$ es **completo** si satisface la identidad de Parseval $\forall f \in \mathcal{H}$:
+$$
+\begin{align*}
+\|f\|^2 = \displaystyle \sum_{k = 0}^{\infty} |\langle f, \varphi_k\rangle|^2\\
+\end{align*}
+$$
+
+<EjBox title="Recordatorio">
+
+Decimos que un espacio es Hilbert si es un espacio pre-Hilbert completo, es decir, si toda sucesión de Cauchy en el espacio converge a un elemento del espacio. Equivalentemente, se puede definir un espacio de Hilbert como un espacio vectorial con producto escalar que es completo respecto a la norma inducida por el producto escalar.
+
+</EjBox>
+
+### Proposición
+En $L_2(I, \mathbb{K})$, el sistema ortonormal definido como:
+$$
+\begin{align*}
+\left\{\frac{1}{\sqrt{2\pi}}, \, \frac{\cos t}{\sqrt{\pi}}, \, \frac{\sin t}{\sqrt{\pi}}, \, \frac{\cos 2t}{\sqrt{\pi}}, \, \frac{\sin 2t}{\sqrt{\pi}}, \, \ldots \right\} 
+\end{align*}
+$$
+es completo.
+
+<DemBox title="Demostración">
+
+No se verá, es un resultado muy largo que no va a demostrar
+
+</DemBox>
+
+<EjBox title="Nota">
+
+De forma algo intuitiva, podemos pensar que el sistema ortonormal anterior es completo porque cualquier función periódica se puede aproximar arbitrariamente bien mediante una suma de senos y cosenos (serie de Fourier). En otras palabras, no existe ninguna función no nula en $L_2(I, \mathbb{K})$ que sea ortogonal a todos los senos y cosenos, lo que implica que el sistema ortonormal es completo.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+El sistema ortonormal anterior es el más utilizado y la serie de Fourier de una función $f$ respecto a dicho sistema se llama simplemente **serie de Fourier de $f$** y se representa como:
+
+$$
+\begin{align*}
+f(t) \sim \frac{a_0}{2} + \displaystyle \sum_{n = 1}^{\infty} \left[a_n \cos nt + b_n \sin nt\right]
+\end{align*}
+$$
+donde los $a_n$ de la serie se obtienen por identificación con los $c_n$ aplicando ortogonalidad, es decir:
+$$
+\begin{align*}
+S_k(t) = \frac{c_0}{\sqrt{2\pi}} + \displaystyle \sum_{n = 1}^{k} \left[ C_{2n - 1} \frac{\cos nt}{\sqrt{\pi}} + C_{2n} \frac{\sin nt}{\sqrt{\pi}} \right] = \frac{a_0}{2} + \displaystyle \sum_{n = 1}^{k} \left[a_n \cos nt + b_n \sin nt\right]
+\end{align*}
+$$
+luego, para la gente que no sabe teoría de la medida:
+$$
+\begin{align*}
+a_n = \frac{1}{\pi} \int_0^{2\pi} f(t) \cos nt \, dt \qquad b_n = \frac{1}{\pi} \int_0^{2\pi} f(t) \sin nt \, dt
+\end{align*}
+$$
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea la función escalón dada por:*
+$$
+\begin{align*}
+f(t) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \in [0, \pi)\\
+1 & \text{ si } x \in [\pi, 2\pi)
+\end{array}
+\right.
+\end{align*}
+$$
+*Que se puede representar gráficamente como:*
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_0.svg)
+
+Los coeficientes de Fourier son:
+$$
+\begin{align*}
+a_n = \left\{
+\begin{array}{ll}
+1 & \text{ si } n = 0\\[1ex]
+0 & \text{ si } n \geq 1
+\end{array}
+\right. \qquad b_n = \left\{
+\begin{array}{ll}
+-\frac{2}{n\pi} & \text{ si } n \text{ es impar}\\[1ex]
+0 & \text{ si } n \text{ es par}
+\end{array}
+\right.
+\end{align*}
+$$
+Luego la serie de Fourier de $f$ es:
+$$
+\begin{align*}
+f(t) \sim \frac{1}{2} - \frac{2}{\pi} \displaystyle \sum_{k = 0}^{\infty} \frac{\sin \left((2k + 1)t\right)}{(2k + 1)} = \frac{1}{2} - \frac{2}{\pi} \left[\sin x + \frac{\sin 3x}{3} + \frac{\sin 5x}{5} + \ldots \right] 
+\end{align*}
+$$
+Notar que la serie de Fourier converge a $f$ en norma $L_2$ pero no puntualmente en todo $[0, 2\pi)$, es decir, que si hacemos la diferencia en norma $L_2$ entre $f$ y la serie de Fourier, esta tiende a cero, pero si lo hacemos punto a punto, no siempre converge a $f(t)$. Lo que tenemos gráficamente en realidad es:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_1.svg)
+
+Si hiciéramos aproximaciones de orden superior nos acercaríamos más a la función escalón como se puede ver a continuación para un término de orden 20:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_2.svg)
+
+Podemos ver que aunque aumentemos el número de términos, la serie de Fourier no converge puntualmente a $f(t)$ en $t = \pi$ (punto de discontinuidad), sino que converge al valor medio $\frac{f(\pi^-) + f(\pi^+)}{2} = \frac{0 + 1}{2} = \frac{1}{2}$. Es más, podemos ver que las oscilaciones cerca del punto de discontinuidad no desaparecen al aumentar el número de términos, simplemente se concentran en una zona más pequeña alrededor de $t = \pi$. Este fenómeno se conoce como el **fenómeno de Gibbs**.
+
+</EjemBox>
+
+### Teorema de Riesz-Fischer
+Sea $\{\varphi\}_n \subseteq L_2(I, \mathbb{K})$ sistema ortonormal completo y $\{C_n\}_{n \in \mathbb{N} \subseteq \mathbb{K}}$ sucesión tal que:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 0}^{\infty} |C_n|^2 < \infty
+\end{align*}
+$$
+Entonces, existe $f \in L_2(I, \mathbb{K})$ tal que:
+$$
+\begin{align*}
+C_n = \langle f, \varphi_n\rangle \quad \forall n \in \mathbb{N} \quad \text{ y } \quad \displaystyle \sum_{n = 0}^{\infty} |C_n|^2 = \|f\|^2
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sea la sucesión de funciones $\{S_n\}_{n = 0}^\infty$ dada por:
+$$
+\begin{align*}
+S_n(x) = \displaystyle \sum_{k = 0}^{n} C_k \varphi_k(x) \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Sabemos que es de Cauchy por la demostración de la serie de Fourier, donde vimos:
+$$
+\begin{align*}
+\|S_p(x) - S_q(x)\|^2 = \displaystyle \sum_{k = p + 1}^{q} |C_k|^2
+\end{align*}
+$$
+Como sabemos que $\sum_{n = 0}^\infty |C_n|^2 < \infty$ entonces:
+$$
+\begin{align*}
+\|S_p(x) - S_q(x)\|^2 = \displaystyle \sum_{k = p + 1}^{q} |C_k|^2 \xrightarrow[p, q \to \infty]{} 0
+\end{align*}
+$$
+Ahora, como $L_2(I, \mathbb{K})$ es completo, existe $f \in L_2(I, \mathbb{K})$ tal que:
+$$
+\begin{align*}
+\|f - S_n(x)\| \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+Ahora, sea $k \in \mathbb{N}$ fijo, entonces para $n \geq k$ se tiene:
+$$
+\begin{align*}
+\langle S_n(x), \varphi_k\rangle & = \left\langle \displaystyle \sum_{j = 0}^{n} C_j \varphi_j, \varphi_k \right\rangle = \displaystyle \sum_{j = 0}^{n} C_j \langle \varphi_j, \varphi_k \rangle = C_k
+\end{align*}
+$$
+por ortonormalidad del sistema. Entonces:
+$$
+\begin{align*}
+|C_k - \langle f, \varphi_k\rangle| & \xlongequal[n \geq k]{} |\langle S_n(x), \varphi_k\rangle - \langle f, \varphi_k\rangle| = |\langle S_n(x) - f, \varphi_k\rangle| \overset{\text{Cauchy-Schwarz}}{\leq} \\[2ex]
+& \leq \|S_n(x) - f\| \cdot \underbrace{\|\varphi_k\|}_{ = 1} = \|S_n(x) - f\| \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+Por tanto, $C_k = \langle f, \varphi_k\rangle$ para todo $k \in \mathbb{N}$. 
+
+Ahora, como el sistema es completo, por la Identidad de Parseval tenemos que:
+$$
+\begin{align*}
+\|f\|^2 = \displaystyle \sum_{n = 0}^{\infty} |\langle f, \varphi_n\rangle|^2 = \displaystyle \sum_{n = 0}^{\infty} |C_n|^2
+\end{align*}
+$$
+
+</DemBox>
+
+### Núcleo de Dirichlet. Lema
+Sea $f \in L_2([0, 2\pi], \mathbb{K})$ tal que extendida con periodo $2\pi$ a $\mathbb{R}$ entonces la suma parcial $n$-ésima de Fourier de $f$ satisface:
+$$
+\begin{align*}
+S_n(x) = \frac{a_0}{2} + \displaystyle \sum_{k = 1}^{n} a_k \cos kx + b_k \sin kx = \frac{1}{\pi} \int_0^\pi \left(f(x + t) + f(x - t)\right) D_n(t) \, dt
+\end{align*}
+$$
+donde la función $D_n(t)$ viene dada por:
+$$
+\begin{align*}
+D_n(t) = \left\{
+\begin{array}{ll}
+\frac{\sin \left[(n + \frac{1}{2})t\right]}{2\sin \left(\frac{t}{2}\right)} & \text{ en otro caso}\\
+0 & \text{ si } t = 2\pi n
+\end{array}
+\right.
+\end{align*}
+$$
+<EjBox title="Nota">
+
+En otras palabras, la suma parcial de Fourier de $f$ es una media ponderada de valores de $f$ alrededor de un punto $x$ con un peso $D_n$ que se concentra alrededor de $t = 0$ a medida que $n$ aumenta.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Por la definición de los coeficientes de Fourier dados en el sistema ortonormal de senos y cosenos, tenemos:
+$$
+\begin{align*}
+S_n(x) &= \frac{1}{2\pi} \int_0^{2\pi} f(t) dt + \frac{1}{\pi} \displaystyle \sum_{k = 1}^{n} \left[\cos kx \int_0^{2\pi} f(t) \cos kt \, dt + \sin kx \int_0^{2\pi} f(t) \sin kt \, dt\right] = \\[2ex]
+& = \frac{1}{\pi} \int_0^{2\pi} f(t) \left[\frac{1}{2} + \displaystyle \sum_{k = 1}^{n} \left(\cos kx \cos kt + \sin kx \sin kt\right)\right] dt = \\[2ex]
+& = \frac{1}{\pi} \int_0^{2\pi} f(t) \left[\frac{1}{2} + \displaystyle \sum_{k = 1}^{n} \cos k(x - t)\right] dt
+\end{align*}
+$$
+Ahora, podemos simplificar la expresión entre corchetes (el núcleo). Definimos $u = x - t$ y buscamos una fórmula cerrada para:
+$$
+\begin{align*}
+D_n(u) = \frac{1}{2} + \sum_{k = 1}^{n} \cos (ku)
+\end{align*}
+$$
+Multiplicamos ambos lados por $2 \sin \left(\frac{u}{2}\right)$:
+$$
+\begin{align*}
+2 \sin \left(\frac{u}{2}\right) D_n(u) & = \sin \left(\frac{u}{2}\right) + \displaystyle \sum_{k = 1}^{n} 2 \cos (ku) \sin \left(\frac{u}{2}\right) = \\[2ex]
+& = \sin \left(\frac{u}{2}\right) + \displaystyle \sum_{k = 1}^{n} \left[\sin \left(\left(k + \frac{1}{2}\right)u\right) - \sin \left(\left(k - \frac{1}{2}\right)u\right)\right]
+\end{align*}
+$$
+Que es una suma telescópica, por lo que todos los términos intermedios se cancelan, quedando:
+$$
+\begin{align*}
+2 \sin \left(\frac{u}{2}\right) D_n(u) & = \sin \left(\frac{u}{2}\right) + \left[\sin \left(\left(n + \frac{1}{2}\right)u\right) - \sin \left(\frac{u}{2}\right)\right] = \sin \left(\left(n + \frac{1}{2}\right)u\right)
+\end{align*}
+$$
+Así, despejando $D_n(u)$ para $u \neq 0$:
+$$
+\begin{align*}
+D_n(u) & = \frac{\sin \left[\left(n + \frac{1}{2}\right)u\right]}{2 \sin \left(\frac{u}{2}\right)}
+\end{align*}
+$$
+Ahora, volviendo a la expresión de $S_n(x)$:
+$$
+\begin{align*}
+S_n(x) & = \frac{1}{\pi} \int_0^{2\pi} f(t) D_n(x - t) \, dt = \frac{1}{\pi} \int_0^{2\pi} f(t) \frac{\sin \left[\left(n + \frac{1}{2}\right)(x - t)\right]}{2 \sin \left(\frac{1}{2}(x - t)\right)} \, dt
+\end{align*}
+$$
+Haciendo el cambio de variable $t = x - u$:
+$$
+\begin{align*}
+S_n(x)& = \frac{1}{\pi} \int_{x}^{x + 2\pi} f(x - u)D_n(u) \, du  = \frac{1}{\pi} \int_0^{2\pi} f(x - u) D_n(u) \, du = \\[2ex]
+& = \frac{1}{\pi} \left[\int_0^{\pi} f(x - u) D_n(u) \, du + \int_{\pi}^{2\pi} f(x - u) D_n(u) \, du\right] = \\[2ex]
+& = \frac{1}{\pi} \left[\int_0^{\pi} f(x - u) D_n(u) \, du + \int_0^{\pi} f(x + v) D_n(v) \, dv\right] = \\[2ex]
+& = \frac{1}{\pi} \int_0^{\pi} \left(f(x + t) + f(x - t)\right) D_n(t) \, dt
+\end{align*}
+$$
+
+</DemBox>
+
+### Lema de Riemann-Lebesgue
+Sea $f \in L_1(J, \mathbb{R})$ con $J$ intervalo compacto real entonces:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \int_J f(t) \sin (\alpha t + \beta) \, dt = 0 \quad \text{ con } \beta \in \mathbb{R}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+*Veamos primero el caso $f = I_[c, d]$.*
+
+Sea $\varepsilon > 0$ fijo y $f$ la función característica del intervalo compacto $[c, d] \subseteq J$, i.e.:
+$$
+\begin{align*}
+f : J & \longrightarrow \mathbb{R}\\
+t & \longmapsto f(t) = \left\{
+\begin{array}{ll}
+1 & \text{ si } x \in [c, d]\\
+0 & \text{ si } x \in J \setminus [c, d]
+\end{array}
+\right.
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \int_J f(t) \sin (\alpha t + \beta) \, dt & = \lim_{\alpha \to \infty} \int_c^d 1 \cdot \sin(\alpha t + \beta) \, dt =\\[2ex]
+& = \lim_{\alpha \to \infty} \dfrac{\cos (\alpha c + \beta) - \cos (\alpha d + \beta)}{\alpha}
+\end{align*}
+$$
+Notamos que:
+$$
+\begin{align*}
+\left|\dfrac{\cos (\alpha c + \beta) - \cos (\alpha d + \beta)}{\alpha}\right| \leq \dfrac{|\cos (\alpha c + \beta)| + |\cos (\alpha d + \beta)|}{\alpha} \leq \dfrac{2}{\alpha} \xrightarrow[\alpha \to \infty]{} 0
+\end{align*}
+$$
+Por lo tanto, el resultado es cierto para este tipo de funciones.
+
+*Ahora veamos el caso general $f \in L_1(J, \mathbb{R})$.*
+
+<EjBox title="Nota">
+
+Emplearemos el resultado auxiliar: *Sea $f \in L_1([a, b], \mathbb{R})$ y $\varepsilon > 0$ entonces $\exists g \in L_1([a, b], \mathbb{R})$ y $s: [a, b] \to \mathbb{R}$ combinación lineal de funciones características sobre intervalos compactos en $[a, b]$ tales que:*
+$$
+\begin{align*}
+f = g + s \quad \text{ y } \quad \int_a^b |g(x)| \, dx < \varepsilon
+\end{align*}
+$$
+
+</EjBox>
+
+Sea $\varepsilon_1 = \frac{\varepsilon}{2}$ entonces existe $g \in L_1(J, \mathbb{R})$ y $s: J \to \mathbb{R}$ combinación lineal de funciones características sobre intervalos compactos en $J$ tales que:
+$$
+\begin{align*}
+f = g + s \quad \text{ y } \quad \int_J |g(t)| \, dt < \frac{\varepsilon}{2}
+\end{align*}
+$$
+Además, sabemos que por el caso particular visto anteriormente:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \int_J s(t) \sin (\alpha t + \beta) \, dt = 0
+\end{align*}
+$$
+Entonces, para $\varepsilon_2 = \frac{\varepsilon}{2}$ existe $M \in \mathbb{R}$ tal que $\forall \alpha \geq M$ se tiene:
+$$
+\begin{align*}
+\left| \int_J s(t) \sin (\alpha t + \beta) \, dt \right| < \frac{\varepsilon}{2}
+\end{align*}
+$$
+Por tanto, para cualquier $\alpha \geq M$:
+$$
+\begin{align*}
+\left|\int_J f(t) \sin (\alpha t + \beta) \, dt \right| & \leq \left|\int_J \left[f(t) - s(t)\right] \sin (\alpha t + \beta) \, dt\right| + \left|\int_J s(t) \sin (\alpha t + \beta) \, dt\right| \leq \\[2ex]
+& \leq \int_J |f(t) - s(t) | \cdot |\sin (\alpha t + \beta)| \, dt + \left|\int_J s(t) \sin (\alpha t + \beta) \, dt\right| \leq \\[2ex]
+& \leq \int_J \underbrace{|f(t) - s(t)|}_{|g(t)|} \, dt + \left|\int_J s(t) \sin (\alpha t + \beta) \, dt\right| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon
+\end{align*}
+$$
+
+</DemBox>
+
+### Variación de una función. Definición
+Sea $f: [a, b] \to \mathbb{R}$ función y $P = \{a = x_0 < x_1 < \ldots < x_n = b\}$ una partición cualquiera de $[a, b]$ entonces la **variación** de $f$ en $[a, b]$ respecto a la partición $P$ viene dada por:
+$$
+\begin{align*}
+V_f(P) = \displaystyle \sum_{i = 1}^{n} |f(x_i) - f(x_{i - 1})|
+\end{align*}
+$$
+
+### Variación acotada. Definición
+Se dice que una función $f: [a, b] \to \mathbb{R}$ es de **variación acotada** en $[a, b]$ si:
+$$
+\begin{align*}
+V_f(a, b) = \sup_{P} \left\{\displaystyle \sum_{i = 1}^{n} |f(x_i) - f(x_{i - 1})| \right\} < \infty
+\end{align*}
+$$
+
+### Teorema de localización de Riemann. Teorema
+Sea $f \in L_1([0, 2\pi], \mathbb{R})$ función $2\pi$-periódica entonces la serie de Fourier de $f$ converge en $x$ si y solo si $\exists \delta \in (0, \pi)$ tal que:
+$$
+\begin{align*}
+\exists \lim_{n \to \infty} \frac{2}{\pi} \int_0^\delta \frac{f(x + t) + f(x - t)}{2} \cdot \frac{\sin \left(\left(n + \frac{1}{2}\right)t\right)}{t} \, dt 
+\end{align*}
+$$
+en cuyo caso la serie converge en $x$ al valor de ese límite.
+
+<DemBox title="Demostración">
+
+Dado $x \in \mathbb{R}$, por el Lema del núcleo de Dirichlet sabemos que la suma parcial $n$-ésima de Fourier de $f$ viene dada por:
+$$
+\begin{align*}
+S_n(x) & = \frac{1}{\pi} \int_0^\pi \left[f(x + t) + f(x - t)\right] D_n(t) \, dt = \\[2ex]
+& = \frac{1}{\pi} \int_0^\pi \left[f(x + t) + f(x - t)\right] \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{2 \sin \frac{t}{2}} \, dt = \\[2ex]
+& = \frac{1}{\pi} \int_0^\pi \left[f(x + t) + f(x - t)\right] \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{t} \cdot \frac{t}{2 \sin \frac{t}{2}} \, dt = \\[2ex]
+& = \frac{1}{\pi} \int_0^\pi \left[f(x + t) + f(x - t)\right] \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{t} \cdot \left[1 + \left(\frac{t}{2 \sin \frac{t}{2}} - 1\right)\right] \, dt = \\[2ex]
+& = \frac{1}{\pi} \int_0^\pi \left[f(x + t) + f(x - t)\right] \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{t} \, dt + \\[2ex]
+&  + \underbrace{\frac{1}{\pi} \int_0^\pi \left(\frac{1}{2 \sin \frac{t}{2}} - \frac{1}{t}\right)\left[f(x + t) + f(x - t)\right] \cdot \sin \left((n + \frac{1}{2})t\right)\, dt}_{R_n(x)}
+\end{align*}
+$$
+*Veamos que $R_n(x) \xrightarrow[n \to \infty]{} 0$.*
+
+- Como $f \in L_1([0, 2\pi], \mathbb{R})$ y es $2\pi$-periódica, entonces:
+$$
+\begin{align*}
+f(x + t) \quad \text{ y } \quad f(x - t) \qquad \text{ son } L_1([0, 2\pi], \mathbb{R})
+\end{align*}
+$$
+- $\frac{1}{2 \sin \frac{t}{2}} - \frac{1}{t}$ definida como $0$ en $t = 0$, es de variación acotada en $[0, \pi]$ entonces:
+$$
+\begin{align*}
+\frac{1}{2 \sin \frac{t}{2}} - \frac{1}{t} \in L_1([0, \pi], \mathbb{R})
+\end{align*}
+$$
+
+Así, tenemos que:
+$$
+\begin{align*}
+\left(\frac{1}{2 \sin \frac{t}{2}} - \frac{1}{t}\right)\left[f(x + t) + f(x - t)\right] \in L_1([0, \pi], \mathbb{R})
+\end{align*}
+$$
+Y por el Lema de Riemann-Lebesgue:
+$$
+\begin{align*}
+\lim_{n \to \infty} R_n(x) & = \lim_{n \to \infty} \frac{1}{\pi} \int_0^\pi \left(\frac{1}{2 \sin \frac{t}{2}} - \frac{1}{t}\right)\left[f(x + t) + f(x - t)\right] \cdot \sin \left((n + \frac{1}{2})t\right) \, dt = 0
+\end{align*}
+$$
+*Ahora, el problema se reduce a estudiar el límite:*
+$$
+\begin{align*}
+\lim_{n \to \infty} S_n(x) & = \lim_{n \to \infty} \frac{1}{\pi} \int_0^\pi \underbrace{\left[f(x + t) + f(x - t)\right] \cdot \frac{\sin ((n + \frac{1}{2})t)}{t} \, dt}_{a(t)} + \bcancel{\lim_{n \to \infty} R_n(x)}
+\end{align*}
+$$
+Sea $0 < \delta < \pi$ entonces, separamos la integral en dos partes:
+$$
+\begin{align*}
+\lim_{n \to \infty} S_n(x) & = \lim_{n \to \infty} \frac{1}{\pi} \int_0^\delta a(t) \, dt + \lim_{n \to \infty} \frac{1}{\pi} \int_\delta^\pi a(t) \, dt
+\end{align*}
+$$
+Y como en $a(t)$ tenemos que:
+$$
+\begin{align*}
+[f(x + t) + f(x - t)] \cdot \frac{1}{t} \in L_1([\delta, \pi], \mathbb{R})
+\end{align*}
+$$
+ya que $f$ es $L_1$ y $\frac{1}{t}$ es acotada en $[\delta, \pi]$ entonces, por el Lema de Riemann-Lebesgue:
+$$
+\begin{align*}
+\lim_{n \to \infty} S_n(x) & = \lim_{n \to \infty} \frac{1}{\pi} \int_0^\delta a(t) \, dt + 0
+\end{align*}
+$$
+Por tanto, si reescribimos lo que queda ya en $S_n$ tenemos:
+$$
+\begin{align*}
+\lim_{n \to \infty} S_n(x) & = \lim_{n \to \infty} \frac{1}{\pi} \int_0^\delta a(t) \, dt + \bcancel{\lim_{n \to \infty} \frac{1}{\pi} \int_\delta^\pi a(t) \, dt} = \\[2ex]
+& = \lim_{n \to \infty} \frac{1}{\pi} \int_0^\delta \underbrace{\left[f(x + t) + f(x - t)\right] \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{t} \, dt}_{a(t)} = \\[2ex]
+& = \lim_{n \to \infty} \frac{2}{\pi} \int_0^\delta \frac{f(x + t) + f(x - t)}{2} \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{t} \, dt
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+En otras palabras, lo que quiere decir el teorema es que la convergencia de la serie de Fourier en un punto $x$ depende únicamente del comportamiento de la función $f$ en un entorno arbitrariamente pequeño alrededor de $x$. Si podemos controlar el límite dado en el teorema para algún $\delta > 0$, entonces la serie de Fourier converge en ese punto $x$.
+
+</EjBox>
+
+### Teorema de Jordan. Teorema
+Sea $g: [0, \delta] \to \mathbb{R}$ función de variación acotada entonces:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta g(t) \cdot \frac{\sin (\alpha t)}{t} \, dt = g(0^+ ) = \lim_{t \to 0^+} g(t)
+\end{align*}
+$$
+<EjBox title="Nota">
+
+En otras palabras, lo que nos dice el teorema es que si $g$ no oscila demasiado cerca de $0$, entonces la integral ponderada por $\frac{\sin (\alpha t)}{t}$ (que se concentra alrededor de $t = 0$ a medida que $\alpha$ aumenta) solo ``captura'' el valor de $g$ en $0^+$.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+No se da.
+
+</DemBox>
+
+### Condición de Jordan. Teorema
+Sea $f \in L_1([0, 2\pi], \mathbb{R})$ función $2\pi$-periódica de variación acotada en $[x - \varepsilon, x + \varepsilon]$ para algún $\varepsilon > 0$ entonces la serie de Fourier de $f$ converge en $x$ al valor:
+$$
+\begin{align*}
+\lim_{t \to 0^ + } \frac{f(x + t) + f(x - t)}{2}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Definimos la función $g_1(t) \coloneq f(x + t)$ para $x \in \mathbb{R}$ fijo. Entonces, como por hipótesis $f$ es de variación acotada en $[x - \varepsilon, x + \varepsilon]$ con $\varepsilon > 0$ entonces:
+$$
+\begin{align*}
+g_1(t) \text{ de variación acotada en } [ - \varepsilon, \varepsilon] \implies g_1(t) \text{ de variación acotada en } [0, \varepsilon]
+\end{align*}
+$$
+Ahora, aplicando el Teorema de Jordan:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\varepsilon f(x + t) \cdot \frac{\sin (\alpha t)}{t} \, dt = \lim_{t \to 0^+} g_1(t) = \lim_{t \to 0^+} f(x + t)
+\end{align*}
+$$
+Análogamente, aplicando el mismo razonamiento para la función $g_2(t) \coloneq f(x - t)$ se tiene que:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\varepsilon f(x - t) \cdot \frac{\sin (\alpha t)}{t} \, dt = \lim_{t \to 0^+} g_2(t) = \lim_{t \to 0^+} f(x - t)
+\end{align*}
+$$
+Sumando ambas expresiones y dividiendo entre $2$ obtenemos:
+$$
+\begin{align*}
+L & = \lim_{\alpha \to \infty} \frac{1}{\pi} \int_0^\varepsilon \left[f(x + t) + f(x - t)\right] \cdot \frac{\sin (\alpha t)}{t} \, dt = \lim_{t \to 0^+} \dfrac{f(x + t) + f(x - t)}{2}
+\end{align*}
+$$
+Y, por el Teorema de localización de Riemann:
+$$
+\begin{align*}
+\lim_{n \to \infty} \frac{1}{\pi} \int_0^\varepsilon \left[f(x + t) + f(x - t)\right] \cdot \frac{\sin \left((n + \frac{1}{2})t\right)}{t} \, dt = \lim_{n \to \infty} S_n(x)
+\end{align*}
+$$
+Por tanto, la serie de Fourier de $f$ converge en $x$ al valor:
+$$
+\begin{align*}
+\lim_{n \to \infty} S_n(x) & = \lim_{t \to 0^+} \dfrac{f(x + t) + f(x - t)}{2}
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+En otras palabras, lo que tenemos es que si una función $f$ no oscila demasiado cerca de un punto, entonces su serie de Fourier converge en ese punto al valor medio de los límites laterales de $f$ en ese punto. Por tanto:
+
+- Si $f$ es continua en $x$ entonces la serie de Fourier converge a $f(x)$.
+- Si $f$ tiene un salto en $x$ entonces la serie de Fourier converge al valor medio entre los dos lados del salto.
+
+</EjBox>
+
+### Teorema de Dini. Teorema
+Sea $g: [a, b] \to \mathbb{R}$ función tal que:
+$$
+\begin{align*}
+\exists \lim_{t \to 0^ + } g(t) = g(0^ + )
+\end{align*}
+$$
+Si $\exists \delta \in (0, b)$ tal que $\frac{g(t) - g(0^ + )}{t} \in L_1([0, \delta], \mathbb{R})$ entonces:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta g(t) \cdot \frac{\sin (\alpha t)}{t} \, dt = g(0^ + )
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Supongamos que $\exists \delta > 0$ tal que $\frac{g(t) - g(0^ + )}{t} \in L_1([0, \delta], \mathbb{R})$ entonces:
+$$
+\begin{align*}
+& \lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta g(t) \cdot \frac{\sin (\alpha t)}{t} \, dt  = \lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta \left[g(0^ + ) + \left(g(t) - g(0^ + )\right)\right] \cdot \frac{\sin (\alpha t)}{t} \, dt = \\[2ex]
+& = \lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta g(0^ + ) \cdot \frac{\sin (\alpha t)}{t} \, dt + \lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta \left(g(t) - g(0^ + )\right) \cdot \frac{\sin (\alpha t)}{t} \, dt 
+\end{align*}
+$$
+Por hipótesis $\frac{g(t) - g(0^ + )}{t} \in L_1([0, \delta], \mathbb{R})$ entonces, por el Lema de Riemann-Lebesgue:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta \left(g(t) - g(0^ + )\right) \cdot \frac{\sin (\alpha t)}{t} \, dt = 0
+\end{align*}
+$$
+Por otro lado, tenemos que:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta g(0^ + ) \cdot \frac{\sin (\alpha t)}{t} \, dt & = \frac{2}{\pi} g(0^ + ) \lim_{\alpha \to \infty} \int_0^{\delta} \frac{\sin (\alpha t)}{t} \, dt \xlongequal[dt = \frac{d\tilde{t}}{\alpha}]{\tilde{t} = \alpha t} \\[2ex]
+& = \frac{2}{\pi} g(0^ + ) \lim_{\alpha \to \infty} \int_0^{\alpha \delta} \frac{\sin (\tilde{t})}{\tilde{t}} \, d\tilde{t} = \frac{2}{\pi} g(0^ + ) \cdot \frac{\pi}{2} = g(0^ + )
+\end{align*}
+$$
+Por tanto, volviendo a la  tenemos que:
+$$
+\begin{align*}
+\lim_{\alpha \to \infty} \frac{2}{\pi} \int_0^\delta g(t) \cdot \frac{\sin (\alpha t)}{t} \, dt = g(0^ + ) + 0 = g(0^ + )
+\end{align*}
+$$
+
+</DemBox>
+
+### Condición de Dini. Teorema
+Sea $f \in L_1([0, 2\pi], \mathbb{R})$ función $2\pi$-periódica y $g(t) = \dfrac{f(x + t) + f(x - t)}{2}$ para $x \in \mathbb{R}$ fijo y:
+
+- $\exists g(0^ + ) = \lim_{t \to 0^ + } g(t)$
+- $\exists \delta \in (0, \pi)$ tal que $\frac{g(t) - g(0^ + )}{t} \in L_1([0, \delta], \mathbb{R})$
+
+entonces la serie de Fourier de $f$ converge en $x$ al valor:
+$$
+\begin{align*}
+\lim_{t \to 0^ + } \frac{f(x + t) + f(x - t)}{2}
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Podemos notar que este resultado es una generalización del Teorema de la condición de Jordan, ya que lo que hace es relajar la condición de variación acotada en un entorno de $x$ por una condición más débil relacionada con la integrabilidad de una función derivada. De hecho, podemos notar que toda función $g$ de variación acotada cumple la condición de Dini, es decir:
+$$
+\begin{align*}
+\frac{g(t) - g(0^ + )}{t} \in L_1([0, \delta], \mathbb{R}) 
+\end{align*}
+$$
+Así, el Teorema de la condición de Dini puede funcionar cuando $g$ puede oscilar mucho pero esas oscilación son integrables cuando se miran cerca de $0$.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+La demostración es análoga a la del Teorema de la condición de Jordan, pero empleando el Teorema de Dini en lugar del Teorema de Jordan.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Es importante notar que la continuidad de una función no implica necesariamente que la serie de Fourier converja a $f(x)$.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*No es suficiente con que una función esté acotada en un entorno de $x$ para que su serie de Fourier converja en $x$.*
+
+Consideremos la función dada por:
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\sin \left(\frac{1}{x}\right) & \text{ si } x \in (0, \pi]\\
+0 & \text{ si } x = 0
+\end{array}
+\right.
+\end{align*}
+$$
+Aunque la función es acotada en $[-\delta, \delta]$ para cualquier $\delta > 0$ (ya que $|f(x)| \leq 1$ para todo $x$), no podemos garantizar que la serie de Fourier de $f$ converja en $x = 0$. Esto se debe a que oscila infinitamente rápido cerca de $0$, y el límite requerido en el Teorema de localización de Riemann no existe. De hecho, podemos notar que:
+
+- **Falla Jordan:** La función no es de variación acotada, el número de oscilaciones en cualquier intervalo alrededor de $0$ es infinito.
+- **Falla Dini:** La función $\frac{f(t) - f(0^ + )}{t} = \frac{\sin \left(\frac{1}{t}\right)}{t}$ no es integrable en $(0, \delta]$ para ningún $\delta > 0$ debido a las oscilaciones infinitas cerca de $0$.
+
+Por tanto, la mera acotación de una función en un entorno de un punto no garantiza la convergencia de su serie de Fourier en ese punto. Así, vemos la importancia de las condiciones adicionales impuestas por los teoremas de Jordan y Dini para asegurar la convergencia de la serie de Fourier. Podemos ilustrar gráficamente este comportamiento:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_3.svg)
+
+Si vamos ``haciendo zoom'' progresivamente cerca de $0$:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_4.svg)
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_5.svg)
+
+</EjemBox>
+
+### Teorema de Carleson. Teorema
+Sea $f \in L_2([0, 2\pi], \mathbb{R})$ entonces la serie de Fourier de $f$ converge a $f(x)$ $\mu$-a.e.
+
+<EjBox title="Nota">
+
+La continuidad no basta para garantizar la convergencia puntual de la serie de Fourier en todos los puntos. Sin embargo, el Teorema de Carleson nos asegura que para funciones en $L_2$, la serie de Fourier converge casi en todas partes (excepto en un conjunto de medida cero). Esto significa que, aunque pueda haber puntos donde la serie no converge, estos puntos son excepcionales y no afectan significativamente el comportamiento general de la función.
+
+</EjBox>
+
+<EjemBox title="Ejercicio">
+
+*Sea la función $f(x) = x$ en $[0, 2\pi)$ extendida periódicamente a $\mathbb{R}$. Calcula su serie de Fourier y estudia su convergencia puntual.*
+
+Primero, podemos notar que esta función extendida periódicamente se puede representar como:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_6.svg)
+
+Como vimos en un ejemplo previo, la serie de Fourier de esta función es:
+$$
+\begin{align*}
+f(x) \sim \frac{a_0}{2} + \sum_{n = 1}^{\infty} \left[a_n \cos (nx) + b_n \sin (nx)\right]
+\end{align*}
+$$
+Donde los coeficientes $a_n$ y $b_n$ se calculan como:
+$$
+\begin{align*}
+a_0 & = \frac{1}{\pi} \int_0^{2\pi} f(x) \, dx = \frac{1}{\pi} \int_0^{2\pi} x \, dx = \frac{1}{\pi} \left[\frac{x^2}{2}\right]_0^{2\pi} = \frac{2\pi^2}{\pi} = 2\pi\\[6ex]
+a_n & = \frac{1}{\pi} \int_0^{2\pi} f(x) \cos (nx) \, dx \xlongequal[dv = \cos (nx) \Rightarrow v = \frac{\sin (nx)}{n}]{u = x \Rightarrow du = dx} \\[2ex]
+&  = \frac{1}{\pi} \left[\frac{x \sin (nx)}{n}\right]_0^{2\pi} - \frac{1}{\pi} \int_0^{2\pi} \frac{\sin (nx)}{n} \, dx = \\[2ex]
+&  = 0 - \frac{1}{\pi n} \left[-\frac{\cos (nx)}{n}\right]_0^{2\pi} = \frac{1}{\pi n^2} \left[\cos (0) - \cos (2\pi n)\right] = 0 \\[6ex]
+b_n & = \frac{1}{\pi} \int_0^{2\pi} f(x) \sin (nx) \, dx \xlongequal[dv = \sin (nx) \Rightarrow v = -\frac{\cos (nx)}{n}]{u = x \Rightarrow du = dx} \\[2ex]
+&  = \frac{1}{\pi} \left[-\frac{x \cos (nx)}{n}\right]_0^{2\pi} + \frac{1}{n\pi} \int_0^{2\pi} \cos (nx) \, dx = \\[2ex]
+&  = -\frac{2\pi \cos (2\pi n)}{n\pi} + \frac{1}{n\pi} \left[\frac{\sin (nx)}{n}\right]_0^{2\pi} = -\frac{2}{n} + 0 = -\frac{2}{n}
+\end{align*}
+$$
+Así, la serie de Fourier de $f$ es:
+$$
+\begin{align*}
+f(x) \sim \pi - 2 \sum_{n = 1}^{\infty} \frac{\sin (nx)}{n}
+\end{align*}
+$$
+
+Ahora, veamos las condiciones de convergencia puntual:
+
+- **Condición de Jordan:**
+
+- **Condición de Dini:** Consideramos la función:
+$$
+\begin{align*}
+g(t) = \frac{f(x + t) + f(x - t)}{2} \quad \text{ con } x \in [0, 2\pi]
+\end{align*}
+$$
+
+- Si $x \in (0, 2\pi)$ entonces:
+$$
+\begin{align*}
+g(t) = \frac{(x + t) + (x - t)}{2} = x
+\end{align*}
+$$
+Por tanto, $\exists g(0^ + ) = x$ y:
+$$
+\begin{align*}
+\frac{g(t) - g(0^ + )}{t} = \frac{x - x}{t} = 0 \in L_1([0, \delta], \mathbb{R}) \quad \text{ para cierto } \delta > 0
+\end{align*}
+$$
+Así, la serie de Fourier de $f$ converge $\forall x \in (0, 2\pi)$ y lo hace al valor:
+$$
+\begin{align*}
+g(0^ + ) = x = f(x)
+\end{align*}
+$$
+- Si $x = 0$ entonces:
+$$
+\begin{align*}
+g(t) = \frac{(0 + t) + (2\pi - t)}{2} = \frac{2\pi}{2} = \pi
+\end{align*}
+$$
+Por tanto, $\exists g(0^ + ) = \pi$ y:
+$$
+\begin{align*}
+\frac{g(t) - g(0^ + )}{t} = \frac{\pi - \pi}{t} = 0 \in L_1([0, \delta], \mathbb{R}) \quad \text{ para cierto } \delta > 0
+\end{align*}
+$$
+Así, la serie de Fourier de $f$ converge en $x = 0$ y lo hace al valor:
+$$
+\begin{align*}
+g(0^ + ) = \pi
+\end{align*}
+$$
+- Si $x = 2\pi$ es análogo al caso $x = 0$ y la serie de Fourier de $f$ converge en $x = 2\pi$ al valor:
+$$
+\begin{align*}
+g(0^ + ) = \pi
+\end{align*}
+$$
+
+Por tanto, por el Teorema de la condición de Dini, la serie de Fourier de $f$ converge en todos los puntos $x \in [0, 2\pi]$ al valor:
+$$
+\begin{align*}
+\lim_{t \to 0^ + } \frac{f(x + t) + f(x - t)}{2} = \left\{
+\begin{array}{ll}
+f(x) & \text{ si } x \in (0, 2\pi) \\[1ex]
+\pi & \text{ si } x = 0 \\[1ex]
+\pi & \text{ si } x = 2\pi
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora, finalmente, podríamos ver a mayores gráficamente la serie de Fourier de $f$ y su convergencia puntual:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_7.svg)
+
+Si hacemos una aproximación más precisa con más términos en la serie de Fourier, podemos observar el fenómeno de Gibbs cerca de los puntos de discontinuidad en $x = 0$ y $x = 2\pi$, donde la serie de Fourier oscila alrededor del valor de convergencia $\pi$ antes de estabilizarse:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_8.svg)
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_9.svg)
+
+</EjemBox>
+
+### Sumable Cesàro. Definición
+Sea $\{a_n\}_{n \in \mathbb{N}} \subseteq \mathbb{R}$ y $\{S_n\}_{n \in \mathbb{N}}$ la correspondiente sucesión de sumas parciales, es decir:
+$$
+\begin{align*}
+S_n = \sum_{k = 0}^{n} a_k \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+Se dice que la serie $\sum_{n = 0}^{\infty} a_n$ es **sumable Cesàro** o **convergente Cesàro** si la sucesión $\{\sigma_n\}_{n \in \mathbb{N}}$ dada por:
+$$
+\begin{align*}
+\sigma_n = \frac{1}{n} \sum_{i = 1}^{n} S_i \quad \forall n \in \mathbb{N}
+\end{align*}
+$$
+converge a un número real $\sigma$ al que se llama **suma Cesàro** de la serie y se denota por:
+$$
+\begin{align*}
+\sigma = \sum_{n = 0}^{\infty} a_n
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+La idea de la convergencia Cesàro es estudiar la convergencia de una serie a través del comportamiento promedio de sus sumas parciales.
+
+En una serie, cuando estudiamos la convergencia tradicional, nos fijamos en que las sumas parciales $S_n$ se estabilicen alrededor de un número, es decir, cada término adicional corrige un poco la suma total, ``apagando'' las oscilaciones y acercándose a un valor fijo.
+
+En la convergencia Cesàro, en lugar de observar directamente las sumas parciales $S_n$, se observa el promedio de todas las anteriores. De esta forma, no se le da todo el peso al último término, si no que se ``suavizan'' las oscilaciones.
+
+A modo de ejemplo, consideremos la serie alternante:
+$$
+\begin{align*}
+\sum_{n = 0}^{\infty} (-1)^n = 1 - 1 + 1 - 1 + 1 - 1 + \ldots
+\end{align*}
+$$
+Las sumas parciales $S_n$ son:
+$$
+\begin{align*}
+S_0 & = 1, \quad S_1 = 0, \quad S_2 = 1, \quad S_3 = 0, \quad S_4 = 1, \quad S_5 = 0, \ldots
+\end{align*}
+$$
+Esta serie no converge en el sentido tradicional, ya que las sumas parciales oscilan entre $0$ y $1$. Sin embargo, si calculamos las medias de las sumas parciales:
+$$
+\begin{align*}
+\sigma_1 & = S_0 = 1,\\
+\sigma_2 & = \frac{S_0 + S_1}{2} = \frac{1 + 0}{2} = \frac{1}{2},\\
+\sigma_3 & = \frac{S_0 + S_1 + S_2}{3} = \frac{1 + 0 + 1}{3} = \frac{2}{3},\\
+\sigma_4 & = \frac{S_0 + S_1 + S_2 + S_3}{4} = \frac{1 + 0 + 1 + 0}{4} = \frac{1}{2},\\
+\sigma_5 & = \frac{S_0 + S_1 + S_2 + S_3 + S_4}{5} = \frac{1 + 0 + 1 + 0 + 1}{5} = \frac{3}{5}
+\end{align*}
+$$
+Observamos que las medias $\sigma_n$ tienden a $\frac{1}{2}$ a medida que $n$ aumenta. Por lo tanto, aunque la serie original no converge en el sentido tradicional, es sumable Cesàro con suma Cesàro igual a $\frac{1}{2}$.
+
+</EjBox>
+
+### Convergencia Cesàro. Teorema
+Si $\sum_{n = 0}^\infty a_n$ converge a $S$, entonces es sumable Cesàro y su suma Cesàro coincide con $S$.
+
+### Teorema de Fejér. Teorema
+Sea $f \in L_1([0, 2\pi], \mathbb{R})$ función $2\pi$-periódica en $\mathbb{R}$ y se considera la función:
+$$
+\begin{align*}
+S(x) = \lim_{t \to 0^ + }\dfrac{f(x + t) + f(x - t)}{2} \quad \forall x \in A = \left\{x \in [0, 2\pi] : S(x) \text{ está bien definida}\right\}
+\end{align*}
+$$
+Entonces se tiene:
+
+- La serie de Fourier de $f$ converge en el sentido de Cesàro a $S(x)$. Es decir:
+$$
+\begin{align*}
+\sigma_n(x) \xrightarrow[n \to \infty]{} S(x) \quad \forall x \in A
+\end{align*}
+$$
+- Si $f$ es continua en $\mathbb{R}$ entonces $\sigma_n(x) \xrightarrow[n \to \infty]{unif} S(x)$, es decir:
+$$
+\begin{align*}
+\forall \varepsilon > 0, \quad \exists n_0 \in \mathbb{N} \text{ tq } \forall n \geq n_0, \quad \forall x \in \mathbb{R}, \quad |\sigma_n(x) - S(x)| < \varepsilon
+\end{align*}
+$$
+
+### Teorema
+Sea $f \in \mathcal{C}^0(\mathbb{R})$ función $2\pi$-periódica entonces:
+
+1. $\|f - S_n\| \xrightarrow[n \to \infty]{} 0$
+2. Se cumple la identidad de Parseval en $[0, 2\pi]$:
+$$
+\begin{align*}
+\|f\|^2 = \frac{a_0^2}{4} + \displaystyle \sum_{k = 1}^{\infty} a_k^2 + b_k^2
+\end{align*}
+$$
+3. Si la serie de Fourier de $f$ converge en $x$, entonces converge a $f(x)$.
+4. La serie de Fourier de $f$ es integrable término a término:
+$$
+\begin{align*}
+\int_0^x f(t) \, dt = \frac{a_0}{2} x + \displaystyle \sum_{n = 1}^{\infty} \int_0^x \left(a_n \cos (nt) + b_n \sin (nt)\right) \, dt
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+1. Obvia por el Teorema de Fejér y la Convergencia Cesàro.
+2. Se sigue de la Identidad de Parseval y del punto anterior.
+3. Supongamos que la serie de Fourier de $f$ converge en $x$, es decir:
+$$
+\begin{align*}
+\{S_n(x)\}_{n \in \mathbb{N}} \xrightarrow[n \to \infty]{} \widetilde{S}(x)
+\end{align*}
+$$
+Entonces, por la Convergencia Cesàro se tiene que:
+$$
+\begin{align*}
+\sigma_n(x) \xrightarrow[n \to \infty]{} \widetilde{S}(x)
+\end{align*}
+$$
+Por el Teorema de Fejér se tiene que:
+$$
+\begin{align*}
+\sigma_n(x) \xrightarrow[n \to \infty]{\text{unif}} f(x)
+\end{align*}
+$$
+Es decir, la serie converge en el sentido usual y en el sentido de Cesàro al mismo valor, luego:
+$$
+\begin{align*}
+\widetilde{S}(x) = f(x)
+\end{align*}
+$$
+4. Definimos:
+$$
+\begin{align*}
+F(x) = \int_0^x f(t) \, dt \qquad \text{y} \qquad m = \frac{1}{2\pi} \int_0^{2\pi} f(t) \, dt
+\end{align*}
+$$
+Y consideramos la función:
+$$
+\begin{align*}
+g(x) = f(x) - m = f(x) - \frac{1}{2\pi} \int_0^{2\pi} f(t) \, dt = f(t) - \frac{a_0}{2}
+\end{align*}
+$$
+Es claro que $g(x)$ es continua en $\mathbb{R}$ y $2\pi$-periódica ya que $f(x)$ lo es. Además, se tiene que su serie de Fourier es:
+$$
+\begin{align*}
+g(x) \sim \displaystyle \sum_{n = 1}^{\infty} a_n \cos (nx) + b_n \sin (nx)
+\end{align*}
+$$
+donde $a_n, b_n$ son los coeficientes de Fourier de $f$ para $n \geq 1$.
+
+Definiendo la función:
+$$
+\begin{align*}
+G(x) = \int_0^x g(t) \, dt
+\end{align*}
+$$
+entonces tenemos que $G \in \mathcal{C}^1(\mathbb{R})$ y es $2\pi$-periódica (ya que $\int_0^{2\pi} g = 0$), su serie de Fourier es:
+$$
+\begin{align*}
+G(x) \sim \frac{A_0}{2} + \displaystyle \sum_{n = 1}^{\infty} A_n \cos (nx) + B_n \sin (nx)
+\end{align*}
+$$
+Entonces, veamos la relación entre los $A_n, B_n$ y los $a_n, b_n$:
+$$
+\begin{align*}
+A_n & = \frac{1}{\pi} \int_0^{2\pi} G(x) \cos (nx) \, dx  \xlongequal[dv = \cos (nx) \Rightarrow v = \frac{\sin (nx)}{n}]{u = G(x) \Rightarrow du = g(x) \, dx}\\[2ex]
+& = \frac{1}{\pi} \left[G(x) \cdot \frac{\sin (nx)}{n}\right]_0^{2\pi} - \frac{1}{\pi} \int_0^{2\pi} g(x) \cdot \frac{\sin (nx)}{n} \, dx \\[2ex]
+& = 0 - \frac{1}{n\pi} \int_0^{2\pi} g(x) \sin (nx) \, dx = -\frac{b_n}{n} \quad \forall n \geq 1
+\end{align*}
+$$
+Análogamente se llega a que $B_n = \frac{a_n}{n}$.
+
+Es decir, que entonces:
+$$
+\begin{align*}
+F(x) = \int_0^x f(t) dt = mx + G(x) 
+\end{align*}
+$$
+Y la serie de Fourier de $G$ es:
+$$
+\begin{align*}
+G(x) \sim \frac{A_0}{2} + \displaystyle \sum_{n = 1}^{\infty} \left(-\frac{b_n}{n} \cos (nx) + \frac{a_n}{n} \sin (nx)\right)
+\end{align*}
+$$
+Por el Teorema de Fejér como $g \in \mathcal{C}^0(\mathbb{R})$ y $2\pi$-periódica, sabemos que:
+$$
+\begin{align*}
+& \sigma_n^g(t) \xrightarrow[n \to \infty]{\text{unif}} g(t) \quad \forall t \in \mathbb{R} \implies \\[2ex]
+&  \implies  G(x) = \int_0^x g(t) \, dt = \int_0^x \lim_{n \to \infty} \sigma_n^g(t) \, dt = \lim_{n \to \infty} \int_0^x \sigma_n^g(t) \, dt
+\end{align*}
+$$
+Como para cada $n \in \mathbb{N}$ se tiene que:
+$$
+\begin{align*}
+\sigma_n^g(t) = \alpha_n^{(0)} + \displaystyle \sum_{k = 1}^{n} \alpha_n^{(k)} \cos (kt) + \beta_n^{(k)} \sin (kt)
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}
+\int_0^x \sigma_n^g(t) \, dt & = \underbrace{\alpha_n^{(0)}}_{\frac{\alpha_0}{2}} + \displaystyle \sum_{k = 1}^{n} \left[\dfrac{\overbrace{\alpha_n^{(k)}}^{a_k}}{k} \sin (kt) - \dfrac{\overbrace{\beta_n^{(k)}}^{b_k}}{k} \cos (kt) + \frac{\beta_n^{(k)}}{k}\right]_0^x
+\end{align*}
+$$
+Por tanto, tomando límite cuando $n \to \infty$ se llega a que:
+$$
+\begin{align*}
+\lim_{n \to \infty} \int_0^x \sigma_n^g(t) \, dt & \xlongequal[\lim \alpha_n^{(k)} = a_k]{\lim \beta_n^{(k)} = b_k} \frac{a_0}{2} + \displaystyle \sum_{k = 1}^{\infty} \left[\frac{a_k}{k} \sin (kt) - \frac{b_k}{k} \cos (kt) + \frac{b_k}{k}\right]_0^x
+\end{align*}
+$$
+Por tanto:
+$$
+\begin{align*}
+F(x) = \frac{\alpha_0}{2} + \displaystyle \sum_{n = 1}^{\infty} \int_0^x \left(a_n \cos (nt) + b_n \sin (nt)\right) \, dt
+\end{align*}
+$$
+
+</DemBox>
+
+<EjemBox title="Ejercicio">
+
+*Para que valores de $x$ es válida la siguiente expresión:*
+$$
+\begin{align*}
+\frac{x^2}{2} = \pi x - \frac{\pi^2}{3} + 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (nx)}{n^2} 
+\end{align*}
+$$
+Sea $f(x) = \frac{x^2}{2} - \pi x$ en $[0, 2\pi)$ y extendemos periódicamente a $\mathbb{R}$ con periodo $2\pi$:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_10.svg)
+
+Tenemos que $f \in L_2([0, 2\pi], \mathbb{R})$ y además $f \in \mathcal{C}^0$. Ahora calculamos su serie de Fourier:
+$$
+\begin{align*}
+a_0 = - \frac{2}{3}\pi^2 \qquad a_n = \frac{2}{n^2} \qquad b_n = 0 \quad \forall n \geq 1
+\end{align*}
+$$
+Por tanto, la serie de Fourier de $f$ es:
+$$
+\begin{align*}
+f(x) \sim - \frac{\pi^2}{3} + 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (nx)}{n^2}
+\end{align*}
+$$
+Ahora, sería posible emplear tanto la Condición de Jordan como la Condición de Dini para ver la convergencia puntual de la serie de Fourier de $f$ en todos los puntos de $\mathbb{R}$ y ver que converge a $f(x)$ en todos ellos. Pero, como $f \in \mathcal{C}^0(\mathbb{R})$, podemos aplicar el Teorema de Fejér.
+
+Como $f$ es continua y $2\pi$-periódica y sabemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} \frac{\cos (nx)}{n^2} < \infty \quad \forall x \in \mathbb{R}
+\end{align*}
+$$
+Por el Teorema de Fejér la serie de Fourier de $f$ converge $\forall x \in \mathbb{R}$ a $f(x)$, i.e.:
+$$
+\begin{align*}
+f(x) = - \frac{\pi^2}{3} + 2 \displaystyle \sum_{n = 1}^{\infty} \frac{\cos (nx)}{n^2} \quad \forall x \in \mathbb{R}
+\end{align*}
+$$
+Por tanto, la igualdad pedida es cierta para $[0, 2\pi]$, en particular, si $x = 0$ entonces:
+$$
+\begin{align*}
+f(0) = 0 = - \frac{\pi^2}{3} + 2 \displaystyle \sum_{n = 1}^{\infty} \frac{1}{n^2} \implies \sum_{n = 1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejercicio">
+
+*Demostrar que $x = 2\displaystyle \sum_{n = 1}^{\infty} ( - 1)^{n + 1} \frac{\sin (nx)}{n}$ $\forall x \in (-\pi, \pi)$ y emplearlo para ver que:*
+$$
+\begin{align*}
+\frac{\pi^2}{8} = \displaystyle \sum_{k = 0}^{\infty} \frac{1}{(2k + 1)^2}
+\end{align*}
+$$
+Sea $f(x)$ definida en $[0, 2\pi)$ como:
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+x & \text{ si } x \in [0, \pi) \\[1ex]
+x - 2\pi & \text{ si } x \in [\pi, 2\pi)
+\end{array}
+\right.
+\end{align*}
+$$
+Y extendida a $\mathbb{R}$ con periodo $2\pi$:
+
+![TikZ Graph](/blogs/images/tema-7-series-de-fourier_tikz_11.svg)
+
+Entonces tenemos que $f \in L_2([0, 2\pi], \mathbb{R})$. Calculamos su serie de Fourier:
+$$
+\begin{align*}
+a_n = 0 \quad \forall n \geq 0 \qquad \text{y} \qquad b_n = \frac{2}{n} (-1)^{n + 1} \quad \forall n \geq 1
+\end{align*}
+$$
+Entonces, la serie de Fourier de $f$ es:
+$$
+\begin{align*}
+f(x) \sim 2 \displaystyle \sum_{n = 1}^{\infty} ( - 1)^{n + 1} \frac{\sin (nx)}{n}
+\end{align*}
+$$
+Se verifican tanto las condiciones de la Condición de Jordan como las de la Condición de Dini, por ejemplo, para $x \in \mathbb{R}$ fijo, existe $\delta > 0$ tal que $f$ es monótona o suma de monótonas en $(x - \delta, x + \delta)$. Ahora:
+
+- Si $x \in [0, \pi)$ entonces:
+$$
+\begin{align*}
+x = 2 \displaystyle \sum_{n = 1}^{\infty} ( - 1)^{n + 1} \frac{\sin (nx)}{n}
+\end{align*}
+$$
+- Si $x \in [\pi, 2\pi)$ entonces:
+$$
+\begin{align*}
+f(x) = x - 2\pi
+\end{align*}
+$$
+- Si $x \in ( - \pi, 0)$ entonces:
+$$
+\begin{align*}
+x = 2 \displaystyle \sum_{n = 1}^{\infty} ( - 1)^{n + 1} \frac{\sin (nx)}{n}
+\end{align*}
+$$
+
+Ahora, recordando que *sea $f \in \mathcal{C}^0(\mathbb{R})$ función $2\pi$-periódica entonces:*
+$$
+\begin{align*}
+\forall x \in \mathbb{R} \quad \int_0^x f(t) \, dt = \frac{a_0}{2} x + \displaystyle \sum_{n = 1}^{\infty} \int_0^x \left(a_n \cos (nt) + b_n \sin (nt)\right) \, dt
+\end{align*}
+$$
+Por tanto, para $x \in ( - \pi, \pi)$ se tiene que:
+$$
+\begin{align*}
+\int_0^x f(t)\, dt = \displaystyle \sum_{n = 1}^{\infty} \frac{2( - 1)^{n - 1}}{n} \int_0^x \sin (nt) \, dt = - 2 \displaystyle \sum_{n = 1}^{\infty} \frac{( - 1)^{n - 1}}{n} [1 - \cos (nx)]
+\end{align*}
+$$
+Así, sea:
+$$
+\begin{align*}
+G(x) = 2 \displaystyle \sum_{n = 1}^{\infty} \frac{( - 1)^{n - 1}}{n^2} [1 - \cos (nx)]
+\end{align*}
+$$
+Por el criterio M de Weierstrass, $G$ converge uniformemente para todo $x \in \mathbb{R}$, en particular, en $[-\pi, \pi]$ y además:
+$$
+\begin{align*}
+\left|\frac{( - 1)^{n - 1}}{n^2} [1 - \cos (nx)]\right| \leq \frac{4}{n^2} \quad \forall n \geq 1
+\end{align*}
+$$
+Por lo tanto $G(x)$ es continua para $x \in \mathbb{R}$, en particular, en $[0, \pi]$ donde:
+
+- Si $x \in [0, \pi)$ entonces:
+$$
+\begin{align*}
+G(x) = \int_0^x t \, dt = \frac{x^2}{2}
+\end{align*}
+$$
+- Si $x = \pi$ entonces:
+$$
+\begin{align*}
+G(\pi) = \int_0^{\pi} t \, dt = \frac{\pi^2}{2}
+\end{align*}
+$$
+
+Por tanto:
+$$
+\begin{align*}
+\frac{x^2}{2} = 2 \displaystyle \sum_{n = 1}^{\infty} \frac{( - 1)^{n - 1}}{n^2} [1 - \cos (nx)] \quad \forall x \in ( - \pi, \pi]
+\end{align*}
+$$
+En particular, si $x = \pi$ entonces:
+$$
+\begin{align*}
+\frac{\pi^2}{2} = 2 \displaystyle \sum_{n = 1}^{\infty} \frac{( - 1)^{n - 1}}{n^2} [1 - \cos (n\pi)] = 4 \displaystyle \sum_{k = 0}^{\infty} \frac{1}{(2k + 1)^2}
+\end{align*}
+$$
+Luego, para $n = 2k + 1$ se tiene que:
+$$
+\begin{align*}
+\frac{\pi^2}{8} = \displaystyle \sum_{k = 0}^{\infty} \frac{1}{(2k + 1)^2}
+\end{align*}
+$$
+
+</EjemBox>
+
+### Teorema
+Sea $f \in L_2([0, 2\pi], \mathbb{R})$ función $2\pi$-periódica y diferenciable en $x_0 \in \mathbb{R}$ entonces su serie de Fourier converge en $x_0$ a $f(x_0)$.
+
+### Teorema
+Sea $f \in \mathcal{C}^2(\mathbb{R})$ función $2\pi$-periódica entonces su serie de Fourier converge uniformemente a $f$ en $\mathbb{R}$.
+
+Además, en ese caso la serie de Fourier es derivable término a término:
+$$
+\begin{align*}
+f'(x) = \displaystyle \sum_{n = 1}^{\infty} \left(- n a_n \sin (nx) + n b_n \cos (nx)\right) \quad \forall x \in \mathbb{R}
+\end{align*}
+$$

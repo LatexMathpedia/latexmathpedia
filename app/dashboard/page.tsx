@@ -37,9 +37,9 @@ type Categories = {
 
 const sampleDataBlog = [
   { title: "Resolución Examen Análisis 2025", description: "Resolución del examen de análisis de 2025 con explicaciones detalladas.", date: "2025-09-01", estimatedReadTime: "5 min", tags: ["Análisis", "Exámenes", "Cálculo", "Integrales"], link: "/resolucion-examen-analisis-2025" },
-  { title: "Teorema de Pitágoras", description: "Explicación y demostración del Teorema de Pitágoras.", date: "15/2/2025", estimatedReadTime: "7 min", tags: ["Matemáticas", "Geometría", "Teoremas"], link: "/teorema-pitagoras" },
-  { title: "Teorema de Darboux", description: "Descripción y aplicaciones del Teorema de Darboux.", date: "10/3/2025", estimatedReadTime: "6 min", tags: ["Matemáticas", "Análisis", "Teoremas"], link: "/teorema-darboux" },
-  { title: "Modelos de Vectores Aleatorios", description: "Introducción a los modelos de vectores aleatorios y su importancia en estadística.", date: "22/4/2025", estimatedReadTime: "11 min", tags: ["Estadística", "Probabilidad", "Matemáticas"], link: "/modelos-vectores-aleatorios" },
+  { title: "Ejercicios Resueltos Análisis III - Parte 1", description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo", date: "2026-01-12", estimatedReadTime: "150 min", tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebesgue"], link: "/analisis3-ejercicios-1" },
+  { title: "Apuntes MOR - Tema 4", description: "Apuntes sobre Introducción a la Teoría de Grafos para la asignatura de Modelos de Optimización de Redes", date: "2025-12-20", estimatedReadTime: "120 min", tags: ["MOR", "Grafos", "Optimización", "Redes"], link: "/mor-tema-4" },
+  { title: "Apuntes TPP - Tema 1", description: "Principales conceptos sobre lenguajes y paradigmas de programación, incluyendo definiciones, clasificaciones y características destacadas", date: "2026-01-10", estimatedReadTime: "35 min", tags: ["TPP", "Programación", "Lenguajes de Programación", "Paradigmas"], link: "/tpp-tema-1" },
 ]
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';

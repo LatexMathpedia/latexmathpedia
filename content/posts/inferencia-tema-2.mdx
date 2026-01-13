@@ -1,0 +1,1639 @@
+---
+title: "Inferencia - Tema 2"
+description: "Suficiencia de un estadígrafo, Familia exponencial k-paramétrica, Estimación puntual y Método de los momentos"
+date: "2026-01-12"
+tags: ["Inferencia estadística", "Estadística", "Matemáticas"]
+---
+
+## Suficiencia de un estadígrafo
+Consideramos una población $X$ con función de distribución $F_\theta$ donde $\theta \in \Theta$ es un parámetro desconocido (y $\Theta$ es el espacio paramétrico). Tomamos una muestra aleatoria $\vec{X} = (X_1, \dots, X_n)$ de tamaño $n$ de dicha población y definimos un estadígrafo $T = T(\vec{X})$ para resumir la información contenida en la muestra.
+
+En la muestra $\vec{X}$ puede existir información redundante o innecesaria que no aporta nada al conocimiento sobre el parámetro $\theta$, por ejemplo, el orden de los datos o ciertos valores que no afecta a la estimación de $\theta$. Por tanto, nos interesa encontrar un estadígrafo que conserve toda la información relevante sobre $\theta$ contenida en la muestra, eliminando cualquier información redundante.
+
+<EjemBox title="Ejemplo">
+
+*Se considera el lanzamiento de una moneda tres veces, en el que se obtiene la muestra:*
+$$
+\begin{align*}
+(\text{cara}, \text{cruz}, \text{cruz})    
+\end{align*}
+$$
+*Se desea estimar el parámetro $p = P(\text{cara})$*.
+
+Cada secuencia posible de tres lanzamientos tiene probabilidad:
+$$
+\begin{align*}
+P(X_1=x_1, X_2=x_2, X_3=x_3) = p^{n_c}(1-p)^{3-n_c},
+\end{align*}
+$$
+donde $n_c$ es el número de caras en la secuencia. En particular,
+$$
+\begin{align*}
+P(\text{cara}, \text{cruz}, \text{cruz}) = p(1-p)^2.
+\end{align*}
+$$
+Observamos que existen tres secuencias con exactamente una cara:
+$$
+\begin{align*}
+(\text{cara}, \text{cruz}, \text{cruz}), \quad
+(\text{cruz}, \text{cara}, \text{cruz}), \quad
+(\text{cruz}, \text{cruz}, \text{cara}).
+\end{align*}
+$$
+Por tanto, la probabilidad total de obtener exactamente una cara y dos cruces es:
+$$
+\begin{align*}
+P(\text{cara:1, cruz:2}) = 3p(1-p)^2.
+\end{align*}
+$$
+
+Consideremos ahora la probabilidad condicional de haber obtenido
+$(\text{cara}, \text{cruz}, \text{cruz})$ sabiendo que hubo una cara y dos cruces:
+$$
+\begin{align*}
+P\big((\text{cara}, \text{cruz}, \text{cruz}) \mid \text{cara:1, cruz:2}\big)
+= \frac{P(\text{cara}, \text{cruz}, \text{cruz})}{P(\text{cara:1, cruz:2})}
+= \frac{p(1-p)^2}{3p(1-p)^2}
+= \frac{1}{3}.
+\end{align*}
+$$
+
+Este resultado no depende del parámetro $p$. Por tanto, el orden en que aparecen las caras y cruces es irrelevante para estimar $p$; basta con conocer el número total de caras.
+
+En consecuencia, el estadígrafo suficiente para $p$ es:
+$$
+\begin{align*}
+T(\mathbf{X}) = \text{número de caras en la muestra}.
+\end{align*}
+$$
+En este caso particular, la observación corresponde a $T = 1$.
+
+</EjemBox>
+
+### Suficiencia. Definición
+Sea $T$ un estadígrafo, se dice **suficiente** o **exhaustivo** para estimar $\theta$ si la distribución de $\vec{X}$ condicionada a $T = t$ no depende del parámetro $\theta$.
+
+### Teorema de factorización
+Sea $T$ un estadígrafo, es suficiente para estimar $\theta$ si y sólo existen $g, h$ tales que:
+$$
+\begin{align*}
+f(\vec{x}, \theta) = g(t, \theta) \cdot h(\vec{x}) \quad \text{ con } t = T(\vec{x})
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Esta demostración se realizará solo para **el caso discreto**:
+
+- **$\Rightarrow$)** Sea $f(\vec{x}, \theta)$ la función de masa de probabilidad conjunta de $\vec{X}$. Tenemos que:
+$$
+\begin{align*}
+f(\vec{x}, \theta) = f(\vec{x}, \theta \mid T=t) \cdot f_T(t, \theta)
+\end{align*}
+$$
+Por definición de suficiencia, $f(\vec{x}, \theta \mid T=t)$ no depende de $\theta$, luego:
+$$
+\begin{align*}
+g(t, \theta) &= f_T(t, \theta) = \displaystyle \sum_{T(\vec{x}) = t} f(\vec{x}, \theta) \\[2ex]
+h(\vec{x}) &= f(\vec{x}, \theta \mid T = T(\vec{x}))
+\end{align*}
+$$
+- **$\Leftarrow$)** Por hipótesis:
+$$
+\begin{align*}
+f(\vec{x}, \theta) = g(t, \theta) \cdot h(\vec{x}) \quad \text{ con } t = T(\vec{x})
+\end{align*}
+$$
+Definimos los conjuntos:
+$$
+\begin{align*}
+A_t = \{\vec{x} | T(\vec{x}) = t\}
+\end{align*}
+$$
+Entonces tenemos que:
+$$
+\begin{align*}
+f(\vec{x}, \theta | T = t) = \left\{
+\begin{array}{ll}
+0 & \text{ si } T(\vec{x}) \neq t \\[2ex]
+\dfrac{f(\vec{x}, \theta)}{f(t, \theta)} & \text{ si } T(\vec{x}) = t
+\end{array}
+\right.
+\end{align*}
+$$
+Si desarrollamos el caso $T(\vec{x}) = t$:
+$$
+\begin{align*}
+\dfrac{f(\vec{x}, \theta)}{f(t, \theta)} = \frac{f(\vec{x}, \theta)}{\displaystyle \sum_{\vec{y} \in A_t} f(\vec{y}, \theta)} = \frac{g(t, \theta) \cdot h(\vec{x})}{\displaystyle \sum_{\vec{y} \in A_t} g(t, \theta) \cdot h(\vec{y})} = \frac{h(\vec{x})}{\displaystyle \sum_{\vec{y} \in A_t} h(\vec{y})}
+\end{align*}
+$$
+que no depende de $\theta$. Por tanto, $T$ es suficiente para estimar $\theta$.
+
+</DemBox>
+
+### Demostración de no suficiencia
+Sean dos muestras $\vec{x} = (x_1, \dots, x_n)$ y $\vec{y} = (y_1, \dots, y_n)$ tales que $T(\vec{x}) = T(\vec{y})$, se tiene que:
+$$
+\begin{align*}
+\frac{f(\vec{x}, \theta)}{f(\vec{y}, \theta)} \text{ depende de } \theta \implies T \text{ no es suficiente}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Supongamos que si lo fuera, entonces:
+$$
+\begin{align*}
+\frac{f(\vec{x}, \theta)}{f(\vec{y}, \theta)} = \frac{g(T(\vec{x}, \theta)) \cdot h(\vec{x})}{g(T(\vec{y}, \theta)) \cdot h(\vec{y})} = \frac{h(\vec{x})}{h(\vec{y}))}
+\end{align*}
+$$
+que no depende de $\theta$, lo que contradice la hipótesis.
+
+</DemBox>
+
+<EjemBox title="Ejemplo">
+
+*Se considera $\vec{X}$ una muestra aleatoria de tamaño $n$, ¿es $\vec{X}$ un estadígrafo suficiente?*
+
+Trivialmente, $\vec{X}$ es ...
+
+</EjemBox>
+
+### Estadístico suficiente minimal
+Podemos notar que un estadígrafo $T(X)$ induce una partición del espacio muestral en clases de equivalencia, donde dos muestras $\vec{x}$ y $\vec{y}$ pertenecen a la misma clase si $T(\vec{x}) = T(\vec{y})$, es decir:
+$$
+\begin{align*}
+\vec{x} \sim \vec{y} \iff T(\vec{x}) = T(\vec{y})
+\end{align*}
+$$
+Así, una partición del espacio muestral está asociada a algún estadígrafo $T$ si y sólo si las clases de equivalencia son los conjuntos de muestras que comparten el mismo valor del estadígrafo.
+
+Una partición (o estadígrafo) será suficiente entonces si, una vez que conocemos la clase de equivalencia a la que pertenece la muestra observada, es decir, conociendo $T$, la distribución condicional del resto de la muestra no depende del parámetro $\theta$.
+
+Diremos que una partición es **suficiente minimal** si es suficiente y además es la más gruesa posible, es decir, cualquier otra partición suficiente es un refinamiento de ella.
+
+Equivalentemente, un estadígrafo será **minimalmente suficiente** si es función de cualquier otro estadígrafo suficiente o, en otras palabras, si induce una partición suficiente minimal.
+
+#### Relación de equivalencia para suficiencia minimal
+Sean $\vec{x}, \vec{y}$ dos muestras, la partición dada por la relación de equivalencia:
+$$
+\begin{align*}
+\vec{x} \sim \vec{y} \iff \frac{f(\vec{x}, \theta)}{f(\vec{y}, \theta)} \text{ no depende de } \theta 
+\end{align*}
+$$
+es suficiente minimal.
+
+<EjBox title="Nota">
+
+Podemos interpretar esto como que $\vec{x}$ e $\vec{y}$ son equivalentes si la razón de verosimilitudes es una cantidad independiente de $\theta$. Es decir, si el cambio de $\theta$ afecta a ambas densidades de la misma manera, manteniendo constante su cociente.
+
+</EjBox>
+
+<DemBox title="Demostración del caso discreto">
+
+Sea $T$ un estadígrafo asociado a la partición dada por la relación de equivalencia anterior y, sea $\vec{x}'$ tal que $T(\vec{x}') = t$ fijo entonces:
+$$
+\begin{align*}
+f(\vec{x}', \theta |T = t) = \frac{f(\vec{x}', \theta)}{f_T(t, \theta)} = \frac{f(\vec{x}', \theta)}{\displaystyle \sum_{T(\vec{x}) = t} f(\vec{x}, \theta)} = \frac{1}{\displaystyle \sum_{T(\vec{x}) = t} \frac{f(\vec{x}, \theta)}{f(\vec{x}', \theta)}}
+\end{align*}
+$$
+Por definición de la relación de equivalencia, el cociente $\frac{f(\vec{x}, \theta)}{f(\vec{x}', \theta)}$ no depende de $\theta$ para todo $\vec{x}$ tal que $T(\vec{x}) = t$, luego $f(\vec{x}', \theta |T = t)$ no depende de $\theta$. Por tanto, $T$ es suficiente.
+
+Sea ahora $T'$ otro estadígrafo suficiente, si $T(\vec{x}) = T(\vec{x}') = t'$, es decir, $\vec{x}$ y $\vec{x}'$ pertenecen al mismo elemento de la partición asociada a $T'$ entonces:
+$$
+\begin{align*}
+f(\vec{x}, \theta|T' = t') = \frac{f(\vec{x}, \theta)}{f_{T'}(t', \theta)} \quad \text{ y } \quad f(\vec{x}', \theta|T' = t') = \frac{f(\vec{x}', \theta)}{f_{T'}(t', \theta)} 
+\end{align*}
+$$
+Por suficiencia de $T'$, ambas expresiones no dependen de $\theta$, y su cociente:
+$$
+\begin{align*}
+\frac{f(\vec{x}, \theta|T' = t')}{f(\vec{x}', \theta|T' = t')} = \frac{f(\vec{x}, \theta)}{f(\vec{x}', \theta)}
+\end{align*}
+$$
+tampoco depende de $\theta$, luego se tiene:
+$$
+\begin{align*}
+T(\vec{x}) = T(\vec{x}') \quad \text{ y } \quad \vec{x}, \vec{x}' \text{ pertenecen a la misma partición de }T
+\end{align*}
+$$
+Por tanto, $T'$ es un refinamiento de $T$ y $T$ es minimalmente suficiente.
+
+</DemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $X \rightsquigarrow \mathcal{E}(\lambda)$ y se considera el estadígrafo:*
+$$
+\begin{align*}
+T = \displaystyle \sum_{i = 1}^{n} X_i
+\end{align*}
+$$
+*Demostrar que $T$ es suficiente minimal para $\lambda$.*
+
+La función de masa de probabilidad conjunta de la muestra aleatoria $\vec{X}$ es:
+$$
+\begin{align*}
+f(\vec{x}, \lambda) = \lambda^n e^{ - \lambda \sum_{i = 1}^{n} x_i} = \lambda^n e^{ - \lambda t} \quad \text{ con } t = T(\vec{x})
+\end{align*}
+$$
+Por lo que si definimos las funciones:
+$$
+\begin{align*}
+g(t, \lambda) &= \lambda^n e^{ - \lambda t} \quad \text{y} \quad h(\vec{x}) = 1
+\end{align*}
+$$
+se cumple la factorización:
+$$
+\begin{align*}
+f(\vec{x}, \lambda) = g(t, \lambda) \cdot h(\vec{x})
+\end{align*}
+$$
+Luego, $T$ es suficiente para $\lambda$.
+
+Para ver que es suficiente minimal, consideramos las muestras $\vec{x}$ y $\vec{y}$ tales que $T(\vec{x}) = T(\vec{y})$, es decir:
+$$
+\begin{align*}
+\frac{f(\vec{x}, \theta)}{f(\vec{y}, \theta)} = \frac{\lambda^n e^{ - \lambda^{\sum_{i = 1}^n x_i}}}{\lambda^n e^{ - \lambda^{\sum_{i = 1}^n y_i}}} = \frac{e^{ - \lambda^{\sum_{i = 1}^n x_i}}}{e^{ - \lambda^{\sum_{i = 1}^n y_i}}} = e^{ - \lambda[T(\vec{x}) - T(\vec{y})]}
+\end{align*}
+$$
+que no depende de $\lambda$ si $T(\vec{x}) = T(\vec{y})$. Por tanto, $T$ es suficiente minimal.
+
+</EjemBox>
+
+## Familia exponencial $k$-paramétrica
+### Familia exponencial $k$-paramétrica. Definición
+Una familia de distribuciones de probabilidad $\{F_\theta: \theta \in \Theta \subseteq \mathbb{R}^k\}$ se dice que pertenece a la **familia exponencial $k$-paramétrica** si:
+
+- Su suporte $\{\vec{x} : f(\vec{x}, \theta) > 0\}$ no depende de $\theta$.
+- Existen $D, Q_1, \dots, Q_k, S, T_1, \dots, T_k$ tales que:
+$$
+\begin{align*}
+f(\vec{x}, \vec{\theta}) = e^{S(\vec{x}) + D(\vec{\theta}) + \sum_{j = 1}^{k} Q_j(\vec{\theta}) T_j(\vec{x})}
+\end{align*}
+$$
+O equivalentemente:
+$$
+\begin{align*}
+f(\vec{x}, \vec{\theta}) = c(\vec{\theta}) h(\vec{x}) e^{\sum Q_j(\vec{\theta}) T_j(\vec{x})}
+\end{align*}
+$$
+
+### Parametrización natural. Definición
+Parametrizando $\eta_j = Q_j(\theta)$ se tiene la **parametrización natural** de la familia exponencial $k$-paramétrica:
+$$
+\begin{align*}
+f(\vec{x}, \vec{\eta}) = c^*(\vec{\eta}) h(\vec{x}) e^{\sum_{j = 1}^{k} \eta_j T_j(\vec{x})}
+\end{align*}
+$$
+Donde el espacio paramétrico natural es:
+$$
+\begin{align*}
+H = \{\vec{\eta} \in \mathbb{R}^k : \int_{\mathbb{R}^n} h(\vec{x}) e^{\sum_{j = 1}^{k} \eta_j T_j(\vec{x})} d\vec{x} < \infty \}
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Sea $X \rightsquigarrow \mathcal{B}(n, p)$ con $n$ conocido y $0 < p < 1$, demostrar que la familia de distribuciones de $X$ pertenece a la familia exponencial paramétrica.*
+
+Tenemos que la función de masa de probabilidad de $X$ es:
+$$
+\begin{align*}
+f(x, p) = \binom{n}{x} p^x (1-p)^{n-x} \quad \text{ con } x = 0, 1, \dots, n
+\end{align*}
+$$
+Que podemos expresar como:
+$$
+\begin{align*}
+f(x, p) = \binom{n}{x} p^x (1 - p)^{n - 1} = \binom{n}{x} (1 - p)^n\left(\frac{p}{1 - p}\right)^x = \binom{n}{x} (1 - p)^n e^{x \log \left(\frac{p}{1 - p}\right)}
+\end{align*}
+$$
+Por lo que si definimos:
+$$
+\begin{align*}
+c(p) = (1 - p)^n \qquad
+h(x) = \binom{n}{x} \qquad
+Q_1(p) = \log \left(\frac{p}{1 - p}\right) \qquad
+T_1(x) = x
+\end{align*}
+$$
+se cumple la factorización y tenemos que el parámetro natural es:
+$$
+\begin{align*}
+\eta_1 = Q_1(p) = \log \left(\frac{p}{1 - p}\right)
+\end{align*}
+$$
+Luego su parametrización natural es:
+$$
+\begin{align*}
+f(x, \eta_1) & = c^*(\eta_1) h(x) e^{\eta_1 T_1(x)} = \left(1 - \log\left(\frac{p}{1 - p}\right)\right)^n \binom{n}{x} e^{\log\left(\frac{p}{1 - p}\right) x}
+\end{align*}
+$$
+Y tendríamos que $T_1(X) = X$ es un estadígrafo suficiente minimal para $p$.
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Se considera $X \rightsquigarrow \gamma(p, a)$ con $p, a > 0$* 
+
+La función de densidad de probabilidad de $X$ es:
+$$
+\begin{align*}
+f(x, p, a) = \frac{a^p}{\Gamma(p)} x^{p - 1} e^{-a x} \quad \text{ con } x > 0
+\end{align*}
+$$
+Que podemos expresar como:
+$$
+\begin{align*}
+f(x, p, a) = \frac{1}{\Gamma(p)} x^{-1} e^{p \log(a x) - a x}
+\end{align*}
+$$
+Por lo que si definimos:
+$$
+\begin{align*}
+c(p, a) = \frac{1}{\Gamma(p)} \quad
+h(x) = x^{-1} \quad
+Q_1(p, a) & = \log(a) \quad
+T_1(x) = \log(x) \\[2ex]
+Q_2(p, a) & = -a \quad
+T_2(x) = x
+\end{align*}
+$$
+se cumple la factorización y tenemos que los parámetros naturales son:
+$$
+\begin{align*}
+\eta_1 = Q_1(p, a) = \log(a) \quad \text{ y } \quad \eta_2 = Q_2(p, a) = - a
+\end{align*}
+$$
+
+</EjemBox>
+
+## Estimación puntual
+### Estimador puntual. Definición
+Llamamos **estimador puntual** de un parámetro $\theta \in \Theta$, asociado a una característica con distribución $F_{\theta}$, a una función medible:
+$$
+\begin{align*}
+T : (X_1, \dots, X_n) \longrightarrow T(X_1, \dots, X_n) \in \Theta \in \mathbb{R}^p
+\end{align*}
+$$
+Además, llamamos **estimación** o **aproximación del parámetro** a la realización del estimador puntual, es decir:
+$$
+\begin{align*}
+t = T(x_1, \dots, x_n) \in \Theta \in \mathbb{R}^p\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Lógicamente, se busca que un estimador garantice de alguna manera que las estimaciones sean razonables, es decir, que estén cerca del valor real del parámetro desconocido.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Que una función sea estimador, no implica que sea útil en muchos casos, por ejemplo, se considera una distribución uniforme $X \rightsquigarrow \mathcal{U}(0, \theta)$ con $\theta > 0$ desconocido y se plantea el estimador puntual:*
+$$
+\begin{align*}
+T(\vec{x}) = \sum_{i = 1}^{n} x_i
+\end{align*}
+$$
+Como podemos ver, es claramente un estimador ya que:
+$$
+\begin{align*}
+T : \mathbb{R}^n \longrightarrow \mathbb{R}^ + 
+\end{align*}
+$$
+Y tenemos que el espacio paramétrico es $\Theta = (0, \infty)$.
+
+Sin embargo, este estimador no es útil ya que casi siempre dará un valor muy grande comparado con el valor real de $\theta$. Por ejemplo, si tomamos una muestra aleatoria de tamaño $n = 3$ (supongamos que $\theta = 1$) y obtenemos la realización:
+$$
+\begin{align*}
+\vec{x} = (0.5, 0.8, 0.9)
+\end{align*}
+$$
+Entonces la estimación del parámetro será:
+$$
+\begin{align*}
+t = T(\vec{x}) = 0.5 + 0.8 + 0.9 = 2.2
+\end{align*}
+$$
+Que está muy lejos del valor real $\theta = 1$.
+
+</EjemBox>
+
+### Criterios de calidad de un estimador puntual
+#### Insesgadez. Definición
+Un estimador puntual $T$ de un parámetro $\theta$ es **insesgado** si:
+$$
+\begin{align*}
+E(T) = \theta
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Lo que se busca con este criterio es que, en promedio, el estimador proporcione el valor correcto del parámetro. Por ejemplo, se plantean dos estimadores $T_1$ y $T_2$ para un parámetro $\theta$ cuyas distribuciones son idénticas pero con un desplazamiento sobre el valor del estimador real:
+
+![TikZ Graph](/blogs/images/tema-2-estimacion_tikz_0.svg)
+
+Podemos deducir ``a ojo'' que el estimador $T_1$ nos ofrecerá mejores estimaciones del parámetro $\theta$ que el estimador $T_2$, ya que la mayoría de los valores que nos dará (la esperanza) estarán más cerca de $\theta$.
+
+</EjBox>
+
+#### Eficiencia. Definición
+Entre dos estimadores cuyo sesgo sea igual, es decir, que pertenezcan a la misma clase, diremos que un estimador $T_1$ es **más eficiente** que otro estimador $T_2$ si:
+$$
+\begin{align*}
+Var(T_1) < Var(T_2)
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Los que se busca con este criterio es que el estimador proporcione estimaciones que no varíen mucho entre sí y que, por tanto, estén más concentradas alrededor del valor real del parámetro. Por ejemplo, se plantean dos estimadores $T_1$ y $T_2$ para un parámetro $\theta$ cuyas distribuciones son idénticas pero con diferente dispersión:
+
+![TikZ Graph](/blogs/images/tema-2-estimacion_tikz_1.svg)
+
+Podemos deducir ``a ojo'' que el estimador $T_1$ nos ofrecerá mejores estimaciones del parámetro $\theta$ que el estimador $T_2$, ya que la mayoría de los valores que nos dará (la varianza) estarán más concentrados alrededor de $\theta$.
+
+</EjBox>
+
+#### Cota de Frechet-Cramér-Rao
+La cota de Frechet-Cramér-Rao establece un límite inferior para la varianza de cualquier estimador insesgado de un parámetro $\theta$ bajo unas condiciones de regularidad. Sea $T$ un estimador insesgado de $\theta$, entonces:
+$$
+\begin{align*}
+Var(T) \geq \frac{1}{I(\theta)}
+\end{align*}
+$$
+donde $I(\theta)$ es la información de Fisher, definida como:
+$$
+\begin{align*}
+I(\theta) = E \left[\left[\frac{\partial }{\partial \theta} \log f(\vec{X}, \theta)\right]^2\right] = - E \left[\frac{\partial^2 }{\partial \theta^2} \log f(\vec{X}, \theta)\right]
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Podemos notar que la información de Fisher mide la cantidad de información que una muestra aleatoria proporciona sobre el parámetro desconocido $\theta$. Esto lo hace ya que, si descomponemos la fórmula, tenemos que:
+
+- $\log f(\vec{X}, \theta)$ es el logaritmo de la función de densidad, que se utiliza para simplificar los cálculos y convertir productos en sumas.
+- $\frac{\partial }{\partial \theta} \log f(\vec{X}, \theta)$ al derivar respecto a $\theta$, nos da una medida de cuánto cambia la función de densidad cuando variamos el parámetro $\theta$.
+- Al elevar al cuadrado esta derivada, potenciamos la sensibilidad de la función de densidad respecto a cambios en $\theta$. Esto es debido a que para valores pequeños de la derivada, el cuadrado será aún más pequeño, mientras que para valores grandes, el cuadrado será mucho mayor.
+- Finalmente, al tomar la esperanza $E[\cdot]$, estamos promediando esta sensibilidad sobre todas las posibles muestras $\vec{X}$, lo que nos da una medida global de cuánta información contiene la muestra sobre el parámetro $\theta$.
+
+</EjBox>
+
+#### Error cuadrático medio. Definición
+El **error cuadrático medio** (ECM) de un estimador puntual $T$ de un parámetro $\theta$ es:
+$$
+\begin{align*}
+ECM(T) = E\big[(T - \theta)^2\big] = Var(T) + (\underbrace{E(T) - \theta}_{\text{sesgo}})^2
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+El ECM combina los dos criterios anteriores (sesgo y varianza) en una sola medida de calidad del estimador. Un estimador con un ECM bajo es deseable, ya que indica que el estimador es preciso (baja varianza) y exacto (bajo sesgo).
+
+Podemos notar que en la fórmula del ECM, lo que estamos haciendo es medir la distancia cuadrática entre el estimador $T$ y el parámetro real $\theta$. Al tomar el cuadrado de la diferencia, penalizamos más los errores grandes, lo que significa que un estimador que ocasionalmente se aleja mucho del valor real tendrá un ECM más alto que uno que se mantiene consistentemente cerca del valor real. Además, al aplicar la esperanza $E[\cdot]$, estamos promediando esta distancia cuadrática sobre todas las posibles muestras, lo que nos da una medida global de la precisión del estimador.
+
+</EjBox>
+
+#### Consistencia. Definición
+Una sucesión de estimadores $\{T_n\}$ de un parámetro $\theta$ es **consistente** si:
+$$
+\begin{align*}
+T_n \xrightarrow[n \to \infty]{P} \theta
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Podemos ver que, en realidad lo que estamos diciendo es que, a medida que aumentamos el tamaño de la muestra $n$, las estimaciones proporcionadas por el estimador $T_n$ se acercan cada vez más al valor real del parámetro $\theta$. Esto es deseable, ya que significa que con muestras más grandes, podemos confiar más en las estimaciones proporcionadas por el estimador.
+
+Gráficamente, podríamos pensar en algo como:
+
+![TikZ Graph](/blogs/images/tema-2-estimacion_tikz_2.svg)
+
+</EjBox>
+
+### Método de los momentos
+El **método de los momentos** es un procedimiento sencillo y versátil que permite obtener estimadores puntuales en situaciones complejas. No obstante, los estimadores obtenidos mediante este método pueden ser inadmisibles en ciertos casos, por lo que es importante verificar su validez antes de utilizarlos (se verán ejemplos más adelante).
+
+Sea $X$ una variable aleatoria con distribución $F_\theta$ (con $\theta \in \Theta \subseteq \mathbb{R}^k$) y sean sus momentos poblacionales $(\alpha_i)_{i = 1}^r$, entonces se tiene que:
+$$
+\begin{align*}
+\alpha_i = g_i(\theta_1, \dots, \theta_k) \quad \text{ para } i = 1, \dots, r
+\end{align*}
+$$
+donde $g_i$ son funciones conocidas.
+
+Sea ahora $\vec{X} = (X_1, \dots, X_n)$ una muestra aleatoria de tamaño $n$ de $X$, el método de los momentos consiste en identificar los primeros $r$ momentos muestrales $(a_i)_{i = 1}^r$ con los correspondientes momentos poblacionales $(\alpha_i)_{i = 1}^r$ con el fin de obtener un sistema de ecuaciones que permita estimar las soluciones $\theta_1, \dots, \theta_k$ en función de los momentos muestrales.
+$$
+\begin{align*}
+\left.
+\begin{array}{ccc}
+a_1 = & \alpha_1 = & g_1(\theta_1, \dots, \theta_k) \\
+\vdots & \vdots & \vdots \\
+a_i = & \alpha_i = & g_i(\theta_1, \dots, \theta_k) \\
+\vdots & \vdots & \vdots \\
+a_r = & \alpha_r = & g_r(\theta_1, \dots, \theta_k)
+\end{array}
+\right\} \implies T_i = h_i(a_1, \dots, a_r) \quad \text{ para } i = 1, \dots, k
+\end{align*}
+$$
+Donde $T_i$ es el estimador puntual del parámetro $\theta_i$ y $h_i$ son funciones conocidas.
+
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria $X \rightsquigarrow \mathcal{N}(\mu, \sigma)$ con $\theta = (\mu, \sigma^2) \in \mathbb{R} \times \mathbb{R}^+$ desconocido. Obtener los estimadores puntuales de $\mu$ y $\sigma^2$ mediante el método de los momentos.*
+
+Sabemos que los momentos poblacionales de una distribución normal son:
+$$
+\begin{align*}
+\mu = \alpha_1 \quad \text{ y } \quad \sigma^2 = \alpha_2 - \alpha_1^2
+\end{align*}
+$$
+
+Por lo que, podemos obtener los momentos muestrales como:
+$$
+\begin{align*}
+\alpha_1 & = a_1 = \mu = g_1(\mu, \sigma^2)\\
+\alpha_2 & = a_2 = \sigma^2 + \mu^2 = g_2(\mu, \sigma^2)
+\end{align*}
+$$
+De donde obtenemos el sistema de ecuaciones:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\overline{X} = \dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i = \mu \\[4ex]
+\overline{X^2} = \dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i^2 = \sigma^2 + \mu^2
+\end{array}
+\right\}
+\end{align*}
+$$
+De donde se deduce que:
+$$
+\begin{align*}
+T_1 & = \hat{\mu} = \overline{X} = \dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i \\[2ex]
+T_2 & = \hat{\sigma}^2 = \overline{X^2} - \overline{X}^2 = \dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i^2 - \left(\dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i\right)^2
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria $X \rightsquigarrow \mathcal{U}(0, \theta)$ con $\theta > 0$ desconocido. Obtener el estimador puntual de $\theta$ mediante el método de los momentos.*
+
+Sabemos que el momento poblacional de una distribución uniforme es:
+$$
+\begin{align*}
+\alpha_1 = \frac{\theta}{2}
+\end{align*}
+$$
+Por lo que, podemos obtener el momento muestral como:
+$$
+\begin{align*}
+\alpha_1 = a_1 = \frac{\theta}{2} = g_1(\theta)
+\end{align*}
+$$
+De donde obtenemos la ecuación:
+$$
+\begin{align*}
+\overline{X} = \dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i = \frac{\theta}{2}
+\end{align*}
+$$
+De donde se deduce que:
+$$
+\begin{align*}
+T = \hat{\theta} = 2 \overline{X} = \frac{2}{n} \displaystyle \sum_{i = 1}^{n} X_i
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Se considera una variable aleatoria $X \rightsquigarrow \mathcal{U}( - \theta, \theta)$ con $\theta > 0$ desconocido. Obtener el estimador puntual de $\theta$ mediante el método de los momentos.*
+
+Como tenemos que el momento poblacional de primer orden de una distribución uniforme es:
+$$
+\begin{align*}
+\alpha_1 = \frac{b - a}{2} = \frac{\theta - (-\theta)}{2} = 0 
+\end{align*}
+$$
+Tenemos que recurrir al momento poblacional de segundo orden:
+$$
+\begin{align*}
+\alpha_2 = \frac{(b - a)^2}{12} = \frac{(2\theta)^2}{12} = \frac{\theta^2}{3}
+\end{align*}
+$$
+Por lo que, podemos obtener el momento muestral como:
+$$
+\begin{align*}
+\alpha_2 = a_2 = \frac{\theta^2}{3} = g_2(\theta)
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+T = \hat{\theta} = \sqrt{3 \cdot \overline{X^2}} = \sqrt{\frac{3}{n} \displaystyle \sum_{i = 1}^{n} X_i^2}
+\end{align*}
+$$
+que no es función del estadístico suficiente $(X_{(1)}, X_{(n)})$ por lo que es un estimador inadmisible.
+
+</EjemBox>
+
+### Método delta
+El **método delta** es una técnica en estadística que permite determinar la distribución asintótica de una trasformación diferenciable de un estadístico. Es especialmente útil cuando se trabaja con estimadores que son asintóticamente normales, ya que permite inferir propiedades de funciones de estos estimadores sin necesidad de conocer la distribución exacta.
+
+Sea $\{T_n\}_{n \in \mathbb{N}}$ una sucesión de estadísticos construidos a partir de una muestra aleatoria $\vec{X} = (X_1, \dots, X_n)$ de una variable aleatoria $X \rightsquigarrow F_\theta$ con $\theta \in \Theta \subseteq \mathbb{R}$ desconocido, tq:
+$$
+\begin{align*}
+\sqrt{n} (T_n - \theta) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}(0, \sigma)
+\end{align*}
+$$
+Sea $g$ una función con derivada no nula en el espacio paramétrico $\Theta$, entonces:
+$$
+\begin{align*}
+\sqrt{n} (g(T_n) - g(\theta)) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0,|g'(\theta)| \sigma\right)
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Análogamente, se puede escribir el enunciado bajo las mismas condiciones como:
+$$
+\begin{align*}
+\dfrac{T_n - \theta}{\frac{\sigma}{\sqrt{n}}} \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}(0, 1) \implies \dfrac{g(T_n) - g(\theta)}{\frac{|g'(\theta)| \sigma}{\sqrt{n}}} \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}(0, 1)
+\end{align*}
+$$
+O incluso:
+$$
+\begin{align*}
+T_n \underset{n \to \infty}{\rightsquigarrow} \mathcal{N}\left(\theta, \frac{\sigma}{\sqrt{n}}\right) \implies g(T_n) \underset{n \to \infty}{\rightsquigarrow} \mathcal{N}\left(g(\theta), \frac{|g'(\theta)| \sigma}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Como sabemos que se cumple que:
+$$
+\begin{align*}
+Y_n \xrightarrow[n \to \infty]{\mathcal{L}} Y \implies c \cdot Y_n \xrightarrow[n \to \infty]{\mathcal{L}} c \cdot Y
+\end{align*}
+$$
+Si lo aplicamos a nuestro caso, tenemos que:
+$$
+\begin{align*}
+\sqrt{n}(T_n - \theta) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}(0, \sigma) \implies \sqrt{n} (T_n - \theta)g'(\theta) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, |g'(\theta)| \sigma\right)
+\end{align*}
+$$
+Por otro lado, tenemos que:
+$$
+\begin{align*}
+\sqrt{n}(g(T_n) - g(\theta)) = \sqrt{n}(T_n - \theta) \cdot \frac{g(T_n) - g(\theta)}{T_n - \theta}
+\end{align*}
+$$
+Por otro resultado de convergencias, tenemos que:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+Y_n \xrightarrow[n \to \infty]{\mathcal{L}} Y \\
+Z_n \xrightarrow[n \to \infty]{P} c
+\end{array}
+\right\} \implies Y_n \cdot Z_n \xrightarrow[n \to \infty]{\mathcal{L}} c \cdot Y
+\end{align*}
+$$
+Por lo que, bastaría ver que:
+$$
+\begin{align*}
+\frac{g(T_n) - g(\theta)}{T_n - \theta} \xrightarrow[n \to \infty]{P} g'(\theta) 
+\end{align*}
+$$
+Por la definición de derivada tenemos que, $\forall \varepsilon > 0$ existe $\delta_\varepsilon > 0$ tal que:
+$$
+\begin{align*}
+|T_n - \theta| < \delta_\varepsilon \implies \left|\frac{g(T_n) - g(\theta)}{T_n - \theta} - g'(\theta)\right| < \varepsilon
+\end{align*}
+$$
+Si consideramos un $\omega$ tal que $|T_n(\omega) - \theta| < \delta_\varepsilon$, entonces:
+$$
+\begin{align*}
+\left|\frac{g(T_n(\omega)) - g(\theta)}{T_n(\omega) - \theta} - g'(\theta)\right| < \varepsilon
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+\left\{\omega : |T_n(\omega) - \theta| < \delta_\varepsilon\right\} \subseteq \left\{\omega : \left|\frac{g(T_n(\omega)) - g(\theta)}{T_n(\omega) - \theta} - g'(\theta)\right| < \varepsilon\right\}
+\end{align*}
+$$
+Y, por tanto:
+$$
+\begin{align*}
+\lim_{n \to \infty} P\left(\left|\frac{g(T_n) - g(\theta)}{T_n - \theta} - g'(\theta)\right| < \varepsilon\right) & \geq \lim_{n \to \infty} P\left(|T_n - \theta| < \delta_\varepsilon\right) = \\[2ex]
+& = \lim_{n \to \infty} P\left(\sqrt{n} |T_n - \theta| < \sqrt{n} \delta_\varepsilon\right) = \\[2ex]
+& = \lim_{n \to \infty} P\left(\left|\frac{\sqrt{n}(T_n - \theta)}{\sigma}\right| < \frac{\sqrt{n} \delta_\varepsilon}{\sigma}\right) =\\[2ex]
+& \geq \lim_{n \to \infty} P\left(\left|\frac{\sqrt{n}(T_n - \theta)}{\sigma}\right| < \frac{\sqrt{n_0} \delta_\varepsilon}{\sigma}\right) =\\[2ex]
+& = P \left(\left|\mathcal{N}(0, 1)\right| < \frac{\sqrt{n_0}\delta_\varepsilon}{\sigma} \right)
+\end{align*}
+$$
+Por lo que, tomando $n_0$ tal que:
+$$
+\begin{align*}
+\frac{\sqrt{n_0} \delta_\varepsilon}{\sigma} < z_\varepsilon \quad \text{ con } P(|\mathcal{N}(0, 1)| < z_\varepsilon) > 1 - \varepsilon
+\end{align*}
+$$
+se tiene que:
+$$
+\begin{align*}
+\lim_{n \to \infty} P\left(\left|\frac{g(T_n) - g(\theta)}{T_n - \theta} - g'(\theta)\right| < \varepsilon\right) > 1 - \varepsilon \quad \forall \varepsilon > 0
+\end{align*}
+$$
+Y, por tanto:
+$$
+\begin{align*}
+\frac{g(T_n) - g(\theta)}{T_n - \theta} \xrightarrow[n \to \infty]{P} g'(\theta)
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+La idea es que si tenemos un estimador $T_n$ casi normal que se acerca a un parámetro $\theta$ cuando $n$ es suficientemente grande, es decir, cuando tenemos muchos datos queremos saber que ocurre cuando aplicamos una transformación $g$ a este estimador.
+
+Así, $T_n$ nos dará valores que oscilan cerca de $\theta$ con una cierta incertidumbre (desviación típica). Cuando aplicamos la función $g$ a $T_n$ en cierta forma es como poner una lupa sobre la función en el punto $\theta$. Esto se debe a que, al ser $g$ suave, cerca de $\theta$ se comporta como una línea recta cuya pendiente es $g'(\theta)$. Por tanto:
+
+- Si $g$ tiene pendiente pronunciada ($|g'(\theta)| > 1$) se amplifica la incertidumbre
+- Si $g$ tiene pendiente suave ($|g'(\theta)| < 1$) se reduce la incertidumbre
+
+Gracias a esto, podemos obtener la distribución asintótica de $g(T_n)$ a partir de estimadores obtenidos por el método de los momentos.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Consideremos un ejemplo intuitivo en el que queremos medir la temperatura y tenemos un termómetro con cierto fallo. Supongamos que la temperatura real es $\theta = 20^\circ C$ y tenemos un estimador $T_n$ que nos da la medición promedio de $n$ muestras de temperatura y que se comporta aproximadamente como una distribución normal alrededor de $\theta$ con desviación estándar $\frac{\sigma}{\sqrt{n}}$.*
+
+Ahora, supongamos que queremos convertir esta temperatura a Fahrenheit, para ello, hay que emplear la función de conversión:
+$$
+\begin{align*}
+g(x) = 1.8x + 32
+\end{align*}
+$$
+
+Aplicando el método delta, podemos determinar cómo afecta esta conversión a la incertidumbre de nuestra medición. La derivada de $g$ es:
+$$
+\begin{align*}
+g'(x) = 1.8
+\end{align*}
+$$
+Por lo que, aplicando el método delta, tenemos que la distribución asintótica de $g(T_n)$ es:
+$$
+\begin{align*}
+g(T_n) \underset{n \to \infty}{\rightsquigarrow} \mathcal{N}\left(g(\theta), \frac{|g'(\theta)| \sigma}{\sqrt{n}}\right) = \mathcal{N}\left(1.8 \cdot 20 + 32, \frac{1.8 \sigma}{\sqrt{n}}\right) = \mathcal{N}\left(68, \frac{1.8 \sigma}{\sqrt{n}}\right)
+\end{align*}
+$$
+Esto significa que al convertir la temperatura a Fahrenheit, la incertidumbre en nuestra medición se amplifica por un factor de $1.8$. Por lo tanto, si originalmente teníamos una desviación estándar de $\frac{\sigma}{\sqrt{n}}$ en Celsius, ahora tendremos una desviación estándar de $\frac{1.8 \sigma}{\sqrt{n}}$ en Fahrenheit. Esto ilustra cómo el método delta nos permite entender el impacto de las transformaciones en la incertidumbre de nuestras estimaciones.
+
+Gráficamente, podríamos representar la situación de la siguiente manera (ajustando las escalas, ya que $g(x)$ debería estar mucho más arriba):
+
+![TikZ Graph](/blogs/images/tema-2-estimacion_tikz_3.svg)
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria $X \rightsquigarrow \mathcal{E}(\lambda)$ con $\lambda > 0$ desconocido. Obtener el estimador puntual de $\lambda$ mediante el método delta, aplicando previamente el método de los momentos.*
+
+Sabemos que el momento poblacional de una distribución exponencial es:
+$$
+\begin{align*}
+\alpha_1 = \frac{1}{\lambda}
+\end{align*}
+$$
+Por lo que, podemos obtener el momento muestral como:
+$$
+\begin{align*}
+\alpha_1 = a_1 = \frac{1}{\lambda} = g_1(\lambda)
+\end{align*}
+$$
+De donde obtenemos la ecuación:
+$$
+\begin{align*}
+\overline{X} = \dfrac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i = \frac{1}{\lambda} \implies \lambda = \frac{1}{\overline{X}}
+\end{align*}
+$$
+Ahora, sean $X_i \rightsquigarrow \mathcal{E}(\lambda)$ variables aleatorias independientes e idénticamente distribuidas, sabemos que:
+$$
+\begin{align*}
+X_i \rightsquigarrow \mathcal{E}(\lambda) \equiv \gamma(1, \lambda)
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} X_i \rightsquigarrow \gamma(n, \lambda) \implies \overline{X} = \frac{ \sum_{i = 1}^{n} X_i}{n} \rightsquigarrow \gamma\left(n, \frac{\lambda}{n}\right) 
+\end{align*}
+$$
+Por otra parte, si aplicamos el Teorema del Límite Central sobre $\overline{X}$, tenemos que:
+$$
+\begin{align*}
+\overline{X} \rightsquigarrow \mathcal{N}\left(\frac{1}{\lambda}, \frac{1}{\sqrt{n} \lambda}\right)
+\end{align*}
+$$
+ya que:
+$$
+\begin{align*}
+E(\overline{X}) & = E\left(\frac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i\right) = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} E(X_i) = \frac{1}{n} \cdot n \cdot \frac{1}{\lambda} = \frac{1}{\lambda} \\[2ex]
+Var(\overline{X}) & = Var\left(\frac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i\right) = \frac{1}{n^2} \displaystyle \sum_{i = 1}^{n} Var(X_i) = \frac{1}{n^2} \cdot n \cdot \frac{1}{\lambda^2} = \frac{1}{n \lambda^2}
+\end{align*}
+$$
+Por tanto, definimos el estimador puntual de $\lambda$ como:
+$$
+\begin{align*}
+\hat{\theta} = T = \overline{X} \rightsquigarrow \mathcal{N}\left(\frac{1}{\lambda}, \frac{1}{\sqrt{n} \lambda}\right)
+\end{align*}
+$$
+Ahora, para elegir la función $g$ adecuada, podemos notar que:
+$$
+\begin{align*}
+\lambda = \frac{1}{\overline{X}} \implies g(x) = \frac{1}{x} \quad \text{ con } g'(x) = -\frac{1}{x^2}
+\end{align*}
+$$
+Aplicando el método delta, tenemos que la distribución asintótica de $g(T)$ es:
+$$
+\begin{align*}
+g(T) \rightsquigarrow \mathcal{N}\left(g\left(\frac{1}{\lambda}\right), \frac{|g'(\frac{1}{\lambda})|}{\sqrt{n} \lambda}\right) = \mathcal{N}\left(\lambda, \frac{\lambda^2}{\sqrt{n} \lambda}\right) = \mathcal{N}\left(\lambda, \frac{\lambda}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+</EjemBox>
+
+### Método de máxima verosimilitud
+El **método de máxima verosimilitud** es una técnica estadística utilizada para estimar los parámetros desconocidos de un modelo probabilístico. La idea principal es encontrar los valores de los parámetros que maximizan la función de verosimilitud, que mide la probabilidad de observar los datos dados los parámetros del modelo.
+
+<EjemBox title="Idea principal">
+
+*Sean dos monedas $A$ y $B$ cuyas probabilidades de obtener cara son $\frac{1}{4}$ y $\frac{3}{4}$, respectivamente. Se lanza una de las dos monedas 5 veces y no se obtiene ninguna cara. ¿Cuál es la moneda que se ha lanzado?*
+
+Por intuición, la moneda más probable es la $A$, ya que tiene una probabilidad menor de obtener cara. Basta ver que:
+$$
+\begin{align*}
+P(0 \text{ caras}|_{A}) & = \left(\frac{3}{4}\right)^5 = \frac{243}{1024} \approx 0.237 \\[2ex]
+P(0 \text{ caras}|_{B}) & = \left(\frac{1}{4}\right)^5 = \frac{1}{1024} \approx 0.00098
+\end{align*}
+$$
+Haciendo una generalización, podemos notar que, si se realizan $n$ tiradas de una moneda con probabilidad de cara $p \in [0, 1]$ desconocida y se obtienen $k$ caras, la probabilidad de obtener ese resultado es:
+$$
+\begin{align*}
+\binom{n}{k} p^k (1 - p)^{n - k}
+\end{align*}
+$$
+Por lo que, nos interesa poder encontrar el valor de $p$ que maximiza esta probabilidad, es decir, el valor de $p$ que hace que el resultado observado sea más probable.
+
+</EjemBox>
+
+#### Función de verosimilitud. Definición
+Sea $\vec{X} = (X_1, \dots, X_n)$ una muestra aleatoria de tamaño $n$ de una población cuya distribución pertenece a una familia paramétrica $\mathcal{F}_\theta = \{F_\theta, \, \theta \in\Theta\}$, se denomina **función de verosimilitud asociada a la realización muestral $\vec{x} = (x_1, \dots, x_n)$** a la probabilidad o densidad conjunta de la muestra $f_\theta(x_1, \dots, x_n)$ vista como función del parámetro $\theta$:
+$$
+\begin{align*}
+L(\theta; \vec{x}) = f_\theta(x_1, \dots, x_n)
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar que la función de verosimilitud es dependiente de la muestra observada $\vec{x}$ ya que, para cada valor de la muestra, la función de verosimilitud toma una forma diferente. Por otro lado, la función de verosimilitud es una función del parámetro $\theta$ y no de las variables aleatorias $X_i$.
+
+</EjBox>
+
+#### Estimador de máxima verosimilitud. Definición
+Sea $(X_1, \dots, X_n)$ muestra aleatoria simple de una población cuya distribución pertenece a una familia paramétrica $\mathcal{F}_\theta = \{F_\theta, \, \theta \in\Theta\}$ con función de verosimilitud $L(\theta; \vec{x})$. Se denomina **estimador de máxima verosimilitud** al estimador $\hat{\theta}(\vec{x}) = T(\vec{X})$ que maximiza la función de verosimilitud, es decir:
+$$
+\begin{align*}
+L(\vec{x}, \hat{\theta}(\vec{x})) = \sup_{\theta \in \Theta} L(\vec{x}, \theta) \quad \text{ con } \vec{x} \in \mathbb{X}^n\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+La búsqueda del máximo o supremo de la función de verosimilitud a veces puede ser complicado, por lo que se suele hacer uso de métodos numéricos o de optimización para encontrar una aproximación del valor del parámetro que maximiza la función de verosimilitud.
+
+No obstante, una técnica comúnmente utilizada para simplificar el proceso de maximización es trabajar con el logaritmo de la función de verosimilitud, conocido como **log-verosimilitud**. Dado que el logaritmo es una función monótonamente creciente, maximizar la función de verosimilitud es equivalente a maximizar su logaritmo. Esto se debe a que el logaritmo transforma productos en sumas, lo que facilita el cálculo de derivadas y la identificación de puntos críticos.
+
+</EjBox>
+
+#### Obtención del estimador de máxima verosimilitud
+<EjBox title="Nota">
+
+Aunque se trate el procedimiento para casos unidimensionales, es decir, $\theta \in \Theta \subseteq \mathbb{R}$, es posible extenderlo mediante un razonamiento análogo a casos multidimensionales, es decir, $\vec{\theta} = (\theta_1, \dots, \theta_k) \in \Theta \subseteq \mathbb{R}^k$.
+
+</EjBox>
+
+Sea $L(\vec{x}, \theta)$ una función derivable respecto de $\theta$ en $\overset{\circ}{\Theta}$, la forma usual de obtener el estimador de máxima verosimilitud es examinar los máximos relativos en $\overset{\circ}{\Theta}$ y posteriormente compararlos con los valores obtenidos en la frontera de $\Theta$ (si existe). Para ello:
+$$
+\begin{align*}
+\frac{\partial }{\partial \theta} \log L(\vec{x}, \theta) = 0
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+La ecuación de verosimilitud puede tener varias soluciones, donde alguna de ellas puede ser el máximo global (EMV) o que este máximo absoluto se encuentre en la frontera de $\Theta$ y $\Theta$ no sea abierto, con lo que no existiría el EMV
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria $X \rightsquigarrow \mathcal{E}(\theta)$, hallar el estimador de máxima verosimilitud de $\theta$.*
+
+Como $X \rightsquigarrow \mathcal{E}(\theta)$, tenemos que:
+$$
+\begin{align*}
+f(x; \theta) = \theta e^{ - \theta x} I_{[0, \infty)}(x) \implies L(\vec{x}, \theta) = \prod_{i = 1}^{n} f(x_i; \theta) = \theta^n e^{ - \theta \sum_{i = 1}^{n} x_i} I_{[0, \infty)}(x_i)
+\end{align*}
+$$
+Por lo que, la log-verosimilitud es (quitamos la indicadora por simplicidad):
+$$
+\begin{align*}
+\log L(\vec{x}, \theta) = n \log \theta - \theta \sum_{i = 1}^{n} x_i
+\end{align*}
+$$
+Entonces, derivando respecto de $\theta$:
+$$
+\begin{align*}
+\frac{\partial }{\partial \theta} \log L(\vec{x}, \theta) = \frac{n}{\theta} - \sum_{i = 1}^{n} x_i
+\end{align*}
+$$
+Igualando a cero, tenemos que:
+$$
+\begin{align*}
+\frac{n}{\theta} - \sum_{i = 1}^{n} x_i = 0 \iff \frac{n}{\theta} = \sum_{i = 1}^{n} x_i \iff \theta = \frac{n}{\sum_{i = 1}^{n} x_i} = \frac{1}{\overline{x}}
+\end{align*}
+$$
+Por lo que, el estimador de máxima verosimilitud es:
+$$
+\begin{align*}
+\hat{\theta} = T(\vec{X}) = \frac{n}{\sum_{i = 1}^{n} X_i} = \frac{1}{\overline{X}}
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria $X \rightsquigarrow \mathcal{U}(0, \theta)$, hallar el estimador de máxima verosimilitud de $\theta$.*
+
+Como $X \rightsquigarrow \mathcal{U}(0, \theta)$, tenemos que:
+$$
+\begin{align*}
+f_\theta(x) = \frac{1}{\theta} I_{[0, \theta]}(x) \implies L(\vec{x}, \theta) = \prod_{i = 1}^{n} f_\theta(x_i) = \frac{1}{\theta^n} I(x_{(n)} < \theta) = \left\{
+\begin{array}{ll}
+0 & \text{ si } \theta < x_{(n)} \\[2ex]
+\frac{1}{\theta^n} & \text{ si } \theta \geq  x_{(n)}
+\end{array}
+\right.
+\end{align*}
+$$
+Podemos notar que la función no es derivable en $\theta = x_{(n)}$, pero podemos observar que la función es decreciente en $(x_{(n)}, \infty)$ y nula en $(0, x_{(n)})$. Por lo que el máximo se alcanza en:
+$$
+\begin{align*}
+\theta = x_{(n)} \implies \hat{\theta} = T(\vec{X}) = X_{(n)}
+\end{align*}
+$$
+
+</EjemBox>
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria $X \rightsquigarrow \mathcal{U}(\theta, \theta + 3)$, hallar el estimador de máxima verosimilitud de $\theta$.*
+
+Como $X \rightsquigarrow \mathcal{U}(\theta, \theta + 3)$, tenemos que:
+$$
+\begin{align*}
+f_\theta(x) = \frac{1}{3} I_{[\theta, \theta + 3]}(x) \implies L(\vec{x}, \theta) & = \prod_{i = 1}^{n} f_\theta(x_i) = \frac{1}{3^n} I(\theta \leq x_{(1)} \leq x_{(n)} \leq \theta + 3) = \\[2ex]
+& = \left\{
+\begin{array}{ll}
+0 & \text{ si } x_{(1)} < \theta \text{ o } \theta + 3 < x_{(n)} \\[2ex]
+\frac{1}{3^n} & \text{ si } x_{(n)} - 3 \leq \theta \leq x_{(1)}
+\end{array}
+\right.
+\end{align*}
+$$
+Podemos notar que la función no es derivable en $\theta = x_{(1)}$ ni en $\theta = x_{(n)} - 3$, pero podemos observar que la función es constante en el intervalo $[x_{(n)} - 3, x_{(1)}]$ y nula fuera de este. Por lo que cualquier valor de $\theta$ en dicho intervalo es un estimador de máxima verosimilitud, por ejemplo:
+$$
+\begin{align*}
+\hat{\theta} = T(\vec{X}) = \frac{X_{(1)} + X_{(n)} - 3}{2}
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea una variable aleatoria definida como $Y \rightsquigarrow \mathcal{P}(\lambda)$, consideramos la variable aleatoria $X$ dada por:*
+$$
+\begin{align*}
+X = \left\{
+\begin{array}{ll}
+1 & \text{ si } Y \leq 1\\
+2 & \text{ si } Y = 2\\
+3 & \text{ si } Y \geq 3
+\end{array}
+\right.
+\end{align*}
+$$
+*Hallar el estimador de máxima verosimilitud de $\lambda$ a partir de una muestra aleatoria de $X$.*
+
+Primero, obtenemos la función de probabilidad de $X$:
+$$
+\begin{align*}
+P(X = 1) & = P(Y \leq 1) = P(Y = 0) + P(Y = 1) = e^{ - \lambda} + \lambda e^{ - \lambda} = e^{ - \lambda} (1 + \lambda) \\[2ex]
+P(X = 2) & = P(Y = 2) = \frac{\lambda^2}{2} e^{ - \lambda} \\[2ex]
+P(X = 3) & = 1 - P(Y \leq 2) = 1 - \left(e^{ - \lambda} + \lambda e^{ - \lambda} + \frac{\lambda^2}{2} e^{ - \lambda}\right) = 1 - e^{ - \lambda} \left(1 + \lambda + \frac{\lambda^2}{2}\right)
+\end{align*}
+$$
+Por lo que, la función de verosimilitud es:
+$$
+\begin{align*}
+L(\vec{x}, \lambda) & = \prod_{i = 1}^{n} P(X = x_i) = \left(e^{ - \lambda} (1 + \lambda)\right)^{n_1} \left(\frac{\lambda^2}{2} e^{ - \lambda}\right)^{n_2} \left(1 - e^{ - \lambda} \left(1 + \lambda + \frac{\lambda^2}{2}\right)\right)^{n_3}
+\end{align*}
+$$
+donde $n_j = \sum_{i = 1}^{n} I_{\{x_i = j\}}$ para $j = 1, 2, 3$, es decir, el número de veces que aparece el valor $j$ en la muestra.
+
+En este caso, no se va a poder encontrar una solución explícita para la ecuación de verosimilitud, por lo que se deberá recurrir a métodos numéricos para encontrar el valor de $\lambda$ que maximiza la función de verosimilitud. A continuación, se muestra un código en `R` que realiza esta tarea:
+
+```
+L <- function(n1, n2, n3, lambda) { 
+(exp(-lambda) * (1 + lambda))^n1 * 
+((lambda^2 / 2) * exp(-lambda))^n2 * 
+(1 - exp(-lambda) * (1 + lambda + (lambda^2 / 2)))^n3
+}
+
+# Maximización de la función de verosimilitud
+optimize(function(lambda) L(3, 3, 4, lambda), c(0, 10), maximum = TRUE) 
+# > $maximum
+# > [1] 2.342104
+
+# Maximización del logaritmo de la función de verosimilitud
+optimize(function(lambda) log(L(3, 3, 4, lambda)), c(0, 10), maximum = TRUE)
+# > $maximum
+# > [1] 2.342104
+```
+
+</EjemBox>
+
+#### Propiedades del estimador de máxima verosimilitud
+#### Invarianza del estimador de máxima verosimilitud
+Sea $T$ un estadístico suficiente para $\mathcal{F}_\theta = \{F_\theta, \, \theta \in \Theta\}$ y existe un estimador de máxima verosimilitud de $\theta$ dado por $\hat{\theta} = T(\vec{X})$ entonces:
+$$
+\begin{align*}
+T(\vec{x}) \text{ es función de } T(\vec{x})\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Por el Teorema de Factorización, dado $T$ suficiente entonces:
+$$
+\begin{align*}
+L(\vec{x}, \theta) = h(\vec{x}) \cdot g(T(\vec{x}), \theta)
+\end{align*}
+$$
+Por lo tanto, maximizar $L(\vec{x}, \theta)$ respecto de $\theta$ es equivalente a maximizar $g(T(\vec{x}), \theta)$ respecto de $\theta$, es decir:
+$$
+\begin{align*}
+\max_{\theta \in \Theta} L(\vec{x}, \theta) = h(\vec{x}) \cdot \max_{\theta \in \Theta} g(T(\vec{x}), \theta)
+\end{align*}
+$$
+Por tanto, el valor donde se alcanza el máximo de la función de verosimilitud depende únicamente de $T(\vec{x})$, en otras palabras, es función de $T$.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Si se sabe que el estimador de máxima verosimilitud es único, entonces es función del estadístico suficiente $T$. No obstante, en otro caso, puede no ser cierta dicha propiedad.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Que el estimador de máxima verosimilitud sea función de un estadístico suficiente $T$ implica que el estimador de máxima verosimilitud también es suficiente. Basta ver que en $X \rightsquigarrow \mathcal{U}(\theta, \theta + 2)$ el estadístico suficiente minimal es $T(\vec{X}) = (X_{(1)}, X_{(n)})$. Sin embargo, el estimador de máxima verosimilitud es:
+$$
+\begin{align*}
+\hat{\theta} = T(\vec{X}) = \frac{1}{2} X_{(n)}
+\end{align*}
+$$
+que no es suficiente
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Sea $\hat{\theta}$ estimador máximo verosímil de $\theta$ entonces $g(\hat{\theta})$ es el estimador máximo verosímil de $g(\theta)$ para $g$ función definida en el espacio paramétrico.
+
+</EjBox>
+
+#### Comporamiento asintótico del estimador de máxima verosimilitud
+Cuando las muestras son pequeñas, los estimadores suelen dar resultados poco fiables. Sin embargo, cabe esperar que, a medida que el tamaño de la muestra aumenta, los estimadores se acercarán al valor real del parámetro, aumentando así su precisión. Este comportamiento se conoce como **comportamiento asintótico**. Para estudiar esto, es necesario exigir una serie de condiciones de regularidad:
+
+- **A0)** $P_\theta(\{x : f_\theta(x) \neq f_{\theta'}(x)\}) > 0$ para $\theta \neq \theta'$ (identificabilidad)
+- **A1)** El soporte de $f_\theta$ es independiente de $\theta$
+- **A2)** La muestra es aleatoria simple
+- **A3)** El espacio paramétrico $\Theta$ es un intervalo abierto de $\mathbb{R}$
+- **A4)** La función de densidad/probabilidad es dos veces derivable respecto de $\theta$
+- **A5)** Las integrales $\displaystyle \int \left|\frac{\partial^i}{\partial \theta^i} L(x, \theta) \right| \, dx$ son finitas para $i = 1, 2$
+
+#### Teorema
+Bajo las hipótesis anteriores, la función de verosimilitud tiene una raíz fuertemente consistente, es decir, existe una sucesión de soluciones $\hat{\theta}_n$ de la ecuación de verosimilitud tal que:
+$$
+\begin{align*}
+\hat{\theta_n} \xrightarrow[n \to \infty]{c.s.} \theta_0
+\end{align*}
+$$
+donde $\theta_0$ es el valor real del parámetro.
+
+#### Teorema
+Bajo las las condiciones de regularidad de *Frechet-Cramer-Rao* y suponiendo que:
+$$
+\begin{align*}
+\exists \frac{\partial^3}{\partial \theta^3} \log L(\vec{x}, \theta) \quad \text{ con } \left|\frac{\partial^3}{\partial \theta^3} \log L(\vec{x}, \theta) \right| < K(\vec{x}) \quad \text{ donde } E_\theta(K(\vec{x})) = k < \infty
+\end{align*}
+$$
+entonces existe una sucesión de raíces de la ecuación de versoimilitud $\hat{\theta}_n$ que es asintóticamente normal y consistente, es decir, que dado $\theta_0$ valor real del parámetro:
+$$
+\begin{align*}
+\sqrt{n}(\widehat{\theta_n} - \theta_0) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \sqrt{\frac{1}{I(\theta_0)}}\right)
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Antes de proceder con la demostración, veamos que la varianza y la esperanza de la función informante, definda como:
+$$
+\begin{align*}
+u(\theta) = \frac{\partial }{\partial \theta} \log L(\vec{x}, \theta) = \sum_{i = 1}^{n} \frac{\partial }{\partial \theta} \log f(x_i; \theta)
+\end{align*}
+$$
+Entonces, su esperanza es:
+$$
+\begin{align*}
+E\left(\frac{\partial}{\partial \theta} \log f(x_i; \theta) \right) & = \int \frac{\partial}{\partial \theta} \log f(x; \theta) f(x; \theta) \, dx = \int \frac{\frac{\partial}{\partial \theta} f(x; \theta)}{f(x; \theta)} f(x; \theta) \, dx = \\[2ex]
+& = \int \frac{\partial}{\partial \theta} f(x; \theta) \, dx \xlongequal[]{\text{regu}} \frac{\partial}{\partial \theta} \int f(x; \theta) \, dx \xlongequal[\text{densidad}]{f \text{ función}} \frac{\partial}{\partial \theta} 1 = 0 
+\end{align*}
+$$
+Por otra parte, su varianza es:
+$$
+\begin{align*}
+\text{Var} \left( \frac{\partial }{\partial \theta } \log f(x_i; \theta) \right) & = E\left[\left(\frac{\partial }{\partial \theta} \log f(x_i; \theta) \right)^2\right] - \underbrace{\cancel{\left(E\left(\frac{\partial }{\partial \theta} \log f(x_i; \theta) \right)\right)^2}}_{0}
+\end{align*}
+$$
+Por lo tanto, desarrollando el primer término:
+$$
+\begin{align*}
+E\left[\left(\frac{\partial }{\partial \theta} \log f(x_i; \theta) \right)^2\right] & = \int \left(\frac{\partial }{\partial \theta} \log f(x; \theta)\right)^2 f(x; \theta) \, dx = \int \dfrac{\left(\frac{\partial}{\partial \theta} f(x; \theta)\right)^2}{f(x; \theta)} \, dx
+\end{align*}
+$$
+Podemos notar que:
+$$
+\begin{align*}
+\frac{\partial^2}{\partial \theta^2} \log f(x; \theta) = \frac{\partial }{\partial \theta} \left(\frac{\frac{\partial }{\partial \theta} f(x; \theta)}{f(x; \theta)}\right) 
+\end{align*}
+$$
+Y por la regla del cociente:
+$$
+\begin{align*}
+\frac{\partial^2}{\partial \theta^2} \log f(x; \theta) & = \frac{\frac{\partial^2 }{\partial \theta^2} f(x; \theta) \cdot f(x; \theta) - \left(\frac{\partial }{\partial \theta} f(x; \theta)\right)^2}{(f(x; \theta))^2} \\[2ex]
+& = \frac{\frac{\partial^2 }{\partial \theta^2} f(x; \theta)}{f(x; \theta)} - \frac{\left(\frac{\partial }{\partial \theta} f(x; \theta)\right)^2}{(f(x; \theta))^2}
+\end{align*}
+$$
+Tomando esperanzas en ambos lados:
+$$
+\begin{align*}
+E\left(\frac{\partial^2}{\partial \theta^2} \log f(x; \theta)\right) & = \int \frac{\partial^2 }{\partial \theta^2} f(x; \theta) \, dx - \int \frac{\left(\frac{\partial }{\partial \theta} f(x; \theta)\right)^2}{f(x; \theta)} \, dx
+\end{align*}
+$$
+Y por regularidad:
+$$
+\begin{align*}
+E\left(\frac{\partial^2}{\partial \theta^2} \log f(x; \theta)\right) & = \frac{\partial^2 }{\partial \theta^2} \int f(x; \theta) \, dx - \int \frac{\left(\frac{\partial }{\partial \theta} f(x; \theta)\right)^2}{f(x; \theta)} \, dx \\[2ex]
+& = \underbrace{\cancel{\frac{\partial^2}{\partial \theta} 1 }} - \int \frac{\left(\frac{\partial }{\partial \theta} f(x; \theta)\right)^2}{f(x; \theta)} \, dx = - E\left[\left(\frac{\partial }{\partial \theta} \log f(x_i; \theta) \right)^2\right]
+\end{align*}
+$$
+Finalmente, combinando  y la expresión anterior, obtenemos:
+$$
+\begin{align*}
+\text{Var} \left( \frac{\partial }{\partial \theta } \log f(x_i; \theta) \right) & = E\left[\left(\frac{\partial }{\partial \theta} \log f(x_i; \theta) \right)^2\right] = - E\left(\frac{\partial^2}{\partial \theta^2} \log f(x; \theta)\right)
+\end{align*}
+$$
+Por lo tanto, la varianza de la función informante es finita ya que, por las condiciones de regularidad, la esperanza del valor absoluto de la tercera derivada es finita.
+
+</EjBox>
+
+<DemBox title="Demostración">
+
+Sea $\hat{\theta}_n$ una raíz de la ecuación de verosimilitud, es decir:
+$$
+\begin{align*}
+\frac{\partial }{\partial \theta} \log L(\vec{x}, \hat{\theta}_n) = 0 \implies u(\hat{\theta}_n) = 0
+\end{align*}
+$$
+Haciendo desarrollo de Taylor de $u(\theta_n)$ alrededor de $\theta_0$ y evaluando en $\hat{\theta}_n$, tenemos:
+$$
+\begin{align*}
+0 = u(\hat{\theta}_n) & = u(\theta_0) + (\hat{\theta}_n - \theta_0) u'(\theta_0) + \frac{(\hat{\theta}_n - \theta_0)^2}{2} u''(\tilde{\theta})
+\end{align*}
+$$
+donde se tiene que $|\tilde{\theta} - \theta_0| < |\hat{\theta}_n - \theta_0|$.
+
+Por tanto, operando sobre la expresión anterior:
+$$
+\begin{align*}
+\sqrt{n}(\hat{\theta}_n - \theta_0) & = \dfrac{\sqrt{n} \dfrac{ - u(\theta_0)}{n}}{\dfrac{u'(\theta_0)}{n} + \dfrac{(\hat{\theta}_n - \theta_0)}{2} \dfrac{u''(\tilde{\theta})}{n}} = \dfrac{(1)}{(2)}
+\end{align*}
+$$
+Analizando el numerador $(1)$, podemos aplicar el Teorema del Límite Central a las variables aleatorias independientes e idénticamente distribuidas:
+$$
+\begin{align*}
+Z_i = \frac{\partial }{\partial \theta} \log f(X_i; \theta_0) \quad \text{ con } E(Z_i) = 0 \text{ y } Var(Z_i) = I(\theta_0)
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+- \sqrt{n} \frac{u(\theta_0)}{n} = - \sqrt{n} \left(\frac{1}{n} \sum_{i = 1}^{n} \frac{\partial }{\partial \theta} \log f(x_i, \theta)\Big|_{\theta = \theta_0}\right) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \sqrt{ I(\theta_0)}\right) 
+\end{align*}
+$$
+Analizando el denominador $(2)$, por la Ley Fuerte de los Grandes Números:
+$$
+\begin{align*}
+\frac{u'(\theta_0)}{n} & = \frac{1}{n} \sum_{i = 1}^{n} \frac{\partial^2 }{\partial \theta^2} \log f(X_i; \theta)\Big|_{\theta = \theta_0} \xrightarrow[n \to \infty]{c.s.} E\left(\frac{\partial^2 }{\partial \theta^2} \log f(X_i; \theta)\Big|_{\theta = \theta_0}\right) = - I(\theta_0)
+\end{align*}
+$$
+Para el otro término del denominador, sabemos que existe una sucesión de soluciones de la ecuación de verosimilitud consistente, es decir, tales que:
+$$
+\begin{align*}
+\hat{\theta}_n - \theta_0 \xrightarrow[n \to \infty]{p} 0 \quad \text{ i.e. } \quad (\hat{\theta}_n - \theta_0)^2 \xrightarrow[n \to \infty]{p} 0
+\end{align*}
+$$
+Además, por la hipótesis de regularidad, tenemos que:
+$$
+\begin{align*}
+\frac{u''(\tilde{\theta})}{n} & = \frac{1}{n} \sum_{i = 1}^{n} \frac{\partial^3 }{\partial \theta^3} \log f(x_i; \theta) \Big|_{\theta = \tilde{\theta}} 
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+\left|\frac{u''(\tilde{\theta})}{n}\right| & \leq \frac{1}{n} \sum_{i = 1}^{n} \left| \frac{\partial^3 }{\partial \theta^3} \log f(x_i; \theta) \Big|_{\theta = \tilde{\theta}} \right| \leq \frac{1}{n} \sum_{i = 1}^{n} K(x_i) \xrightarrow[n \to \infty]{c.s.} E_\theta(K(X)) = k < \infty
+\end{align*}
+$$
+Para $n$ suficientemente grande, se sabe que con probabilidad 1:
+$$
+\begin{align*}
+\left|\frac{1}{n} \displaystyle \sum_{i = 1}^{n} K(x_i) - k \right| < \varepsilon \iff \frac{1}{n} \sum_{i = 1}^{n} K(x_i) < k + \varepsilon
+\end{align*}
+$$
+Con lo cal, para $n$ suficientemente grande, tenemos que:
+$$
+\begin{align*}
+\left|\frac{u''(\tilde{\theta})}{n}\right| < k + \varepsilon \implies \frac{(\hat{\theta}_n - \theta_0)}{2} \frac{u''(\tilde{\theta})}{n} \xrightarrow[n \to \infty]{p} 0
+\end{align*}
+$$
+Por lo que el denominador verifica que es igual a:
+$$
+\begin{align*}
+\frac{u'(\theta_0)}{n} + \frac{(\hat{\theta}_n - \theta_0)}{2} \frac{u''(\tilde{\theta})}{n} \xrightarrow[n \to \infty]{p} - I(\theta_0) + 0 = - I(\theta_0)
+\end{align*}
+$$
+Como $I(\theta_0) > 0$ entonces se tiene que:
+$$
+\begin{align*}
+\frac{1}{\frac{u'(\theta_0)}{n} + \frac{(\hat{\theta}_n - \theta_0)}{2} \frac{u''(\tilde{\theta})}{n}} \xrightarrow[n \to \infty]{p} - \frac{1}{I(\theta_0)}
+\end{align*}
+$$
+Finalmente, por el Teorema de Slutsky, tenemos que:
+$$
+\begin{align*}
+\sqrt{n}(\hat{\theta}_n - \theta_0) & = \dfrac{- \sqrt{n} \dfrac{u(\theta_0)}{n}}{\dfrac{u'(\theta_0)}{n} + \dfrac{(\hat{\theta}_n - \theta_0)}{2} \dfrac{u''(\tilde{\theta})}{n}} \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \sqrt{\frac{1}{I(\theta_0)}}\right)
+\end{align*}
+$$
+
+</DemBox>
+
+#### Corolario
+En las condiciones del teorema anterior, si la ecuación de verosimilitud tiene una única raíz $\hat{\theta}_n$, esa raíz es el estimador de máxima verosimilitud y es consistente, asintóticamente normal y eficiente.
+
+<EjemBox title="Ejemplo">
+
+*Las condiciones del teorema anterior son suficientes pero no necesarias.*
+
+Basta considerar la distribución exponencial $X \rightsquigarrow \mathcal{E}(\theta)$ y el estimador de máxima verosimilitud $\hat{\theta} = \frac{1}{\overline{X}}$. En este caso, tenemos que, si consideramos el espacio paramétrico fuera del intervalo $\theta > 1$:
+$$
+\begin{align*}
+\frac{\partial^3}{\partial \theta^3} \log L(\vec{x}, \theta) & = \frac{\partial^3}{\partial \theta^3} \left(n \log \theta - \theta \sum_{i = 1}^{n} x_i\right) = \frac{2}{\theta^3} < 2
+\end{align*}
+$$
+A partir de aquí, podemos deducir que:
+$$
+\begin{align*}
+\sqrt{n} \left(\frac{1}{\overline{X}} - \theta_0\right) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \theta\right)
+\end{align*}
+$$
+No obstante, si consideramos el espacio paramétrico $\theta \in (0, \infty)$, la acotación de la tercera derivada no se cumple pero el resultado sigue siendo cierto. Aplicando el Teorema del Límite Central a la media muestral:
+$$
+\begin{align*}
+\sqrt{n}(\overline{X} - \mu) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \mu\right)
+\end{align*}
+$$
+Como $\mu = \frac{1}{\theta}$ por el método delta sobre la función $g(x) = \frac{1}{x}$ se obtiene:
+$$
+\begin{align*}
+\sqrt{n} \left(\frac{1}{\overline{X}} - \theta_0\right) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \theta\right)
+\end{align*}
+$$
+
+</EjemBox>
+
+## Estimación por intervalo
+Por los métodos previos, hemos visto como obtener estimadores puntuales de los parámetros de una distribución. No obstante, desconocemos el error cometido al emplearlos. La idea de la estimación por intervalo es proporcionar un conjunto de valores posibles para el parámetro, de tal forma que se tenga una cierta confianza de que el valor real del parámetro se encuentra dentro de dicho intervalo. Estos intervalos se denominan **intervalos de confianza**.
+
+### Intervalos de confianza. Definición
+Sea $X$ variable aleatoria con distribución $F_\theta$ donde $\theta \in \Theta$ y consideramos una muestra aleatoria simple $(X_1, \dots, X_n)$, si existen dos estadísticos $T_1$ y $T_2$ tales que con probabilidad $1 - \alpha$ se cumple que:
+$$
+\begin{align*}
+P_\theta(\vec{x} \in (X_1, \dots , X_n) : T_1(\vec{x}) \leq g(\theta) \leq T_2(\vec{x})) \geq 1 - \alpha \quad \forall \theta \in \Theta
+\end{align*}
+$$
+Entonces $[T_1(X_1, \dots, X_n), T_2(X_1, \dots, X_n)]$ es un **intervalo de confianza** para $g(\theta)$ con nivel de confianza $1 - \alpha$.
+
+<EjBox title="Nota">
+
+*Se desea construir un intervalo de confianza para $\theta$ con nivel de confianza $1 - \alpha = 0.95$ a partir de una muestra aleatoria simple.*
+
+Lo que queremos es encontrar dos estadísticos $T_1$ y $T_2$ tales que:
+$$
+\begin{align*}
+P_\theta\left(\vec{x} \in (X_1, \dots , X_n) : \theta \in [T_1(\vec{x}), T_2(\vec{x})]\right) \geq 1 - \alpha = 0.95 \quad \forall \theta \in \Theta
+\end{align*}
+$$
+Esto significa que de cada 100 muestras elejidas (de tamaño $n$), aproximadamente 95 de los intervalos construidos contendrán el valor real del parámetro $\theta$.
+
+Esto induce una partición del espacio muestral en dos regiones:
+
+- Región de aceptación: $\{\vec{x} : T_1(\vec{x}) \leq \theta \leq T_2(\vec{x})\}$
+- Región de rechazo: $\{\vec{x} : \theta < T_1(\vec{x}) \text{ o } T_2(\vec{x}) < \theta\}$
+
+No obstante, al desconocer el valor real de $\theta$, no podemos saber si el intervalo asociado a una muestra concreta contiene o no a $\theta$. Por ello, no podemos asegurar que dada una muetra concreta $\vec{x_0}$:
+$$
+\begin{align*}
+P_\theta\left(\theta \in [T_1(\vec{x_0}), T_2(\vec{x_0})]\right) \geq 1 - \alpha = 0.95
+\end{align*}
+$$
+Lo que sí podemos asegurar es que el procedimiento seguido para construir el intervalo de confianza garantiza que la proporción de intervalos que contienen a $\theta$ es, al menos, $1 - \alpha$.
+
+</EjBox>
+
+### Método de la función pivotal
+#### Fucnión pivote. Definición
+Sea $X$ variable aleatoria con distribución $F_\theta$ donde $\theta \in \Theta$ y consideramos una muestra aleatoria simple $(X_1, \dots, X_n)$ de tamaño $n$, una función $T(X_1, \dots, X_n; \theta)$ se dice **función pivote** si:
+
+- Depende de la muestra ($X_1, \dots, X_n$) y del parámetro $\theta$
+- La distribución de $T$ está totalmente determinada, es decir, no depende de parámetros desconocidos
+
+<EjBox title="Nota">
+
+Normalmente, las funciones pivote suelen ser estadísticos suficientes y funciones mónotonas respecto de $\theta$.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea la variable aleatoria $X \rightsquigarrow \mathcal{N}(\mu, 1)$, hallar una función pivote para $\mu$ a partir de una muestra aleatoria simple de tamaño $n$.*
+
+Sabemos que la media muestral $\overline{X}$ es un estadístico suficiente para $\mu$ y que:
+$$
+\begin{align*}
+E(\overline{X}) & = E\left(\frac{1}{n} \sum_{i = 1}^{n} X_i\right) = \frac{1}{n} \sum_{i = 1}^{n} E(X_i) = \mu \\[2ex]
+Var(\overline{X}) & = Var\left(\frac{1}{n} \sum_{i = 1}^{n} X_i\right) = \frac{1}{n^2} \sum_{i = 1}^{n} Var(X_i) = \frac{1}{n}
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+\overline{X} \rightsquigarrow \mathcal{N}\left(\mu, \frac{1}{\sqrt{n}}\right) \xLeftrightarrow[]{- \mu} \overline{X} - \mu \rightsquigarrow \mathcal{N}\left(0, \frac{1}{\sqrt{n}}\right) \xLeftrightarrow[]{\cdot \sqrt{n}} \sqrt{n}(\overline{X} - \mu) \rightsquigarrow \mathcal{N}(0, 1)
+\end{align*}
+$$
+Por lo que, si consideramos la función:
+$$
+\begin{align*}
+T(X_1, \dots, X_n; \mu) = \sqrt{n}(\overline{X} - \mu)
+\end{align*}
+$$
+Entonces, la distribución de $T$ es:
+$$
+\begin{align*}
+T \rightsquigarrow \mathcal{N}(0, 1)
+\end{align*}
+$$
+que no depende de $\mu$. Por lo tanto, $T$ es una función pivote para $\mu$.
+
+</EjemBox>
+
+#### Construcción de intervalos de confianza mediante funciones pivote
+Para la construcción de un intervalo de confianza mediante una función pivote, se siguen los siguientes pasos:
+
+1. Elección de dos probabilidades $\alpha_1, \alpha_2$ tales que $\alpha_1 + \alpha_2 = \alpha$ (en general $\alpha_1 = \alpha_2 = \frac{\alpha}{2}$)
+2. Determinación de constantes $c_1, c_2$ tales que:
+$$
+\begin{align*}
+P_\theta(\vec{x} \in X., : T(\vec{x}, \theta) < c_1) & \leq  \alpha_1 \\[2ex]
+P_\theta(\vec{x} \in X., : T(\vec{x}, \theta) \leq c_2) & \geq 1 - \alpha_2
+\end{align*}
+$$
+Es decir:
+$$
+\begin{align*}
+P_\theta(\vec{x} \in \vec{X} : c_1 \leq T(\vec{x}, \theta) \leq c_2) = \underbrace{P(T(\vec{x}, \theta) \leq c_2)}_{ \geq 1 - \alpha_2} - \underbrace{P(T(\vec{x}, \theta) < c_1)}_{\leq \alpha_1} \geq 1 - \alpha
+\end{align*}
+$$
+3. Expresar la desigualdad $c_1 \leq T(\vec{x}, \theta) \leq c_2$ cdomo un intervalo alrededor de $\theta$.
+
+<EjBox title="Nota">
+
+Visualmente, el procedimiento anterior se puede resumir en la siguiente figura:
+
+![TikZ Graph](/blogs/images/tema-2-estimacion_tikz_4.svg)
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $X \rightsquigarrow \mathcal{N}(\mu, 1)$ variable aleatoria, se tiene una muestra aleatoria simple $(X_1, \dots , X_n)$ de tamaño $n$ y se desea construir un intervalo de confianza para $\mu$ con nivel de confianza $1 - \alpha = 0.99$, empleando como función pivote la siguiente expresión:*
+$$
+\begin{align*}
+T(X_1, \dots, X_n; \mu) = \sqrt{n}(\overline{X} - \mu) \rightsquigarrow \mathcal{N}(0, 1)
+\end{align*}
+$$
+Tomando $\alpha_1 = \alpha_2 = \frac{\alpha}{2} = 0.005$, se buscan las constantes $c_1$ y $c_2$ tales que:
+$$
+\begin{align*}
+P(T < c_1) & = 0.005 \qquad \text{ y } \quad P(T \leq c_2) = 0.995
+\end{align*}
+$$
+Consultando la tabla de la distribución normal estándar, se obtiene que:
+$$
+\begin{align*}
+c_1 & = -2.5758 \quad \text{ y } \quad c_2 = 2.5758
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+P(-2.5758 \leq \sqrt{n}(\overline{X} - \mu) \leq 2.5758) & = 0.99
+\end{align*}
+$$
+Despejando $\mu$:
+$$
+\begin{align*}
+P\left(\overline{X} - \frac{2.5758}{\sqrt{n}} \leq \mu \leq \overline{X} + \frac{2.5758}{\sqrt{n}}\right) & = 0.99
+\end{align*}
+$$
+Por lo que un intervalo de confianza para $\mu$ con nivel de confianza $0.99$ es:
+$$
+\begin{align*}
+\left[\overline{X} - \frac{2.5758}{\sqrt{n}}, \, \overline{X} + \frac{2.5758}{\sqrt{n}}\right]
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+A partir del ejemplo anterior, se puede obtener fácilmente variaciones para obtener la función pivote en otros casos de variables aleatorias normales:
+
+- Para encontrar el valor de $\mu$:
+$$
+\begin{align*}
+\frac{\sqrt{n} (\overline{X} - \mu)}{\hat{S}} \rightsquigarrow t_{n - 1} 
+\end{align*}
+$$
+- Para encontrar el valor de $\sigma^2$:
+$$
+\begin{align*}
+\frac{(n - 1) \widehat{S^2}}{\sigma^2} \rightsquigarrow \chi^2_{n - 1}
+\end{align*}
+$$
+
+</EjBox>
+
+#### Proposición
+Sea $X$ variable aleatoria con distribución $F_\theta$ donde $\theta \in \Theta$ absolutamente continua y consideramos una muestra aleatoria simple $(X_1, \dots, X_n)$ de tamaño $n$. Entonces, se puede emplear la función pivote:
+$$
+\begin{align*}
+- \displaystyle \sum_{i = 1}^{n} \log F_\theta (x_i) \rightsquigarrow \gamma(n, 1)
+\end{align*}
+$$
+para construir un intervalo de confianza para $\theta$ con nivel de confianza $1 - \alpha$.
+
+<DemBox title="Demostración">
+
+*Veamos que $- \log F_\theta (X) \rightsquigarrow \gamma(1, 1)$.*
+
+Tenemos que:
+$$
+\begin{align*}
+F_\theta(x) = P_\theta(X \leq x) \implies F_\theta(X) \in (0, 1) \implies - \log F_\theta(X) \in (0, \infty)
+\end{align*}
+$$
+Si consideramos la transformación $Y = - \log F_\theta(X)$, entonces:
+$$
+\begin{align*}
+F_Y(y) = P_\theta(Y \leq y) & = P_\theta(- \log F_\theta(X) \leq y) = P_\theta(F_\theta(X) \geq e^{-y}) =\\[2ex]
+&= 1 - P_\theta(F_\theta(X) < e^{-y}) = 1 - P_\theta(X < F_\theta^{-1}(e^{-y})) = \\[2ex]
+& = 1 - F_\theta(F_\theta^{-1}(e^{-y})) = 1 - e^{-y}
+\end{align*}
+$$
+Por lo tanto, la función de densidad de $Y$ es:
+$$
+\begin{align*}
+f_Y(y) = \frac{d}{dy} F_Y(y) = e^{-y} \quad y > 0
+\end{align*}
+$$
+Que corresponde a una distribución $\gamma(1, 1)$.
+
+Por lo tanto, como la suma de $n$ variables aleatorias independientes con distribución $\gamma(1, 1)$ es una variable aleatoria con distribución $\gamma(n, 1)$, se tiene que:
+$$
+\begin{align*}
+- \sum_{i = 1}^{n} \log F_\theta (X_i) \rightsquigarrow \gamma(n, 1)
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Los intervalos de confianza construidos mediante funciones pivote pueden ser diferentes según la elección de las probabilidades $\alpha_1$ y $\alpha_2$. A continuación se muestran dos elecciones distintas de $\alpha_1$ y $\alpha_2$ para construir un intervalo de confianza sobre una normal. Aunque ambos cumplen el nivel de confianza $1 - \alpha = 0.95$, los intervalos obtenidos son diferentes.
+
+![TikZ Graph](/blogs/images/tema-2-estimacion_tikz_5.svg)
+
+Por tanto, un criterio habitual deseable es emplear aquel intervalo de confianza que tenga la menor amplitud posible.
+
+</EjBox>
+
+### Intervalos de confianza asintóticos
+Es posible construir intervalos de confianza cuyas funciones pivote tienen distribución desconocida pero para tamaño muestral grande tienden a una distribución conocida. Para musetras grandes y bajo ciertas condiciones de regularidad, los estimadores de máxima verosimilitud son asintóticamente normales. Para estos casos, se necesitan estimadores que converjan uniformemente (CUAN), para facilitar la construcción de los intervalos de confianza asintóticos.
+
+Bajo condiciones de regularidad bastante generales, se puede llegar a que los estimadores máximo verosímiles verifican que:
+$$
+\begin{align*}
+\sqrt{n} (T_n - \theta) \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}\left(0, \frac{1}{I(\theta)^2}\right)
+\end{align*}
+$$
+Por lo que, podemos construir la función pivote como:
+$$
+\begin{align*}
+T(X_1, \dots, X_n; \theta) = \frac{\sqrt{n} (T_n - \theta)}{\sqrt{\frac{1}{I(\theta)^2}}} \rightsquigarrow \mathcal{N}(0, 1)
+\end{align*}
+$$
+También es posible construir dichos intervalos a través del teorema del límite central y el método delta.
+
+<EjemBox title="Ejemplo">
+
+*Sea $X$ variable aleatoria con $X\rightsquigarrow \mathcal{B}(1, p)$ y sea $(X_1, \dots, X_n)$ muestra aleatoria simple de tamaño suficientemente grande. Construir un intervalo de confianza.*
+
+Aplicando el Teorema del Límite Central a la media muestral:
+$$
+\begin{align*}
+\sqrt{n} \dfrac{(\overline{X} - p)}{\sqrt{p(1 - p)}} \xrightarrow[n \to \infty]{\mathcal{L}} \mathcal{N}(0, 1)
+\end{align*}
+$$
+Por lo tanto, tenemos que:
+$$
+\begin{align*}
+P_\theta\left(\vec{x} \in \vec{X} : - z_{\frac{\alpha}{2}} \leq \sqrt{n} \dfrac{(\overline{X} - p)}{\sqrt{p(1 - p)}} \leq z_{\frac{\alpha}{2}}\right) & = 1 - \alpha \simeq \\[2ex]
+& \simeq P_\theta(\vec{x} \in \vec{X} : - z_{\frac{\alpha}{2}} \leq \mathcal{N}(0, 1) \leq z_{\frac{\alpha}{2}})
+\end{align*}
+$$
+Despejando $p$:
+$$
+\begin{align*}
+- z_{\frac{\alpha}{2}} \leq \sqrt{n} \dfrac{(\overline{X} - p)}{\sqrt{p(1 - p)}} \leq z_{\frac{\alpha}{2}} & \iff - z_{\frac{\alpha}{2}} \dfrac{\sqrt{p(p - 1)}}{\sqrt{n}} \leq \overline{X} - p \leq z_{\frac{\alpha}{2}} \dfrac{\sqrt{p(1 - p)}}{\sqrt{n}} \\[2ex]
+& \iff \overline{X} - z_{\frac{\alpha}{2}} \dfrac{\sqrt{p(1 - p)}}{\sqrt{n}} \leq p \leq \overline{X} + z_{\frac{\alpha}{2}} \dfrac{\sqrt{p(1 - p)}}{\sqrt{n}}
+\end{align*}
+$$
+
+Por lo que un intervalo de confianza asintótico para $p$ con nivel de confianza $1 - \alpha$:
+$$
+\begin{align*}
+\left[\overline{X} - z_{\frac{\alpha}{2}} \dfrac{\sqrt{\overline{X}(1 - \overline{X})}}{\sqrt{n}}, \, \overline{X} + z_{\frac{\alpha}{2}} \dfrac{\sqrt{\overline{X}(1 - \overline{X})}}{\sqrt{n}}\right]
+\end{align*}
+$$
+
+</EjemBox>

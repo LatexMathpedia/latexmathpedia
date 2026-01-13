@@ -114,19 +114,24 @@ const data = {
   ],
   projects: [
     {
-      name: "Solución del Exámen de CDI",
-      url: "/dashboard/blog/resolucion-examen-analisis-2025",
-      icon: PieChart,
-    },
-    {
-      name: "Teorema de Pitágoras",
-      url: "/dashboard/blog/teorema-pitagoras",
+      name: "Ejercicios Resueltos Análisis III - Parte 1",
+      url: "/dashboard/blog/analisis3-ejercicios-1",
       icon: Frame,
     },
     {
-      name: "Teorema de Darboux",
-      url: "/dashboard/blog/teorema-darboux",
+      name: "Apuntes MOR - Tema 4",
+      url: "/dashboard/blog/mor-tema-4",
       icon: Map,
+    },
+    {
+      name: "Apuntes TPP - Tema 1",
+      url: "/dashboard/blog/tpp-tema-1",
+      icon: SquareTerminal,
+    },
+    {
+      name: "Solución del Exámen de CDI",
+      url: "/dashboard/blog/resolucion-examen-analisis-2025",
+      icon: PieChart,
     },
   ],
 }
@@ -157,7 +162,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     name: email ? email.split('@')[0] : 'Usuario',
     email: email || ''
   }
-  
+
   const handleLogoClick = () => {
     // Limpiar los filtros y la búsqueda
     clearFilter();
@@ -174,14 +179,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
+
             <SidebarMenuButton size="lg" asChild>
-                <Link href="/dashboard" className="flex items-center space-x-2" onClick={handleLogoClick}>
+              <Link href="/dashboard" className="flex items-center space-x-2" onClick={handleLogoClick}>
                 <img src={logo.src} alt="Logo" className="h-10 w-12 rounded-lg" />
                 <div className="flex flex-col text-left">
                   <span className="truncate font-medium text-lg">MathTexpedia</span>
                   <span className="truncate text-sm text-gray-500">Apuntes bien guarrones</span>
                 </div>
-                </Link>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

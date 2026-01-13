@@ -1,0 +1,1257 @@
+---
+title: "Análisis 3 - Tema 1"
+date: "2026-01-11"
+description: "Conceptos básicos sobre conjuntos, cardinalidad y conjuntos numerables. Introducción a la teoría de conjuntos."
+tags: ["Matemáticas", "Análisis", "Cardinalidad", "Conjuntos Numerables"]
+---
+
+## Notación y Preliminares
+
+Durante el curso, se usarán preferiblemente las siguientes notaciones durante las demostraciones y ejercicios:
+
+- En clase se empleará la abreviatura *c.* para referirse a *conjuntos*.
+Se empleará preferiblemente la $N$ para referirse al natural en $R^N$
+En análisis en general consideraremos que los naturales empiezan en $1$, aunque en álgebra se consideren desde $0$. Por lo tanto, emplearemos la notación $N \cup \{0\}$ cuando queramos incluir el $0$ en los naturales.
+
+## Cardinalidad de un conjunto
+### Cardinalidad. Idea intuitiva
+Podemos entender la **cardinalidad** de un conjunto $A$ como la cantidad de elementos de $A$. Además, dentro de los conjuntos, podemos distinguir entre dos tipos:
+
+- **Conjuntos finitos:** Aquellos conjuntos que tienen un número finito de elementos, es decir, $\exists n \in\mathbb{N} \cup \{0\}$ tal que $\exists$ biyección entre $A$ y $\{1, 2, \dots, n\}$, esto es:
+
+$$
+\begin{array}{rcl}
+\exists \varphi : \{1, 2, \dots, n\}  &  \longrightarrow & A \neq \emptyset  \\
+i & \longmapsto & \varphi(i)
+\end{array}
+$$
+
+**Conjuntos infinitos:** Aquellos conjuntos para los cuales existe una aplicación inyectiva $\varphi : \mathbb{N} \longrightarrow A$. De esta forma, podemos distinguir entre:
+
+**Conjuntos infinitos numerables:** Aquellos conjuntos $A$ para los cuales existe una biyección $\varphi : \mathbb{N} \longrightarrow A$.
+**Conjuntos infinitos no numerables:** Aquellos conjuntos $A$ para los cuales existe una aplicación inyectiva $\varphi : \mathbb{N} \longrightarrow A$ pero no existe ninguna biyección entre ambos conjuntos.
+
+### Conjuntos numerables y no numerables. Ejemplos
+Podemos plantear algunos ejemplos de conjuntos numerables y no numerables comunes:
+
+#### Conjuntos numerables
+Los siguientes conjuntos son numerables:
+
+1. El conjunto de los naturales $\mathbb{N}$.
+<DemBox title="Demostración">
+
+Trivial, basta considerar la aplicación identidad:
+$$
+\begin{align*}
+\varphi : \mathbb{N} & \longrightarrow \mathbb{N} \\
+n & \longmapsto \varphi(n) = n
+\end{align*}
+$$
+
+</DemBox>
+
+El grupo de los enteros $\mathbb{Z} = \left\{ - \infty, \dots, - 2, - 1, 0, 1, 2, \dots , \infty\right\}$.
+<DemBox title="Demostración">
+
+Podemos emplear la siguiente idea para definir una biyección entre $\mathbb{N}$ y $\mathbb{Z}$:
+
+$$
+\begin{array}{c|cccccccc}
+\mathbb{N} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & \dots \\
+& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \\
+\mathbb{Z} & 0 & 1 & -1 & 2 & -2 & 3 & -3 & \dots
+\end{array}
+$$
+
+De esta forma, podemos definir la aplicación:
+$$
+\begin{align*}
+\varphi : \mathbb{N} & \longrightarrow \mathbb{Z} \\
+n & \longmapsto \varphi(n) = \begin{cases}
+\frac{n}{2}, & n \text{ par} \\[1ex]
+-\frac{n-1}{2}, & n \text{ impar}
+\end{cases}
+\end{align*}
+$$
+Y así, tenemos una biyección entre ambos conjuntos.
+
+</DemBox>
+
+El conjunto $\mathbb{Q} \coloneq \left\{\dfrac{z}{n} : z \in \mathbb{Z}, n \in \mathbb{N}\right\}$ 
+<DemBox title="Demostración">
+
+Como tenemos que:
+$$
+\begin{align}
+\text{Card } \mathbb{Z} = \text{Card } \mathbb{N} \implies  \text{Card } \mathbb{Q} = \text{Card } \left\{\frac{z}{n} : z \in \mathbb{N}, n \in \mathbb{N}\right\}
+
+\end{align}
+$$
+Para construir una biyección entre $\mathbb{N}$ y $\left\{\frac{z}{n} : z, n \in \mathbb{N}\right\}$ podemos ver que si disponemos los naturales en filas y columnas, obtenemos la siguiente tabla expresando los cocientes:
+
+$$
+\begin{array}{c|ccccccc}
+& 1 & 2 & 3 & 4 & 5 & 6 & \dots \\
+\hline
+1 & \frac{1}{1} & \frac{1}{2} & \frac{1}{3} & \frac{1}{4} & \frac{1}{5} & \frac{1}{6} & \dots \\[1ex]
+2 & \frac{2}{1} & \frac{2}{2} & \frac{2}{3} & \frac{2}{4} & \frac{2}{5} & \frac{2}{6} & \dots \\[1ex]
+3 & \frac{3}{1} & \frac{3}{2} & \frac{3}{3} & \frac{3}{4} & \frac{3}{5} & \frac{3}{6} & \dots \\[1ex]
+4 & \frac{4}{1} & \frac{4}{2} & \frac{4}{3} & \frac{4}{4} & \frac{4}{5} & \frac{4}{6} & \dots \\[1ex]
+5 & \frac{5}{1} & \frac{5}{2} & \frac{5}{3} & \frac{5}{4} & \frac{5}{5} & \frac{5}{6} & \dots \\[1ex]
+6 & \frac{6}{1} & \frac{6}{2} & \frac{6}{3} & \frac{6}{4} & \frac{6}{5} & \frac{6}{6} & \dots \\[1ex]
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots
+\end{array}
+$$
+
+Y recorriendo la tabla en diagonal tenemos la siguiente sucesión:
+$$
+\begin{align*}
+\frac{1}{1}, \, \frac{2}{1}, \, \frac{1}{2}, \, \frac{3}{1}, \, \frac{2}{2}, \, \frac{1}{3}, \, \frac{4}{1}, \, \frac{3}{2}, \, \frac{2}{3}, \, \frac{1}{4}, \, \frac{5}{1}, \, \frac{4}{2}, \, \frac{3}{3}, \, \frac{2}{4}, \, \frac{1}{5}, \, \frac{6}{1}, \, \dots
+\end{align*}
+$$
+Como podemos notar, en esta sucesión aparecen algunos números repetidos (por ejemplo, $\frac{2}{2}$ y $\frac{1}{1}$). Pero podemos eliminar estos números de la sucesión sin que deje de ser numerable. Finalmente, a cada número de esta sucesión le asignamos un natural, es decir:
+
+$$
+\begin{array}{c|cccccccccc}
+\mathbb{N} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \dots \\
+& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \\
+\left\{\frac{z}{n} \colon z, n \in \mathbb{N}\right\} & \frac{1}{1} & \frac{2}{1} & \frac{1}{2} & \frac{3}{1} & \frac{1}{3} & \frac{4}{1} & \frac{3}{2} & \frac{2}{3} & \frac{1}{4} & \dots
+\end{array}
+$$
+
+Así, podemos definir una aplicación $\varphi : \mathbb{N} \longrightarrow \left\{\frac{z}{n} : z, n \in \mathbb{N}\right\}$ suprayectiva y, como sabemos que:
+$$
+\begin{align*}
+\text{Card } \left\{\frac{z}{n} : z, n \in \mathbb{N}\right\} \leq \text{Card } \mathbb{N} \quad \text{y} \quad \mathbb{N} \subseteq \left\{\frac{z}{n} : z, n \in \mathbb{N}\right\}
+\end{align*}
+$$
+Tenemos que:
+$$
+\begin{align*}
+\text{Card } \mathbb{N} \leq \text{Card } \left\{\frac{z}{n} : z, n \in \mathbb{N}\right\} \leq \text{Card } \mathbb{N}
+\end{align*}
+$$
+Por lo tanto, por  concluimos que:
+$$
+\begin{align*}
+\text{Card } \left\{\frac{z}{n} : z, n \in \mathbb{N}\right\} = \text{Card } \mathbb{N} = \text{Card } \mathbb{Q}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Conjuntos no numerables
+Los siguientes conjuntos no son numerables:
+
+1. El conjunto $(0, 1)$
+<DemBox title="Demostración">
+
+Procederemos por reducción al absurdo. Supongamos que $(0, 1)$ sí es numerable y, por tanto, existe una biyección $\varphi \colon \mathbb{N} \longrightarrow(0, 1)$. De esta manera, podríamos hacer una lista infinita que contendría todos los elementos de $(0, 1)$, es decir, $\varphi(\mathbb{N}) = (0, 1)$.
+
+Ahora, podríamos escribir todos los números del intervalo $(0, 1)$ como $\varphi(n)$ con $n \in \mathbb{N}$ de la siguiente forma:
+$$
+\begin{align*}
+\varphi(1) & = 0.\textbf{7}00681003\dots \\
+\varphi(2) & = 0.4\textbf{0}0100200\dots \\
+\varphi(3) & = 0.90\textbf{0}100300\dots \\
+\varphi(4) & = 0.100\textbf{1}00400\dots \\
+\vdots \quad &  \vdots
+\end{align*}
+$$
+Ahora queremos construir un nuevo número $b \in (0, 1)$. Para ello, nos fijamos en los decimales remarcados de la lista anterior y hacemos lo siguiente:
+$$
+\begin{align*}
+b_n = \left(n\text{-ésimo decimal de } \varphi(n) + 1\right) \mod 10
+\end{align*}
+$$
+De esta forma en nuestra sucesión $b$ tenemos:
+$$
+\begin{align*}
+b & = 0.b_1 b_2 b_3 b_4 \dots = 0.8112\dots
+\end{align*}
+$$
+Y por construcción, $b \in (0, 1)$ y $b \neq \varphi(n) \, \forall n \in \mathbb{N}$ ya que difiere en al menos un decimal de cada uno de ellos. Por lo tanto, hemos llegado a una contradicción y concluimos que $(0, 1)$ no es numerable.
+
+</DemBox>
+
+El conjunto de los reales $\mathbb{R}$
+<DemBox title="Demostración">
+
+Para esta demostración emplearemos el Teorema de los intervalos encajados de Cantor, que dice que si tenemos una sucesión infinitas de intervalos cerrados y acotados $[a_n, b_n]$ tal que $a_n < b_n$ donde cada intervalo está contenido en el anterior, es decir:
+$$
+\begin{align*}
+[a_1, b_1] \supseteq [a_2, b_2] \supseteq [a_3, b_3] \supseteq \dots \implies \bigcap_{n \in \mathbb{N}} [a_n, b_n] \neq \emptyset
+\end{align*}
+$$
+Entonces, procederemos por reducción al absurdo. Supongamos que $\mathbb{R}$ es numerable y, por tanto, existe una biyección $\varphi \colon \mathbb{N} \longrightarrow \mathbb{R}$. 
+
+Queremos una sucesión de intervalos encajados que excluyan sistemáticamente a cada número de nuestra lista $\varphi(\mathbb{N}) = \mathbb{R}$:
+
+[1)] Como $\varphi(1)$ es un punto en la recta real, podemos tomar fácilmente un intervalo que no lo contenga, es decir, $[a_1, b_1]$ tal que:
+$$
+\begin{align*}
+\varphi(1) \not\in [a_1, b_1] \, \text{ con } a_1 < b_1
+\end{align*}
+$$
+[2)] Para excluir a $\varphi(2)$ tomamos otro intervalo $[a_2, b_2]$ tal que:
+$$
+\begin{align*}
+\varphi(2) \not\in [a_2, b_2] \subseteq [a_1, b_1] \, \text{ con } a_2 < b_2
+\end{align*}
+$$
+que es posible ya que $[a_1, b_1]$ es un intervalo que podemos dividir en dos subintervalos y elegir aquel que no contenga a $\varphi(2)$.
+[3)] De forma análoga, para $n > 2$ tomamos $[a_n, b_n]$ tal que:
+$$
+\begin{align*}
+\varphi(n) \not\in [a_n, b_n] \subseteq [a_{n-1}, b_{n-1}] \, \text{ con } a_n < b_n
+\end{align*}
+$$
+
+Así, hemos construido una sucesión de intervalos encajados $[a_n, b_n]$ que además excluyen a cada número de la lista, es decir, $\forall n \in \mathbb{N}$ tenemos $\varphi(n) \not\in [a_n, b_n]$.
+
+Ahora, aplicando el Teorema de los intervalos encajados sabemos que existe al menos un número real $x$ tal que:
+$$
+\begin{align*}
+x \in \bigcap_{n \in \mathbb{N}} [a_n, b_n]
+\end{align*}
+$$
+Pero entonces debería existir $k \in \mathbb{N}$ tal que $x = \varphi(k)$. Sin embargo, por construcción nos habíamos asegurado de que:
+$$
+\begin{align*}
+\varphi(k) \not\in [a_k, b_k] \implies x \not\in [a_k, b_k] \implies x \not\in \bigcap_{n \in \mathbb{N}} [a_n, b_n] \quad \#
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Observación">
+
+Podemos ver las siguientes igualdades:
+$$
+\begin{align*}
+\text{Card } \mathbb{R} = \text{Card } \left( -\frac{\pi}{2} , \frac{\pi}{2} \right)
+\end{align*}
+$$
+ya que existe una biyección entre ambos conjuntos dada por la función arctan:
+$$
+\begin{align*}
+\arctan : \mathbb{R} \longrightarrow \left( - \frac{\pi}{2}, \frac{\pi}{2}   \right)
+\end{align*}
+$$
+Y también tenemos que:
+$$
+\begin{align*}
+\text{Card } \mathbb{C} = \text{Card } \mathbb{R}
+\end{align*}
+$$
+
+</EjBox>
+
+### Procesos que dan lugar a conjuntos numerables
+
+1. Sea $A$ finito y $B$ infinito numerable tal que $A \cap B = \emptyset$ entonces:
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}    
+A \cup B \text{ es infinito numerable}\\
+A \times B \text{ es infinito numerable o } \emptyset \text{ si } A = \emptyset 
+\end{array}
+\right.
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Se plantean dos casos:
+
+Si $A = \emptyset$ entonces:
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}
+A \cup B = B \text{ es infinito numerable}\\
+A \times B = \emptyset \times B = \emptyset
+\end{array}
+\right.
+\end{align*}
+$$
+Si $A \neq \emptyset$ entonces:
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}
+A = \{a_1, a_2, \dots, a_n\} \quad n \in \mathbb{N} \text{ y } a_i \neq a_j \text{ si } i \neq j\\[1ex]
+B = \{b_1, b_2, b_3, \dots\} = \{b_n : n \in \mathbb{N}\} \quad b_i \neq b_j \text{ si } i \neq j
+\end{array}
+\right.
+\end{align*}
+$$
+Así tenemos que la unión natural es:
+$$
+\begin{align*}
+A \cup B = \left\{\underbrace{a_1}_{1}, \underbrace{a_2}_{2}, \dots, \underbrace{a_n}_{n}, \underbrace{b_1}_{n+1}, \underbrace{b_2}_{n+2}, \underbrace{b_3}_{n+3}, \dots\right\}
+\end{align*}
+$$
+Y podemos definir la biyección:
+$$
+\begin{align*}
+\varphi : \mathbb{N} & \longrightarrow A \cup B \\
+m & \longmapsto \varphi(m) = \begin{cases}
+a_m, & 1 \leq m \leq n\\
+b_{m-n}, & m > n
+\end{cases}
+\end{align*}
+$$
+Y por otra parte, si consideramos el producto $A \times B$ tenemos:
+
+$$
+\begin{array}{c|cccc}
+& b_1 & b_2 & b_3 & \dots \\
+\hline
+a_1 & (a_1, b_1) & (a_1, b_2) & (a_1, b_3) & \dots \\[1ex]
+a_2 & (a_2, b_1) & (a_2, b_2) & (a_2, b_3) & \dots \\[1ex]
+a_3 & (a_3, b_1) & (a_3, b_2) & (a_3, b_3) & \dots \\[1ex]
+\vdots & \vdots & \vdots & \vdots & \vdots\\
+a_n & (a_n, b_1) & (a_n, b_2) & (a_n, b_3) & \dots
+\end{array}
+$$
+
+Así, recorriendo la tabla columna a columna obtendríamos la sucesión:
+$$
+\begin{align*}
+A \times B = \left\{(a_1, b_1), (a_2, b_1), \dots , (a_n, b_1), (a_1, b_2), (a_2, b_2), \dots, (a_n, b_2), \dots  \right\}
+\end{align*}
+$$
+
+</DemBox>
+
+Sea $A, B$ infinitos numerables con $A \cup B = \emptyset$ entonces:
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}
+A \cup B \text{ es infinito numerable}\\
+A \times B \text{ es infinito numerable }
+\end{array}
+\right.
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Supongamos ambos conjuntos $A$ y $B$ infinitos numerables, es decir:
+$$
+\begin{align*}
+A & = \{a_n : n \in \mathbb{N}\} \text{ con } a_n \neq a_m \text{ si } n \neq m \\[1ex]
+B & = \{b_n : n \in \mathbb{N}\} \text{ con } b_n \neq b_m \text{ si } n \neq m
+\end{align*}
+$$
+Entonces tenemos que la unión natural es:
+$$
+\begin{align*}
+A \cup B = \left\{\underbrace{a_1}_1, \underbrace{b_1}_2, \underbrace{a_2}_3, \underbrace{b_2}_4, \underbrace{a_3}_5, \underbrace{b_3}_6, \dots\right\}
+\end{align*}
+$$
+Y podemos definir la biyección:
+$$
+\begin{align*}
+\varphi : \mathbb{N} & \longrightarrow A \cup B \\
+m & \longmapsto \varphi(m) = \begin{cases}
+a_{\frac{m+1}{2}}, & m \text{ impar} \\[1ex]
+b_{\frac{m}{2}}, & m \text{ par}
+\end{cases}
+\end{align*}
+$$
+
+Y por otra parte, si consideramos el producto $A \times B$ tenemos:
+
+$$
+\begin{array}{c|cccc}
+& b_1 & b_2 & b_3 & \dots \\
+\hline
+a_1 & (a_1, b_1) & (a_1, b_2) & (a_1, b_3) & \dots \\[1ex]
+a_2 & (a_2, b_1) & (a_2, b_2) & (a_2, b_3) & \dots \\[1ex]
+a_3 & (a_3, b_1) & (a_3, b_2) & (a_3, b_3) & \dots \\[1ex]
+\vdots & \vdots & \vdots & \vdots & \vdots\\
+\end{array}
+$$
+
+Por lo que, recorriendo la tabla en diagonal obtendríamos la sucesión:
+$$
+\begin{align*}
+A \times B = \left\{
+(a_1,b_1), (a_1, b_2), (a_2, b_1), (a_1, b_3), \dots 
+\right\}
+\end{align*}
+$$
+
+</DemBox>
+
+<EjemBox title="Ejercicio">
+
+*Sea $A_i$ conjunto infinito numerable $\forall i \in \mathbb{N}$ tal que $A_i \cap A_j \neq \emptyset \, \, \forall i \neq j$ (no necesario). Probar que $\cup_{i \in \mathbb{N}} A_i$ es numerable.*
+
+Sea $A_i$ un conjunto infinito numerable cualquiera, será de la forma:
+$$
+\begin{align*}
+A_i = \{a_{i_n} : n \in \mathbb{N}\} \text{ con } a_{i_n} \neq a_{i_m} \text{ si } n \neq m
+\end{align*}
+$$
+Y definimos la aplicación $f_i$ como:
+$$
+\begin{align*}
+f_i : \mathbb{N} & \longrightarrow A_i \\
+n & \longmapsto f_i(n) = a_{i_n}
+\end{align*}
+$$
+Colocando los elementos $f_i(j)$ en una matriz donde la fila $i$ contiene la enumeración de $A_i$ tenemos:
+
+$$
+\begin{array}{c|ccccc}
+& j = 1 & j = 2 & j = 3 & j = 4 & \dots \\
+\hline
+i = 1 & f_1(1) & f_1(2) & f_1(3) & f_1(4) & \dots \\[1ex]
+i = 2 & f_2(1) & f_2(2) & f_2(3) & f_2(4) & \dots \\[1ex]
+i = 3 & f_3(1) & f_3(2) & f_3(3) & f_3(4) & \dots \\[1ex]
+i = 4 & f_4(1) & f_4(2) & f_4(3) & f_4(4) & \dots \\[1ex]
+\vdots & \vdots & \vdots & \vdots & \vdots & \ddots      
+\end{array}
+$$
+
+Ahora, recorriendo las entradas por diagonales según la suma $i + j = k$ tenemos:
+$$
+\begin{align*}
+k = 2 & \longrightarrow f_1(1) \\
+k = 3 & \longrightarrow f_1(2), f_2(1) \\
+k = 4 & \longrightarrow f_1(3), f_2(2), f_3(1) \\
+k = 5 & \longrightarrow f_1(4), f_2(3), f_3(2), f_4(1) \\
+\vdots  &  \vdots
+\end{align*}
+$$
+Este recorrido visita todas las parejas $(i,j) \in \mathbb{N} \times \mathbb{N}$ por lo que si definimos la aplicación:
+$$
+\begin{align*}
+\varphi : \mathbb{N} & \longrightarrow \bigcup_{i \in \mathbb{N}} A_i \\
+m & \longmapsto \varphi(m) = f_i(j) \text{ donde } m = \frac{(i+j-2)(i+j-1)}{2} + i
+\end{align*}
+$$
+Tenemos una aplicación suprayectiva y, por lo tanto, la unión es a lo sumo numerable.
+
+Si los $A_i$ no fueran disjuntos, podemos repetir la misma idea pero teniendo en cuenta que se podría repetir un mismo elemento. Para obtener una biyección, simplemente:
+
+1. Recorremos las entradas como antes formando la lista: $\varphi(1), \varphi(2), \varphi(3), \dots$
+Definimos una nueva sucesión $t$ como:
+
+- $n = 0$ entonces $t(0 ) = \varphi(0)$
+$n \geq 1$ entonces $t(n)$ es el primer elemento $\varphi(k)$ con $k$ mayor que los usados previamente y tal que $\varphi(k) \notin \left\{t(0), \dots, t(n - 1)\right\}$
+
+Así, tenemos que cada $t(n)$ es distinto por construcción y todo $x \in \cup_i A_i$ aparece en $\varphi$ en alguna posición, por lo que su primera aparición será tomada en algún $t(n)$.
+
+</EjemBox>
+
+### Partes de un conjunto. Definición
+Sea $A$ un conjunto, se llama **partes de $A$** al conjunto cuyos elementos son todos los subconjuntos de $A$. Se denota por $\mathcal{P}(A)$.
+
+<EjBox title="Nota">
+
+En particular, tenemos que $\emptyset \in \mathcal{P}(A)$ y $A \in \mathcal{P}(A)$.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Sea $A = \{1, 2\}$ entonces:
+$$
+\begin{align*}
+\mathcal{P}(A) = \left\{\emptyset, \{1\}, \{2\}, \{1, 2\}\right\}
+\end{align*}
+$$
+Donde tenemos que:
+$$
+\begin{align*}
+\text{Card } A = 2 \quad \text{y} \quad \text{Card } \mathcal{P}(A) = 4
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+Si consideramos el conjunto vacío $\emptyset$ entonces:
+$$
+\begin{align*}
+\mathcal{P}(\emptyset ) = \{\emptyset\}
+\end{align*}
+$$
+Por lo que:
+$$
+\begin{align*}
+\text{Card } \emptyset = 0 \quad \text{y} \quad \text{Card } \mathcal{P}(\emptyset) = 1
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Observación">
+
+En general, si $A$ es finito entonces se cumple que:
+$$
+\begin{align*}
+\text{Card } \mathcal{P}(A) = 2^{\text{Card } A} \in \mathbb{N}
+\end{align*}
+$$
+En efecto, podemos ver que:
+
+- Si $A = \emptyset$ entonces:
+$$
+\begin{align*}
+\text{Card } A = 0 \quad \text{ y } \quad \text{Card } \mathcal{P}(A) = 1 = 2^0
+\end{align*}
+$$
+Si $A \neq \emptyset$, supongamos que $\text{Card } A = n \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+\exists \varphi : \mathcal{P}(A) & \longrightarrow C \coloneq \left\{(\varepsilon_1, \varepsilon_2, \dots, \varepsilon_n ) \text{ tq } \varepsilon_i = 0  \text{ o } 1\right\}\\
+B & \longmapsto (\varepsilon_1, \varepsilon_2, \dots, \varepsilon_n) \quad \text{ con } \varepsilon_i = \left\{
+\begin{array}{ll}
+1 \text{ si } a_i \in B \\[1ex]
+0 \text{ si } a_i \not\in B
+\end{array}
+\right.
+\end{align*}
+$$
+La idea aquí es que estamos ``codificando'' cada subconjunto $B$ de $\mathcal{P}(A)$ mediante una sucesión de ceros y unos, donde el $i$-ésimo dígito nos indica si el elemento $a_i$ pertenece o no a $B$.
+
+Así, tenemos que si $A = \{a_1, a_2, \dots, a_n\}$ entonces:
+$$
+\begin{align*}
+C = \{(0,0,\dots,0), (1,0,\dots,0), (0,1,\dots,0), \dots, (1,1,\dots,1)\}
+\end{align*}
+$$
+Y por tanto, $\text{Card } C = 2^n$ ya que cada dígito puede tomar dos valores y hay $n$ dígitos.
+
+</EjBox>
+
+### $\text{Card } \mathcal{P}(A) > \text{Card } A$. Proposición
+Sea $A$ un conjunto cualquiera, entonces se cumple que:
+$$
+\begin{align*}
+\text{Card } \mathcal{P}(A) > \text{Card } A
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea un conjunto $B$ cualquiera, entonces claramente tenemos que:
+$$
+\begin{align*}
+\text{Card } B \leq \text{Card } \mathcal{P}(B)
+\end{align*}
+$$
+Supongamos que existe un conjunto $A$ tal que:
+$$
+\begin{align*}
+\text{Card } \mathcal{P}(A) = \text{Card } A
+\end{align*}
+$$
+Entonces, existiría una biyección $\varphi: A \longrightarrow \mathcal{P}(A)$, es decir, que cada elemento de $A$ se corresponde exactamente con un subconjunto de $\mathcal{P}(A)$. 
+
+Consideremos el conjunto de todos los elementos que no pertenecen al subconjunto con el que están asociados mediante $\varphi$:
+$$
+\begin{align*}
+B \coloneq \left\{x \in A : x \not\in \varphi(x)\right\}
+\end{align*}
+$$
+Como $\varphi$ es supuestamente sobreyectiva, debe existir $z \in A$ tal que $\varphi(z) = B$, donde se presentan dos casos:
+
+- $z \in B = \varphi(z)$ entonces por definición de $B$: $z \not\in \varphi(z) \quad \#$
+$z \not\in \varphi(z) = B$ entonces por definición de $B$: $z \in B \quad \#$
+
+Como hemos llegado inevitablemente a una contradicción, concluimos que $\text{Card } A \neq \text{Card } \mathcal{P}(A)$ y por tanto:
+$$
+\begin{align*}
+\text{Card } A < \text{Card } \mathcal{P}(A)
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Nota">
+
+La proposición anterior establece la existencia de una jerarquía bastante grande de cardinales no finitos. Por ello, aprovechamos esto para introducir la siguiente notación:
+$$
+\begin{align*}
+\underbrace{0}_{\text{\tiny $\text{Card } \emptyset$} } < \overbrace{ \underbrace{1}_{\text{\tiny $\text{Card } \mathcal{P}(\emptyset )$}} < \underbrace{2}_{\text{\tiny $\text{Card } \mathcal{P}(\mathcal{P}(\emptyset ))$}} < 3 < 4 < \dots}^{\mathbb{N}} < \underbrace{\aleph_0 < 2^{\aleph_0} < 2^{2^{\aleph_0}}}_{\text{Cardinales transfinitos}} < \dots
+\end{align*}
+$$
+Donde hemos definido $\aleph_0$ como $\text{Card } \mathbb{N}$.
+
+</EjBox>
+
+<EjemBox title="Ejercicio">
+
+*Demostrar que $\text{Card } \mathbb{R} = \text{Card } \mathcal{P}(\mathbb{N})$*
+
+Consideremos la aplicación $\varphi$ dada por:
+$$
+\begin{align*}
+\varphi : \mathcal{P}(\mathbb{N}) & \longrightarrow C = \left\{\left(\varepsilon_1, \varepsilon_2, \dots , \varepsilon_n, \dots \right) \colon \varepsilon_i \in \mathbb{N}\right\}\\
+B & \longmapsto \left(\varepsilon_1, \varepsilon_2, \dots, \varepsilon_n, \dots \right) \text{ con } \varepsilon_i = \left\{
+\begin{array}{ll}
+a_i & \text{ si } a_i \in B \\[1ex]
+0 & \text{ si } a_i \not\in B
+\end{array}
+\right.
+\end{align*}
+$$
+Así, cada subconjunto $B$ de $\mathcal{P}(\mathbb{N})$ se corresponde con una sucesión infinita de números naturales, donde el $i$-ésimo término es $a_i$ si $a_i$ pertenece a $B$ y $0$ en caso contrario y bastaría ver que $\phi$ es biyectiva.
+
+- **Inyectividad:** Supongamos que existen $B_1, B_2 \in \mathcal{P}(\mathbb{N})$ tales que $\varphi(B_1) = \varphi(B_2)$. Entonces, sus sucesiones asociadas son iguales:
+$$
+\begin{align*}
+\left(\varepsilon_1^{(1)}, \varepsilon_2^{(1)}, \dots\right) = \left(\varepsilon_1^{(2)}, \varepsilon_2^{(2)}, \dots\right)
+\end{align*}
+$$
+Por lo que cada término de ambas sucesiones coincide, es decir, $\forall i \in \mathbb{N}$:
+$$
+\begin{align*}
+\varepsilon_i^{(1)} = \varepsilon_i^{(2)}
+\end{align*}
+$$
+Y por tanto, $B_1 = B_2$.
+**Sobreyectividad:** Sea una sucesión cualquiera en $C$:
+$$
+\begin{align*}
+\left(\varepsilon_1, \varepsilon_2, \dots\right) \quad \text{ con } \varepsilon_i \in \mathbb{N}
+\end{align*}
+$$
+Entonces, podemos definir el subconjunto $B$ como:
+$$
+\begin{align*}
+B = \left\{a_i : \varepsilon_i = a_i \neq 0\right\} \subseteq \mathbb{N}
+\end{align*}
+$$
+Por lo que tenemos que:
+$$
+\begin{align*}
+\varphi(B) = \left(\varepsilon_1, \varepsilon_2, \dots\right)
+\end{align*}
+$$
+
+</EjemBox>
+
+## Descomposición de subconjuntos abiertos de $\mathbb{R}^N$ en cubos diádicos
+
+### Intervalo diádico. Definición
+Se llama **intervalo diádico de orden $n \in \mathbb{N}$** a cualquier intervalo de la forma:
+$$
+\begin{align*}
+\left[\frac{j - 1}{2^n}, \frac{j}{2^n}\right) \quad \text{ con } j \in \mathbb{Z}
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+En otras palabras, estamos dividiendo la recta real en trozos de tamaño $\frac{1}{2^n}$ y cada trozo empieza en un múltiplo de $\frac{1}{2^n}$ y termina justo antes del siguiente múltiplo de $\frac{1}{2^n}$. 
+
+Por ejemplo, para $n = 1$ los intervalos de longitud $\frac{1}{2}$ son:
+$$
+\begin{align*}
+\left[\frac{j - 1}{2}, \frac{j}{2}\right) = \left\{\dots, \left[-1, -\frac{1}{2}\right), \left[-\frac{1}{2}, 0\right), \left[0, \frac{1}{2}\right), \left[\frac{1}{2}, 1\right), \left[1, \frac{3}{2}\right), \dots\right\}
+\end{align*}
+$$
+Y para $n = 2$ los intervalos de longitud $\frac{1}{4}$ son:
+$$
+\begin{align*}
+\left[\frac{j - 1}{4}, \frac{j}{4}\right) = \left\{\dots, \left[-\frac{1}{2}, -\frac{1}{4}\right), \left[-\frac{1}{4}, 0\right), \left[0, \frac{1}{4}\right), \left[\frac{1}{4}, \frac{1}{2}\right), \dots\right\}
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Observación">
+
+Podemos notar que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{j\in\mathbb{Z}} \left[\frac{j - 1}{2^n}, \frac{j}{2^n}\right) = \mathbb{R}
+\end{align*}
+$$
+Y también podemos ver que se tiene que si $i \neq j$ entonces:
+$$
+\begin{align*}
+\left[\frac{i - 1}{2^n}, \frac{i}{2^n}\right) \cap \left[\frac{j - 1}{2^n}, \frac{j}{2^n}\right) = \emptyset
+\end{align*}
+$$
+Además, la colección de todos los intervalos diádicos de orden $n$ es numerable.
+
+</EjBox>
+
+<EjBox title="Observación">
+
+Si $I$ es un intervalo diádico de orden $n$ y $J$ es un intervalo diádico de orden $m$ con $m \leq n$ entonces:
+$$
+\begin{align*}
+I \subseteq J \quad \text{ o bien } \quad I \cap J = \emptyset
+\end{align*}
+$$
+
+</EjBox>
+
+### Cubo diádico. Definición
+Se llama **cubo diádico de $\mathbb{R}^N$ de orden $n \in \mathbb{N}$** a cualquier conjunto de la forma:
+$$
+\begin{align*}
+I_1 \times I_2 \times \dots \times I_n \subseteq \mathbb{R}^N
+\end{align*}
+$$
+donde $I_k$ es un intervalo diádico de orden $n$ para $k = 1, 2, \dots, n$.
+
+<EjemBox title="Ejemplo">
+
+Por ejemplo, en $\mathbb{R}^2$ un cubo diádico de orden $n$ es un cuadrado cuyos lados miden $\frac{1}{2^n}$ y están alineados con los ejes coordenados. 
+
+En particular, un cubo diádico de $\mathbb{R}^2$ de orden $1$ podría ser:
+$$
+\begin{align*}
+\left[-\frac{1}{2}, 0\right) \times \left[0, \frac{1}{2}\right)
+\end{align*}
+$$
+Es decir, el cuadrado de lado $\frac{1}{2}$ que tiene un vértice en el origen y se extiende hacia el segundo cuadrante.
+
+![TikZ Graph](/blogs/images/tema-1-preliminares_tikz_0.svg)
+
+En $\mathbb{R}^3$, un cubo diádico de orden $n$ podría ser un cubo cuyos lados miden $\frac{1}{2^n}$ y están alineados con los ejes coordenados. 
+
+Por ejemplo, un cubo diádico de $\mathbb{R}^3$ de orden $1$ podría ser:
+$$
+\begin{align*}
+\left[ - \frac{1}{2}, 0 \right) \times \left[0, \frac{1}{2}\right) \times \left[0, \frac{1}{2}\right)
+\end{align*}
+$$
+Es decir, el cubo de lado $\frac{1}{2}$ que tiene un vértice en el origen y se extiende hacia el octante negativo en $x$ y positivo en $y$ y $z$.
+
+![TikZ Graph](/blogs/images/tema-1-preliminares_tikz_1.svg)
+
+</EjemBox>
+
+<EjBox title="Observación">
+
+Podemos notar que:
+$$
+\begin{align*}
+\displaystyle \bigcup_{C \in \mathcal{F}_n} C = \mathbb{R}^N
+\end{align*}
+$$
+donde $\mathcal{F}_n$ es la colección de todos los cubos diádicos de $\mathbb{R}^N$ de orden $n$.
+
+Así, tenemos que si $C_1, C_2 \in \mathcal{F}_n$ y $C_1 \neq C_2$ entonces:
+$$
+\begin{align*}
+C_1 \cap C_2 = \emptyset
+\end{align*}
+$$
+Además, la colección de todos los cubos diádicos de orden $n$, esto es, $\mathcal{F}_n$, es numerable.
+
+Por último, si $C \in \mathcal{F}_n$, $D \in \mathcal{F}_m$ con $m \leq n$ entonces:
+$$
+\begin{align*}
+C \subseteq D \quad \text{ o } \quad C \cap D = \emptyset 
+\end{align*}
+$$
+
+</EjBox>
+
+### Teorema de descomposición
+Para todo subconjunto abierto $O \subseteq \mathbb{R}^N$ no vacío, se tiene que existe una colección numerable de cubos diádicos $\{C_i\}_{i \in \mathbb{N}}$ disjuntos dos a dos (posiblemente de órdenes distintos) tales que:
+
+1. $O$ es exactamente la unión de todos esos cubos, es decir: $O = \bigcup_{i \in \mathbb{N}} C_i$
+Cada cubo está completamente dentro de $O$, incluso su clausura: $\overline{C_i} \subseteq O \quad \forall i \in \mathbb{N}$
+Son disjuntos entre sí: $C_i \cap C_j = \emptyset \quad \text{ si } i \neq j$
+
+<DemBox title="Demostración">
+
+Recordemos que para cada $n \in \mathbb{N}$ se tiene que:
+$$
+\begin{align*}
+\mathcal{F}_n = \left\{C : C \text{ cubo diádico de orden } n\right\}
+\end{align*}
+$$
+Entonces definimos la subfamilia de cubos diádicos de orden $n$ cuya clausura está contenida en $O$, esto es:
+$$
+\begin{align*}
+\mathcal{G}_n \coloneq \left\{C \in \mathcal{F}_n : \overline{C} \subseteq O\right\}
+\end{align*}
+$$
+Y construimos recursivamente las familias $\mathcal{H}_n$ de cubos disjuntos:
+
+- Si $n = 1$ entonces:
+$$
+\begin{align*}
+\mathcal{H}_1 \coloneq \mathcal{G}_1
+\end{align*}
+$$
+Es decir, tomamos todos los cubos de orden 1 cuya clausura está en $O$.
+Si $n > 1$ entonces:
+$$
+\begin{align*}
+\mathcal{H}_n \coloneq \left\{C \in \mathcal{G}_n : C \not\subseteq \displaystyle \bigcup_{k = 1}^{n - 1} \bigcup_{D \in \mathcal{H}_k} D\right\} = \left\{C \in \mathcal{G}_n : C \cap \left[\displaystyle \bigcup_{k = 1}^{n - 1} \displaystyle \bigcup_{D \in \mathcal{H}_k} D \right] = \emptyset \right\}
+\end{align*}
+$$
+Es decir, tomamos solo los cubos de orden $n$ que **no** están ya cubiertos por los cubos de órdenes menores.
+
+Así, probaremos por doble contenido que:
+$$
+\begin{align*}
+O = \bigcup_{n = 1}^\infty \bigcup_{C \in \mathcal{H}_n} C
+\end{align*}
+$$
+
+- [$\supseteq$)] Trivial, todo cubo $C \in \mathcal{H}_n$ satisface que $C \subseteq O$ ya que $C \in \mathcal{G}_n$ y $\overline{C} \subseteq O$.
+
+[$\subseteq$)] Sea $x_0 = (x_1, x_2, \dots, x_N) \in O \subseteq \mathbb{R}^N$, como $O$ es abierto, existe un cubo abierto centrado en $x_0$ contenido en $O$, esto es $\exists n \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+x_0 \in \prod_{i = 1}^N \left(x_i - \frac{1}{2^n}, x_i + \frac{1}{2^n}\right) \subseteq \prod_{i = 1}^N \left[x_i - \frac{1}{2^n}, x_i + \frac{1}{2^n}\right] \subseteq O
+\end{align*}
+$$
+Entonces, para cada coordenada $1 \leq i \leq N$ tenemos que $\exists! j_i \in \mathbb{Z}$ tal que:
+$$
+\begin{align*}
+x_i \in \left[\frac{j_i - 1}{2^n}, \frac{j_i}{2^n} \right)
+\end{align*}
+$$
+Así, tenemos que para cada $1 \leq i \leq N$:
+$$
+\begin{align*}
+\left.
+\begin{array}{rl}
+\frac{j_i - 1}{2^n} \leq x_i & \implies \frac{j_i}{2^n} \leq x_i + \frac{1}{2^n}\\[2ex]
+x_i < \frac{j_i}{2^n} & \implies x_i - \frac{1}{2^n} < \frac{j_i - 1}{2^n} 
+\end{array}
+\right\} \implies \left[\frac{j_i - 1}{2^n}, \frac{j_i}{2^n} \right) \subseteq \left(x_i - \frac{1}{2^n}, x_i + \frac{1}{2^n}\right)
+\end{align*}
+$$
+Luego:
+$$
+\begin{align*}
+C \coloneq \prod_{i = 1}^N \left[\frac{j_i - 1}{2^n}, \frac{j_i}{2^n} \right) \subseteq \prod_{i = 1}^N \left(x_i - \frac{1}{2^n}, x_i + \frac{1}{2^n}\right) \subseteq O
+\end{align*}
+$$
+Y por lo tanto se cumple que:
+$$
+\begin{align*}
+x_0 \in C \subseteq \overline{C} \subseteq O
+\end{align*}
+$$
+Esto prueba que:
+$$
+\begin{align*}
+\mathcal{A}_{x_0} = \left\{n \in \mathbb{N} : \exists C \in \mathcal{G}_n \text{ con }x_0 \in C\right\} \neq \emptyset 
+\end{align*}
+$$
+Y aplicando el principio de buena ordenación de $\mathbb{N}$:
+$$
+\begin{align*}
+\exists \min \mathcal{A}_{x_0} \coloneq m
+\end{align*}
+$$
+Veamos que el correspondiente $C \in \mathcal{G}_m$ con $x_0 \in C \subseteq O$ cumple que $C \in \mathcal{H}_m$. En efecto, si $C \notin \mathcal{H}_m$ entonces:
+$$
+\begin{align*}
+C \in \mathcal{G}_n \text{ con } n < m = \min \mathcal{A}_{x_0} \quad \#
+\end{align*}
+$$
+Por tanto, hemos probado que $C \in \mathcal{H}_m$ lo que implica que:
+$$
+\begin{align*}
+x_0 \in C \subseteq \bigcup_{n = 1}^\infty \bigcup_{D \in \mathcal{H}_n} D \implies O \subseteq \bigcup_{n = 1}^\infty \bigcup_{C \in \mathcal{H}_n} C
+\end{align*}
+$$
+
+Para ver que $\mathcal{H}_n$ son disjuntos, basta notar que se cumple por construcción:
+
+- Dentro de cada $\mathcal{H}_n$ los cubos diádicos del mismo orden son disjuntos.
+Entre diferentes órdenes, si $C \in \mathcal{H}_n$ y $D \in \mathcal{H}_m$ con $n \neq m$ son disjuntos ya que si $n > m$ entonces:
+$$
+\begin{align*}
+C \not\subseteq \displaystyle \bigcup_{k = 1}^{n - 1} \displaystyle \bigcup_{E \in \mathcal{H}_k} E
+\end{align*}
+$$
+es decir, que en particular, no está contenido en $D$ y por tanto, $C \cap D = \emptyset$.
+
+Finalmente, cada $\mathcal{H}_n$ es numerable ya que es una subcolección de $\mathcal{F}_n$ que es numerable, y la unión numerable de conjuntos numerables es numerable.
+
+</DemBox>
+
+## Series Dobles
+El objetivo de esta sección es estudiar qué significa ``sumar todos los elementos'' de una trabla infinita de números reales dispuestos como $a_n,m$ donde $n, m \in \mathbb{N}$:
+
+$$
+\begin{array}{c|cccccc}
+\mathbb{N} & &&&&&\\
+& \vdots & \vdots & \vdots & \vdots & & \\
+& a_{31} & a_{32} & a_{33} & a_{34} & \dots & \\
+& a_{21} & a_{22} & a_{23} & a_{24} & \dots & \\
+& a_{11} & a_{12} & a_{13} & a_{14} & \dots & \\ \hline
+& 1 & 2 & 3 & 4 & \dots & \mathbb{N}
+\end{array}
+$$
+
+### Sucesión doble. Definición
+Llamamos **sucesión doble** a una función de la forma:
+$$
+\begin{align*}
+\varphi : \mathbb{N} \times \mathbb{N} & \longrightarrow \overline{\mathbb{R}} = \mathbb{R} \cup \{\pm \infty\}\\
+(n, m) & \longmapsto \varphi(n, m) = a_{n,m}
+\end{align*}
+$$
+Cada número $a_{n,m}$ es el **término general** de la fila $n$ y columna $m$ de la sucesión doble.{12}\) o algo así. Digo yo que lo del $- \frac{1}{12}$ será por los $12$ apóstoles, porque si no yo no lo veo.}
+
+### Serie doble. Definición
+Dada una sucesión doble $\varphi : \mathbb{N} \times \mathbb{N} \longrightarrow \overline{\mathbb{R}}$, llamamos **serie doble de término general $a_{n,m}$** a la expresión:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n, m} = \displaystyle \sum_{n = 1, m = 1} a_{n, m}\\
+\end{align*}
+$$
+
+#### Serie doble convergente. Definición
+Sea $\displaystyle \sum_{n,m} a_{n, m}$ serie doble, diremos que es **convergente** si $\exists s \in \mathbb{R}$ tal que:
+$$
+\begin{align*}
+\forall \varepsilon > 0, \quad \exists n_0 \in \mathbb{N} \quad \text{tal que} \quad  \forall n, m \geq n_0,
+\end{align*}
+$$
+se cumple que:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j}\right| < \varepsilon
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+Podemos ver esta convergencia como que los bloques rectangulares crecientes de la tabla se aproximan a un valor límite $s$:
+
+$$
+\begin{array}{c|cccccc}
+\mathbb{N} & &&&&&\\
+& \vdots & \vdots & \vdots & \vdots & & \\
+& a_{41} & a_{42} & a_{43} & a_{44} & \dots & \\
+& a_{31} & a_{32} & a_{33} & a_{34} & \dots & \\
+& a_{21} & a_{22} & a_{23} & a_{24} & \dots & \\
+& \textcolor{red}{a_{11}} & a_{12} & a_{13} & a_{14} & \dots & \\ \hline
+& 1 & 2 & 3 & 4 & \dots & \mathbb{N}
+\end{array}
+$$
+$\displaystyle \sum_{1 \leq i \leq 1, 1 \leq j \leq 1} a_{i,j}$
+
+$$
+\begin{array}{c|cccccc}
+\mathbb{N} & &&&&&\\
+& \vdots & \vdots & \vdots & \vdots & & \\
+& a_{41} & a_{42} & a_{43} & a_{44} & \dots & \\
+& a_{31} & a_{32} & a_{33} & a_{34} & \dots & \\
+& \textcolor{red}{a_{21}} & \textcolor{red}{a_{22}} & a_{23} & a_{24} & \dots & \\
+& \textcolor{red}{a_{11}} & \textcolor{red}{a_{12}} & a_{13} & a_{14} & \dots & \\ \hline
+& 1 & 2 & 3 & 4 & \dots & \mathbb{N}
+\end{array}
+$$
+$\displaystyle \sum_{1 \leq i \leq 2, 1 \leq j \leq 2} a_{i,j}$
+
+$$
+\begin{array}{c|cccccc}
+\mathbb{N} & &&&&&\\
+& \vdots & \vdots & \vdots & \vdots & & \\
+& a_{41} & a_{42} & a_{43} & a_{44} & \dots & \\
+& \textcolor{red}{a_{31}} & \textcolor{red}{a_{32}} & \textcolor{red}{a_{33}} & a_{34} & \dots & \\
+& \textcolor{red}{a_{21}} & \textcolor{red}{a_{22}} & \textcolor{red}{a_{23}} & a_{24} & \dots & \\
+& \textcolor{red}{a_{11}} & \textcolor{red}{a_{12}} & \textcolor{red}{a_{13}} & a_{14} & \dots & \\ \hline
+& 1 & 2 & 3 & 4 & \dots & \mathbb{N}
+\end{array}
+$$
+$\displaystyle \sum_{1 \leq i \leq 3, 1 \leq j \leq 3} a_{i,j}$
+
+Y así sucesivamente.
+
+</EjemBox>
+
+#### Serie doble divergente. Definición
+Sea $\displaystyle \sum_{n,m} a_{n, m}$ serie doble, diremos que **es divergente** a $+ \infty$ (resp. $- \infty$) si:
+$$
+\begin{align*}
+\forall K \in \mathbb{R}, \quad \exists n_0 \in \mathbb{N} \quad \text{tal que} \quad  \forall n, m \geq n_0,
+\end{align*}
+$$
+se cumple que:
+$$
+\begin{align*}
+\displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} > K \quad \left(\text{resp.} < K\right)
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Tanto si la serie doble es convergente como si es divergente, se llama valor de la suma de dicha serie doble al número $s$ (si es convergente) o al número $+\infty$ o $-\infty$ (si es divergente) y se denota por:
+$$
+\begin{align*}
+s = \displaystyle \sum_{n, m} a_{n, m} \in \mathbb{R} \qquad \text{ y } \qquad \pm\infty = \displaystyle \sum_{n,m} a_{n,m} \in \overline{\mathbb{R}}
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Por la ambigüedad del lenguaje, dos series diferentes pueden tener el mismo valor de la suma pero no ser las mismas series. 
+
+Por ejemplo, consideremos las siguientes dos series:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} a_n = 1 + 0 + 0 + 0 + \dots \qquad \text{y} \qquad
+\displaystyle \sum_{n = 1}^{\infty} b_n = \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \dots 
+\end{align*}
+$$
+Y se comete el error de escribir $\displaystyle \sum_n a_n = \displaystyle \sum_n b_n$ porque ambas series convergen a $1$.
+
+En realidad, ambas valen 1 como número pero no como series, es decir:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} a_n \neq \displaystyle \sum_{n = 1}^{\infty} b_n
+\end{align*}
+$$
+aunque sí se cumple que:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} a_n = \displaystyle \sum_{n = 1}^{\infty} b_n = 1\\
+\end{align*}
+$$
+
+</EjBox>
+
+### Teorema
+Sea $\varphi : \mathbb{N} \times \mathbb{N} \longrightarrow [0, +\infty]$ entonces para cualquier biyección $g : \mathbb{N} \longrightarrow \mathbb{N} \times \mathbb{N}$ tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{n, m} a_{n,m} = \displaystyle \sum_{n = 1}^{\infty} a_{g(n)} = \displaystyle \sum_{m = 1}^{\infty} \displaystyle \sum_{n = 1}^{\infty} a_{n,m} = \displaystyle \sum_{n = 1}^{\infty} \displaystyle \sum_{m = 1}^{\infty} a_{n,m} \in [0, + \infty]\\
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Veamos la demostración por los dos casos posibles:
+
+1. Algún coeficiente $a_{n,m}$ es igual a $+ \infty$. Entonces, trivialmente:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n,m} = + \infty & \qquad \text{ y } \qquad \displaystyle \sum_{n = 1}^\infty a_{g(n)} = + \infty\\[2ex]
+\displaystyle \sum_{m = 1}^{\infty}\displaystyle \sum_{n = 1}^{\infty} a_{n,m} = + \infty & \qquad \text{ y } \qquad \displaystyle \sum_{n = 1}^{\infty} \displaystyle \sum_{m = 1}^{\infty} a_{n,m} = + \infty\\
+\end{align*}
+$$
+$\forall n,m$ se tiene $a_{n,m} \in [0, \infty)$ entonces $\forall n$ se tiene que $a_{g(n)} \in [0, \infty)$ y, como consecuencia, se dan dos subcasos:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} a_{g(n)} = s \in [0, +\infty) \qquad \text{ o } \qquad \displaystyle \sum_{n = 1}^{\infty} a_{g(n)} = + \infty
+\end{align*}
+$$
+Veamos ambos casos por separado:
+
+- Si $\sum a_{g(n)} = s$ entonces $\forall \varepsilon > 0, \quad \exists n_0\in \mathbb{N}$ tal que $\forall k \geq  n_0$ se tiene:
+$$
+\begin{align*}
+0 \leq s - \displaystyle \sum_{n = 1}^{k} a_{g(n)} < \varepsilon
+\end{align*}
+$$
+Como $g$ biyectiva, $\exists m_0 \in \mathbb{N}$ donde los primeros $n_0$ términos de $a_{g(n)}$ corresponden a los índices en el conjunto $\left\{1, \dots, m_0\right\} \times \left\{1, \dots, m_0\right\}$, i.e.:
+$$
+\begin{align*}
+g\left(\left\{1, 2, \dots, n_0\right\}\right) \subseteq \left\{1, 2, \dots, m_0\right\} \times \left\{1, 2, \dots, m_0\right\}
+\end{align*}
+$$
+Así, $\forall n,m \geq m_0$ tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} \geq \displaystyle \sum_{i = 1}^{n_0} a_{g(i)} & \xRightarrow[\text{invertir } \geq]{\text{añadir } - } - \displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} \leq - \displaystyle \sum_{i = 1}^{n_0} a_{g(i)} \implies \\[2ex]
+& \xRightarrow{\text{añadir } s} s - \displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} \leq s - \displaystyle \sum_{i = 1}^{n_0} a_{g(i)} < \varepsilon
+\end{align*}
+$$
+Y además, sabemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} \text{ es suma parcial de alguna reordenación de } \displaystyle \sum_{n = 1}^{\infty} a_{g(n)}
+\end{align*}
+$$
+
+Como todas las reordenaciones de una serie simple de términos positivos tienen la misma suma por lo que:
+$$
+\begin{align*}
+0 \leq s - \displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} < s - \displaystyle \sum_{i = 1}^{n_0} a_{g(i)} < \varepsilon
+\end{align*}
+$$
+Y por tanto, como $\varepsilon$ era arbitrario, tenemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n,m} = s\\
+\end{align*}
+$$
+Si $\sum a_{g(n)} = + \infty$ entonces $\textcolor{blue}{\forall K \in \mathbb{R}} \quad \exists n_0\in \mathbb{N}$ tal que $\forall k \geq  n_0$ se tiene:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{k} a_{g(n)} \textcolor{blue}{\, > K}
+\end{align*}
+$$
+Como $g$ es biyectiva, $\exists m_0 \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+g\left(\left\{1, 2, 3, \dots, n_0\right\}\right) \subseteq \left\{1, 2, 3, \dots, m_0\right\} \times \left\{1, 2, 3, \dots, m_0\right\}
+\end{align*}
+$$
+Así, $\forall n,m \geq m_0$ tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} \geq \displaystyle \sum_{i = 1}^{n_0} a_{g(i)} \textcolor{blue}{\, > K}
+\end{align*}
+$$
+Y por tanto, como $K$ era arbitrario, tenemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n,m} = + \infty
+\end{align*}
+$$
+
+Así, tenemos que $\displaystyle \sum_{n,m} a_{n,m}$ es convergente o divergente a $+\infty$ y además:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n,m} = \displaystyle \sum_{n = 1}^{\infty} a_{g(n)}
+\end{align*}
+$$
+
+Ahora nos falta ver que:
+$$
+\begin{align*}
+\displaystyle \sum_{n, m} a_{n, m} = \displaystyle \sum_{m = 1}^{\infty} \displaystyle \sum_{n = 1}^{\infty} a_{n, m} = \displaystyle \sum_{n = 1}^{\infty} \displaystyle \sum_{m = 1}^{\infty} a_{n, m}
+\end{align*}
+$$
+
+Diferenciaremos dos casos:
+
+- Si $\displaystyle \sum_{n, m} a_{n,m} = s \in [0, \infty)$, es decir, si es convergente.
+
+Por definición $\forall \varepsilon > 0, \quad \exists n_0 \in \mathbb{N}$ tal que $\forall n,m \geq n_0$ se cumple que:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j}\right| < \varepsilon
+\end{align*}
+$$
+donde tenemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} = \displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{i,j} = \displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{m} a_{i,j}
+\end{align*}
+$$
+Así, si desarrollamos la desigualdad anterior, tenemos:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j}\right| & = \left|s - \displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{i,j}\right| = \left|s - \displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{m} a_{i,j}\right|
+\end{align*}
+$$
+Veamos que ocurre con cada una de las expresiones, empezando por:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{i,j}\right| < \varepsilon \implies 
+\end{align*}
+$$
+$$
+\begin{align*}
+\implies & \varepsilon \geq \lim_n \left|s - \displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{i,j}\right| = \left|s - \lim_n \displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{ij}\right| = \\[1ex] 
+&  = \left|s - \displaystyle \sum_{j = 1}^{m}\left(\lim_n \displaystyle \sum_{i = 1}^{n} a_{ij}\right)\right| = \left|s - \displaystyle \sum_{j = 1}^{m} \left(\displaystyle \sum_{i = 1}^{\infty} a_{ij}\right)\right| \xRightarrow[\forall m \geq n_0]{\text{Válido}} \\[4ex]
+\implies & \varepsilon \geq \lim_{m} \left|s - \displaystyle \sum_{j = 1}^{m}\left(\displaystyle \sum_{i = 1}^{\infty} a_{i,j}\right)\right| = \left|s - \lim_m \displaystyle \sum_{j = 1}^{m}\underbrace{\left(\displaystyle \sum_{i = 1}^{\infty}a_{ij}\right)}_{ \geq  0}\right| =\\[1ex]
+&  = \left|s - \displaystyle \sum_{j = 1}^{\infty} \left(\displaystyle \sum_{i = 1}^{\infty} a_{i,j}\right)\right| \geq 0 \xRightarrow[\forall \varepsilon > 0]{\text{Válido}} s - \displaystyle \sum_{j = 1}^{\infty} \left(\displaystyle \sum_{i = 1}^{\infty} a_{i,j}\right) = 0
+\end{align*}
+$$
+Y ahora de forma análoga, veamos qué ocurre con:
+$$
+\begin{align*}
+\left|s - \displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{m} a_{i,j}\right| < \varepsilon \implies
+\end{align*}
+$$
+$$
+\begin{align*}
+\implies & \varepsilon \geq \lim_m \left|s - \displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{m} a_{i,j}\right| = \dots  = \left|s - \displaystyle \sum_{i = 1}^{n} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right)\right| \xRightarrow[\forall n \geq n_0]{\text{Válido}} \\[4ex]
+\implies & \varepsilon \geq \lim_{n} \left|s - \displaystyle \sum_{i = 1}^{n}\left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right)\right| = \dots = \left|s - \displaystyle \sum_{i = 1}^{\infty} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right)\right| \geq 0 \xRightarrow[\forall \varepsilon > 0]{\text{Válido}} \\[2ex]
+\implies & s - \displaystyle \sum_{i = 1}^{\infty} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right) = 0
+\end{align*}
+$$
+Por tanto, si $\displaystyle \sum_{n,m} a_{n,m} = s \in [0, +\infty)$ entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n,m} = \displaystyle \sum_{m = 1}^{\infty} \left(\displaystyle \sum_{n = 1}^{\infty} a_{n,m}\right) = \displaystyle \sum_{n = 1}^{\infty} \left(\displaystyle \sum_{m = 1}^{\infty} a_{n,m}\right) = s\\
+\end{align*}
+$$
+
+Si $\displaystyle \sum_{n, m} a_{n,m} = \infty$, es decir, si es divergente a $+\infty$.
+
+Si para algún $\left\{
+\begin{array}{ll}
+n \in \mathbb{N} & \sum_{m = 1}^{\infty} a_{n,m} = + \infty\\[1ex]
+m \in \mathbb{N} & \sum_{n = 1}^{\infty} a_{n,m} = + \infty
+\end{array}
+\right.$ entonces trivialmente:
+$$
+\begin{align*}
+\displaystyle \sum_{n = 1}^{\infty} \displaystyle \sum_{m = 1}^{\infty} a_{n,m} = + \infty & \qquad \text{ o } \qquad \displaystyle \sum_{m = 1}^{\infty} \displaystyle \sum_{n = 1}^{\infty} a_{n,m} = + \infty \quad \text{respectivamente}
+\end{align*}
+$$
+Supongamos que $\left\{
+\begin{array}{l}
+\sum_{m = 1}^{\infty} a_{n, m} < \infty \quad \forall n\\[1ex]
+\sum_{n = 1}^{\infty} a_{n, m} < \infty \quad \forall m
+\end{array}
+\right.$ 
+
+Por divergencia $\forall K \in \mathbb{R}, \quad \exists n_0 \in \mathbb{N}$ tal que $\forall n,m \geq n_0$ se cumple que:
+$$
+\begin{align*}
+\displaystyle \sum_{1 \leq i \leq n, 1 \leq j \leq m} a_{i,j} > K
+\end{align*}
+$$
+Y aplicando pasos similares al caso de la convergencia, tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{i,j} > K \implies 
+\end{align*}
+$$
+$$
+\begin{align*}
+\implies & K \leq \lim_n \displaystyle \sum_{j = 1}^{m} \displaystyle \sum_{i = 1}^{n} a_{i,j} = \displaystyle \sum_{j = 1}^{m} \lim_n \displaystyle \sum_{i = 1}^{n}a_{i,j} = \displaystyle \sum_{j = 1}^{m} \left(\displaystyle \sum_{i = 1}^{\infty} a_{i,j}\right) \xRightarrow[\forall m \geq n_0]{\text{Válido}} \\[4ex]
+\implies & K \leq \lim_m \displaystyle \sum_{j = 1}^{m} \left(\displaystyle \sum_{i = 1}^{\infty} a_{i, j}\right) = \dots = \displaystyle \sum_{j = 1}^{\infty} \left(\displaystyle \sum_{i = 1}^{\infty} a_{i,j}\right) \geq 0 \xRightarrow[\forall K \in \mathbb{R}]{\text{Válido}} \\[2ex]
+\implies & \displaystyle \sum_{j = 1}^{\infty} \left(\displaystyle \sum_{i = 1}^{\infty} a_{i,j}\right) = + \infty
+\end{align*}
+$$
+Y de forma análoga, tenemos:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{m} a_{i,j} > K \implies
+\end{align*}
+$$
+$$
+\begin{align*}
+\implies & K \leq \lim_m \displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{m} a_{i,j} = \dots = \displaystyle \sum_{i = 1}^{n} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right) \xRightarrow[\forall n \geq n_0]{\text{Válido}} \\[4ex]
+\implies & K \leq \lim_n \displaystyle \sum_{i = 1}^{n} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right) = \dots = \displaystyle \sum_{i = 1}^{\infty} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right) \geq 0 \xRightarrow[\forall K \in \mathbb{R}]{\text{Válido}} \\[2ex]
+\implies & \displaystyle \sum_{i = 1}^{\infty} \left(\displaystyle \sum_{j = 1}^{\infty} a_{i,j}\right) = + \infty
+\end{align*}
+$$
+Por tanto, si $\displaystyle \sum_{n,m} a_{n,m} = + \infty$ entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{n,m} a_{n,m} = \displaystyle \sum_{m = 1}^{\infty} \left(\displaystyle \sum_{n = 1}^{\infty} a_{n,m}\right) = \displaystyle \sum_{n = 1}^{\infty} \left(\displaystyle \sum_{m = 1}^{\infty} a_{n,m}\right) = + \infty\\
+\end{align*}
+$$
+
+Y con esto, queda demostrado que:
+$$
+\begin{align*}
+\displaystyle \sum_{n, m} a_{n,m} = \displaystyle \sum_{n = 1}^{\infty} a_{g(n)} = \displaystyle \sum_{m = 1}^{\infty} \displaystyle \sum_{n = 1}^{\infty} a_{n,m} = \displaystyle \sum_{n = 1}^{\infty} \displaystyle \sum_{m = 1}^{\infty} a_{n,m} \in [0, + \infty]\\
+\end{align*}
+$$
+
+</DemBox>

@@ -1,0 +1,2030 @@
+---
+title: "MOR - Tema 1"
+description: "Apuntes sobre Introducción a la Teoría de Grafos para la asignatura de Modelos de Optimización de Redes."
+date: "2026-01-12"
+tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"]
+---
+
+## Grafos
+### Conceptos básicos de teoría de grafos
+#### Grafo. Definición
+Llamamos **grafo** a un par $G = (V, A)$ donde:
+
+- $V$ es un conjunto de puntos que representan elementos cualesquiera con $V \neq \emptyset$
+- $A$ es un conjunto de pares de elementos de $V$
+
+<EjBox title="Nota">
+
+Notar que $A$ es un multiconjunto, es decir, puede contener elementos repetidos.
+
+</EjBox>
+
+#### Grafos orientados y no orientados
+Según haya orden o no en los pares de elementos de $A$ podemos distinguir dos tipos de grafos para un grafo $G = (V, A)$:
+
+- **Grafo no dirigido:** si $A$ es un conjunto de pares no ordenados de elementos de $V$, es decir, dados dos elementos de $A$: $e_I = (i, j)$ y $e_K = (j, i)$ entonces $e_I = e_K$.
+
+Por lo tanto, tenemos que $A \subseteq \mathcal{P}(V)$ y solemos representar los pares no ordenados como $\{i, j\}$.
+
+Los elementos del conjunto $A$ se llaman **aristas** o **ejes** y los elementos de $V$ presentes en un elemento $\{i, j\}$ se llaman **extremos**, **vértices** o **nodos** de la arista.
+- **Grafo dirigido (orientado):** si $A$ es un conjunto en el que influye el orden de los pares, es decir, dados dos elementos de $A$: $e_I = (i, j)$ y $e_K = (j, i)$ entonces $e_I \neq e_K$.
+
+Por lo tanto, tenemos que $A \subseteq V \times V$ y solemos representar los pares ordenados como $(i, j)$.
+
+Los elementos del conjunto $A$ se llaman **arcos** y los elementos de $V$ presentes en un elemento $(i, j)$ se les llaman **vértice inicial** y **vértice final** del arco, respectivamente.
+
+<EjBox title="Nota">
+
+Visualmente, en los grafos no dirigidos las aristas se representan mediante líneas y en los dirigidos mediante flechas:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_0.svg)
+
+Y sus representaciones matemáticas serían:
+
+- Grafo no dirigido:
+$$
+\begin{align*}
+V & = \{A, B, C\} \\
+V \times V \supseteq A & = \{(A, B), (A, C), (B, C)\}
+\end{align*}
+$$
+- Grafo dirigido:
+$$
+\begin{align*}
+V & = \{D, E, F\} \\
+V \supseteq P(V) & = \{\{D, E\}, \{D, F\}, \{E, F\}\}
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Observación">
+
+Evidentemente un mismo grafo admite muchas representaciones diferentes.
+
+</EjBox>
+
+#### Grafo orientado equivalente a un grafo no orientado. Definición
+Sea $G = (V, A)$ un grafo no orientado, decimos que el **grafo orientado equivalente** de $G$ es el grafo orientado $G^\circ = (V, A^\circ)$ donde:
+$$
+\begin{align*}
+A^\circ = \{(i, j), (j, i) \in V \times V \colon \{i, j\} \in A\}
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+Si consideramos el grafo no orientado $G$:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_1.svg)
+
+Su grafo orientado equivalente $G^\circ$ es:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_2.svg)
+
+</EjemBox>
+
+#### Grafo subyacente de un grafo orientado. Definición
+Sea un grafo orientado $G = (V, A)$, decimos que el **grafo subyacente** de $G$ es un grafo no orientado $G^S = (V, A^S)$ donde:
+$$
+\begin{align*}
+A^S = \{\{i, j\} \in \mathcal{P}(V) \colon (i, j) \in A \lor (j, i) \in A\}
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+Si consideramos el grafo orientado $G$:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_3.svg)
+
+Su grafo subyacente $G^S$ es:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_1.svg)
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+Notar que si $G$ es un grafo no orientado, entonces $(G^\circ)^S = G$. Sin embargo, si $G$ es un grafo orientado, en general $(G^S)^\circ \neq G$.
+
+</EjBox>
+
+#### Orden de un grafo. Definición
+Llamamos **orden** de un grafo $G = (V, A)$ (se denota $o(G)$) al cardinal de $V$, es decir:
+$$
+\begin{align*}
+o(G) = |V|
+\end{align*}
+$$
+
+#### Tamaño de un grafo. Definición
+Llamamos **tamaño** de un grafo $G = (V, A)$ (se denota $t(G)$) al cardinal de $A$, es decir:
+$$
+\begin{align*}
+t(G) = |A|
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar las siguientes relaciones:
+
+- Si $G$ es grafo no orientado y $G^\circ$ su grafo orientado equivalente entonces:
+$$
+\begin{align*}
+o(G) = o(G^\circ) \quad \text{y} \quad t(G^\circ) = 2t(G)
+\end{align*}
+$$
+- Si $G$ es grafo orientado y $G^S$ su grafo subyacente entonces:
+$$
+\begin{align*}
+o(G) = o(G^S) \quad \text{y} \quad t(G^S) \leq t(G)
+\end{align*}
+$$
+
+</EjBox>
+
+#### Grafo trivial. Definición
+Sea $G = (V, A)$ decimos que es un **grafo trivial** si $o(G) = 1$ y $t(G) = 0$.
+
+#### Grafo finito. Definición
+Sea $G = (V, A)$, es un **grafo finito** si $o(G) < \infty$, es decir, si $V$ es un conjunto finito.
+
+#### P-Grafo. Definición
+Sea $G = (V, A)$ un grafo, decimos que es un **p-grafo** si $A$ contiene a lo sumo $p$ arcos o aristas con los mismos extremos $i,j$.
+
+<EjBox title="Notación">
+
+En general, usaremos la siguiente notación dado un grafo $G = (V, A)$:
+$$
+\begin{align*}
+n = o(G) \quad \text{y} \quad m = t(G)
+\end{align*}
+$$
+
+</EjBox>
+
+#### Bucle. Definición
+Sea $G = (V, A)$ un grafo, decimos que $G$ tiene un **bucle en $i$** si $\exists (i,i) \in A$. 
+
+#### Grafo simple. Definición
+Sea $G = (V, A)$ grafo decimos que es un **grafo simple** si es un 1-grafo y no tiene bucles. 
+
+#### Grafos finitos simples. Definición
+Sea $G = (V, A)$ grafo decimos que es un **grafo finito simple** si es un grafo simple y finito. 
+
+### Grafos orientados
+Durante el resto de la sección, salvo que se indique lo contrario, trabajaremos con grafos orientados finitos simples.
+
+<EjBox title="Nota">
+
+Una duda natural podría ser la cantidad máxima de arcos que puede tener un grafo orientado finito simple de orden $n$. 
+
+Para hacer el desarrollo intuitivo, consideremos una construcción básica de 4 nodos:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_5.svg)
+
+Y vamos a ir desarrollando el número de arcos que sale de cada nodo. Empezamos por el nodo $A$:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_6.svg)
+
+A continuación el nodo $B$:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_7.svg)
+
+Ahora el nodo $C$:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_8.svg)
+
+Y finalmente, para el nodo $D$ ya no quedarían más arco que repartir. Ahora, para hacer las cuentas solo hace falta sumar estas arco (notando que cada arco realmente representa 2, al ser uno de $i$ a $j$ y otro de $j$ a $i$):
+$$
+\begin{align*}
+\underbrace{2 \cdot 3}_{\text{A}} + \underbrace{2 \cdot 2}_{\text{B}} + \underbrace{2 \cdot 1}_{\text{C}} = 2 \left(3 + 2 + 1\right) = 2 * 6 = 12
+\end{align*}
+$$
+Podríamos observar que este comportamiento se repite indefinidamente por lo que llegamos que la fórmula general será:
+$$
+\begin{align*}
+t(G) = 2 \left((n - 1) + (n - 2) + \dots + 1\right) = 2 \cdot \displaystyle \sum_{i = 1}^{n - 1} i = 2 \cdot \dfrac{n (n - 1)}{2} = n(n - 1)
+\end{align*}
+$$
+
+</EjBox>
+
+#### Grafo orientado completo. Definición
+Sea $G = (V, A)$ grafo orientado, decimos que es **completo** si es simple y se verifica que $\forall i,j \in V$ con $i \neq j$ se cumple:
+$$
+\begin{align*}
+(i,j), (j,i) \in A
+\end{align*}
+$$
+<EjBox title="Nota">
+
+En este caso, el número de arcos de $G$ siendo $o(G) = n$ es claramente el número máximo de arcos que puede tener un grafo orientado simple, es decir:
+$$
+\begin{align*}
+t(G) = n(n - 1)
+\end{align*}
+$$
+
+</EjBox>
+
+#### Subgrafo. Definición
+Sea $G = (V, A)$ grafo, si consideramos $V' \subseteq V$ y $A'\subseteq A$, decimos que $G' = (V', A')$ es **subgrafo de $G$**.
+
+#### Subgrafo generado. Definición
+Sea $G = (V, A)$ grafo, llamamos **subgrafo generado por un conjunto de vértices** $V' \subseteq V$ a $G' = (V', A')$ donde:
+$$
+\begin{align*}
+A' = A \cap (V' \times V')\\
+\end{align*}
+$$
+
+#### Grafo parcial. Definición
+Sea $G = (V, A)$ grafo, llamamos **grafo parcial** a cualquier subgrafo de $G$ que cumple $V' = V$.
+
+#### Grafo complementario. Definición
+Sea $G = (V, A)$ grafo, llamamos **grafo complementario de $G$** al grafo simple $G^c = (V, A^c)$ con:
+$$
+\begin{align*}
+A^c = \left\{(i,j) : i,j \in V, \, i \neq j, \, (i,j) \notin A\right\}\\[4ex]
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Sea $o(G) = n$, ¿cuánto vale $t(G) + t(G^c)$?*. 
+
+Sea $G = (V, A)$ grafo simple orientado finito tal que $o(G) = n$, supongamos que $t(G) = m$. Ahora, por definición de grafo complementario:
+$$
+\begin{align*}
+t(G^c) & = |A^c| = \left|\left\{(i,j) \colon i,j \in V, \, i \neq j, \, (i,j) \notin A\right\}\right| = \\[2ex]
+& = \left|\left\{(i,j) \colon i,j \in V, \, i \neq j\right\} \setminus \left\{(i,j) \in A\right\}\right| = \\[2ex]
+& = \left|\left\{(i,j) \colon i,j \in V, i \neq j\right\}\right| - t(G)
+\end{align*}
+$$
+Y basta notar que $\left|\left\{(i,j) \colon i,j \in V, i \neq j\right\}\right|$ es precisamente el número máximo de arcos de un grafo simple finito orientado de orden $n$, por lo tanto:
+$$
+\begin{align*}
+t(G^c) = \underbrace{\left|\left\{(i,j) \colon i,j \in V, i \neq j\right\}\right|}_{n(n - 1)} - \underbrace{t(G)}_{m} = n(n - 1) - m
+\end{align*}
+$$
+Por lo tanto, para hallar la suma basta con:
+$$
+\begin{align*}
+t(G) + t(G^c) = m + (n(n - 1) - m) = n(n - 1)
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Adyacencia. Definción
+Sea $G = (V, A)$ grafo, decimos que dos vértices son **adyacentes** si hay un arco que los conecta, es decir, dados $i, j \in V$ son adyacentes si:
+$$
+\begin{align*}
+(i,j) \in A \lor (j,i) \in A
+\end{align*}
+$$
+
+#### Vértice asilado. Definción
+Sea $G = (V, A)$ grafo y dado un vértice $i \in V$ decimos que es un **vértice asilado** si no es adyacente a ningún otro vértice, es decir, si:
+$$
+\begin{align*}
+\nexists j \in V \colon (i,j) \in A \lor (j,i) \in A
+\end{align*}
+$$
+
+#### Incidencia. Definición
+Sea $G = (V, A)$ grafo, se dice que un arco es incidente en un vértice $i \in V$ si $i$ es el vértice inicial o final del arco, es decir, si:
+$$
+\begin{align*}
+(i,j) \in A \lor (j,i) \in A \quad \text{con} \quad j \in V
+\end{align*}
+$$
+
+#### Grado de incidencia. Definición
+Sea $G = (V, A)$ grafo y dado un vértice $i \in V$ llamamos **grado de incidencia** de $i$ (se denota $g(i)$) al número de arcos incidentes en $i$, es decir:
+$$
+\begin{align*}
+g(i) = |\{(i,j) \in A \colon j \in V\}| + |\{(j,i) \in A \colon j \in V\}|
+\end{align*}
+$$
+Por lo que $g \colon V \longrightarrow \mathbb{N}$. 
+
+Además, podemos distinguir entre:
+
+- **Grado de salida** de $i$ (se denota $g^+(i)$) al número de arcos que salen de $i$, i.e.:
+$$
+\begin{align*}
+g^+(i) = |\{(i,j) \in A \colon j \in V\}|
+\end{align*}
+$$
+- **Grado de entrada** de $i$ (se denota $g^-(i)$) al número de arcos que llegan a $i$, i.e.:
+$$
+\begin{align*}
+g^-(i) = |\{(j,i) \in A \colon j \in V\}|
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Dado $G = (V, A)$ y un vértice $i \in V$, ¿Cuánto vale $g^+(i) + g^ - (i)$?*
+
+Sea $G = (V, A)$ grafo y $i \in V$ un vértice cualquiera, por definición de grado de incidencia, grado de salida y grado de entrada:
+$$
+\begin{align*}
+g^+(i) + g^-(i) = |\{(i,j) \in A \colon j \in V\}| + |\{(j,i) \in A \colon j \in V\}| = g(i)
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Sucesores y predecesores. Definición
+Sea $G = (V, A)$ grafo y dada una arcos $(i,j) \in A$, se dice que $j$ es el **sucesor** de $i$ y que $i$ es el **antecesor/predecesor** de $j$.
+
+Denotamos como $\Gamma(i)$ al conjunto de sucesores de $i$ y como $\Gamma^{ - }(i)$ al conjunto de predecesores de $i$, es decir:
+$$
+\begin{align*}
+\Gamma(i) & = \{j \in V \colon (i,j) \in A\} \\[2ex]
+\Gamma^{ - }(i) & = \{j \in V \colon (j,i) \in A\}
+\end{align*}
+$$
+
+Podemos notar que $\Gamma$ y $\Gamma^ -$ son funciones reales tales que:
+$$
+\begin{align*}
+\Gamma \colon V \longrightarrow \mathcal{P}(V) \quad \text{y} \quad \Gamma^{ - } \colon V \longrightarrow \mathcal{P}(V)
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Dado $G = (V, A)$ y un vértice $i \in V$, ¿Cuánto vale $|\Gamma(i)|$?, ¿y $|\Gamma^ - (i)|$?*
+
+Sea $G = (V, A)$ grafo y $i \in V$ un vértice cualquiera, por definición de conjunto de sucesores:
+$$
+\begin{align*}
+|\Gamma(i)| = |\{j \in V \colon (i,j) \in A\}| = g^+(i)
+\end{align*}
+$$
+Análogamente, por definición de conjunto de predecesores:
+$$
+\begin{align*}
+|\Gamma^ - (i)| = |\{j \in V \colon (j,i) \in A\}| = g^-(i)
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Camino. Definición
+Sea $G = (V, A)$ grafo y dados $i_1, i_l \in V$, un **camino** de $i_1$ a $i_l$ es sucesión alternada de vértices y arcos desde $i_1$ hasta $i_l$ de la forma:
+$$
+\begin{align*}
+i_1, \, e_1, \, i_2, \, e_2, \, i_3, \, \dots, \, e_{l - 1}, \, i_l
+\end{align*}
+$$
+donde denotamos al arco $e_k = (i_k, i_{k + 1})$ y el camino de $i_1$ a $i_l$ se denota $\pi_{i_1 i_l}$. 
+
+<EjBox title="Observación">
+
+Notar que en el caso de trabajar con grafos simples, podemos emplear una representación abreviada empleando solo los vértices:
+$$
+\begin{align*}
+i_1, \, i_2, \, i_3, \, \dots, \, i_l
+\end{align*}
+$$
+o solo los arcos:
+$$
+\begin{align*}
+e_1, \, e_2, \, \dots, \, e_{l - 1}
+\end{align*}
+$$
+ya que existe un único arco entre dos vértices cualesquiera.
+
+</EjBox>
+
+#### Longitud de un camino. Definición
+Sea $G = (V, A)$ grafo y $\pi_{ij}$ un camino de $i$ a $j$ de la forma:
+$$
+\begin{align*}
+i = i_1, \, e_1, \, i_2, \, e_2, \, i_3, \, \dots, \, e_{l - 1}, \, i_l = j
+\end{align*}
+$$
+llamamos **longitud** de $\pi_{ij}$ al número de arcos que contiene, es decir:
+$$
+\begin{align*}
+\text{Longitud}(\pi_{ij}) = l - 1
+\end{align*}
+$$
+
+Se considera el camino de longitud 0, llamado **camino trivial**, que va de un vértice $i$ a sí mismo, es decir, $\pi_{ii}$.
+
+#### Concatenación de caminos. Definición
+Sean dos caminos $\pi_{ij}$ y $\pi_{jk}$ de la forma:
+$$
+\begin{align*}
+\pi_{ij} \equiv i - i_1 - i_2 - \dots - i_l - j \quad \text{y} \quad \pi_{jk} \equiv j - j_1 - j_2 - \dots - j_m - k
+\end{align*}
+$$
+se define la **concatenación** o **unión** de $\pi_{ij}$ y $\pi_{jk}$ (y se denota $\pi_{ij} \cup \pi_{jk}$) como el camino:
+$$
+\begin{align*}
+\pi_{ij} \cup \pi_{jk} \equiv i - i_1 - i_2 - \dots - i_l - j - j_1 - j_2 - \dots - j_m - k\\
+\end{align*}
+$$
+
+#### Subcamino. Definición
+Sea un camino $\pi_{i_0 i_n} = i_0 - i_1 - \dots - i_{n - 1} - i_n$ se denomina **subcamino** a cualquier camino de la forma:
+$$
+\begin{align*}
+\pi_{i_k i_r} = i_k - i_{k + 1} - \dots - i_{r - 1} - i_r \quad \text{ con } 0 \leq k < r \leq n\\
+\end{align*}
+$$
+
+#### Camino simple. Definición
+Sea $G = (V, A)$ grafo y $\pi_{i_0i_n}$ un camino de $i_0$ a $i_n$, decimos que es un **camino simple** si no repite ningún arco, es decir, si:
+$$
+\begin{align*}
+e_k \neq e_r \quad \forall k, r \in \{1, 2, \dots, n - 1\} \text{ con } k \neq r\\
+\end{align*}
+$$
+
+#### Camino elemental. Definición
+Sea $G = (V, A)$ grafo y $\pi_{i_0i_n}$ un camino de $i_0$ a $i_n$, decimos que es un **camino elemental** si no repite ningún vértice, es decir, si:
+$$
+\begin{align*}
+i_k \neq i_r \quad \forall k, r \in \{0, 1, \dots, n\} \text{ con } k \neq r\\
+\end{align*}
+$$
+
+#### Teorema 1.1
+Todo camino elemental es un camino simple.
+
+<DemBox title="Demostración">
+
+Sea $G = (V, A)$, supongamos por reducción al absurdo que existe un camino que es elemental pero no simple, es decir, que existe al menos un arco $e = (i,j) \in A$ que se repite al menos dos veces en el camino. 
+
+De esta forma, el vértice $i$ aparece al menos dos veces en el camino, lo que contradice la hipótesis de que el camino es elemental.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Podemos notar que el recíproco del teorema no es en general cierto, es decir, no todo camino simple es elemental. 
+
+Supongamos un grafo $G = (V, A)$ con:
+$$
+\begin{align*}
+V = \{1, 2, 3, 4\} \quad \text{y} \quad A = \{(1, 2), (2, 3), (3, 1), (1, 4)\}
+\end{align*}
+$$
+Que gráficamente sería: 
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_9.svg)
+
+Si construimos el camino simple siguiente:
+$$
+\begin{align*}
+\pi_{1,4} = 1 - 2 - 3 - 1 - 4
+\end{align*}
+$$
+Tenemos que es un camino simple, ya que no se repite ningún arco, pero no es elemental, ya que el vértice $1$ se repite.
+
+</EjBox>
+
+#### Alcanzabilidad y descendientes. Definición
+Sea $G = (V, A)$ grafo y dado un vértice $j \in V$, se dice **alcanzable desde $i \in V$** si existe un camino de $i$ a $j$, es decir, si existe $\pi_{ij}$.
+
+En el caso de que $j$ sea alcanzable desde $i$, se dice que $j$ es un **descendiente** de $i$.
+
+Sea $i \in V$ denotamos $Ds(i)$ al conjunto de descendientes de $i$, es decir:
+$$
+\begin{align*}
+Ds(i) = \left\{j \in V \colon \exists \pi_{ij}\right\}
+\end{align*}
+$$
+<EjBox title="Nota">
+
+Notar que $i \in Ds(i)$ ya que existe el camino trivial $\pi_{ii}$.
+
+</EjBox>
+
+#### Ascendientes. Definición
+Sea $G = (V, A)$ grafo y dado un vértice $i \in V$, se dice **ascendiente de $j \in V$** si existe un camino de $i$ a $j$, es decir, si existe $\pi_{ij}$.
+
+Denotamos $As(j)$, donde $j \in V$ al conjunto de ascendientes de $j$, es decir:
+$$
+\begin{align*}
+As(j) = \left\{i \in V \colon \exists \pi_{ij}\right\}
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Notar que $j \in As(j)$ ya que existe el camino trivial $\pi_{jj}$.
+
+</EjBox>
+
+#### Circuitos. Definición
+Sea $G = (V, A)$, llamamos **circuito** a un camino no trivial donde coincide el vértice inicial con el final. 
+
+Al igual que con los caminos, la longitud de un circuito es el número de arcos que contiene y podemos distinguir entre:
+
+- **Circuito simple** si no repite ningún arco.
+- **Circuito elemental** si no repite ningún vértice, salvo el inicial y el final.
+
+#### Camino euleriano. Definción
+Se llama **camino euleriano** a un camino simple que contiene todos los arcos del grafo.
+
+#### Circuito euleriano. Definición
+Se llama **circuito euleriano** a un camino euleriano que comienza y acaba en el mismo vértice. Equivalentemente, es un circuito simple que contiene todos los arcos del grafo.
+
+#### Grafo euleriano. Definición
+Se dice que un grafo es **euleriano** si contiene un circuito euleriano.
+
+#### Camino hamiltoniano. Definición
+Se llama **camino hamiltoniano** a un camino elemental que contiene todos los vértices del grafo.
+
+#### Circuito hamiltoniano. Definición
+Se llama **circuito hamiltoniano** a un camino hamiltoniano que comienza y acaba en el mismo vértice.
+
+#### Grafo hamiltoniano. Definción
+Se dice que un grafo es **hamiltoniano** si contiene un circuito hamiltoniano.
+
+### Grafos no orientados
+Durante esta sección, salvo que se indique lo contrario, trabajaremos con grafos no orientados finitos simples.
+
+Además, introduciremos una serie de conceptos básicos equivalentes a los de los grafos no orientados, pero adaptados a este tipo de grafos. De hecho, en muchas casos basta cambiar la terminología empleada.
+
+$$
+\begin{array}{c|c}
+\textbf{Grafos orientados} & \textbf{Grafos no orientados} \\ \hline\hline
+Vértice inicial/final del arco & Vértices de la arista\\ \hline
+Arco & Arista \\ \hline
+Grado de incidencia (entrada y salida) & Grado de incidencia \\ \hline
+Camino & Cadena \\ \hline
+Circuito & Ciclo \\ \hline
+\end{array}
+$$
+
+#### Grado de incidencia. Definición
+Sea $G = (V, A)$ grafo, dado un vértice $i$ llamamos **grado de incidencia** de $i$ al número de aristas que incluyen a $i$, es decir:
+$$
+\begin{align*}
+g(i) = |\{(i,j) \in A \colon j \in V\}| + |\{(j,i) \in A \colon j \in V\}|\\
+\end{align*}
+$$
+
+#### Cadena. Definición
+Sea $G = (V, A)$ grafo y dados $i, j \in V$, una **cadena** de $i$ a $j$ es sucesión de vértices y aristas que unen $i$ y $j$.
+
+#### Ciclos. Definición
+Sea $G = (V, A)$ grafo, llamamos **ciclo** a una cadena que no repite aristas ni vértices, salvo el inicial y el final.
+
+<EjBox title="Nota">
+
+Notar que cualquier ciclo tiene que tener al menos 3 vértices, ya que en caso contrario se repetiría algún vértice o arista.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+*En un grafo $G$ en el que todas sus aristas forman un único ciclo (por lo que se dice que el grafo es un ciclo), ¿qué relación existe entre $o(G)$ y $t(G)$?*
+
+Sea $G = (V, A)$ un grafo no orientado en el que todas sus aristas forman un único ciclo, supongamos que $o(G) = n$. 
+
+Como $o(G) = n$ supongamos $i_1, \dots, i_n \in V$ todas las aristas del grafo. Sabemos que todas ellas forman un único ciclo, por lo que podemos construir el ciclo:
+$$
+\begin{align*}
+\left\{i_1, i_2\right\}, \, \left\{i_2, i_3\right\}, \, \dots, \, \left\{i_{n - 1}, i_n\right\}, \, \left\{i_n, i_1\right\}
+\end{align*}
+$$
+Por lo tanto, como cada arista conecta dos vértices, tenemos que:
+$$
+\begin{align*}
+t(G) = n = o(G)
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Grafo completo. Definción
+Sea $G = (V, A)$ grafo no orientado, se dice **completo** si es simple y para cualquier par de vértices $i, j \in V$ con $i \neq j$ se cumple:
+$$
+\begin{align*}
+\{i,j\} \in A
+\end{align*}
+$$
+Denotamos $K_n$ al grafo completo de orden $n$.
+
+<EjBox title="Nota">
+
+*Sea el grafo completo $K_n$, ¿cuánto vale $t(K_n)$?*
+
+Sea $K_n = (V, A)$, sabemos que cada par de vértices distintos está unido por exactamente una arista. El número de pares no ordenados de $n$ vertices es $\binom{n}{2}$, es decir, elegir 2 vértices de $n$ sin importar el orden. Por lo tanto:
+$$
+\begin{align*}
+t(K_n) = \binom{n}{2} = \frac{n(n - 1)}{2}
+\end{align*}
+$$
+
+Otra posible forma de hacer esto sería por inducción. Los casos $n = 1$ y $n = 2$ son triviales y su fórmula es obvia:
+$$
+\begin{align*}
+t(K_1) = 0 \quad \text{ y } \quad t(K_2) = 1 = K_0 + 1
+\end{align*}
+$$
+Supongamos que la fórmula (que podemos obtener de forma similar a cuando calculamos algo similar pero para los grafos orientados) es correcta, es decir:
+$$
+\begin{align*}
+t(K_n) = \frac{n(n - 1)}{2} 
+\end{align*}
+$$
+Así, si se cumple para $K_n$, veamos si también lo hace para $K_{n + 1}$ añadiendo exactamente $n$ aristas más:
+$$
+\begin{align*}
+t(K_{n + 1}) = t(K_n) + n = \frac{n(n - 1)}{2} + n = \frac{(n + 1)n}{2} 
+\end{align*}
+$$
+lo que cumple la inducción.
+
+</EjBox>
+
+#### Subgrafo, grafo generado, parcial y complementario. Definición
+Estas definiciones son completamente análogas a las vistas para los grafos orientados. 
+
+<EjemBox title="Ejercicio">
+
+*Dado un grafo no orientado cualquiera $G$, ¿cuánto vale $t(G) + t(G^c)$?.* 
+
+Sea $G = (V, A)$ un grafo no orientado, supongamos que $o(G) = n$ y que $t(G) = m$. Por definición de grafo complementario $G^c = (V, A^c)$ tendríamos que:
+$$
+\begin{align*}
+t(G^c) & = \left|\left\{\left\{i,j\right\} : i,j \in V,\, i \neq j,\, \left\{i,j\right\} \notin A\right\}\right| = \\[2ex]
+& = \left|\left\{\left\{i,j\right\} : i,j \in V,\, i \neq j\right\} \setminus \left\{\left\{i,j\right\} \in A\right\}\right|=\\[2ex]
+& = \left|\left\{\left\{i,j\right\} \colon i, j \in V, \, i \neq j\right\}\right| - t(G) =\\[2ex]
+& = \dfrac{n(n - 1)}{2} - m
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+t(G) + t(G^c) = m + \left(\frac{(n - 1)n}{2} - m \right) = \frac{n(n - 1)}{2} 
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjemBox title="Ejercicio">
+
+*¿Cuál es el complementario de $K_n$?*
+
+Sea $K_n = (V, A)$ el grafo completo no orientado, por definición de complementario, tenemos que $K^c_n = (V, A^c)$ tendrá un conjunto de aristas determinado por:
+$$
+\begin{align*}
+A^c = \left\{\left\{i,j\right\} \subseteq \mathcal{P}(V) \colon i \neq j,\, \left\{i,j\right\} \notin A\right\}
+\end{align*}
+$$
+Por lo tanto, al ser $K_n$ completo, es decir, que cada par de vértices está conectado por una arista no quedaría ningún par libre para que aparezca $A^c$. Así $K^c_n = (V, \emptyset )$.
+
+</EjemBox>
+
+### Representación matricial
+Una de las principales problemáticas de los grafos es que, a medida que crecen en tamaño y grado, su representación gráfica puede ser muy compleja.
+
+Sin embargo, un grafo puede representarse mediante una matriz, lo que facilita el trabajo sobre todo de cara a emplearse un ordenadores. La forma más habitual es mediante la matriz de adyacencia. 
+
+#### Matriz de adyacencia. Definción
+Sea $G = (V, A)$ un grafo orientado de orden $n$, definimos la **matriz de adyacencia** del grafo $G$ (denotada por $A(G)$) como la matriz $n \times n$ con:
+$$
+\begin{align*}
+A(G) = \left(a_{ij}\right)_{i,j \in \left\{1, 2, \dots , n\right\}} \quad \text{ con } \quad a_{ij} = \left\{
+\begin{array}{ll}
+1 & \text{ si } (i,j) \in A\\
+0 & \text{ si } (i,j) \notin A
+\end{array}
+\right.\\
+\end{align*}
+$$
+
+#### Matriz de adyacencia en grafos orientados
+Sea $G = (V, A)$ es un grafo orientado, podemos notar que $\Gamma(i)$ estará formado por los vértices asociados a las columnas con 1 en la fila $i$. De forma similar $\Gamma^{ -}(i)$ estará formado por los vértices asociados a las filas con un 1 en la columna $i$, esto es:
+$$
+\begin{align*}
+\Gamma(i) & = \left\{j \in V : A(G)_{ij} = 1\right\}\\
+\Gamma^ - (i) & = \left\{j \in V : A(G)_{ji} = 1\right\}
+\end{align*}
+$$
+
+<EjemBox title="Ejercicio">
+
+*Sea $G = (V, A)$ grafo simple orientado con $o(G) = n$ y $A(G)$ denotando su matriz de adyacencia:*
+
+- *¿Cómo son los elementos de la diagonal $A(G)$?* 
+
+Si entendemos que $G$ es simple, sabemos que no hay bucles, por lo tanto:
+$$
+\begin{align*}
+a_{ii} = 0 \quad \forall i = 1, \dots, n
+\end{align*}
+$$
+Sin embargo, si existiera algún bucle, tendríamos un 1 en la posición $i$-ésima donde exista dicho bucle.
+- *¿La matriz A(G) es siempre simétrica?*
+
+No necesariamente. Al ser un grafo orientado, la existencia de $(i,j) \in A$ no implica la existencia de $(j,i) \in A$. Solo sería simétrica si $\forall i,j \in V$ con $i \neq j$ se cumple que:
+$$
+\begin{align*}
+(i,j) \in A \iff (j, i) \in A
+\end{align*}
+$$
+- *¿Cuánto vale la suma de todos los elementos de la matriz $A(G)$?* 
+
+Cada entrada en la matriz $a_{ij}$ vale 1 si existe el arco, es decir, que si hacemos la suma de todos los elementos de la matriz estaríamos contando los arcos, o lo que es lo mismo, calculando el tamaño de $G$, esto es:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{n} a_{ij} = |A| = t(G)
+\end{align*}
+$$
+- *¿Cuánto vale la suma de la fila $i$ de dicha matriz?* 
+
+Por un razonamiento similar al anterior, podemos notar sumar los elementos de la fila $i$-ésima equivale a contar cuántos arcos salen del vértice $i$, es decir, el grado de incidencia de salida:
+$$
+\begin{align*}
+\displaystyle \sum_{j = 1}^{n} a_{ij} = g^{ + } (i)
+\end{align*}
+$$
+- *¿Y la suma de la columna $i$?* 
+
+Análogamente al apartado anterior, sería calcular el grado de incidencia de entrada, es decir:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} a_{ij} = g^ - (i)
+\end{align*}
+$$
+- *¿Cuánto vale $\sum_{i \in V} g^{ + }(i)$?* 
+
+En castellano, lo que estamos haciendo es recorrer todos los vértices sumando su grado de salida, lo que es equivalente a contar el número de arcos del grafo, es decir:
+
+$$
+\begin{align*}
+\displaystyle \sum_{i \in V} g^{ + }(i) = |A| = t(G)
+\end{align*}
+$$
+- *¿Y $\sum_{i \in V} g^{ - }(i)$?* 
+
+Análogo al apartado anterior, sumar todos los grados de entrada es equivalente a contar todos los arcos:
+
+$$
+\begin{align*}
+\displaystyle \sum_{i \in V} g^ - (i) = |A| = t(G)\\
+\end{align*}
+$$
+- *¿Y $\sum_{i \in V} g(i)$?* 
+
+En este caso, el razonamiento es similar, sin embargo, como estamos recorriendo todos los vértices y sumando tanto el grado de entrada como el de salida, realmente estamos contado doble cada arco. Basta ver que:
+$$
+\begin{align*}
+\displaystyle \sum_{i \in V} g(i) = \displaystyle \sum_{i \in V} \left(g^ + (i) + g^ - (i)\right) & = \displaystyle \sum_{i \in V} g^ + (i) + \displaystyle \sum_{i \in V} g^ - (i) = \\[2ex]
+& = |A| + |A| = t(G) + t(G) = 2t(G)
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Matriz de adyacencia en grafos no orientados
+Sea $G = (V, A)$ un grafo no orientado de orden $n$, la matriz de adyacencia del grafo $G$ es una matriz $n \times n$ definida por:
+$$
+\begin{align*}
+A(G) = \left(a_{ij}\right)_{i,j \in \left\{1, 2, \dots , n\right\}} \quad \text{ con } \quad a_{ij} = \left\{
+\begin{array}{ll}
+1 & \text{ si } \{i,j\} \in A \lor \{j,i\} \in A\\
+0 & \text{ si } \{i,j\} \notin A
+\end{array}
+\right.\\
+\end{align*}
+$$
+<EjemBox title="Ejercicio">
+
+*Sea $G = (V, A)$ un grafo simple no orientado con $o(G) = n$ y $A(G)$ su matriz de adyacencia:*
+
+- *¿Cómo son los elementos de la diagonal $A(G)$?* 
+
+Si $G$ es simple, sabemos que no hay bucles, por lo que la diagonal estará formada por ceros:
+$$
+\begin{align*}
+a_{ii} = 0 \quad \forall i = 1, \dots, n
+\end{align*}
+$$
+Sin embargo, si existiera algún bucle, tendríamos un 1 en la posición $i$-ésima donde exista dicho bucle.
+- *¿La matriz A(G) es siempre simétrica?*
+
+Sí, ya que en un grafo no orientado se cumple que:
+$$
+\begin{align*}
+\{i,j\} \in A \iff \{j,i\} \in A
+\end{align*}
+$$
+- *¿Cuánto vale la suma de todos los elementos de la matriz $A(G)$?* 
+
+Cada entrada de la matriz vale 1 si existe la arista, es decir, que si hacemos la suma de todos los elementos de la matriz estaríamos contando las aristas, o lo que es lo mismo, calculando el tamaño de $G$, esto es:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} \displaystyle \sum_{j = 1}^{n} a_{ij} = |A| = t(G)
+\end{align*}
+$$
+- *¿Cuánto vale la suma de la fila $i$ de dicha matriz?* 
+
+Por un razonamiento similar al anterior, podemos notar sumar los elementos de la fila $i$-ésima equivale a contar cuántas aristas inciden en el vértice $i$, es decir, el grado de incidencia:
+$$
+\begin{align*}
+\displaystyle \sum_{j = 1}^{n} a_{ij} = g(i)
+\end{align*}
+$$
+- *¿Cuánto vale la suma de la columna $i$?* 
+
+Análogamente al apartado anterior, sería calcular el grado de incidencia, es decir:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} a_{ij} = g(i)
+\end{align*}
+$$
+- *¿Cuánto vale $\sum_{i \in V} g(i)$?* 
+
+En este caso, el razonamiento es similar, sin embargo, como estamos recorriendo todos los vértices y sumando su grado de incidencia, realmente estamos contado doble cada arista. Basta ver que:
+$$
+\begin{align*}
+\displaystyle \sum_{i \in V} g(i) = 2|A| = 2t(G)
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Observación">
+
+A partir de los ejercicios previos, podemos concluir que:
+$$
+\begin{align*}
+\displaystyle \sum_{i,j} a_{ij} = \left\{
+\begin{array}{ll}
+t(G) & \text{ si } G \text{ es orientado}\\[2ex]
+2t(G) & \text{ si } G \text{ es no orientado}
+\end{array}
+\right.
+\end{align*}
+$$
+Y además:
+$$
+\begin{align*}
+\displaystyle \sum_{i \in V} g(i) = \left\{
+\begin{array}{ll}
+2 \displaystyle \sum_{ij} a_{ij} & \text{ si } G \text{ es orientado}\\[4ex]
+\displaystyle \sum_{ij} a_{ij} & \text{ si } G \text{ es no orientado}
+\end{array}
+\right.
+\end{align*}
+$$
+Por lo tanto, dado un grafo $G$ (orientado o no orientado) se verifica:
+$$
+\begin{align*}
+\displaystyle \sum_{i \in V} g(i) = 2t(G)
+\end{align*}
+$$
+
+</EjBox>
+
+#### Teorema 1.2. Potencias de la matriz de adyacencia
+Sea $G$ un grafo orientado (no orientado) de orden $n > 1$ y $A(G)^p$ denota la potencia $p$-ésima de la matriz de adyacencia de $G$, el valor del elemento $(i,j)$ de dicha matriz $A(G)^p$ es el número de caminos (cadenas) que hay de longitud $p$ de $i$ a $j$ para todo $p \geq 1$.
+
+<DemBox title="Demostración">
+
+La demostración se realizará sobre un grafo orientado $G = (V, A)$ de orden $n$. La demostración para grafos no orientados es análoga.
+
+Emplearemos inducción, para ello:
+
+- **Caso base:** $p = 1$. En este caso, denotando $[M]_{ij}$ al elemento $(i, j)$ de una matriz cualquier $M$ tenemos:
+$$
+\begin{align*}
+\left[A(G)^1\right]_{ij} = [A(G)]_{ij} = a_{ij} = \left\{
+\begin{array}{ll}
+1 & \text{ si } (i,j) \in A\\
+0 & \text{ si } (i,j) \notin A
+\end{array}
+\right.
+\end{align*}
+$$
+Por lo tanto, el elemento $(i,j)$ de $A(G)^1$ es el número de caminos de longitud 1 de $i$ a $j$. Al ser $G$ un 1-grafo, se tiene probado que $[A(G)^1]_{ij}$ es el número de caminos de longitud 1 de $i$ a $j$ para todo $i, j \in V$.
+- **Paso inductivo:** Supongamos que se cumple para $p - 1$, y veamos si se cumple para $p$. Puesto que:
+$$
+\begin{align*}
+A(G)^p = A(G)^{p - 1} \cdot A(G)
+\end{align*}
+$$
+Se tiene que:
+$$
+\begin{align*}
+\left[A(G)^p\right]_{ij} & = \displaystyle \sum_{k = 1}^{n} \left[A(G)^{p - 1}\right]_{ik} \cdot \left[A(G)\right]_{kj} =\\[2ex]
+& = \displaystyle \sum_{k = 1, k \in \Gamma^{ - (j)}}^{n} \left[A(G)^{p - 1}\right]_{ik} \cdot \underbrace{[A(G)]_{kj}}_{1} + \displaystyle \sum_{k = 1, k \not\in \Gamma^{ - (j)}}^{n} \left[A(G)^{p - 1}\right]_{ik} \cdot \underbrace{[A(G)]_{kj}}_{0} = \\[2ex]
+& = \displaystyle \sum_{k = 1, k \in \Gamma^{ - (j)}}^{n} \left[A(G)^{p - 1}\right]_{ik}\\
+\end{align*}
+$$
+Como por hipótesis de inducción tenemos que $[A(G)^{p - 1}]_{ik}$ representa el número de caminos de longitud $p - 1$ de $i$ a $k$ y estamos considerando todos los $k \in V$ tales que $(k, j) \in A$ tenemos que:
+$$
+\begin{align*}
+\exists \pi_{ij} \text{ camino de longitud } p
+\end{align*}
+$$
+Y por lo tanto:
+$$
+\begin{align*}
+\displaystyle \sum_{k = 1, k \in \Gamma^{ - (j)}}^{n} \left[A(G)^{p - 1}\right]_{ik}
+\end{align*}
+$$
+representa el número de caminos de longitud $p$ de $i$ a $j$.
+
+</DemBox>
+
+#### Número de caminos de longitud $p$. Definición
+Sea $G$ un grafo orientado (no orientado) de orden $n$, el **número de caminos (cadenas) de longitud $p$** de $i$ a $j$ se define como el elemento $(i,j)$ de la matriz $A(G)^p$:
+$$
+\begin{align*}
+\left[A(G)^p\right]_{ij}\\
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+*Sea $G = (V,A)$* grafo no orientado y se consideran los vértices $i, j \in V$ con $i \neq j$:
+
+- *¿Cuánto vale $[A(G)]_{ij}$?*
+
+Por definición de matriz de adyacencia, tenemos que:
+$$
+\begin{align*}
+[A(G)]_{ij} = \left\{
+\begin{array}{ll}
+1 & \text{ si } \{i,j\} \in A\\
+0 & \text{ si } \{i,j\} \notin A
+\end{array}
+\right.
+\end{align*}
+$$
+Por lo tanto, $[A(G)]_{ij}$ es el número de cadenas de longitud 1 de $i$ a $j$.
+- *¿Qué representa $[A(G)]_{ii}$ + $[A(G)^2]_{ii}$?*
+
+Tenemos que $[A(G)]_{ii}$ es el número de cadenas de longitud 1 de $i$ a $i$. Por otro lado, $[A(G)^2]_{ii}$ es el número de cadenas de longitud 2 de $i$ a $i$. Por lo tanto, la suma de ambos términos es el número de cadenas de longitud 1 o 2 que comienzan y terminan en $i$.
+- *¿Representa $[A(G)]_{ii} + [A(G)^2]_{ii} + [A(G)^3]_{ii}$ el número de cadenas de longitud menor o igual a 3 entre $i$ e $i$?*
+
+No, ya que no se están considerando las cadenas de longitud 0, que es el camino trivial $\pi_{ii}$.
+- *¿Qué representa $[A(G)^2]_{ij} + [A(G)^2]_{ji}$?*
+
+Tenemos que $[A(G)^2]_{ij}$ es el número de cadenas de longitud 2 de $i$ a $j$ y $[A(G)^2]_{ji}$ es el número de cadenas de longitud 2 de $j$ a $i$. Por lo tanto, la suma de ambos términos es el número de cadenas de longitud 2 entre $i$ y $j$.
+- *¿Qué representa $[A(G)]_{ij} + [A(G)^2]_{ij}$?*
+
+El número de cadenas de longitud 1 o 2 de $i$ a $j$.
+
+</EjemBox>
+
+## Conexión
+Una de las propiedades más importantes de un grafo es la **conexión**. Veremos los grafos no orientados primero y luego pasaremos a los orientados.
+
+### Conexión en grafos no orientados
+#### Grafo conexo. Definición
+Sea $G = (V, A)$ grafo no orientado, se dice que $G$ es **conexo** si para cualquier par de vértices $i, j \in V$ existe una cadena que los une, es decir, si existe $\pi_{ij}$.
+
+<EjBox title="Nota">
+
+El grafo trivial se considera conexo dado que existe la cadena trivial.
+
+</EjBox>
+
+#### Componente conexa. Idea intuitiva
+Sea $G = (V, A)$ grafo no orientado, podemos notar que la relación binaria $R_C$ definida sobre $V$ como:
+$$
+\begin{align*}
+iR_Cj \iff \exists \pi_{ij}
+\end{align*}
+$$
+es una relación de equivalencia. 
+
+Así, llamaremos **componentes conexas** de $G$ a las clases de equivalencia de $R_C$.
+
+<EjBox title="Nota">
+
+Notar que cada componente conexa $V_i$ con $i \in \mathbb{N}$ es subconjunto de $V$. Además, cada $V_i$ genera un subgrafo conexo de $G$ definido como:
+$$
+\begin{align*}
+G_i = (V_i, A_i) \qquad \text{ con } A_i = \left\{(i,j) \in A : i, j \in V_i\right\}
+\end{align*}
+$$
+A este subgrafo $G_i$ también se le denomina componente conexa de $G$
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Se considera el siguiente grafo no orientado: 
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_10.svg)
+
+Podemos notar $[1]_{R_C} = \left\{1, 2, 3, 4\right\}$ y $[5]_{R_C} = \left\{5, 6, 7\right\}$ por lo que $G$ tiene dos componentes conexas:
+$$
+\begin{align*}
+V_1 = \left\{1, 2, 3, 4\right\} \quad \text{ y } \quad V_2 = \left\{5, 6, 7\right\}
+\end{align*}
+$$  
+Y los subgrafos asociados son:
+$$
+\begin{align*}
+G_1 = (V_1, A_1) \quad \text{ con } A_1 = \left\{(1,2), (1, 3), (2,4), (3,4)\right\}\\
+G_2 = (V_2, A_2) \quad \text{ con } A_2 = \left\{(5,6), (5,7), (6,7)\right\}
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Componente conexa. Definición
+Sea $G = (V, A)$ grafo no orientado, llamamos **componente conexa** de $G$ a un subconjunto de vértices $V_i \subseteq V$ tal que:
+
+- El grafo generado por $V_i$ es conexo.
+- El grafo generado por $V_j$ con $V_i \subseteq V_j \subseteq V$ no es conexo.
+
+#### Orden de conexión. Definición
+Sea $G = (V, A)$ grafo no orientado, se dice **orden de conexión** de $G$ al número de componentes conexas de $G$ y se denota por $oc(G)$.
+
+<EjemBox title="Ejercicio">
+
+- *¿Cuánto vale $\displaystyle \sum_{i = 1}^{oc(G)}o(G_i)$?*
+
+Sea $G = (V, A)$ grafo no orientado con $oc(G) = k$ y $G_1, G_2, \dots, G_k$ sus componentes conexas. Por definición de componente conexa, sabemos que:
+$$
+\begin{align*}
+V = \bigcup_{i = 1}^{k} V_i \quad \text{ y } \quad V_i \cap V_j = \emptyset \quad \forall i, j = 1, \dots, k \text{ con } i \neq j
+\end{align*}
+$$
+Por lo tanto, si $o(G) = n$ tenemos que:
+$$
+\begin{align*}
+n = o(G) = \left|V\right| = \left|\bigcup_{i = 1}^{k} V_i\right| = \sum_{i = 1}^{k} \left|V_i\right| = \sum_{i = 1}^{k} o(G_i)
+\end{align*}
+$$
+Es decir, que $\displaystyle \sum_{i = 1}^{oc(G)} o(G_i) = o(G)$.
+- *¿Cuánto vale $\displaystyle \sum_{i = 1}^{oc(G)} t(G_i)$?*
+
+Por un razonamiento similar al anterior, tenemos que:
+$$
+\begin{align*}
+t(G) = \left|A\right| = \left|\bigcup_{i = 1}^{k} A_i\right| = \sum_{i = 1}^{k} \left|A_i\right| = \sum_{i = 1}^{k} t(G_i)
+\end{align*}
+$$
+Es decir, que $\displaystyle \sum_{i = 1}^{oc(G)} t(G_i) = t(G)$.
+
+</EjemBox>
+
+#### Teorema 1.3
+Sea $G = (V, A)$ grafo no orientado, se cumple que:
+$$
+\begin{align*}
+G \text{ es conexo } \iff oc(G) = 1
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $G = (V, A)$ grafo no orientado, por definición de grafo conexo tenemos que:
+$$
+\begin{align*}
+G \text{ es conexo } \iff \forall i, j \in V,\, \exists \pi_{ij}
+\end{align*}
+$$
+Y por definición de la relación $R_C$ tenemos que:
+$$
+\begin{align*}
+iR_Cj \iff \exists \pi_{ij}
+\end{align*}
+$$
+Por lo que, esto es equivalente a decir que $\forall i, j \in V$ con $i \neq j$ se cumple que $i$ y $j$ están en la misma clase de equivalencia de $R_C$ es decir:
+$$
+\begin{align*}
+[i]_{R_C} = [j]_{R_C} \quad \forall i, j \in V
+\end{align*}
+$$
+Así, el número de clase de equivalencia de la relación $R_C$ es 1 y, por definición de orden de conexión tenemos que:
+$$
+\begin{align*}
+oc(G) = 1
+\end{align*}
+$$
+
+</DemBox>
+
+#### Lema 1.4
+Sea $G = (V, A)$ grafo no orientado, se cumple que:
+$$
+\begin{align*}
+G \text{ es conexo } \iff  \forall i,j \in V, \quad \exists \pi_{ij} \text{ cadena elemental}
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sea $G = (V, A)$ grafo no orientado, procederemos por doble implicación:
+
+- **$\Rightarrow$)** Sean $i, j \in V$ un par de vértices, como $G$ conexo entonces $\exists \pi_{ij}$. Aquí se dan dos casos:
+
+\item[$\Leftarrow$)] Sean $i,j \in V$ con $i \neq j$ como $\exists \pi_{ij}$ cadena elemental, entonces $G$ es conexo por definición de grafo conexo.
+
+</DemBox>
+
+#### Teorema 1.5
+Sea $G = (V, A)$ grafo no orientado de orden $n > 1$ con matriz de adyacencia $A(G)$ y sea $C$ la matriz definida como:
+$$
+\begin{align*}
+C \coloneq A(G) + A(G)^2 + \dots + A(G)^{n - 1}
+\end{align*}
+$$
+donde $c_{ij}$ es el elemento $(i,j)$ de dicha matriz con $i, j \in \{1, \dots, n\}$. Se tiene que las siguientes afirmaciones son equivalentes:
+
+1. $G$ es conexo.
+2. $c_{ij} \neq 0, \quad \forall i,j \in \{1, \dots, n\}$ con $i \neq j$
+3. $\exists i \in \{1, \dots, n\}$ tal que $c_{ij} \neq 0, \quad \forall j \in \{1, \dots, n\}$ con $j \neq i$
+
+<DemBox title="Demostración">
+
+- **$1 \Rightarrow 2$)** Sea $G = (V, A)$ grafo conexo, por el lema 1.4 sabemos que:
+$$
+\begin{align*}
+\exists \pi_{ij} \text{ cadena elemental } \quad \forall i, j \in V
+\end{align*}
+$$
+Puesto que es el elemental y $o(G) = n$, la cadena tiene una longitud como mucho de $n - 1$, es decir:
+$$
+\begin{align*}
+p_{ij} = \text{long}(\pi_{ij}) \leq n - 1
+\end{align*}
+$$
+Por lo tanto, por el teorema 1.2 sabemos que el elemento $(i,j)$ de la matriz $A(G)^{p_{ij}}$ es un número positivo. Por lo tanto, por la definición de $C$ tenemos:
+$$
+\begin{align*}
+c_{ij}  \geq 1 \quad \forall i, j \in V \text{ con } i \neq j
+\end{align*}
+$$
+Como esto se ha probado para todo par de vértices $i, j \in V$ con $i \neq j$, se tiene:
+$$
+\begin{align*}
+c_{ij} \neq 0 \quad \forall i, j \in \{1, \dots, n\} \text{ con } i \neq j\\
+\end{align*}
+$$
+- **$2 \Rightarrow 3$)** Trivial. Basta tomar cualquier $i \in \{1, \dots, n\}$ y se cumple que $c_{ij} \neq 0$ para todo $j \in \{1, \dots, n\}$ con $j \neq i$.
+- **$3 \Rightarrow 1$)** Sean $k_1, k_2 \in V$ queremos ver que $\exists \pi_{k_1 k_2}$ en $G$. Así, tenemos dos posibles casos:
+
+</DemBox>
+
+#### Consecuencias I del Teorema 1.5
+Como consecuencia del teorema, podemos destacar algunas consecuencias interesantes:
+
+- Se cumple que $G$ es conexo si y solo si existe una fila $i$ de la matriz $C$ en la que todos los elementos que no están en la diagonal son distintos de cero.
+- Si $\exists p$ con $p \in [1, n - 1]$ tal que $A(G) + A(G)^2 + \dots + A(G)^p$ tiene una fila $i$ en la que todos los elementos que no están en la diagonal son distintos de cero, entonces $G$ es conexo.
+
+<EjemBox title="Ejercicio">
+
+- *Dado el grafo $G$ cuya matriz de adyacencia es:*
+$$
+\begin{align*}
+A(G) = \begin{pmatrix}
+0 & 1 & 1 & 0 & 0 \\
+1 & 0 & 1 & 1 & 0 \\
+1 & 1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 1 \\
+0 & 0 & 0 & 1 & 0
+\end{pmatrix} 
+\end{align*}
+$$
+*¿Podemos decir si $G$ es conexo?*
+
+Aún no podemos decir si $G$ es conexo, ya que $A(G)$ no tiene ninguna fila con todos los elementos distintos de cero salvo el de la diagonal. Por lo tanto, debemos calcular más potencias de la matriz $A(G)$.
+- *Si se tiene que:*
+$$
+\begin{align*}
+A(G) + A(G)^2 = \begin{pmatrix} 
+2 & 2 & 2 & 1 & 0 \\
+2 & 3 & 2 & 1 & 1 \\
+2 & 2 & 2 & 1 & 0 \\
+1 & 1 & 1 & 2 & 1 \\
+0 & 1 & 0 & 1 & 1
+\end{pmatrix} 
+\end{align*}
+$$
+*¿Podemos decir si $G$ es conexo?*
+
+Observando la matriz $A(G) + A(G)^2$ podemos ver que la fila 2 tiene todos los elementos distintos de cero salvo el de la diagonal, por lo que podemos concluir que $G$ es conexo por el teorema 1.5.
+- *¿Es necesario hacer más potencias para determinar si el grafo anterior es conexo o no?*
+
+No, no es necesario. Por el teorema 1.5 basta con encontrar una fila $i$ de la matriz $C$ en la que todos los elementos que no están en la diagonal son distintos de cero para asegurar que el grafo es conexo.
+
+</EjemBox>
+
+#### Consecuencias II del Teorema 1.5
+Además, a partir del apartado 2 del teorema 1.5 podemos extraer otras consecuencias:
+
+- Un grafo no es conexo si y solo si existe algún elemento no diagonal de la matriz $C$ que sea nulo.
+- En ese caso, no se puede asegurar que no sea conexo hasta llegar a la potencia $n - 1$, ya que la no existencia de una cadena de longitud $p < n - 1$ no implica la no existencia de una cadena de longitud $p < p' \leq  n - 1$.
+
+<EjemBox title="Ejercicio">
+
+- *Dado el grafo $G$ cuya matriz de adyacencia es:*
+$$
+\begin{align*}
+A(G) = \begin{pmatrix} 
+0 & 1 & 0 & 0 \\
+1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 1 & 0
+\end{pmatrix} 
+\end{align*}
+$$
+*¿Podemos decir si $G$ es conexo o no?*
+
+Aún no podemos afirmar si $G$ es conexo o no, ya que $A(G)$ no tiene ninguna fila con todos los elementos distintos de cero salvo el de la diagonal, pero tampoco hemos calculado las potencias de la matriz $A(G)$.
+- *Si se tiene que:*
+$$
+\begin{align*}
+A(G) + A(G)^2 = \begin{pmatrix} 
+1 & 1 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 \\
+0 & 0 & 1 & 1
+\end{pmatrix}\\
+\end{align*}
+$$
+
+Seguimos sin poder concluir nada ya que nos faltan potencias de la matriz $A(G)$ como para negar que es conexo o una fila con todos los elementos distintos de cero salvo el de la diagonal para afirmar que es conexo.
+- *¿Es necesario hacer más potencias para determinar si el grafo es conexo o no?*
+
+Sí, es necesario.
+- *Si se tiene que:*
+$$
+\begin{align*}
+A(G) + A(G)^2 + A(G)^3 = \begin{pmatrix} 
+1 & 2 & 0 & 0 \\
+2 & 1 & 0 & 0 \\
+0 & 0 & 1 & 2 \\
+0 & 0 & 2 & 1
+\end{pmatrix}\\
+\end{align*}
+$$
+
+En este caso, ya podemos concluir que $G$ no es conexo, ya que hemos llegado a la potencia $n - 1 = 4 - 1 = 3$ y no hay ninguna fila con todos los elementos distintos de cero salvo el de la diagonal.
+- *¿Es necesario hacer más potencias para determinar si el grafo es conexo o no?*
+
+No, ya hemos determinado que no es conexo.
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+*Sea $G$ un grafo simple no orientado con matriz de adyacencia asociada $A(G)$, ¿cómo son los elementos de la diagonal de $A(G)$?*
+
+Por definición de matriz de adyacencia, tenemos que:
+$$
+\begin{align*}
+[A(G)]_{ii} = \left\{
+\begin{array}{ll}
+1 & \text{ si } \{i,i\} \in A\\
+0 & \text{ si } \{i,i\} \notin A
+\end{array}
+\right.
+\end{align*}
+$$
+Pero como $G$ es un grafo simple, no tiene lazos, por lo que $\{i,i\} \notin A$ y por lo tanto:
+$$
+\begin{align*}
+[A(G)]_{ii} = 0 \quad \forall i \in \{1, \dots, n\}
+\end{align*}
+$$
+Es decir, que todos los elementos de la diagonal de $A(G)$ son nulos.
+
+*Sea $G$ un grafo simple no orientado conexo con $o(G) \geq  3$ y matriz de adyacencia asociada $A(G)$:*
+
+- *¿Cómo son los elementos de la diagonal de $A(G)^2$?*
+
+Por definición de matriz de adyacencia, tenemos que:
+$$
+\begin{align*}
+[A(G)^2]_{ii} = \displaystyle \sum_{k = 1}^{n} [A(G)]_{ik} \cdot [A(G)]_{ki} = \displaystyle \sum_{k = 1}^{n} [A(G)]_{ik}^2
+\end{align*}
+$$
+Por lo tanto, los elementos de la diagonal de $A(G)^2$ son el grado de cada vértice, es decir:
+$$
+\begin{align*}
+[A(G)^2]_{ii} = \deg(i) \quad \forall i \in \{1, \dots, n\}
+\end{align*}
+$$
+- *¿Cómo son los elementos de la diagonal de $C$?*
+
+Por definición de $C$ tenemos que:
+$$
+\begin{align*}
+C = A(G) + A(G)^2 + \dots + A(G)^{n - 1}
+\end{align*}
+$$
+Por lo que $c_{ii}$ es la suma de los número de caminos de longitudes $1, 2, \dots, n - 1$ desde el vértice $i$ hasta sí mismo. Como $G$ es conexo, cada vértice tendrá al menos un vecino, por tanto, existirá al menos un camino de longitud 2, es decir, ir y volver al vecino, por lo que:
+$$
+\begin{align*}
+[A(G)^2]_{ii} \geq 1 \quad \forall i \in \{1, \dots, n\} \implies c_{ii} \geq [A(G)^2]_{ii} \geq 1 \quad \forall i \in \{1, \dots, n\}
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Consecuencias III del Teorema 1.5
+Finalmente, podemos destacar otra consecuencia del teorema 1.5:
+
+- Si el grafo no es conexo, la matriz $C$ nos da sus componentes conexas.
+- La componente conexa que contiene al vértice 1 será la que contiene a todos los vértices $j$ tales que $c_{1j} \neq 0$.
+- Una vez determinada una componente conexa, se pueden eliminar todas sus filas y columnas de la matriz $C$ y repetir el proceso con la matriz resultante hasta que no queden filas ni columnas.
+
+<EjemBox title="Ejemplo">
+
+Sea el grafo $G$ descrito como:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_11.svg)
+
+Y su matriz $C$ es:
+$$
+\begin{align*}
+C = \begin{pmatrix}
+10 & 10 & 10 & 0 & 0 \\
+10 & 10 & 10 & 0 & 0 \\
+10 & 10 & 10 & 0 & 0 \\
+0 & 0 & 0 & 2 & 2 \\
+0 & 0 & 0 & 2 & 2
+\end{pmatrix} \longrightarrow  C = \begin{pmatrix}
+\textcolor{red}{10} & \textcolor{red}{10} & \textcolor{red}{10} & 0 & 0 \\
+\textcolor{red}{10} & \textcolor{red}{10} & \textcolor{red}{10} & 0 & 0 \\
+\textcolor{red}{10} & \textcolor{red}{10} & \textcolor{red}{10} & 0 & 0 \\
+0 & 0 & 0 & \textcolor{blue}{2} & \textcolor{blue}{2} \\
+0 & 0 & 0 & \textcolor{blue}{2} & \textcolor{blue}{2}
+\end{pmatrix}
+\end{align*}
+$$
+Por lo que las componentes conexas de $G$ son:
+$$
+\begin{align*}
+V_1 = \{1, 2, 3\} \quad \text{ y } \quad V_2 = \{4, 5\}
+\end{align*}
+$$
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+No siempre se dará que las componentes conexas estén formadas por filas y columnas consecutivas. Por ejemplo, podríamos tener algo como:
+$$
+\begin{align*}
+C = \begin{pmatrix}
+\textcolor{red}{10} & 0 & \textcolor{red}{10} & \textcolor{red}{10} & 0 \\
+0 & \textcolor{blue}{2} & 0 & 0 & \textcolor{blue}{2} \\
+\textcolor{red}{10} & 0 & \textcolor{red}{10} & \textcolor{red}{10} & 0 \\
+\textcolor{red}{10} & 0 & \textcolor{red}{10} & \textcolor{red}{10} & 0 \\
+0 & \textcolor{blue}{2} & 0 & 0 & \textcolor{blue}{2}
+\end{pmatrix}
+\end{align*}
+$$
+
+</EjBox>
+
+#### Algoritmo para determinar si un grafo no orientado es conexo
+Sea $A(G)$ la matriz de adyacencia de un grafo no orientado $G$ entonces:
+
+1. Hacer $C = A(G)$ y $k = 1$
+2. Si $C$ tiene alguna fila con todos sus elementos no diagonales distintos de cero, el grafo es conexo (**FIN**), si no continuar a paso 3.
+3. Hacer $k = k + 1$:
+
+<EjBox title="Nota">
+
+El algoritmo pese a ser sencillo, no es eficiente. Tiene una complejidad de $O(n!)$. Existen algoritmos más eficientes con complejidades de $O(n(n - 1))$. Sin embargo, este permite obtener información sobre el número de caminos entre dos vértices.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Notar que se emplea la notación $C$ para la matriz $C$ que se va construyendo en el algoritmo, y no para la matriz $C$ definida en el teorema 1.5, aunque ambas matrices son iguales al finalizar el algoritmo en el caso de que se llegue a la iteración $k = n - 1$.
+
+</EjBox>
+
+#### Teorema de Euler
+Sea $G = (V, A)$ grafo no orientado conexo, se cumple que:
+$$
+\begin{align*}
+G \text{ es euleriano } \iff g(i) \text{ es par } \quad \forall i \in V\\
+\end{align*}
+$$
+
+#### Caminos hamiltonianos en grafos no orientados
+Gracias al teorema de Euler, este consiguió caracterizar completamente los grafos en los que existe un ciclo euleriano. Sin embargo, no existe un resultado análogo para los ciclos hamiltonianos.
+
+En el caso de los hamiltonianos, existen determinados resultados que permiten asegurar que algunas formas particulares de grafo son o no hamiltonianas.
+
+<EjBox title="Nota">
+
+Una opción empleada a veces para ver si un grafo es hamiltoniano es intentar dibujarlo de tal forma que se vea claramente que existe un ciclo hamiltoniano. Sin embargo, este método no es fiable, ya que el hecho de no encontrar un ciclo hamiltoniano no implica que no exista. 
+
+También existen algoritmos para encontrar ciclos hamiltonianos, aunque no son infalibles.
+
+</EjBox>
+
+#### Grafo bipartito. Definición
+Sea $G = (V, A)$ grafo no orientado, se dice **bipartito** si es posible separar el conjunto de vértices $V$ en dos subconjuntos $V_1$ y $V_2$ tales que las aristas de $G$ solo unen vértices de $V_1$ con vértices de $V_2$, es decir, no existen aristas que unan vértices dentro de $V_1$ ni dentro de $V_2$. Es decir:
+$$
+\begin{align*}
+V = V_1 \cup V_2 \quad \text{ y } \quad V_1 \cap V_2 = \emptyset \quad \text{ y } \quad A \subseteq \{\{i,j\} : i \in V_1, j \in V_2\}\\
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+Sea $G = (V, A)$ un grafo como el que se muestra a continuación:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_12.svg)
+
+Es un grafo bipartito, ya que podemos separar el conjunto de vértices $V$ en:
+$$
+\begin{align*}
+V_1 = \{1, 3, 5, 7\} \quad \text{ y } \quad V_2 = \{2, 4, 6, 8\}
+\end{align*}
+$$
+Y todas las aristas unen vértices de $V_1$ con vértices de $V_2$.
+
+</EjemBox>
+
+#### Grafo planar. Definición
+Sea $G = (V, A)$ grafo no orientado, se dice **planar** si es posible dibujar $G$ en el plano de tal forma que las aristas solo se corten en los vértices. Es decir, si es posible representar $G$ en el plano sin que las aristas se crucen.
+
+<EjemBox title="Ejemplo">
+
+El grafo anterior admitiría una representación planar como la siguiente:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_13.svg)
+
+</EjemBox>
+
+<EjemBox title="Ejemplo">
+
+También es posible representarlo como sigue:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_14.svg)
+
+Donde es muy evidente que existe un ciclo hamiltoniano, que sería:
+$$
+\begin{align*}
+\pi = (1, 2, 3, 4, 5, 6, 7, 8, 1)
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Grafo minimalmente conexo. Definición
+Sea $G = (V, A)$ grafo, diremos que es un grafo **minimalmente conexo** si es conexo y el subgrafo que se obtiene al eliminar cualquier arista de $G$ no es conexo.
+
+#### Proposición 1.6
+Sea $G = (V, A)$ grafo no orientado conexo con $o(G) > 1$, dada $e \in A$ y $G' = (V, A')$ donde $A' = A \setminus \{e\}$, entonces:
+$$
+\begin{align*}
+G' \text{ conexo } \iff \exists \pi \text{ ciclo tal que } e \in \pi
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sean los extremos de $e$ los vértices $i, j \in V$, i.e., $e = (i, j) \in A$ tenemos:
+
+- **$\Rightarrow$)** Sea $G'$ grafo no orientado conexo, por definición se tiene que:
+$$
+\begin{align*}
+\exists \pi_{ij} \text{ cadena } G' \text{ que une } i \text{ y } j
+\end{align*}
+$$
+Como $A' \subseteq A$ entonces $\pi_{ij}$ es también cadena en $G$. Le unimos $e = (i, j)$:
+$$
+\begin{align*}
+\pi_{ij} \cup \{e\} = \pi_{ij} \cup \{(i, j)\} \text{ es un ciclo en } G
+\end{align*}
+$$
+- **$\Leftarrow$)** Sea $\pi$ ciclo en $G$ tal que $e \in \pi$, sean $u, v \in V$ vértices cualquiera de $G$, como $G$ es conexo, por definición se tiene que:
+$$
+\begin{align*}
+\exists \pi_{uv} \text{ cadena en } G \text{ que une } u \text{ y } v
+\end{align*}
+$$
+Así, tenemos dos posibles casos:
+
+</DemBox>
+
+#### Arista puente. Definición
+Sea $G = (V, A)$ un grafo no orientado conexo y $e \in A$, se dice que $e$ es una **arista puente** de $G$ si:
+$$
+\begin{align*}
+G' = (V, A \setminus \{e\}) \text{ no es conexo}
+\end{align*}
+$$
+
+#### Corolario 1.7
+Sea $G = (V, A)$ grafo no orientado con $o(G) > 1$ entonces son equivalentes:
+
+1. $G$ es minimalmente conexo.
+2. $G$ conexo y sin ciclos
+3. $G$ conexo y $e$ es arista puente de $G \quad \forall e \in A$
+
+<DemBox title="Demostración">
+
+- **$1 \Rightarrow 2$)** Sea $G$ minimalmente conexo, entonces es conexo por definición. Si $G$ tuviera algún ciclo $\pi$, por la proposición 1.6, dada cualquier arista $e$ se tendría que:
+$$
+\begin{align*}
+G' = (V, A \setminus \{e\}) \text{ es conexo}
+\end{align*}
+$$
+Lo que contradice la hipótesis de que $G$ es minimalmente conexo. Por lo tanto, $G$ no tiene ciclos.
+- **$2 \Rightarrow 3$)** Por absurdo, supongamos $G$ conexo y sin ciclos, pero que existe $e \in A$ que no es arista puente, esto es:
+$$
+\begin{align*}
+G' = (V, A') \quad \text{ con } A' = A \setminus \{e\} \text{ es conexo}
+\end{align*}
+$$
+Aplicando la proposición 1.6 tenemos que $\exists \pi$ ciclo en $G$ con $e \in \pi$, lo que contradice la hipótesis de que $G$ no tiene ciclos. Por lo tanto, $e$ es arista puente de $G \quad \forall e \in A$.
+- **$3 \Rightarrow 1$)** Sea $G$ conexo, si todas las aristas son puentes, entonces el subgrafo:
+$$
+\begin{align*}
+G' = (V, A \setminus \{e\}) \text{ no es conexo } \quad \forall e \in A 
+\end{align*}
+$$
+Por lo que se cumple la definición de grafo minimalmente conexo.
+
+</DemBox>
+
+#### Lema 1.8
+Sea $G = (V, A)$ grafo no orientado conexo con $o(G) > 1$ y $e \in A$ una arista puente de $G$. Si $G = (V, A')$ el grafo parcial con $A' = A \setminus \{e\}$ entonces:
+$$
+\begin{align*}
+oc(G') = 2
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sean $i, j \in V$ los extremos de $e$, i.e., $e = (i, j) \in A$, como $e$ arista puente de $G = (V, A)$ entonces:
+$$
+\begin{align*}
+G' = (V, A') \text{ no es conexo } \quad \text{ con } A' = A \setminus \{e\}
+\end{align*}
+$$
+y tenemos que $i, j$ están en dos componentes conexas distintas de $G'$. Además, al añadir $e$ se conectan dos clases de equivalencia distinta que pasan a ser una así:
+$$
+\begin{align*}
+oc(G) = oc(G') - 1
+\end{align*}
+$$
+Y como $G$ es conexo, se tiene que $oc(G) = 1$ y por lo tanto:
+$$
+\begin{align*}
+oc(G') = oc(G) + 1 = 1 + 1 = 2
+\end{align*}
+$$
+
+</DemBox>
+
+#### Teorema 1.9
+Sea $G = (V, A)$ grafo no orientado conexo entonces:
+$$
+\begin{align*}
+m = t(G) \geq n - 1 = o(G) - 1
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sea $P(m)$ la propiedad ``cualquier grafo conexo con $m$ aristas que tiene como mucho $m + 1$ vértices''. Vamos a probar por inducción que $P(m)$ es cierto para todo $m \geq 0$:
+
+- **Caso base:** $m = 0$. Como $G$ conexo y no tiene aristas, entonces la única posibilidad es que tenga un único vértice, por lo que:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+m = t(G) = 0\\
+n = o(G) = 1
+\end{array}
+\right\} \implies \underbrace{0}_{m} \overset{?}{\geq} \underbrace{1}_{n} - 1 \implies m \geq n - 1
+\end{align*}
+$$
+Por lo tanto, $P(0)$ es cierto.
+- **Caso general:** supongamos que es cierta para todo $k \geq 0$, es decir:
+$$
+\begin{align*}
+P(k) \longrightarrow \text{\small Todo grafo conexo con } k \, \text{\small aristas tiene como mucho } k + 1 \, \text{\small vértices}
+\end{align*}
+$$
+Así, veamos si es cierto para $k + 1$ donde se cumpliría que:
+$$
+\begin{align*}
+P(k + 1) \longrightarrow \text{\small Todo grafo conexo con } k + 1\, \text{\small aristas tiene como mucho } k + 2 \, \text{\small vértices}
+\end{align*}
+$$
+Sea $G = (V, A)$ grafo no orientado conexo cualquiera con $m = k + 1$ aristas y sea $e \in A$ cualquier arista de $G$, definimos $G' = (V, A\setminus \{e\})$ y tenemos:
+
+</DemBox>
+
+<EjBox title="Nota">
+
+De hecho, se puede ver que para cualquier grafo no orientado $G$ se tiene:
+$$
+\begin{align*}
+t(G) \geq o(G) - oc(G)
+\end{align*}
+$$
+es decir, que si $G$ tiene $k$ componentes conexas:
+$$
+\begin{align*}
+m \geq n - k
+\end{align*}
+$$
+
+</EjBox>
+
+### Conexión en grafos orientados
+En los grafos orientados, la conexión entre dos vértices ya no es tan sencilla como en los grafos no orientados ya que puede existir una cadena que una dos vértices en un sentido pero no en el otro. Así, se darán varios tipos de conexión que veremos en esta sección.
+
+#### Conexión débil. Definición
+Sea $G = (V, A)$ grafo orientado, se dice que $G$ es **débilmente conexo** si el grafo subyacente $G^s$ es conexo.
+
+#### Conexión fuerte. Definición
+Sea $G = (V, A)$ grafo orientado, se dice que $G$ es **fuertemente conexo** si $\forall i, j \in V$ existen un camino desde $i$ hasta $j$.
+
+<EjBox title="Observación">
+
+Notar que si $G$ es fuertemente conexo, entonces es débilmente conexo, pero no al revés.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Se considera el grafo trivial fuertemente conexo pues existe el camino trivial $\pi_{ii} = i$
+
+</EjBox>
+
+#### Proposición 1.10
+Sea $G = (V, A)$ grafo orientado, las siguientes afirmaciones son equivalentes:
+
+1. $\exists r \in V$ tal que $As(r) \cap Ds(r) = V$
+2. $G$ es fuertemente conexo
+3. $\forall i \in V$ se tiene que $As(i) \cap Ds(i) = V$
+
+<DemBox title="Demostración">
+
+- **$1 \Rightarrow 2$)** Sean $i, j \in V$ cualquiera, como por hipótesis $\exists r \in V$ tal que $As(r) \cap Ds(r) = V$, entonces:
+$$
+\begin{align*}
+i \in As(r) \quad \text{ y } \quad j \in Ds(r)
+\end{align*}
+$$
+Por lo que $\exists \pi_{ir}$ camino desde $i$ hasta $r$ y $\exists \pi_{rj}$ camino desde $r$ hasta $j$. Por lo tanto, podemos construir el camino:
+$$
+\begin{align*}
+\pi_{ij} = \pi_{ir} \cup \pi_{rj}
+\end{align*}
+$$
+que es un camino desde $i$ hasta $j$. Como $i, j$ son arbitrarios, se cumple la definición de grafo fuertemente conexo.
+- **$2 \Rightarrow 3$)** Sea $i \in V$ cualquiera, como $G$ es fuertemente conexo, por definición se tiene que para cualquier $j \in V$:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\exists \pi_{ij} \text{ camino desde } i \text{ hasta } j \implies j \in As(i)\\
+\exists \pi_{ji} \text{ camino desde } j \text{ hasta } i \implies j \in Ds(i)
+\end{array}
+\right\} \implies V \subseteq As(i) \cap Ds(i)
+\end{align*}
+$$
+Como trivialmente $As(i) \cap Ds(i) \subseteq V$, se tiene que:
+$$
+\begin{align*}
+As(i) \cap Ds(i) = V
+\end{align*}
+$$
+- **$3 \Rightarrow 1$)** Trivial.
+
+</DemBox>
+
+<EjBox title="Nota">
+
+Como consecuencias de este resultado tenemos:
+
+- Si $\exists r \in V$ tal que $As(r) \cap Ds(r) = V$ entonces el grafo es fuertemente conexo.
+- Si $\exists r \in V$ tal que $As(r) \cap Ds(r) \neq V$ entonces el grafo no es fuertemente conexo.
+
+</EjBox>
+
+#### Componente fuertemente conexa. Definición
+Sea $G = (V, A)$ grafo orientado, se define la relación binaria $R_C$ sobre $V$ como:
+$$
+\begin{align*}
+i R_C j \iff \exists \pi_{ij} \text{ y } \exists \pi_{ji}
+\end{align*}
+$$
+que es una relación de equivalencia. A cada clase de equivalencia se le llama **componente fuertemente conexa** de $G$.
+
+<EjBox title="Nota">
+
+Evidentemente:
+$$
+\begin{align*}
+[i]_{R_C} = As(i) \cap Ds(i) \quad \forall i \in V
+\end{align*}
+$$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Por abuso de lenguaje, se suele llamar también componente fuertemente conexa al subgrafo $G_i = (V_i, A_i)$ generado por $V_i = [i]_{R_C}$:
+$$
+\begin{align*}
+A_i = \{(u, v) \in A : u, v \in V_i\}
+\end{align*}
+$$
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Dado el siguiente grafo orientado:
+
+![TikZ Graph](/blogs/images/tema-1-introduccion-a-la-teoria-de-grafos_tikz_15.svg)
+
+Aquí, tendríamos que:
+$$
+\begin{align*}
+[1]_{R_C} = \{1, 2, 3\} \quad \text{ y } \quad [4]_{R_C} = \{4, 5\}
+\end{align*}
+$$
+Por lo que las componentes fuertemente conexas serían:
+$$
+\begin{align*}
+V_1 = \{1, 2, 3\} \quad \text{ y } \quad V_2 = \{4, 5\}
+\end{align*}
+$$
+Y sus subgrafos asociados:
+$$
+\begin{align*}
+V_1 = \{1, 2, 3\} & \quad A_1 = \{(1, 2), (2, 3), (3, 1), (3, 2)\}\\
+V_2 = \{4, 5\} & \quad A_2 = \{(4, 5), (5, 4)\}
+\end{align*}
+$$
+
+</EjemBox>
+
+#### Orden de conexión fuerte. Definición
+Sea $G = (V, A)$ grafo orientado, llamamos **orden de conexión fuerte** al número de componentes fuertemente conexas de $G$ y se denota por $ocf(G)$.
+
+<EjemBox title="Ejercicio">
+
+*¿Se verifica que $o(G) = \displaystyle \sum_{i = 1}^{ocf(G)}o(G_i)$?*
+
+Estaríamos realizando el sumatorio de los órdenes de las componentes fuertemente conexas $G_i$ de $G$. De esta forma, como las componentes fuertemente conexas son clases de equivalencia que forman una partición del conjunto $V$ de vértices de $G$, por lo tanto, son disjuntas y su unión es $V$. Por lo tanto, sí se cumple.
+
+*¿Y se verifica que $t(G) = \displaystyle \sum_{i = 1}^{ocf(G)} t(G_i)$?* 
+
+En este caso, no se cumple necesariamente, ya que las aristas de $G$ pueden conectar vértices de distintas componentes fuertemente conexas. Por lo tanto, no se cumple en general.
+
+</EjemBox>
+
+#### Teorema 1.11
+Sea $G = (V, A)$ grafo orientado, se cumple que:
+$$
+\begin{align*}
+G \text{ fuertemente conexo} \iff ocf(G) = 1
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+*Esta demostración es análoga a la del teorema 1.3.*
+
+Sea $G = (V, A)$ grafo orientado, por definición de conexión fuerte se tiene:
+$$
+\begin{align*}
+G \text{ fuertemente conexo } \iff \forall i, j \in V \, \exists \pi_{ij} \text{ y } \exists \pi_{ji}
+\end{align*}
+$$
+Por definición de componente fuertemente conexa se tiene:
+$$
+\begin{align*}
+i R_C j \iff \exists \pi_{ij} \text{ y } \exists \pi_{ji}
+\end{align*}
+$$
+Por lo tanto, esto equivale a decir que $i$ y $j$ pertenecen a la misma clase de equivalencia, es decir:
+$$
+\begin{align*}
+[i]_{R_C} = [j]_{R_C} \quad \forall i, j \in V
+\end{align*}
+$$
+Lo que implica que existe una única clase de equivalencia, es decir, que $ocf(G) = 1$.
+
+</DemBox>
+
+#### Algoritmo para detectar la conexión débil
+Sea $G = (V, A)$ grafo orientado, para determinar si es débilmente conexo basta estudiar la conexión del grafo subyacente $G^s$ mediante el algoritmo visto para grafos no orientados.
+
+#### Algoritmo para detectar la conexión fuerte
+Sea $G = (V, A)$ grafo orientado y su matriz de adyacencia $A(G)$:
+
+1. Elección de un vértice $i \in V$ y se calcula $Ds(i)$ y $As(i)$:
+2. Sea $k \in Ds(i)$ entonces:
+
+1. La componente fuertemente conexa del vértice $i$ viene dada por $As(i) \cap Ds(i)$
+2. Eliminar de $A(G)$ las filas y columnas correspondientes a los vértices de $As(i) \cap Ds(i)$.
+3. Volver a 1 hasta no eliminar todos lo vértices.
+
+<EjBox title="Nota">
+
+Este algoritmo determina en tiempo $O(m)$ las componentes fuertemente conexas de $G$
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Por la proposición 1.10, al terminar por primera vez el paso 3 podríamos determinar si es fuertemente conexo o no.
+
+</EjBox>
+
+#### Grafo cuasi-fuertemente conexo. Definición
+Sea $G = (V, A)$ grafo orientado, se dice que:
+$$
+\begin{align*}
+G \text{ cuasi-fuertemente conexo} \iff \exists r \in V : As(r) = V \text{ o } Ds(r) = V
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Esta definición es equivalente a decir que $\exists r \in V$ que verifica al menos una de las siguientes condiciones:
+
+- $\exists \pi_{ir} \quad \forall i \in V$
+- $\exists \pi_{ri} \quad \forall i \in V$
+
+Si se da el primero de los supuestos, se dice que $G$ es **cuasi-fuertemente conexo en sentido ascendiente con respecto al vértice $r$**. En el segundo caso, se dice que $G$ es **cuasi-fuertemente conexo en sentido descendiente con respecto al vértice $r$**.
+
+</EjBox>
+
+#### Teorema 1.12
+Sea $G = (V, A)$ grafo orientado, se cumple que:
+$$
+\begin{align*}
+G \text{ fuertemente conexo } \implies G \text{ cuasi-fuertemente conexo} \implies G \text{ débilmente conexo}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Si $G$ es fuertemente conexo, consideramos cualquier $r \in V$, y sabemos que:
+$$
+\begin{align*}
+As(r) \cap Ds(r) = V \quad \text{ y } \quad As(r) \cap Ds(r) \subseteq Ds(r) \subseteq V 
+\end{align*}
+$$
+Por lo que $Ds(r) = V$ y cumple la definición de grafo cuasi-fuertemente conexo.
+
+Si $G$ es cuasi-fuertemente conexo, supongamos que verifica que $\exists r \in V$ tal que $Ds(r) = V$, entonces sea $i, j \in V$ cualesquiera, por hipótesis:
+$$
+\begin{align*}
+\exists \pi_{r i} \text{ camino desde } r \text{ hasta } i \quad \text{ y } \quad \exists \pi_{r j} \text{ camino desde } r \text{ hasta } j
+\end{align*}
+$$
+Las aristas de $G^s$ formadas por los arcos de $\pi_{ri}$ y $\pi_{rj}$ forman una cadena en $G^s$ entre $i$ y $j$. Así, $G^s$ es conexo y $G$ cumple la definición de grafo débilmente conexo.
+
+</DemBox>
+
+<EjemBox title="Ejercicio">
+
+*Se verifican alguna de las implicaciones contrarias?*
+
+No, ya que:
+
+- $G$ débilmente conexo no implica que sea cuasi-fuertemente conexo. Por ejemplo, si consideramos el grafo orientado dado por:
+$$
+\begin{align*}
+G = (V, A) \quad \text{ con } \left\{
+\begin{array}{l}
+V = \{1, 2, 3, 4\}\\
+A = \{(1, 2), (3, 2), (3,4)\}
+\end{array}
+\right.
+\end{align*}
+$$
+Es claramente débilmente conexo pero no existe un vértice $r$ tal que haya camino de $r$ a todos los demás vértices o de todos los demás vértices a $r$, por lo que no es cuasi-fuertemente conexo.
+- $G$ cuasi-fuertemente conexo no implica que sea fuertemente conexo. Por ejemplo, si consideramos el grafo orientado dado por:
+$$
+\begin{align*}
+G = (V, A) \quad \text{ con } \left\{
+\begin{array}{l}
+V = \{1, 2, 3\}\\
+A = \{(1, 2), (2, 1), (1, 3), (2, 3)\}
+\end{array}
+\right.
+\end{align*}
+$$
+El vértice 1 es raíz: hay caminos $\pi_{1, 2}, \pi_{2, 1}, \pi_{1, 3}$ pero no hay $\pi_{3, 1}$ por ejemplo. Por lo tanto, es cuasi-fuertemente conexo (con $r = 1$) pero no es fuertemente conexo.
+
+</EjemBox>
+
+<EjemBox title="Ejercicio">
+
+*Sea $G$ grafo orientado y $G^s$ su grafo no orientado subyacente:*
+
+- *¿$G$ fuertemente conexo $\implies G^s$ es conexo?*
+
+Sí, ya que si $G$ es fuertemente conexo, entonces por el teorema 1.12 es débilmente conexo, y por definición de conexión débil $G^s$ es conexo.
+- *¿$G$ es cuasi-fuertemente conexo $\implies G^s$ es conexo?*
+
+Sí, ya que si $G$ es cuasi-fuertemente conexo, entonces por el teorema 1.12 es débilmente conexo, y por definición de conexión débil $G^s$ es conexo.
+- *¿$G$ es débilmente conexo $\implies G^s$ es conexo?*
+
+Sí, ya que por definición de conexión débil $G^s$ es conexo.
+- *¿$G^s$ es conexo $\implies G$ es fuertemente conexo?*
+
+No necesariamente, ya que si consideramos el grafo orientado dado por:
+$$
+\begin{align*}
+G = (V, A) \quad \text{ con } \left\{
+\begin{array}{l}
+V = \{1, 2\}\\
+A = \{(1, 2)\}
+\end{array}
+\right.
+\end{align*}
+$$
+Su grafo subyacente es:
+$$
+\begin{align*}
+G^s = (V, A^s) \quad \text{ con } \left\{
+\begin{array}{l}
+V = \{1, 2\}\\
+A^s = \{\{1, 2\}\}
+\end{array}
+\right.
+\end{align*}
+$$
+que es claramente conexo, pero $G$ no es fuertemente conexo ya que no existe camino de 2 a 1.
+- *¿$G^s$ es conexo $\implies G$ es cuasi-fuertemente conexo?*
+
+No necesariamente, ya que si consideramos el grafo orientado dado por:
+$$
+\begin{align*}
+G = (V, A) \quad \text{ con } \left\{
+\begin{array}{l}
+V = \{1, 2, 3, 4\}\\
+A = \{(1, 2), (3, 2), (3,4)\}
+\end{array}
+\right.
+\end{align*}
+$$
+Su grafo subyacente es:
+$$
+\begin{align*}
+G^s = (V, A^s) \quad \text{ con } \left\{
+\begin{array}{l}
+V = \{1, 2, 3, 4\}\\
+A^s = \{\{1, 2\}, \{2, 3\}, \{3, 4\}\}
+\end{array}
+\right.
+\end{align*}
+$$
+que es claramente conexo, pero $G$ no es cuasi-fuertemente conexo ya que no existe ningún vértice $r$ tal que haya camino de $r$ a todos los demás vértices o de todos los demás vértices a $r$.
+- *¿$G^s$ es conexo $\implies G$ es débilmente conexo?*
+
+Sí, ya que por definición de conexión débil $G^s$ es conexo implica que $G$ es débilmente conexo.
+
+</EjemBox>
+
+<EjemBox title="Ejercicio">
+
+*Sea $G$ grafo no orientado y $G^o$ su grafo orientado equivalente:*
+
+- *¿$G$ es conexo $\implies G^o$ es fuertemente conexo?*
+
+Sí, ya que si $G$ es conexo, entonces el grafo orientado equivalente $G^o$ tiene caminos bidireccionales entre cualquier par de vértices, cumpliendo así la definición de grafo fuertemente conexo.
+- *¿$G$ es conexo $\implies G^o$ es cuasi-fuertemente conexo?*
+
+Sí, ya que si $G$ es conexo, entonces $G^o$ es fuertemente conexo y por el teorema 1.12 es cuasi-fuertemente conexo.
+- *¿$G$ es conexo $\implies G^o$ es débilmente conexo?*
+
+Sí, ya que si $G$ es conexo, entonces $G^o$ es fuertemente conexo y por el teorema 1.12 es débilmente conexo.
+
+</EjemBox>
+
+#### Minimalmente cuasi-fuermente conexo. Definición
+Sea $G = (V, A)$ grafo orientado, se dice **minimalmente cuasi-fuertemente conexo** si:
+
+- $G = (V, A)$ es cuasi-fuertemente conexo en sentido ascendiente o descendiente con respecto a un vértice $r \in V$
+- $G' = (V, A \setminus \{e\})$ no es cuasi-fuertemente conexo en sentido ascendiente o descendiente con respecto a $r$ para toda $e \in A$
+
+<EjBox title="Nota">
+
+Las definiciones de grafo minimalmente fuertemente conexo y minimalmente débilmente conexo son análogas, basta cambiar la palabra ``cuasi-fuertemente'' por ``fuertemente'' o ``débilmente''.
+
+</EjBox>

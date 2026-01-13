@@ -1,0 +1,731 @@
+---
+title: "Análisis 3 - Tema 4"
+description: "Medibilidad de funciones. Operaciones con funciones medibles. Composición de funciones medibles y continuas."
+date: "2026-01-12"
+tags: ["Análisis III", "Funciones Medibles", "Teoría de la Medida"]
+---
+
+## Funciones medibles
+### Función medible. Definición
+Sea $(X, \Sigma, \mu)$ espacio de medida y $f \colon X \to \overline{\mathbb{R}}$ función, se dice **medible** (o $\mu$-medible) si:
+$$
+\begin{align*}
+\forall \alpha \in \mathbb{R} \quad \text{ se cumple } \quad \left\{x \in X : f(x) < \alpha\right\} \in \Sigma
+\end{align*}
+$$
+O, equivalentemente:
+$$
+\begin{align*}
+\forall \alpha \in \mathbb{R} \quad \text{ se cumple } \quad \left\{x \in X : f(x) \leq \alpha\right\} \in \Sigma
+\end{align*}
+$$
+$$
+\begin{align*}
+\forall \alpha \in \mathbb{R} \quad \text{ se cumple } \quad \left\{x \in X : f(x) > \alpha\right\} \in \Sigma
+\end{align*}
+$$
+$$
+\begin{align*}
+\forall \alpha \in \mathbb{R} \quad \text{ se cumple } \quad \left\{x \in X : f(x) \geq \alpha\right\} \in \Sigma
+\end{align*}
+$$
+También se puede considerar $\alpha \in \overline{\mathbb{R}}$ en cualquiera de las definiciones anteriores (se denotarán como (1'), (2'), (3') y (4')).
+
+<DemBox title="Demostración">
+
+Veamos que son equivalentes:
+
+- **$1 \Rightarrow 2$)** *Ver que $\{x : f(x) \leq \alpha\} \in \Sigma$*: empleando una aproximación por sucesiones decrecientes. Dado $\alpha \in \mathbb{R}$ podemos notar que la condición $f(x) \leq \alpha$ es equivalente a que $f(x) < \alpha + \varepsilon$ para todo $\varepsilon > 0$ (tomando $\varepsilon = \frac{1}{n}$). Por tanto:
+$$
+\begin{align*}
+\left\{x : f(x) \leq \alpha\right\} = \displaystyle \bigcap_{n = 1}^{\infty} \left\{x : f(x) < \alpha + \frac{1}{n}\right\} \in \Sigma
+\end{align*}
+$$
+que se cumple ya que:
+
+- **$2 \Rightarrow 3$)** *Ver que $\{x : f(x) > \alpha\} \in \Sigma$*: empleando que las desigualdades estrictas y no estrictas son complementarias cuando se considera el mismo valor. Dado $\alpha \in \mathbb{R}$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) > \alpha\right\} = \{\underbrace{x :f(x) \leq \alpha}_{\in \Sigma}\}^c \in \Sigma
+\end{align*}
+$$
+- **$3 \Rightarrow 4$)** *Ver que $\{x : f(x) \geq \alpha\} \in \Sigma$*: de forma análoga a $[1 \Rightarrow 2]$ empleando sucesiones crecientes, dado $\alpha \in \mathbb{R}$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) \geq \alpha\right\} = \displaystyle \bigcap_{n = 1}^{\infty} \underbrace{\left\{x : f(x) > \alpha - \frac{1}{n}\right\}}_{\in \Sigma \, \text{ por (3)}} \in \Sigma
+\end{align*}
+$$
+- **$4 \Rightarrow 1$)** *Ver que $\{x : f(x) < \alpha\} \in \Sigma$*: de forma análoga a $[2 \Rightarrow 3]$ empleando el complemento, dado $\alpha \in \mathbb{R}$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) < \alpha\right\} = \{\underbrace{x : f(x) \geq \alpha}_{\in \Sigma}\}^c \in \Sigma
+\end{align*}
+$$
+
+</DemBox>
+<DemBox title="Demostración">
+
+Veamos que son equivalentes las definiciones con $\alpha \in \overline{\mathbb{R}}$ y las definiciones con $\alpha \in \mathbb{R}$:
+
+- **1)** *Ver que $(1 \Leftrightarrow 1')$*
+
+- **2)** *Ver que $(2 \Leftrightarrow 2')$*
+
+- **$\Rightarrow)$)** Trivial ya que $\mathbb{R} \subset \overline{\mathbb{R}}$.
+- **$\Leftarrow)$)** Dado $\alpha = + \infty$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) \leq + \infty\right\} = X \in \Sigma
+\end{align*}
+$$
+$$
+\begin{align*}
+\left\{x : f(x) \leq - \infty\right\} = \displaystyle \bigcap_{n = 1}^{\infty} \underbrace{\left\{x: f(x) \leq - n\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **3)** *Ver que $(3 \Leftrightarrow 3')$*
+
+- **$\Rightarrow$)** Trivial ya que $\mathbb{R} \subset \overline{\mathbb{R}}$.
+- **$\Leftarrow$)** Dado $\alpha = + \infty$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) > + \infty\right\} = \emptyset \in \Sigma
+\end{align*}
+$$
+Dado $\alpha = - \infty$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) > - \infty\right\} = \displaystyle \bigcup_{n = 1}^{\infty} \underbrace{\left\{x : f(x) > - n\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **4)** *Ver que $(4 \Leftrightarrow 4')$*
+
+- **$\Rightarrow$)** Trivial ya que $\mathbb{R} \subset \overline{\mathbb{R}}$.
+- **$\Leftarrow$)** Dado $\alpha = + \infty$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) \geq + \infty\right\} = \displaystyle \bigcap_{n = 1}^{\infty} \underbrace{\left\{x : f(x) \geq n\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+Dado $\alpha = - \infty$ entonces:
+$$
+\begin{align*}
+\left\{x : f(x) \geq - \infty\right\} = X \in \Sigma
+\end{align*}
+$$
+
+</DemBox>
+
+### Funciones medibles. Ejemplos
+Se tienen los siguientes ejemplos de funciones medibles:
+
+1. Toda función $f : \mathbb{N} \longrightarrow \overline{\mathbb{R}}$ es $(\mathbb{N}, \mathcal{P}(\mathbb{N}), m)$-medible, donde $m$ es la medida de conteo.
+<DemBox title="Demostración">
+
+Dado $\alpha \in \mathbb{R}$, se tiene que:
+$$
+\begin{align*}
+\left\{n \in \mathbb{N} : f(n) < \alpha\right\} = \displaystyle \bigcup_{ k \in \mathbb{N \\ f(k) < \alpha}} \{k\} \in \mathcal{P}(\mathbb{N})
+\end{align*}
+$$
+Por lo tanto, $f$ es medible.
+
+</DemBox>
+2. Sea $f \colon \mathbb{R}^N \to \mathbb{R}$ continua, es ($\mathbb{R}^N, \mathcal{M}_N, \mu_N$)-medible y $(\mathbb{R}^N, \mathcal{B}_N, \mu_N)$-medible.
+<DemBox title="Demostración">
+
+El intervalo $[ - \infty, \alpha)$ es abierto en $\overline{\mathbb{R}}$ con la topología usual ya que su complemento es $[\alpha, \infty]$ que es cerrado. Dado que $f$ es continua, la preimagen de un abierto es un abierto, es decir:
+$$
+\begin{align*}
+A_\alpha \coloneq f^{ - 1}([ - \infty, \alpha)) = \left\{x \in \mathbb{R}^N : f(x) < \alpha\right\} \quad \text{ es abierto}
+\end{align*}
+$$
+Como todo abierto de $\mathbb{R}^N$ es de Borel y además $\mathcal{B}_N \subseteq \mathcal{M}_N$ entonces:
+$$
+\begin{align*}
+A_\alpha \in \mathcal{B}_N \subseteq \mathcal{M}_N
+\end{align*}
+$$
+
+</DemBox>
+3. Dado un espacio de medida $(X, \Sigma, \mu)$ y $A \in \Sigma$ y $f \colon X \to \overline{\mathbb{R}}$ medible entonces $f_{|A}$ es medible respecto del espacio de medida $(A, \Sigma_A, \mu_{|_{\Sigma(A)}})$, donde:
+
+- $\Sigma_A = \left\{A \cap E: E \in \Sigma\right\}$
+- $\mu_{|_{\Sigma(A)}}$ es la restricción de $\mu$ a $\Sigma_A$
+
+<DemBox title="Demostración">
+
+Como $f_{|_A}(x) = f(x)$ para $x \in A$, podemos reescribir:
+$$
+\begin{align*}
+\left\{x \in A: f_{|_A}(x) < \alpha\right\} = A \cap \left\{x \in X : f(x) < \alpha\right\}
+\end{align*}
+$$
+Dado que $f$ es medible, entonces $\left\{x \in X : f(x) < \alpha\right\} \in \Sigma$ y por lo tanto:
+$$
+\begin{align*}
+\left\{x \in A: f_{|_A}(x) < \alpha\right\} \in \Sigma_A
+\end{align*}
+$$
+
+</DemBox>
+
+### Caracterización de funciones medibles. Proposición
+Dada una función $f : \to \overline{\mathbb{R}}$ y un espacio de medida $(X, \Sigma, \mu)$ se cumple que:
+$$
+\begin{align*}
+f \text{ es } \mu \text{-medible} \iff \forall O \subseteq \overline{\mathbb{R}} \text{ abierto,} \quad f^{ - 1}( O) \in \Sigma
+\end{align*}
+$$
+<EjBox title="Nota">
+
+En $\overline{\mathbb{R}}$ se considera la topología usual extendida, que tiene como base los intervalos abiertos $(a, b)$ y, además, los intervalos $(a, \infty]$ y $[ - \infty, b)$. Por tanto, cualquier abierto $O \subseteq \overline{\mathbb{R}}$ se puede escribir como una unión (a lo sumo numerable) de intervalos abiertos disjuntos dos a dos de las formas previamente indicadas.
+
+</EjBox>
+<DemBox title="Demostración">
+
+- **$\Leftarrow$)** Si $f^{ - 1}(O) \in \Sigma$ para todo abierto $O \subseteq \overline{\mathbb{R}}$ entonces, en particular, para cada $a \in \mathbb{R}$ el intervalo $[ - \infty, a)$ es abierto en $\overline{\mathbb{R}}$ por lo que:
+$$
+\begin{align*}
+\left\{x \in X : f(x) < \alpha\right\} = f^{ - 1}([ - \infty, \alpha)) \in \Sigma
+\end{align*}
+$$
+Por lo tanto, $f$ es medible por definición de función medible (1).
+- **$\Rightarrow$)** Sea $f$ medible y $O \subseteq \overline{\mathbb{R}}$ abierto, como todo abierto de $\overline{\mathbb{R}}$ es unión numerable de intervalos abiertos disjuntos dos a dos, es decir:
+$$
+\begin{align*}
+f^{ - 1}(O) = f^{ - 1}\left(\bigcup_{i \in I} J_i\right) = \bigcup_{i \in I} \underbrace{f^{ - 1}(J_i)}_{\in \Sigma \, ?}
+\end{align*}
+$$
+Basta ver que $f^{ - 1}(J_i) \in \Sigma$ para todo intervalo abierto $J_i$ de $\overline{\mathbb{R}}$.
+
+Todo intervalo abierto $J_i$ de $\overline{\mathbb{R}}$ es de la forma:
+$$
+\begin{align*}
+J_i = (\alpha, \beta) = [ - \infty, \beta) \cap (\alpha, + \infty]
+\end{align*}
+$$
+Por lo tanto:
+$$
+\begin{align*}
+f^{ - 1}(J_i) = \underbrace{f^{ - 1}([ - \infty, \beta))}_{\in \Sigma} \cap \underbrace{f^{ - 1}((\alpha, + \infty])}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+ya que $f$ es medible por definición de función medible (1') y (3').
+
+</DemBox>
+
+### Proposición
+Dado un espacio de medida $(X, \Sigma, \mu)$ y $(f_n: X \to \overline{\mathbb{R}})_{n \in \mathbb{N}}$ una sucesión de funciones medibles entonces se cumplen los siguientes enunciados:
+
+- **i)** $\max \left\{f_1, \dots , f_n\right\}$ es medible para todo $n \in \mathbb{N}$.
+- **ii)** $\min \left\{f_1, \dots , f_n\right\}$ es medible para todo $n \in \mathbb{N}$.
+- **iii)** $\sup \left\{f_1, f_2, \dots \right\}$ es medible.
+- **iv)** $\inf \left\{f_1, f_2, \dots \right\}$ es medible.
+- **v)** $\displaystyle \liminf_{n \to \infty} f_n$ es medible.
+- **vi)** $\displaystyle \limsup_{n \to \infty} f_n$ es medible.
+- **vii)** Si $\exists \displaystyle \lim_{n \to \infty} f_n(x) \in \overline{\mathbb{R}}$ en todo $x \in X$ entonces $\displaystyle \lim_{n \to \infty} f_n$ es medible.
+
+<DemBox title="Demostración">
+
+Dado $\alpha \in \mathbb{R}$ cualquiera:
+
+- **i)** Como el máximo es menor que $\alpha$ si y solo si todos los elementos son menores que $\alpha$, se tiene que:
+$$
+\begin{align*}
+\left\{x : \max \left\{f_1(x), \dots , f_n(x)\right\} < \alpha\right\} = \bigcap_{i = 1}^{n} \underbrace{\left\{x : f_i(x) < \alpha\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **ii)** Como el mínimo es menor que $\alpha$ si y solo si al menos uno de los elementos es menor que $\alpha$, se tiene que:
+$$
+\begin{align*}
+\left\{x : \min \left\{f_1(x), \dots , f_n(x)\right\} < \alpha\right\} = \bigcup_{i = 1}^{n} \underbrace{\left\{x : f_i(x) < \alpha\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **iii)** Como el supremo es $\leq \alpha$ si y solo si todos los elementos son $\leq \alpha$, se tiene que:
+$$
+\begin{align*}
+\left\{x : \sup_{k \in \mathbb{N}} f_k(x) \leq  \alpha\right\} = \bigcap_{n = 1}^{\infty} \underbrace{\left\{x : f_n(x) \leq  \alpha\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **iv)** Como el ínfimo es $\geq \alpha$ si y solo si todos los elementos son $\geq \alpha$, se tiene que:
+$$
+\begin{align*}
+\left\{x : \inf_{k \in \mathbb{N}} f_k(x) \geq  \alpha\right\} = \bigcap_{n = 1}^{\infty} \underbrace{\left\{x : f_n(x) \geq  \alpha\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **v)** Definimos $g_n(x) = \displaystyle \inf_{k \geq n} f_k(x)$ y notamos que:
+$$
+\begin{align*}
+\liminf_{k \to \infty} f_k(x) = \sup_{n \in \mathbb{N}} \left(\inf_{k \geq n} f_k(x)\right) = \sup_{n \in \mathbb{N}} g_n(x)
+\end{align*}
+$$
+ya que $g_n$ es medible por iv) (al ser ínfimo de funciones medibles) y aplicando iii) sobre el supremo de las $g_n$ se concluye que $\liminf_{k \to \infty} f_k$ es medible.
+- **vi)** De forma análoga a v) definimos $h_n(x) = \displaystyle \sup_{k \geq n} f_k(x)$ y notamos que:
+$$
+\begin{align*}
+\limsup_{k \to \infty} f_k(x) = \inf_{n \in \mathbb{N}} \left(\sup_{k \geq n} f_k(x)\right) = \inf_{n \in \mathbb{N}} h_n(x)
+\end{align*}
+$$
+ya que $h_n$ es medible por iii) (al ser supremo de funciones medibles) y aplicando iv) sobre el ínfimo de las $h_n$ se concluye que $\limsup_{k \to \infty} f_k$ es medible.
+- **vii)** Si $\exists \lim_{n \to \infty} f_n(x) \in \overline{\mathbb{R}}$ en todo $x \in X$ entonces:
+$$
+\begin{align*}
+\lim_{n \to \infty} f_n(x) = \liminf_{n \to \infty} f_n(x) = \limsup_{n \to \infty} f_n(x)
+\end{align*}
+$$
+Por lo tanto, $\lim_n f_n$ es medible (por v) y vi)).
+
+</DemBox>
+
+<EjBox title="Observación">
+
+Respecto de vii) si tenemos una sucesión de funciones medibles $(f_n)_{n \in \mathbb{N}}$ y definimos:
+$$
+\begin{align*}
+A \coloneq \left\{x \in X : \nexists \lim_{n \to \infty} f_n(x) \in \overline{\mathbb{R}}\right\} \neq \emptyset 
+\end{align*}
+$$
+Es decir, el conjunto de puntos donde la sucesión no converge (notar que no converger en $\overline{\mathbb{R}}$ implica que no converge ni a un real ni a $\pm \infty$).
+
+Entonces, se tiene que $A$ es medible y podemos considerar el espacio de medida donde el límite sí existe:
+$$
+\begin{align*}
+(X \setminus A, \Sigma_{X \setminus A}, \mu_{|_{\Sigma(X \setminus A)}})
+\end{align*}
+$$
+
+</EjBox>
+
+### Operaciones con funciones medibles. Proposición
+Sean $f, g$ funciones medibles respecto de un espacio de medida $(X, \Sigma, \mu)$ se cumplen los siguientes enunciados:
+
+- **i)** $f + g$ es medible (si $f + g$ está bien definida en todo $X$)
+- **ii)** $\forall \lambda \in \mathbb{R}$ se tiene que $\lambda f$ es medible (si $\lambda f$ está bien definida en todo $X$)
+- **iii)** $f^2$ es medible
+- **iv)** $fg$ es medible (si $fg$ está bien definida en todo $X$)
+
+<DemBox title="Demostración">
+
+- **i)** Fijamos $\alpha \in \mathbb{R}$ cualquiera. Entonces:
+$$
+\begin{align*}
+\left\{x : f(x) + g(x) < \alpha\right\} & = \left\{x : f(x) < \alpha - g(x)\right\} \xlongequal[]{\text{\tiny $\mathbb{Q}$ denso en $\mathbb{R}$}} \\[2ex]
+& = \displaystyle \bigcup_{q \in \mathbb{Q}} \left\{x : f(x) < q < \alpha - g(x)\right\} = \\[2ex]
+& = \displaystyle \bigcup_{q \in \mathbb{Q}} \left\{ \left\{x : f(x) < q\right\} \cap \left\{x : q < \alpha - g(x)\right\}\right\} = \\[2ex]
+& = \displaystyle \bigcup_{q \in \mathbb{Q}} \underbrace{\{ \underbrace{\left\{x : f(x) < q\right\} }_{\in \Sigma\text{ ($f$ medible)}}\cap \underbrace{\left\{x : g(x) < \alpha - q\right\}}_{\in \Sigma\text{ ($g$ medible)}}\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **ii)** Se dan dos casos:
+
+- Si $\lambda = 0$ entonces $\lambda f(x) = 0$ es medible.
+- Si $\lambda > 0$ entonces, dado $\alpha \in \mathbb{R}$ se tiene:
+$$
+\begin{align*}
+\left\{x : \lambda f(x) < \alpha\right\} = \left\{x : f(x) < \frac{\alpha}{\lambda}\right\} \overset{\text{\tiny $f$ medible}}{\in} \Sigma
+\end{align*}
+$$
+- Si $\lambda < 0$, análogamente, dado $\alpha \in \mathbb{R}$ se tiene:
+$$
+\begin{align*}
+\left\{x : \lambda f(x) < \alpha\right\} = \left\{x : f(x) > \frac{\alpha}{\lambda}\right\} \overset{\text{\tiny $f$ medible}}{\in} \Sigma
+\end{align*}
+$$
+- **iii)** Sea $\alpha \in \mathbb{R}$ cualquiera. Entonces:
+
+- Si $\alpha < 0$ se tiene:
+$$
+\begin{align*}
+\left\{x : f(x)^2 \leq \alpha\right\} = \emptyset \in \Sigma
+\end{align*}
+$$
+- Si $\alpha \geq 0$ se tiene:
+$$
+\begin{align*}
+\left\{x : f(x)^2 \geq \alpha\right\} & = \left\{x : - \sqrt{\alpha} \leq f(x) \leq \sqrt{\alpha}\right\} =\\[2ex]
+& = \underbrace{\left\{x : f(x) \leq \sqrt{\alpha}\right\}}_{\text{\tiny $f$ medible $\implies \in \Sigma$}} \cap \underbrace{\left\{x : f(x) \geq - \sqrt{\alpha}\right\}}_{\text{\tiny $f$ medible $\implies \in \Sigma$}} \overset{\text{\tiny $f$ medible}}{\in} \Sigma
+\end{align*}
+$$
+- **iv)** Tenemos que la siguiente fórmula es válida $\forall x \in X$:
+$$
+\begin{align*}
+f \cdot g = \frac{1}{2}\left[(f + g)^2 - f^2 - g^2\right]
+\end{align*}
+$$
+excepto si $x$ está en alguno de los siguientes conjuntos:
+$$
+\begin{align*}
+A_1 & \coloneq \left\{x : f(x) = \infty \text{ y } g(x) \in [ - \infty, 0)\right\}\\
+A_2 & \coloneq \left\{x : f(x) = \infty \text{ y } g(x) \in (0, \infty]\right\}\\
+A_3 & \coloneq \left\{x : f(x) = - \infty \text{ y } g(x) \in [ - \infty, 0)\right\}\\
+A_4 & \coloneq \left\{x : f(x) = - \infty \text{ y } g(x) \in (0, \infty]\right\}\\
+A_5 & \coloneq \left\{x : g(x) = \infty \text{ y } f(x) \in (- \infty, 0)\right\}\\
+A_6 & \coloneq \left\{x : g(x) = \infty \text{ y } f(x) \in (0, \infty]\right\}\\
+A_7 & \coloneq \left\{x : g(x) = - \infty \text{ y } f(x) \in (- \infty, 0)\right\}\\
+A_8 & \coloneq \left\{x : g(x) = - \infty \text{ y } f(x) \in (0, \infty]\right\}
+\end{align*}
+$$
+Se tiene que $A_i \in \Sigma$ para todo $i = 1, \dots, 8$ ya que se definen como la intersección de dos conjuntos medibles (por ser $f$ y $g$ medibles). Definimos además:
+$$
+\begin{align*}
+A_9 \coloneq X \setminus \displaystyle \bigcup_{i = 1}^{8} A_i \in \Sigma
+\end{align*}
+$$
+Notamos entonces que $A_i$ son disjuntos dos a dos y que su unión es todo $X$, así tenemos que:
+
+- Para $i = 1, \dots, 8$ se cumple que $f \cdot g|_{A_i} \equiv \infty$ o bien $f \cdot g|_{A_i} \equiv - \infty$ luego:
+$$
+\begin{align*}
+f \cdot g|_{A_i} \text{ medible respecto } \left(A_i, \Sigma(A_i), \mu|_{\Sigma(A_i)}\right)
+\end{align*}
+$$
+- Para $i = 9$ se tiene:
+$$
+\begin{align*}
+f \cdot g|_{A_9} = \frac{1}{2}\left[(f + g)^2 - f^2 - g^2\right] \quad \text{ medible resp. } \left(A_9, \Sigma(A_9), \mu|_{\Sigma(A_9)}\right)
+\end{align*}
+$$
+
+Así $\forall i \in \{1, \dots, 9\}$, la función $f\cdot g|_{A_i}$ es medible respecto de $\left(A_i, \Sigma(A_i), \mu|_{\Sigma(A_i)}\right)$ luego, $\forall i \in \{1, \dots, 9\}$ tenemos:
+$$
+\begin{align*}
+f\cdot g \cdot \mathcal{X}_{A_i} \quad \text{ es medible respecto } (X, \Sigma, \mu)
+\end{align*}
+$$
+Entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{9} f \cdot g \cdot \mathcal{X}_{A_i} = f \cdot g \quad \text{ medible respecto } (X, \Sigma, \mu)
+\end{align*}
+$$
+Y esto está bien definido en todo $X$ ya que $A_i \cap A_j = \emptyset$ si $i \neq j$.
+
+</DemBox>
+
+<EjBox title="Observación">
+
+En general, la composición de funciones medibles no tiene sentido salvo en casos especiales. Existen funciones medibles $fg$ respecto de $(\mathbb{R}, \mathcal{M}_1, \mu_1)$ tales que $g \circ f$ no es medible respecto de $(\mathbb{R}, \mathcal{M}_1, \mu_1)$.
+
+</EjBox>
+
+### Composición de funciones medibles y continuas. Proposición
+Sea $(X, \Sigma, \mu)$ espacio de medida, $f: X \to \overline{\mathbb{R}}$ medible y $g: A \to \overline{\mathbb{R}}$ continua con $f(X) \subseteq A$ se tiene que:
+$$
+\begin{align*}
+g \circ f \quad \text{ es medible}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Sea $\alpha \in \mathbb{R}$ cualquiera entonces:
+$$
+\begin{align*}
+(g \circ f)^{ - 1}([ - \infty, \alpha)) = f^{ - 1}\left(g^{ - 1}([ - \infty, \alpha))\right)
+\end{align*}
+$$
+Como $[ - \infty, \alpha)$ es abierto de $\overline{\mathbb{R}}$ y $g$ continua, entonces:
+$$
+\begin{align*}
+g^{ - 1}([ - \infty, \alpha)) \subseteq A \text{ es abierto de } A
+\end{align*}
+$$
+Como $f$ medible, por la caracterízación de funciones medibles se tiene que:
+$$
+\begin{align*}
+f^{ - 1}\left(g^{ - 1}([ - \infty, \alpha))\right) \in \Sigma
+\end{align*}
+$$
+
+</DemBox>
+
+### Corolario
+Sea $(X, \Sigma, \mu)$ espacio de medida y $f: X \to \overline{\mathbb{R}}$ medible tal que $f(x) \neq 0$ para todo $x \in X$ entonces:
+$$
+\begin{align*}
+\frac{1}{f} \quad \text{ es medible}
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Definimos la función $g$ como:
+$$
+\begin{align*}
+g : \overline{\mathbb{R}} \setminus \{0\} & \longrightarrow \overline{\mathbb{R}} \\[1ex]
+y & \longmapsto g(y) = \frac{1}{y}
+\end{align*}
+$$
+Como $g$ continua en $\overline{\mathbb{R}} \setminus \{0\}$ y $f(X) \subseteq \overline{\mathbb{R}} \setminus \{0\}$, por la proposición anterior se tiene:
+$$
+\begin{align*}
+g \circ f = \frac{1}{f} \quad \text{ es medible}
+\end{align*}
+$$
+
+</DemBox>
+
+### Proposición
+Sean las funciones:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+f \colon \mathbb{R} \to \mathbb{R} \text{ medible respecto de } (\mathbb{R}, \mathcal{B}_1, \mu_1) \\[2ex]
+g \colon \mathbb{R} \to \mathbb{R} \text{ medible respecto de } (\mathbb{R}, \mathcal{B}_1, \mu_1)
+\end{array}
+\right\} \implies g \circ f \text{ medible respecto de } (\mathbb{R}, \mathcal{B}_1, \mu_1)
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Se sigue de los siguientes pasos:
+
+- **1)** Se define $\mathcal{A} \coloneq \left\{B \in \mathcal{B}_1 : f^{ - 1}(B) \in \mathcal{B}_1\right\}$. Es decir, $\mathcal{A}$ es el conjunto de todos los borelianos $B$ de $\mathbb{R}$ cuya preimagen por $f$ es también boreliano.
+
+Notar que $\tau_\mathbb{R} \subseteq \mathcal{A}$ ya que $f$ es medible respecto de $(\mathbb{R}, \mathcal{B}_1, \mu_1)$ implica que:
+$$
+\begin{align*}
+B \in \tau_\mathbb{R} \implies f^{ - 1} (B) \in \mathcal{B}_1
+\end{align*}
+$$
+- **2)** *Ver que $\mathcal{A}$ es una $\sigma$-álgebra:*
+
+- **i)** *Ver que $\emptyset \in \mathcal{A}$*: trivial ya que:
+$$
+\begin{align*}
+\emptyset \in \tau_\mathbb{R} \subseteq \mathcal{A}
+\end{align*}
+$$
+- **ii)** *Ver que es cerrada para uniones numerables*: Sea $\{A_i\}_{i \in \mathbb{N}} \subseteq \mathcal{A}$ entonces:
+$$
+\begin{align*}
+f^{ - 1}\left(\bigcup_{i \in \mathbb{N}} A_i\right) = \bigcup_{i \in \mathbb{N}} \underbrace{f^{ - 1}(A_i)}_{\in \mathcal{B}_1} \in \mathcal{B}_1 \implies \bigcup_{i \in \mathbb{N}} A_i \in \mathcal{A}
+\end{align*}
+$$
+Donde hemos usado que $A_i \in \mathcal{A} \implies f^{ - 1}(A_i) \in \mathcal{B}_1$.
+- **iii)** *Ver que es cerrada para complementos*: Sea $A \in \mathcal{A}$ entonces:
+$$
+\begin{align*}
+f^{ - 1}(\mathbb{R} \setminus A) = \mathbb{R} \setminus \underbrace{f^{ - 1}(A)}_{\in \mathcal{B}_1} \in \mathcal{B}_1 \implies \mathbb{R} \setminus A \in \mathcal{A}
+\end{align*}
+$$
+Donde hemos usado que $A \in \mathcal{A} \implies f^{ - 1}(A) \in \mathcal{B}_1$.
+- **3)** *Ver que $\mathcal{A} = \mathcal{B}_1$:*
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\tau_\mathbb{R} \subseteq \mathcal{A} \subseteq \mathcal{B}_1\\
+\mathcal{A} \text{ es } \sigma\text{-álgebra} \implies \mathcal{B}_1 \subseteq \mathcal{A}
+\end{array}
+\right\} \implies A = \mathcal{B}_1
+\end{align*}
+$$
+- **4)** *Caracterización de medibilidad:* Sea $f : \mathbb{R} \to\mathbb{R}$, por la caracterización de funciones medibles se tiene que $f$ es medible respecto de $(\mathbb{R}, \mathcal{B}_1, \mu_1)$ si y solo si:
+$$
+\begin{align*}
+\forall B \in \mathcal{B}_1 : f^{ - 1}(B) \in \mathcal{B}_1
+\end{align*}
+$$
+Como $\mathcal{A} = \mathcal{B}_1$ se tiene la equivalencia.
+- **5)** *Medibilidad de $g \circ f$ respecto de $(\mathbb{R}, \mathcal{B}_1, \mu_1)$:* dado $O \subseteq \mathbb{R}$ abierto cualquiera:
+$$
+\begin{align*}
+(g \circ f)^{ - 1}(O) = f^{ - 1}(\underbrace{g^{ - 1}(O)}_{\in \mathcal{B}_1 \text{ $g \,$medible}}) \in \mathcal{B}_1
+\end{align*}
+$$
+Por lo tanto, $g \circ f$ es medible respecto de $(\mathbb{R}, \mathcal{B}_1, \mu_1)$.
+
+</DemBox>
+
+### Función característica. Definición
+Sea $X$ conjunto y $A \subseteq X$, se dice **función característica** o **indicadora** de $A$ a la función:
+$$
+\begin{align*}
+\mathcal{X}_A : X & \longrightarrow \{0,1\} \subseteq \mathbb{R} \\[1ex]
+x & \longmapsto \mathcal{X}_{A}(x) = \left\{
+\begin{array}{ll}
+1 & \text{ si } x \in A \\[1ex]
+0 & \text{ si } x \notin A
+\end{array}
+\right. \\
+\end{align*}
+$$
+
+### Medibilidad de la función característica. Proposición
+Si $(X, \Sigma, \mu)$ es un espacio de medida entonces se tiene:
+$$
+\begin{align*}
+\mathcal{X}_A \text{ es } \mu\text{-medible} \iff A \in \Sigma\\
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+- **$\Rightarrow$)** Sea $\mathcal{X}_A$ medible, entonces $\forall \alpha \in \mathbb{R}$ se tiene:
+$$
+\begin{align*}
+\left\{x : \mathcal{X}_A(x) < \alpha\right\} \in \Sigma
+\end{align*}
+$$
+En particular, tomando $\alpha = 1$ se tiene:
+$$
+\begin{align*}
+\left\{x :  \mathcal{X}_A  < 1 \right\} = \left\{x : \mathcal{X}_A(x) = 0\right\} = X \setminus A \in \Sigma \implies A = (A^c)^c \in \Sigma
+\end{align*}
+$$
+- **$\Leftarrow$)** Sea $A \in \Sigma$, entonces:
+
+</DemBox>
+
+### Función simple. Definición
+Se dice que $s : X \to \overline{\mathbb{R}}$ es una **función simple** si su imagen es finita, es decir:
+$$
+\begin{align*}
+s(X) \quad \text{ es un conjunto finito}
+\end{align*}
+$$
+O, equivalentemente, si existe $n \in \mathbb{N}$ tal que:
+$$
+\begin{align*}
+s(X) = \left\{\lambda_1, \dots, \lambda_n\right\} \quad \text{ con } \lambda_i \in \overline{\mathbb{R}}\\
+\end{align*}
+$$
+
+### Expresión canónica. Definición
+Sea $s(X) = \left\{\lambda_1 < \lambda_2 < \dots < \lambda_n \right\}$ con $n \in \mathbb{N}$, se dice **expresión canónica** de $s$ a:
+$$
+\begin{align*}
+s = \displaystyle \sum_{i = 1}^{n} \lambda_i \mathcal{X}_{A_i} \quad \text{ donde } A_i = s^{ - 1}(\{\lambda_i\}) = \left\{x \in X : s(x) = \lambda_i\right\}\\
+\end{align*}
+$$
+
+<EjemBox title="Ejercicio">
+
+*Demostrar que dado $(X, \Sigma, \mu)$ espacio de medida, $s : X \to \overline{\mathbb{R}}$ es una función simple medible sii para todo $i = 1, \dots , n$ se tiene que $A_i \in \Sigma$.*
+
+Para esto, consideramos los dos sentidos de la implicación:
+
+- **$\Rightarrow$)** Basta notar que para todo $i = 1, \dots , n$:
+$$
+\begin{align*}
+A_i = s^{ - 1}(\lambda_i) = \underbrace{\left\{x : s(x) \leq \lambda_i\right\}}_{\in \Sigma} \cap \underbrace{\left\{x : s(x) \geq \lambda_i\right\}}_{\in \Sigma} \in \Sigma
+\end{align*}
+$$
+- **$\Leftarrow$)** Como los $A_i$ son disjuntos dos a dos, el valor $\sum_{i = 1}^n \lambda_i \mathcal{X}_{A_i}(x)$ está bien definida para todo $x \in X$. Para todo $i$ se tiene que $A_i$ medible entonces:
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} \lambda_i \underbrace{\mathcal{X}_{A_i}(x)}_{\text{\tiny medible}} \quad \text{ es } \text{ medible}
+\end{align*}
+$$
+
+</EjemBox>
+
+### Parte positiva y negativa de una función. Definición
+Sea $f : X \to \overline{\mathbb{R}}$ una función, definimos la **parte positiva** como la función:
+$$
+\begin{align*}
+f^{ + }(x) = \max \{f(x), 0\} \quad \forall x \in X
+\end{align*}
+$$
+y llamamos **parte negativa** a la función:
+$$
+\begin{align*}
+f^{ - }(x) = - \left[f(x) - f^{ + }(x)\right] \quad \forall x \in X
+\end{align*}
+$$
+Así, se tiene que:
+$$
+\begin{align*}
+f = f^{ + } - f^{ - } \quad \text{ y } \quad |f| = f^{ + } + f^{ - }\\
+\end{align*}
+$$
+
+<EjBox title="Nota">
+
+Sea $f: X \to \overline{\mathbb{R}}$, para cada $x_0 \in X$ al menos uno de los valores $f^{ + }(x_0)$ y $f^{ - }(x_0)$ es no nulo.
+
+</EjBox>
+
+<EjBox title="Nota">
+
+Si $f : X \to \overline{\mathbb{R}}$ es medible entonces $f^{ + }$ y $f^{ - }$ son medibles.
+
+</EjBox>
+
+### Teorema
+Sea $(X, \Sigma, \mu)$ espacio de medida, para toda función medible $f: X \to [0, \infty]$ existe una sucesión de funciones simples medibles $\{s_n: X \to [0, \infty]\}_{n \in \mathbb{N}}$ tal que:
+
+1. $\forall n \in \mathbb{N}, \quad \forall x \in X$ se tiene que $0 \leq s_n(x) \leq s_{n + 1}(x) \leq f(x)$
+2. $\forall n \in \mathbb{N}, \quad \forall x \in X$ se tiene que $\exists \displaystyle  \lim_{n \to \infty} s_n(x) = f(x)$
+
+<DemBox title="Demostración">
+
+Para cada $n \in \mathbb{N}$ consideramos los conjuntos medibles:
+$$
+\begin{align*}
+E_n \coloneq f^{ - 1}([n, \infty]) \in \Sigma
+\end{align*}
+$$
+Y definimos los conjuntos disjuntos dos a dos:
+$$
+\begin{align*}
+E_{n, i} \coloneq f^{ - 1}\left(\left[\frac{i - 1}{2^n}, \frac{i}{2^n}\right)\right) \in \Sigma \quad \forall i = 1, \dots , n 2^n
+\end{align*}
+$$
+Definimos la sucesión de funciones simples medibles:
+$$
+\begin{align*}
+s_n(x) \coloneq \left[\displaystyle \sum_{i = 1}^{n2^n} \frac{i - 1}{2^n} \mathcal{X}_{E_{n, i}}(x)\right] + n \mathcal{X}_{E_n}(x) \quad \forall x \in X
+\end{align*}
+$$
+Para ver la convergencia, tomamos $x_0 \in X$ cualquiera y entonces se dan dos casos:
+
+- Si $f(x_0) = \infty$ entonces:
+$$
+\begin{align*}
+s_n(x_0) = n \xrightarrow[n \to \infty]{} \infty = f(x_0)
+\end{align*}
+$$
+- Si $0 \leq f(x_0) < \infty$ entonces, sea $m \in \mathbb{N}$ el natural más pequeño tal que $f(x_0) < m$:
+
+$$
+\begin{array}{ccccc}
+s_1(x_0) & s_2(x_0) & \ldots & s_{m - 1}(x_0) &  \leq s_m(x_0) \\
+ =  & = & & = &  \\
+1 &  < 2 &  < \dots  &  < m - 1 & 
+\end{array}
+$$
+
+Y para $n \geq m$ denotando $i_n$ el único natural $1 \leq i_n \leq n 2^n$ tal que:
+$$
+\begin{align*}
+f(x_0) \in \left[\frac{i_n - 1}{2^n}, \frac{i_n}{2^n}\right) = \left[\frac{2i_n - 2}{2^{n + 1}}, \frac{2i_n - 1}{2^{n + 1}}\right) \cup \left[\frac{2i_n - 1}{2^{n + 1}}, \frac{2i_n}{2^{n + 1}}\right)
+\end{align*}
+$$
+se tiene que:
+$$
+\begin{align*}
+s_n(x_0) = \frac{i_n - 1}{2^n} & \implies s_{n + 1}(x) \in \left\{\frac{2i_n - 2}{2^{n + 1}}, \frac{2i_n - 1}{2^{n + 1}} \right\} \implies \\[3ex]
+& \implies s_{n + 1}(x_0) \geq \frac{2i_n - 2}{2^{n + 1}} = s_n(x_0) \implies \\[3ex]
+& \implies \frac{i_n - 1}{2^n} = s_n(x_0) \leq f(x_0) < \frac{i_n}{2^n} = \frac{i_n - 1}{2^n} + \frac{1}{2^n} 
+\end{align*}
+$$
+Como $(s_n(x_0))_{n \in \mathbb{N}}$ es creciente entonces:
+$$
+\begin{align*}
+\exists \lim_{n \to \infty} s_n(x_0) = l
+\end{align*}
+$$
+Si $n \to \infty$ entonces:
+$$
+\begin{align*}
+l \leq f(x_0) \leq l + 0
+\end{align*}
+$$
+
+</DemBox>
+
+<EjBox title="Observación">
+
+Si $f$ es acotada (en $\mathbb{R}$), la convergencia de $s_n$ a $f$ en la demostración es uniforme.
+
+</EjBox>
