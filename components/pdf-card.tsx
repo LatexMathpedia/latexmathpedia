@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type PDFCardProps = {
     title: string;
@@ -15,6 +16,7 @@ type PDFCardProps = {
 function PDFCard({ title, url, date, tag }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
     const toast = useToast();
+    const router = useRouter();
 
     // Función para procesar el título y separarlo en partes
     const getTitleParts = () => {
@@ -69,12 +71,12 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
         return colors[index];
     };
 
-    function handleClick() {
+    function handleClick(e: React.MouseEvent) {
         if (!isAuthenticated) {
+            e.preventDefault();
             toast.error("Debes iniciar sesión para acceder a los archivos PDF. Los blogs son de acceso libre.");
-            return false;
+            router.push('/auth/login');
         }
-        return true;
     }
 
     return (
@@ -105,27 +107,27 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
                 </div>
 
                 <div className="mt-auto">
-                    <Button
-                        variant="default"
-                        size="sm"
-                        className="w-full"
-                        asChild
-                        onClick={handleClick}
-                    >
-                        {isAuthenticated ? (
+                    {isAuthenticated ? (
+                        <Button
+                            variant="default"
+                            size="sm"
+                            className="w-full cursor-pointer"
+                            asChild
+                        >
                             <a href={url} target="_blank" rel="noopener noreferrer">
                                 Ver PDF
                             </a>
-                        ) : (
-                            <Link
-                                href="/auth/login"
-                                onClick={handleClick}
-                                className="cursor-pointer"
-                            >
-                                Iniciar sesión para ver PDF
-                            </Link>
-                        )}
-                    </Button>
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="default"
+                            size="sm"
+                            className="w-full cursor-pointer"
+                            onClick={handleClick}
+                        >
+                            Iniciar sesión para ver PDF
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>
