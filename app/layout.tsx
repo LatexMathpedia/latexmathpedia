@@ -127,7 +127,7 @@ export default function RootLayout({
         <meta property="og:image:alt" content="MathTexpedia Logo" />
         <meta name="twitter:image" content="https://mathtexpedia.es/icon-meta.png" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6477110291995241"
-     crossorigin="anonymous"></script>
+     crossOrigin="anonymous"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
