@@ -57,7 +57,7 @@ function getBlogPosts(baseUrl: string): MetadataRoute.Sitemap {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mathtexpedia.es';
-  const appDir = path.join(process.cwd(), 'app')
+  const appDir = path.join(process.cwd(), 'app');
 
   const staticPages = getPages(appDir, baseUrl);
   const blogPosts = getBlogPosts(baseUrl);
