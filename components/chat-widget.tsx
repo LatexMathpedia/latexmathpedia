@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/input-group"
 import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast";
+import { MessageContent } from "./message-content";
+import { Button } from "./ui/button";
 
 
 interface Message {
@@ -43,6 +45,31 @@ export function ChatWidget() {
             textareaRef.current?.focus();
         }
     }, [open]);
+
+    // Persist messages in Session Storage
+    useEffect(() => {
+        if (open) {
+            const savedMessages = sessionStorage.getItem("chat-messages");
+            if (savedMessages) {
+                try {
+                    setMessages(JSON.parse(savedMessages));
+                } catch (error) {
+                    console.error("Error parsing saved messages:", error);
+                }
+            }
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (messages.length > 0) {
+            sessionStorage.setItem("chat-messages", JSON.stringify(messages));
+        }
+    }, [messages]);
+
+    const clearHistory = () => {
+        setMessages([]);
+        sessionStorage.removeItem("chat-messages");
+    }
 
     const sendMessage = async () => {
         if (!input.trim() || isLoading) return;
@@ -136,9 +163,7 @@ export function ChatWidget() {
                                                 : 'bg-muted text-foreground'
                                             }`}
                                     >
-                                        <p className="text-sm whitespace-pre-wrap wrap-break-word">
-                                            {msg.content}
-                                        </p>
+                                        <MessageContent content={msg.content} />
                                     </div>
                                 </div>
                             ))
@@ -172,11 +197,20 @@ export function ChatWidget() {
                                     className="resize-none"
                                 />
                             </InputGroupAddon>
-                            <InputGroupAddon align="block-end">
+                            <InputGroupAddon align="block-end" className="flex justify-end">
+                                {/* Limpiar historial */}
+                                <Button
+                                    variant="destructive"
+                                    className="rounded-full hover:cursor-pointer ml-2 h-8"
+                                    onClick={clearHistory}
+                                    disabled={messages.length === 0}
+                                    aria-label="Limpiar historial de chat"
+                                >
+                                    Limpiar mensajes
+                                </Button>
                                 <InputGroupButton
                                     variant="default"
-                                    className="rounded-full hover:cursor-pointer"
-                                    size="icon-xs"
+                                    className="rounded-full hover:cursor-pointer h-8 w-8"
                                     onClick={sendMessage}
                                     disabled={!input.trim() || isLoading}
                                 >
