@@ -138,7 +138,8 @@ export function ChatWidget() {
                         <div className="flex items-center gap-2">
                             <BotMessageSquare className="w-5 h-5" />
                             <h3 className="font-semibold">{chatName}</h3>
-                        </div                        <button
+                        </div>
+                        <button
                             onClick={() => setOpen(false)}
                             className="rounded-full p-1 hover:bg-primary-foreground/20 transition-colors hover:cursor-pointer"
                             aria-label="Cerrar chat"
