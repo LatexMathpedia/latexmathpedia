@@ -121,6 +121,12 @@ export function ChatWidget() {
         }
     }
 
+    const randomChatName = () => {
+        const names = ["Cabezón", "A.Abejita", "BlackHill", "Tomatitos", "EEEEste CUUURSO", "Batman", "Asistente Heurístico", "Alexelcapo", "Comepalomas", "Chiwawa"];
+
+        return names[Math.floor(Math.random() * names.length)];
+    }
+
     return (
         <div className="flex align-end justify-end w-full max-w-sm gap-6 z-50 fixed bottom-4 right-4 max-h-[80vh]">
             {open ? (
@@ -129,7 +135,7 @@ export function ChatWidget() {
                     <div className="flex items-center justify-between p-4 border-b bg-primary text-primary-foreground rounded-t-lg">
                         <div className="flex items-center gap-2">
                             <BotMessageSquare className="w-5 h-5" />
-                            <h3 className="font-semibold">Asistente MathTexPedia</h3>
+                            <h3 className="font-semibold">{randomChatName()}</h3>
                         </div>
                         <button
                             onClick={() => setOpen(false)}
