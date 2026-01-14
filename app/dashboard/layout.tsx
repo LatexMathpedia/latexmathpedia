@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/sidebar"
 import { FilterProvider } from "@/contexts/filter-context"
 import { SearchProvider } from "@/contexts/search-context"
+import { ChatWidget } from "@/components/chat-widget"
 
 export const iframeHeight = "800px"
 
 export const description = "A sidebar with a header and a search form."
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  // El dashboard ahora es de acceso libre, solo las áreas de admin requieren autenticación
   return (
     <div className="[--header-height:calc(--spacing(14))]">
       <SearchProvider>
@@ -32,6 +32,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </SidebarInset>
             </div>
           </SidebarProvider>
+
+          <ChatWidget />
         </FilterProvider>
       </SearchProvider>
     </div>
