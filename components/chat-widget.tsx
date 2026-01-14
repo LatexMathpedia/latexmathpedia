@@ -122,9 +122,9 @@ export function ChatWidget() {
     }
 
     return (
-        <div className="flex align-end justify-end w-full max-w-sm gap-6 z-50 fixed bottom-4 right-4">
+        <div className="flex align-end justify-end w-full max-w-sm gap-6 z-50 fixed bottom-4 right-4 max-h-[80vh]">
             {open ? (
-                <div className="flex flex-col bg-background border rounded-lg shadow-xl w-full max-w-md h-125">
+                <div className="flex flex-col bg-background border rounded-lg shadow-xl w-full max-w-md h-auto">
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b bg-primary text-primary-foreground rounded-t-lg">
                         <div className="flex items-center gap-2">

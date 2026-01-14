@@ -15,7 +15,7 @@ export function MessageContent({ content }: MessageContentProps) {
                         key={index}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline hover:text-primary"
+                        className="underline text-chart-2 hover:text-chart-3"
                     >
                         {part}
                     </a>
