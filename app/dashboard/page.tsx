@@ -195,7 +195,7 @@ function WelcomePage() {
 
   return (
     <>
-      <div className="p-8 max-w-[1300px] mx-auto">
+      <div className="p-8 max-w-325 mx-auto">
         <div className="bg-muted/50 rounded-xl w-full h-32" />
         <section className="mt-8">
           <div className="flex items-center justify-between mb-4">

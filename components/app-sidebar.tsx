@@ -90,7 +90,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Web e interfaces",
+          title: "Web e Interfaces",
           url: "#",
         },
         {
