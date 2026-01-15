@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@pluginº "@tailwindcss/typography";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
