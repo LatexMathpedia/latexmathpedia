@@ -177,12 +177,14 @@ export function ChatWidget() {
         setInput("");
         setIsLoading(true);
 
+        // Call API with cookie for session management
         try {
             const response = await fetch(`${apiUrl}/chatbot/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     message: input,
                     conversationHistory: messages.slice(-6), // Last 6 messages
