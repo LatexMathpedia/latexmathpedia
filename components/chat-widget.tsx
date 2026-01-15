@@ -5,7 +5,6 @@ import {
     InputGroup,
     InputGroupAddon,
     InputGroupButton,
-    InputGroupText,
     InputGroupTextarea,
 } from "@/components/ui/input-group"
 import { useEffect, useRef, useState } from "react"
@@ -19,16 +18,62 @@ interface Message {
     content: string;
 }
 
+interface RateLimitData {
+    dailyCount: number,
+    currentDate: string,
+    minuteCount: number,
+    minuteResetTime: number,
+}
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
+const getCurrentDate = (): string => {
+    const now = new Date();
+    return now.toISOString().split('T')[0]; // YYYY-MM-DD
+}
 
 export function ChatWidget() {
     const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [rateLimitData, setRateLimitData] = useState<RateLimitData>({
+        dailyCount: 0,
+        currentDate: getCurrentDate(),
+        minuteCount: 0,
+        minuteResetTime: Date.now() + 60000,
+    });
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const toast = useToast();
+    const MAX_MESSAGES_PER_MINUTE = 2;
+    const MAX_MESSAGES_PER_DAY = 10;
+
+    // Load rate limit data from Local Storage
+    useEffect(() => {
+        const savedRateLimit = localStorage.getItem("chat-rate-limit");
+        if (savedRateLimit) {
+            try {
+                const parsed = JSON.parse(savedRateLimit);
+                if (parsed.currentDate !== getCurrentDate()) {
+                    setRateLimitData({
+                        ...parsed,
+                        dailyCount: 0,
+                        currentDate: getCurrentDate(),
+                    });
+                } else {
+                    setRateLimitData(parsed);
+                }
+            } catch (error) {
+                console.error("Error parsing rate limit data:", error);
+            }
+        }
+    }, []);
+
+    // Save rate limit data to Local Storage
+    useEffect(() => {
+        localStorage.setItem("chat-rate-limit", JSON.stringify(rateLimitData));
+    }, [rateLimitData]);
 
     // Function to scroll to the bottom of the messages
     const scrollToBottom = () => {
@@ -71,7 +116,60 @@ export function ChatWidget() {
         sessionStorage.removeItem("chat-messages");
     }
 
+    function checkRateLimits(): boolean {
+        const now = Date.now();
+        const today = getCurrentDate();
+        let updatedRateLimit = { ...rateLimitData };
+
+        if (updatedRateLimit.currentDate !== today) {
+            updatedRateLimit.dailyCount = 0;
+            updatedRateLimit.currentDate = today;
+        }
+
+        if (now > updatedRateLimit.minuteResetTime) {
+            updatedRateLimit.minuteCount = 0;
+            updatedRateLimit.minuteResetTime = now + 60000; // Next minute
+        }
+
+        if (updatedRateLimit.dailyCount >= MAX_MESSAGES_PER_DAY) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            const hoursLeft = Math.ceil((tomorrow.getTime() - now) / (1000 * 60 * 60));
+
+            const errorMessage: Message = {
+                role: 'assistant',
+                content: `Has alcanzado el límite diario de ${MAX_MESSAGES_PER_DAY} mensajes. Por favor, inténtalo de nuevo en ${hoursLeft} horas.`,
+            };
+            setMessages(prev => [...prev, errorMessage]);
+            return true;
+        }
+
+        if (updatedRateLimit.minuteCount >= MAX_MESSAGES_PER_MINUTE) {
+            const secondsLeft = Math.ceil((updatedRateLimit.minuteResetTime - now) / 1000);
+
+            const errorMessage: Message = {
+                role: 'assistant',
+                content: `Has alcanzado el límite de ${MAX_MESSAGES_PER_MINUTE} mensajes por minuto. Por favor, inténtalo de nuevo en ${secondsLeft} segundos.`,
+            };
+            setMessages(prev => [...prev, errorMessage]);
+            return true;
+        }
+
+        // Update rate limit data
+        updatedRateLimit.dailyCount += 1;
+        updatedRateLimit.minuteCount += 1;
+        setRateLimitData(updatedRateLimit);
+        return false;
+    }
+
     const sendMessage = async () => {
+        // Rate limiting
+        if (checkRateLimits()) {
+            return;
+        }
+
+        // Send message
         if (!input.trim() || isLoading) return;
 
         const userMessage: Message = { role: 'user', content: input };
