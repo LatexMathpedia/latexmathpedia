@@ -30,7 +30,7 @@ export function DemBox({ title, children }: DemBoxProps) {
         <span className="text-xl">📐</span>
         <span dangerouslySetInnerHTML={{ __html: renderedTitle }} />
       </h4>
-      <div className="text-gray-700 dark:text-gray-300 prose prose-sm max-w-none [&_.katex-display]:overflow-x-auto [&_.katex-display]:max-w-full">
+      <div className="text-gray-700 dark:text-gray-300 prose prose-sm max-w-none [&_.katex-display]:overflow-x-auto">
         {children}
       </div>
     </div>

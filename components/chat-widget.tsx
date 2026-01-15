@@ -37,6 +37,10 @@ export function ChatWidget() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [chatName] = useState(() => {
+        const names = ["Cabezón", "A.Abejita", "BlackHill", "Tomatitos", "EEEEste CUUURSO", "Batman", "Asistente Heurístico", "Alexelcapo", "Comepalomas", "Chiwawa", "Jordaneza"];
+        return names[Math.floor(Math.random() * names.length)];
+    });
     const [rateLimitData, setRateLimitData] = useState<RateLimitData>({
         dailyCount: 0,
         currentDate: getCurrentDate(),
@@ -221,16 +225,8 @@ export function ChatWidget() {
         }
     }
 
-    const randomChatName = () => {
-        const names = ["Cabezón", "A.Abejita", "BlackHill", "Tomatitos", "EEEEste CUUURSO", "Batman", "Asistente Heurístico", "Alexelcapo", "Comepalomas", "Chiwawa", "Jordaneza"];
-
-        return names[Math.floor(Math.random() * names.length)];
-    }
-
-    const chatName = randomChatName();
-
     return (
-        <div className="flex align-end justify-end w-full max-w-sm gap-6 z-50 fixed bottom-4 right-4 max-h-[80vh]">
+        <div className="flex align-end justify-end w-[90%] md:w-full max-w-sm gap-6 z-50 fixed bottom-4 right-4 max-h-[80vh]">
             {open ? (
                 <div className="flex flex-col bg-background border rounded-lg shadow-xl w-full max-w-md h-auto">
                     {/* Header */}
