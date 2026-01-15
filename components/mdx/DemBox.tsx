@@ -25,7 +25,7 @@ export function DemBox({ title, children }: DemBoxProps) {
   const renderedTitle = renderLatexInTitle(title);
   
   return (
-    <div className="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-950/30 p-6 my-6 rounded-r-lg">
+    <div className="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-950/30 p-6 my-6 rounded-r-lg max-w-full">
       <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
         <span className="text-xl">📐</span>
         <span dangerouslySetInnerHTML={{ __html: renderedTitle }} />
