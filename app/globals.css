@@ -141,3 +141,7 @@
 .pdf-title-tertiary {
   @apply line-clamp-1 opacity-70;
 }
+
+.katex-display {
+  overflow-x: scroll;
+}
