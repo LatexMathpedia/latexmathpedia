@@ -6,12 +6,22 @@ interface MessageContentProps {
 }
 
 export function MessageContent({ content }: MessageContentProps) {
+    const escapeHtml = (unsafe: string): string =>
+        unsafe
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
     const preprocessContent = (text: string): string => {
         const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
         
         return text.replace(markdownLinkRegex, (match, linkText, url) => {
             if (linkText.includes('(') || linkText.includes(')')) {
-                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${linkText}</a>`;
+                const safeLinkText = escapeHtml(linkText);
+                const safeUrl = escapeHtml(url);
+                return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${safeLinkText}</a>`;
             }
             return match;
         });
