@@ -43,7 +43,8 @@ const categories = {
     "Arquitectura y Sistemas",
     "Ingeniería del Software",
     "Bases de Datos",
-    "Redes y Seguridad"
+    "Redes y Seguridad",
+    "Web e Interfaces"
   ]
 }
 
