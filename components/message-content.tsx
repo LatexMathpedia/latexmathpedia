@@ -14,11 +14,20 @@ export function MessageContent({ content }: MessageContentProps) {
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
 
+    const isSafeUrl = (url: string): boolean => {
+        const trimmed = url.trim().toLowerCase();
+        return trimmed.startsWith('http://') || trimmed.startsWith('https://');
+    };
+
     const preprocessContent = (text: string): string => {
         const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-        
+
         return text.replace(markdownLinkRegex, (match, linkText, url) => {
             if (linkText.includes('(') || linkText.includes(')')) {
+                if (!isSafeUrl(url)) {
+                    // If the URL is not safe, render the text without turning it into a link.
+                    return linkText;
+                }
                 const safeLinkText = escapeHtml(linkText);
                 const safeUrl = escapeHtml(url);
                 return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${safeLinkText}</a>`;
