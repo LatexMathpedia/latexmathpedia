@@ -34,7 +34,7 @@ export default function BlogCard({
           </CardTitle>
         </Link>
       </CardHeader>
-      <CardContent className="p-4 pt-2 flex-grow">
+      <CardContent className="p-4 pt-2 grow">
         <p className="text-sm text-muted-foreground line-clamp-2">
           {description}
         </p>
