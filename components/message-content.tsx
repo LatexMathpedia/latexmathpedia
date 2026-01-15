@@ -22,7 +22,7 @@ export function MessageContent({ content }: MessageContentProps) {
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                    // Personaliza los componentes de Markdown
+                    // Customize the Markdown components
                     a: ({ node, ...props }) => (
                         <a
                             {...props}
