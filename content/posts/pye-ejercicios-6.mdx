@@ -1,0 +1,1039 @@
+---
+title: "Ejercicios Resueltos Probabilidad y Estadística - Parte VI"
+date: "2026-01-29"
+description: "Resolución de ejercicios propuestos sobre variables aleatorias y funciones de distribución."
+tags: ["Probabilidad y Estadística", "Variables Aleatorias", "Funciones de Distribución"]
+---
+
+## Exámenes
+### Examen 1
+#### Ejercicio 1 *Sean $P$ y $Q$ dos puntos sobre los ejes coordenados $X$ e $Y$ respectivamente tal y como indica el dibujo. Estos puntos definen dos variables aleatorias independientes con distribución uniforme en el intervalo $[0, 1]$.*
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_12.svg)
+
+- *Planteamiento del problema, definiendo las variables correspondientes, indicando su función de densidad marginal y conjunta y el soporte.*
+
+<DemBox title="Demostración">
+
+Se definen dos variables aleatorias $X$ e $Y$ independientes tales que:
+
+$$
+\begin{align*}
+X \rightsquigarrow U[0,1] \quad Y \rightsquigarrow U[0,1]
+\end{align*}
+$$
+
+La función de densidad marginal de $X$ es:
+
+$$
+\begin{align*}
+f_X(x) = \left\{
+\begin{array}{ll}
+1 & \text{ si } x \in [0, 1]\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Análogamente, la de $Y$ es:
+
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+1 & \text{ si } y \in [0, 1]\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+La función de densidad conjunta es:
+
+$$
+\begin{align*}
+f(x, y) = f_X(x) \cdot f_Y(y) = \left\{
+\begin{array}{ll}
+1 & \text{ si } x, y \in [0, 1]\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+El soporte de la función de densidad conjunta es, claramente, el cuadrado unidad, es decir:
+
+$$
+\begin{align*}
+\{(x, y) \in \mathbb{R}^2 \colon 0 \leq x \leq 1, 0 \leq y \leq 1\}
+\end{align*}
+$$
+
+</DemBox>
+- *Obtener la función de densidad conjunta de una variable aleatoria bidimensional $Z, T$ siendo $Z$ la distancia euclídea de $P$ a $Q$ y $T$ el ángulo que forma la recta que une ambos puntos con el eje $X$*
+
+<DemBox title="Demostración">
+
+Considerar la distancia euclídea como, dados dos puntos $A = (x_1, y_1)$ y $B = (x_2, y_2)$ en el plano:
+
+$$
+\begin{align*}
+d(A, B) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
+\end{align*}
+$$
+
+Y las definiciones trigonométricas siguientes:
+
+$$
+\begin{align*}
+\sin \theta = \dfrac{\text{\small cateto opuesto}}{\text{\small hipotenusa}}  \quad \cos \theta = \dfrac{\text{\small cateto adyacente}}{\text{\small hipotenusa}} \quad \tan \theta = \dfrac{\text{\small cateto opuesto}}{\text{\small cateto adyacente}}
+\end{align*}
+$$
+
+Así, vamos a hallar primero la función de densidad de $Z$, es decir, la distancia euclídea entre $P$ y $Q$. Notar que, cualquier punto $Q$ en el plano se puede expresar como $(0, y)$ y cualquier punto $P$ como $(x, 0)$. Así, la distancia euclídea entre ambos puntos es:
+
+$$
+\begin{align*}
+d(P, Q) = \sqrt{x^2 + y^2}
+\end{align*}
+$$
+
+Esta es la variable aleatoria $Z$, es decir:
+
+$$
+\begin{align*}
+Z = \sqrt{X^2 + Y^2}
+\end{align*}
+$$
+
+Ahora, para hallar la función de densidad $T$, tenemos que viene determinada por el ángulo de la recta que une $P$ y $Q$ con el eje $X$. Así, este ángulo es:
+
+$$
+\begin{align*}
+T = \arctan \left(\dfrac{Y}{X}\right) 
+\end{align*}
+$$
+
+Ahora, vamos a ver cual es el soporte de estas dos variables $(Z, T)$. Al recorrer $[0, 1] \times [0,1]$ la distancia euclídea (el valor de $Z$) va de $0$ a:
+
+$$
+\begin{align*}
+\max \left\{\sqrt{x^2 + y^2} \text{ tq }(x, y) \in [0, 1] \times [0, 1]\right\} = \sqrt{1^2 + 1^2} = \sqrt{2}
+\end{align*}
+$$
+
+Es decir, que el soporte de $Z$ es $[0, \sqrt{2}]$.
+
+Para hallar el de $T$ tenemos que, al recorrer dicho cuadrado, el ángulo va de $0$ a $\frac{\pi}{2}$ por lo que el soporte de $T$ es $[0, \frac{\pi}{2}]$.
+
+Así, el soporte del $(Z, T)$ es:
+
+$$
+\begin{align*}
+\{(z, t) \in \mathbb{R}^2 \text{ tq } 0 \leq z \leq \sqrt{2}, 0 \leq t \leq \frac{\pi}{2}\}
+\end{align*}
+$$
+
+Ahora, vamos a hallar la densidad conjunta en términos de $Z$ y $T$, para ello, usamos el jacobiano de la transformación. Vamos a hallar la inversa de la transformación, es decir:
+
+$$
+\begin{align*}
+Z = \sqrt{X^2 + Y^2} \implies Z^2 = X^2 + Y^2
+\end{align*}
+$$
+
+Por otra parte:
+
+$$
+\begin{align*}
+T = \arctan \left(\dfrac{Y}{X}\right) \implies \tan T = \dfrac{Y}{X} \implies Y = X \tan T
+\end{align*}
+$$
+
+Así, sustituyendo en la ecuación de $Z^2$, tenemos que:
+
+$$
+\begin{align*}
+X^2 + (X \tan T)^2 = Z^2 & \implies X^2 + X^2 \tan^2 T = Z^2 \implies\\[2ex]
+& \implies  X^2(1 + \tan^2 T) = Z^2
+\end{align*}
+$$
+
+Así, despejando $X$ tenemos que:
+
+$$
+\begin{align*}
+X = \dfrac{Z}{\sqrt{(1 + \tan^2(T))}}
+\end{align*}
+$$
+
+(como he encontrado que $\sec^2(T) = 1 + \tan^2(T)$) podemos simplificar todo lo anterior como:
+
+$$
+\begin{align*}
+X = \dfrac{Z}{\sec T} = Z \cos T
+\end{align*}
+$$
+
+Ahora, falta encontrar esta misma relación para $Y$, para ello, tenemos que:
+
+$$
+\begin{align*}
+Y = X \tan T \implies Y = Z \cos T \tan T = Z \cos T \dfrac{\sin T}{\cos T} = Z \sin T
+\end{align*}
+$$
+
+Así, hemos encontrado las relaciones inversas de la transformación y, por tanto, al ser ambas variables aleatorias continuas, podemos hallar el determinante del jacobiano de la transformación que viene dado por:
+
+$$
+\begin{align*}
+|J| &= \left|\begin{array}{cc}
+\dfrac{\partial X}{\partial Z} & \dfrac{\partial X}{\partial T}\\[2ex]
+\dfrac{\partial Y}{\partial Z} & \dfrac{\partial Y}{\partial T}   
+\end{array} \right| = \left|\begin{array}{cc}
+\cos T & -Z \sin T\\[2ex]
+\sin T & Z \cos T
+\end{array} \right| =\\[2ex]
+& = \cos T \cdot Z \cos T - ( - Z\sin T \cdot \sin T) =\, Z \cos^2T + Z \sin^2T = \\[2ex]
+& = Z (\cos^2T + \sin^2T) = Z
+\end{align*}
+$$
+
+Por tanto, la densidad conjunta de $Z$ y $T$ es:
+
+$$
+\begin{align*}
+f_{Z,T}(z, t) = f_{X, Y}(x, y) \cdot |J| = \left\{
+\begin{array}{ll}
+Z & \text{ si } (z, t) \in \left[0, \sqrt{2}\right] \times \left[0, \dfrac{\pi}{2}\right]\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+- *Dibujar el dominio/recinto de la función obtenida*
+
+<DemBox title="Demostración">
+
+$$
+\begin{align*}
+\{(z, t) \in \mathbb{R}^2 \text{ tq } 0 \leq z \leq \sqrt{2}, 0 \leq t \leq \frac{\pi}{2}\}
+\end{align*}
+$$
+
+</DemBox>
+- *Calcular la esperanza de la variable $2Z + T$ (con el cálculo concreto, específico para dicha distribución)*
+
+<DemBox title="Demostración">
+
+Notar que la esperanza de una variable aleatoria bidimensional se calcula como:
+
+$$
+\begin{align*}
+E(2Z + T) & = \int_{\mathbb{R}^2} (2z + t) \cdot f_{Z, T}(z, t) \, dz \, dt = \int_{0}^{\sqrt{2}} \int_{0}^{\frac{\pi}{2}} (2z + t) \cdot z \, dt \, dz = \\[2ex]
+& = \int_{0}^{\sqrt{2}} \left[2z^2t + \dfrac{t^2z}{2}\right]_{0}^{\frac{\pi}{2}} \, dz = \int_{0}^{\sqrt{2}} \left(\pi z^2 + \dfrac{\pi^2 z}{8} \right) \, dz = \\[2ex]
+& = \left[\dfrac{\pi z^3}{3} + \dfrac{\pi^2 z^2}{16} \right]_0^{\sqrt{2}} = \dfrac{2\pi \sqrt{2}}{3} + \dfrac{\pi^2}{8}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Ejercicio 2
+*Sea $(X, Y)$ una variable aleatoria con función de densidad conjunta:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+cx^2y & \text{ si } x^2 \leq y \leq 1\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+- *Calcular el valor de $c$*
+
+<DemBox title="Demostración">
+
+Para que $f(x, y)$ sea una función de densidad de una variable aleatoria tiene que cumplir que:
+
+- $f(x, y) \geq 0 \quad \forall (x, y) \in \mathbb{R}^2$ como $x^2 \geq 0$ e $y \geq x^2$ entonces:
+
+$$
+\begin{align*}
+x^2 y \geq 0 \quad \text{ si escogemos } c \geq 0 \implies cx^2y \geq 0
+\end{align*}
+$$
+
+- $\int_{\mathbb{R}^2} f(x, y) \, dx \, dy = 1$, es decir:
+
+$$
+\begin{align*}
+\iint_{\mathbb{R}^2} f(x, y) \, dx \, dy & = \int_{ - 1}^{1} \int_{u^2}^{1} f(u, v) \, dv \, du = \int_{ - 1}^1 \int_{u^2}^{1} cu^2v \, dv \, du\\[2ex]
+& =\int_{ - 1}^1 \left[\dfrac{cu^2v^2}{2}\right]_{u^2}^1 \, du = \dfrac{c}{2} \int_{ - 1}^1 \left(u^2 - u^6 \right) \, du =\\[2ex]
+& = \dfrac{c}{2} \left[\dfrac{u^3}{3} - \dfrac{u^7}{7}\right]_{ - 1}^1 = \dfrac{c}{2} \left(\dfrac{1}{3} - \dfrac{1}{7} + \dfrac{1}{3} - \dfrac{1}{7}\right) = \\[2ex]
+& = \dfrac{c}{2} \cdot \dfrac{8}{21} = \dfrac{4c}{21}
+\end{align*}
+$$
+
+Así, para que sea función de densidad, se tiene que cumplir que:
+
+$$
+\begin{align*}
+\dfrac{4c}{21} = 1 \implies c = \dfrac{21}{4}
+\end{align*}
+$$
+
+</DemBox>
+- *Calcular la probabilidad de que $X \geq Y$*
+<DemBox title="Demostración">
+
+Para hallar la probabilidad de que $X \geq Y$ tenemos que calcular:
+
+$$
+\begin{align*}
+P(X \geq Y) & = \iint_{X > Y} f(x, y) \, dx \, dy
+\end{align*}
+$$
+
+Como el soporte donde $X > Y$ viene restringido por $x^2 \leq y \leq 1$, tenemos que:
+
+$$
+\begin{align*}
+y \in [x^2, 1] \implies x \in [0, 1] \quad y \in [0, 1]
+\end{align*}
+$$
+
+Así, el area a calcular viene dada por:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_13.svg)
+
+Así, lo que queremos integrar es:
+
+$$
+\begin{align*}
+P(X > Y) & = \int_0^1 \int_{x^2}^x f(x, y) \, dy \, dx = \int_0^1 \int_{x^2}^x \dfrac{21}{4}x^2y \, dy \, dx = \\[2ex]
+& = \dfrac{21}{4} \int_0^1 \left[\dfrac{x^2y^2}{2}\right]_{x^2}^x \, dx = \dfrac{21}{8} \int_0^1 \left(x^4 - x^6\right) \, dx = \\[2ex]
+& = \dfrac{21}{8} \left[\dfrac{x^5}{5} - \dfrac{x^7}{7}\right]_0^1 = \dfrac{21}{8} \left(\dfrac{1}{5} - \dfrac{1}{7}\right) = \dfrac{21}{8} \cdot \dfrac{2}{35} = \dfrac{3}{20}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Ejercicio 3
+*Una fábrica produce paquetes de margarina con un peso nominal del 160g. Debido a ciertas variables en el envasado, este valor fluctúa de un paquete a otro siguiendo una distribución normal. Sabemos que el 10\% de los paquetes producidos pesan menos de 160g, mientras que el 5\% pesa más de 162.5g.*
+
+- *Calcular la media y la desviación típica del peso de los paquetes con una precisión de 5 decimales:*
+
+<DemBox title="Demostración">
+
+Para hallar la media y la desviación típica de la variable aleatoria que mide el peso de los paquetes, definimos dicha variable aleatoria como $X$ y sabemos que:
+
+$$
+\begin{align*}
+X \rightsquigarrow N(\mu, \sigma)
+\end{align*}
+$$
+
+Además, sabemos que:
+
+$$
+\begin{align*}
+& P(X < 160) = 0.1\\[2ex]
+& P(X > 162.5) = 0.05 \implies P(X \leq 162.5) = 0.95
+\end{align*}
+$$
+
+Así, procedemos a tipificar para poder hallar los parámetros de la normal que define el comportamiento de $X$ siguiendo que:
+
+$$
+\begin{align*}
+P\left(\dfrac{X - \mu}{\sigma} < \dfrac{c - \mu}{\sigma}\right)
+\end{align*}
+$$
+
+Entonces, podemos aplicar esto a los dos valores que conocemos:
+
+$$
+\begin{align*}
+P(X < 160) & = P\left(\dfrac{X - \mu}{\sigma} \leq \dfrac{160 - \mu}{\sigma}\right) =\\[2ex]
+& = P\left(\mathcal{N}(0, 1) \leq \dfrac{160- \mu}{\sigma}\right) = 0.1 \implies \dfrac{160 - \mu}{\sigma} = -1.29\\[5ex]
+P(X < 162.5) & = P\left(\dfrac{X - \mu}{\sigma} \leq  \dfrac{162.5 - \mu}{\sigma}\right) = \\[2ex]
+& = P\left(\mathcal{N}(0, 1) \leq  \dfrac{162.5 - \mu}{\sigma}\right) = 0.95 \implies \dfrac{162.5 - \mu}{\sigma} = 1.65
+\end{align*}
+$$
+
+Así, podemos plantear el siguiente sistema de ecuaciones:
+
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}
+\dfrac{160 - \mu}{\sigma} = -1.29\\[1ex]
+\dfrac{162.5 - \mu}{\sigma} = 1.65
+\end{array}
+\right. \iff \left\{
+\begin{array}{l}
+\mu = 160 + 1.29\sigma\\[2ex]
+\mu = 162.5 - 1.65 \sigma
+\end{array}
+\right.
+\end{align*}
+$$
+
+Igualando tenemos que:
+
+$$
+\begin{align*}
+160 + 1.29\sigma = 162.5 - 1.65\sigma \iff - 2.5 = - 2.94 \sigma \iff \sigma = \dfrac{ - 2.5}{ - 2.94} = 0.85034
+\end{align*}
+$$
+
+Y ahora, sustituyendo en la primera ecuación:
+
+$$
+\begin{align*}
+\mu = 160 - 1.29 \cdot 0.85034 = 158.90306
+\end{align*}
+$$
+
+</DemBox>
+- *Sabemos que se producen 375000 paquetes de margarina por día y que el coste de producción de cada paquete viene dado por la función $0.00108X^2 + 0.5378X + 3.55$. Si tras un cambio en la producción este coste viene dado por $0.00078X^2 + 0.559X + 3.468$. Calcular el cambio en el coste medio de producción de cada paquete*
+
+<DemBox title="Demostración">
+
+Para calcular la diferencia del coste medio de producción de cada paquete podemos hallar la esperanza de ambas funciones definiendo como variables aleatorias a estas funciones:
+
+$$
+\begin{align*}
+Y = 0.00108X^2 + 0.5378X + 3.55 \quad \text{y} \quad Z = 0.00078X^2 + 0.559X + 3.468
+\end{align*}
+$$
+
+Así, para calcular la media o esperanza de $Y$ tenemos que:
+
+$$
+\begin{align*}
+E[Y] &= E[0.00108X^2 + 0.5378X + 3.55] = 0.00108E[X^2] + 0.5378E[X] + 3.55\\
+E[Z] &= E[0.00078X^2 + 0.559X + 3.468] = 0.00078E[X^2] + 0.559E[X] + 3.468
+\end{align*}
+$$
+
+Así, vamos a calcular tanto la esperanza de $X$ como la de $X^2$:
+
+$$
+\begin{align*}
+E[X] = \mu = 158.90306
+\end{align*}
+$$
+
+Como sabemos que $Var(X) = E[X^2] - E^2[X]$ entonces:
+
+$$
+\begin{align*}
+E[X^2] = Var(X) + E^2[X] = 0.85034^2 + 158.90306^2 = 252550.90556
+\end{align*}
+$$
+
+Así, tenemos que la variación del coste viene dada por:
+
+$$
+\begin{align*}
+\Delta[C] & = E[Z] - E[Y] = 0.00078E[X^2] + 0.559E[X] + 3.468 -\\[1ex] 
+&   - (0.00108E[X^2] + 0.5378E[X] + 3.55) = -4.28852
+\end{align*}
+$$
+
+</DemBox>
+- *Si se considera que un paquete es defectuoso si pesa menos de 155g o más de 162.5 y se guardan los paquetes en cajas de 10:*
+
+## Tema 2
+### Ejercicio 2
+*Una urna contiene 12 bolas de las cuales 6 son blancas, 4 negras y 2 rojas. Se extraen al azar 5 bolas con reemplazamiento. Calcular la probabilidad de obtener:*
+
+- *Exactamente 3 bolas blancas*
+<DemBox title="Demostración">
+
+Sea $(X_1, X_2, X_3)$ un vector aleatorio donde:
+
+$$
+\begin{align*}
+X_i = \text{nº de bolas } A_i
+\end{align*}
+$$
+
+donde $A_1$ son las blancas, $A_2$ las negras y $A_3$ las rojas. Así, tenemos que:
+
+$$
+\begin{align*}
+p_1 = P(A_1) = \dfrac{1}{2} \quad p_2 = P(A_2) = \dfrac{1}{3} \quad p_3 = P(A_3) = \dfrac{1}{6}
+\end{align*}
+$$
+
+Así, tenemos que $(X_1, X_2, X_3) \rightsquigarrow \mathcal{M}(5, \dfrac{1}{2}, \dfrac{1}{3}, \dfrac{1}{6})$. Así, la probabilidad de que se extraigan 3 bolas blancas es:
+
+$$
+\begin{align*}
+P(X_1 = 3)
+\end{align*}
+$$
+
+Y tenemos que $X_1 \rightsquigarrow B(5, \dfrac{1}{2})$
+
+</DemBox>
+- *2 bolas blancas, 1 negra y 2 rojas*
+<DemBox title="Demostración">
+
+$$
+\begin{align*}
+P(X_1 = 2, X_2 = 1, X_3 = 2)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 1
+*Sea $(X_1, X_2) \rightsquigarrow \mathcal{M}(n, p_1, p_2)$. Obtener la distribución de $X_2$ condicionada por un valor genérico de $X_1$*
+
+<DemBox title="Demostración">
+
+Queremos hallar la distribución de $X_2|_{X_1}$, suponemos que $X_2$ toma el valor $k \in \{0, \ldots, n\}$ y suponemos $X_1 = x_1$ entonces:
+
+$$
+\begin{align*}
+P(X_2 = k|_{X_1 = x_1}) & = \frac{P(X_1 = x_1 \cap X_2 = k)}{P(X_1 = x_1)} = \\[2ex]
+& = \dfrac{\dfrac{n!}{x_1!k!}{p_1}^{x_1} p_2^{k}}{\displaystyle \binom{n}{x_1} p_1^{x_1} (1 - p_1)^{n - x_1} } = \\[2ex]
+& = \dfrac{\dfrac{n!}{x_1!k!}{p_1}^{x_1} p_2^{k}}{\dfrac{n!}{x_1!(n - x_1)!} p_1^{x_1} (1 - p_1)^{n - x_1}} = \\[2ex]
+& =\dfrac{(n - x_1)!}{k! (1 - p_1)^{n - x_1}} \cdot p_2^k
+\end{align*}
+$$
+
+Entonces, la distribución vendrá dada por:
+
+$$
+\begin{align*}
+P(X_2 = k|_{X_1 = x_1}) = \left\{
+\begin{array}{ll}
+1 & \text{ si } k = n - x_1\\
+0 & \text{ si } k \neq n - x_1
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+*Que ocurre si la multinomial es de 3 y se pide la de X2 condicionada por X1*
+
+<DemBox title="Demostración">
+
+Sea $(X_1, X_2, X_3) \rightsquigarrow \mathcal{M}(n, p_1, p_2, p_3)$, queremos la distribución de $\left(X_2 |_{X_1 = x_1}\right)$, supongamos que $X_2 = k$ y $X_1 = x_1$ entonces:
+
+$$
+\begin{align*}
+P(X_2 = k|_{X_1 = x_1}) & = \dfrac{P(X_1 = x_1 \cap X_2 = k)}{P(X_1 = x_1)} = \dfrac{\dfrac{n!}{x_1!k!(n - x_1 - k)!} p_1^{x_1} p_2^k p_3^{n - x_1 - k}}{\dfrac{n!}{x_1!(n - x_1)!} p_1^{x_1} (1 - p_1)^{n - x_1}}\\[2ex]
+& = \dfrac{(n - x_1)!}{k! (n - x_1 - k)!} \cdot \dfrac{p_2^k p_3^{n - x_1 - k}}{(1 - p_1)^{n - x_1}}\\[2ex]
+\end{align*}
+$$
+
+Notamos que podemos reescribir la expresión anterior como:
+
+$$
+\begin{align*}
+P(X_2 = k|_{X_1 = x_1}) = \binom{n - x_1}{k} \left(\dfrac{p_2}{1 - p_1}\right)^k \left(\dfrac{p_3}{1 - p_1}\right)^{n - x_1 - k}
+\end{align*}
+$$
+
+Es decir, que es una binomial de la forma:
+
+$$
+\begin{align*}
+X_2 = k|_{X_1 = x_1} \rightsquigarrow B\left(n - x_1; \dfrac{p_2}{1 - p_1}\right)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Una urna contiene 12 bolas de las cuales 6 son blancas, 4 negras y 2 rojas. Se extraen al azar 5 bolas con reemplazamiento. Calcular la probabilidad de obtener:*
+
+- *3 bolas blancas:* 
+<DemBox title="Demostración">
+
+Sea $(X_1, X_2, X_3)$ un vector aleatorio donde:
+
+$$
+\begin{align*}
+X_i = \text{nº de bolas } A_i \quad \text{ con } \left\{
+\begin{array}{l}
+A_1 = \text{blancas}\\
+A_2 = \text{negras}\\
+A_3 = \text{rojas}
+\end{array}
+\right.
+\end{align*}
+$$
+
+y queremos ver la probabilidad de que $P(X_1 = 3)$. Como sabemos que los sucesos son independientes, podemos aplicar una multinomial:
+
+$$
+\begin{align*}
+P(X_1 = 3) & = \dfrac{5!}{3!2!} p_1^3 (1 - p_1)^2 = \dfrac{5!}{3!2!} \left(\frac{6}{12}\right)^3 \cdot \left(1 - \dfrac{6}{12}\right)^2 = \\[2ex]
+& = \dfrac{120}{12} \cdot \dfrac{1}{8} \cdot \dfrac{1}{4} = 10 \cdot \frac{1}{32} = \dfrac{5}{16}
+\end{align*}
+$$
+
+Así, la probabilidad de que se extraigan 3 bolas blancas es:
+
+$$
+\begin{align*}
+P(X_1 = 3) = \dfrac{5}{16} \approx 0.3125
+\end{align*}
+$$
+
+</DemBox>
+- *2 bolas blancas, 1 negra y 2 rojas:* 
+<DemBox title="Demostración">
+
+Siguiendo el mismo planteamiento que antes, tenemos que:
+
+$$
+\begin{align*}
+P(X_1 = 2, X_2 = 1, X_3 = 2) & = \dfrac{5!}{2!1!2!} p_1^2 p_2^1 p_3^2 = \dfrac{120}{4} \cdot \left(\frac{1}{2}\right)^2 \cdot \left(\frac{1}{3}\right)^1 \cdot \left(\frac{1}{6}\right)^2 = \\[2ex]
+& = 30 \cdot \frac{1}{4} \cdot \frac{1}{3} \cdot \frac{1}{36} = 30 \cdot \dfrac{1}{432} = \dfrac{5}{72}
+\end{align*}
+$$
+
+Así, la probabilidad de que se extraigan 2 bolas blancas, 1 negra y 2 rojas es:
+
+$$
+\begin{align*}
+P(X_1 = 2, X_2 = 1, X_3 = 2) = \dfrac{5}{72} \approx 0.0694
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Sea $(X_i)$, $1 \leq i \leq 2$ dos variables aleatorias con distribución $\mathcal{N}(i, i)$ e independientes. Se define el vector $(Y_1, Y_2) = (X_1 + 2X_2, - X_1 + 4X_2)$. Determinar su función de densidad conjunta.*
+
+<DemBox title="Demostración">
+
+Partimos de las variables aleatorias:
+
+$$
+\begin{align*}
+X_1 \rightsquigarrow \mathcal{N}(1, 1) \quad \text{ y } \quad X_2 \rightsquigarrow \mathcal{N}(2, 2)
+\end{align*}
+$$
+
+que son independientes, lo que implica que su función de densidad conjunta es el producto de sus densidades marginales, es decir:
+
+$$
+\begin{align*}
+f_{(X_1, X_2)}(x_1, x_2) = f_{X_1}(x_1) \cdot f_{X_2}(x_2)
+\end{align*}
+$$
+
+donde tenemos que:
+
+$$
+\begin{align*}
+f_{X_1}(x_1) & = \dfrac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x_1 - 1)^2}\\
+f_{X_2}(x_2) & = \dfrac{1}{2\sqrt{2\pi}} e^{-\frac{1}{8}(x_2 - 2)^2}
+\end{align*}
+$$
+
+Por lo tanto:
+
+$$
+\begin{align*}
+f_{(X_1, X_2)}(x_1, x_2) &=\dfrac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x_1 - 1)^2} \dfrac{1}{2\sqrt{2\pi}} e^{-\frac{1}{8}(x_2 - 2)^2} = \\[2ex]
+& = \dfrac{1}{4\pi} e^{-\frac{1}{2}(x_1 - 1)^2 - \frac{1}{8}(x_2 - 2)^2}
+\end{align*}
+$$
+
+A continuación, se nos plantea la transformación:
+
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}
+Y_1 = X_1 + 2X_2 = g_1(X_1, X_2)\\
+Y_2 = -X_1 + 4X_2 = g_2(X_1, X_2)
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, lo que tenemos es que:
+
+$$
+\begin{align*}
+(\Omega, \mathcal{A}, P) & \xrightarrow{(X_1, X_2)} (\mathbb{R}^2, \mathcal{B}_{\mathbb{R}^2}, P_{(X_1, X_2)}) \xrightarrow[]{g} (\mathbb{R}^2, \mathcal{B}_{\mathbb{R}^2}, P_{g(X_1, X_2)})\\
+(\Omega, \mathcal{A}, P) & \xrightarrow[]{(Y_1, Y_2) = g(X_1, X_2)} (\mathbb{R}^2, \mathcal{B}_{\mathbb{R}^2}, P_{(Y_1, Y_2)})
+\end{align*}
+$$
+
+Para hallar la función de densidad de $Y_1, Y_2$ vamos a aplicar el teorema del cambio de variable. Para ello, vamos a ver que se cumplen las condiciones del teorema:
+
+- La función $g$ es biyectiva y diferenciable
+
+Para ver si $g$ es biyectiva, vamos a ver si existe la inversa para $g$, es decir, si podemos expresar $X_1$ y $X_2$ en función de $Y_1$ y $Y_2$:
+
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+Y_1 = X_1 + 2X_2\\[2ex]
+Y_2 = -X_1 + 4X_2
+\end{array}
+\right\} \implies \left\{
+\begin{array}{l}
+X_1 = \dfrac{2Y_1 - Y_2}{6}\\[2ex]
+X_2 = \dfrac{Y_2 + Y_1}{6}
+\end{array}
+\right.
+\end{align*}
+$$
+
+y claramente es diferenciable.
+- El jacobiano de la transformación es distinto de 0
+
+$$
+\begin{align*}
+J = \left|
+\begin{array}{ll}
+\dfrac{\partial X_1}{\partial g_1} & \dfrac{\partial X_1}{\partial g_2}\\[2ex]
+\dfrac{\partial X_2}{\partial g_1} & \dfrac{\partial X_2}{\partial g_2}
+\end{array}
+\right| = \left|
+\begin{array}{cc}
+\, \dfrac{2}{3} & -\dfrac{1}{3}\\[2ex]
+\, \dfrac{1}{6} & \dfrac{1}{6}
+\end{array}
+\right| = \dfrac{1}{9} + \dfrac{1}{18} = \dfrac{1}{6} \neq 0
+\end{align*}
+$$
+
+Entonces, la densidad conjunta de $(Y_1, Y_2)$ se obtiene aplicando la fórmula:
+
+$$
+\begin{align*}
+f_{(Y_1, Y_2)}(y_1, y_2) = f_{(X_1, X_2)}(x_1, x_2) \cdot |J|
+\end{align*}
+$$
+
+Sustituyendo en la fórmula tenemos que:
+
+$$
+\begin{align*}
+f_Y(y_1, y_2) & = f_{(X_1, X_2)}\left(\dfrac{2y_1 - y_2}{3}, \dfrac{y_2 + y_1}{6}\right) \cdot \dfrac{1}{6} = \\[2ex]
+& = \dfrac{1}{4 \cdot 6\pi} e^{\displaystyle \left[-\frac{1}{2}\left(\dfrac{2y_1 - y_2}{3} - 1\right)^2 - \frac{1}{8}\left(\dfrac{y_2 + y_1}{6} - 2\right)^2\right]} = \\[2ex]
+& = \dfrac{1}{24\pi} e^{\displaystyle -\frac{1}{2}\left[\left(\dfrac{2y_1 - y_2}{3} - 1\right)^2 + \frac{1}{4}\left(\dfrac{y_2 + y_1}{6} - 2\right)^2\right]}
+\end{align*}
+$$
+
+Ahora, vamos a hallar la $\mu$ y la $\sigma$ de $(Y_1, Y_2)$. Para hallar la $\mu$ tenemos que:
+
+$$
+\begin{align*}
+\mu = \left(
+\begin{array}{l}
+E[Y_1]\\
+E[Y_2]
+\end{array}
+\right)
+\end{align*}
+$$
+
+Para hallar $E[Y_1]$ y $E[Y_2]$ vamos a hallar las esperanzas de $Y_1$ y $Y_2$:
+
+$$
+\begin{align*}
+E[Y_1] & = E[X_1 + 2X_2] = E[X_1] + 2E[X_2] = 1 + 2 \cdot 2 = 5\\
+E[Y_2] & = E[-X_1 + 4X_2] = -E[X_1] + 4E[X_2] = -1 + 4 \cdot 2 = 7
+\end{align*}
+$$
+
+Entonces, nuestra $\mu$ es:
+
+$$
+\begin{align*}
+\mu = \left(
+\begin{array}{l}
+5\\
+7
+\end{array}
+\right)
+\end{align*}
+$$
+
+Ahora, vamos a hallar la matriz de covarianzas de $(Y_1, Y_2)$ que viene dada por:
+
+$$
+\begin{align*}
+\Sigma = \left(
+\begin{array}{ll}
+Var(Y_1) & Cov(Y_1, Y_2)\\
+Cov(Y_1, Y_2) & Var(Y_2)
+\end{array}
+\right)
+\end{align*}
+$$
+
+Entonces, vamos a hallar primero la varianza de $Y_1$ y de $Y_2$:
+
+$$
+\begin{align*}
+Var(Y_1) & = Var(X_1 + 2X_2) \overset{1}{ = } Var(X_1) + 4Var(X_2) = 1 + 4 \cdot 2^2 = 17\\
+Var(Y_2) & = Var(-X_1 + 4X_2) \overset{1}{ = } 1 Var(X_1) + 16Var(X_2) = 1 + 16 \cdot 2^2 = 65
+\end{align*}
+$$
+
+1) Se cumple porque $X_1$ y $X_2$ son independientes.
+
+Ahora, vamos a hallar la covarianza de $Y_1$ y $Y_2$:
+
+$$
+\begin{align*}
+Cov(Y_1, Y_2) & = E[Y_1Y_2] - E[Y_1]E[Y_2] = E[(X_1 + 2X_2)(-X_1 + 4X_2)] - 5 \cdot 7 = \\[2ex]
+& = E[-X_1^2 + 4X_1X_2 - 2X_1X_2 + 8X_2^2] - 35 = \\[2ex]
+& = E[ - X_1^2 + 2X_1X_2 + 8X_2^2] - 35 = \\[2ex]
+& = -E[X_1^2] + 2E[X_1X_2] + 8E[X_2^2] - 35
+\end{align*}
+$$
+
+Entonces vamos a hallar $E[X_1^2]$, $E[X_1X_2]$ y $E[X_2^2]$:
+
+$$
+\begin{align*}
+E[X_1^2] & = Var(X_1) + E^2[X_1] = 1 + 1 = 2\\
+E[X_1X_2] & = E[X_1]E[X_2] = 1 \cdot 2 = 2\\
+E[X_2^2] & = Var(X_2) + E^2[X_2] = 4 + 2^2 = 8
+\end{align*}
+$$
+
+Por lo tanto, la covarianza de $Y_1$ y $Y_2$ es:
+
+$$
+\begin{align*}
+Cov(Y_1, Y_2) = -2 + 2 + 8 \cdot 8 - 35 = 29
+\end{align*}
+$$
+
+Entonces, la matriz de covarianzas es:
+
+$$
+\begin{align*}
+\Sigma = \left(
+\begin{array}{ll}
+17 & 29\\
+29 & 65
+\end{array}
+\right)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Sea $(X, Y)$ un vector aleatorio con función de densidad:*
+
+$$
+\begin{align*}
+f(x, y) = \dfrac{1}{12 \sqrt{0.84} \pi}e^{\left[ - \dfrac{1}{2}(x + 1, y - 2)\begin{pmatrix} 4 & 2.4\\2.4 & 9 \end{pmatrix}^{ - 1} \begin{pmatrix} x + 1\\y - 2 \end{pmatrix}  \right]}
+\end{align*}
+$$
+
+- *Obtener las medias y varianzas de $X$ e $Y$, así como su coeficiente de correlación* 
+<DemBox title="Demostración">
+
+Podemos notar que la función de densidad es de la forma de una normal bidimensional, es decir, $\mathcal{N}_2(\mu, \Sigma)$, por lo que podemos identificar la $\mu$ y la $\Sigma$:
+
+$$
+\begin{align*}
+\mu = \begin{pmatrix}
+- 1 \\
+2 \end{pmatrix} 
+\quad \text{y} \quad \Sigma = \begin{pmatrix} 4 & 2.4 \\ 2.4 & 9 \end{pmatrix} 
+\end{align*}
+$$
+
+Para hallar el coeficiente de correlación, tenemos que:
+
+$$
+\begin{align*}
+Cov(X, Y) = \Sigma_{12} = 2.4
+\end{align*}
+$$
+
+Por lo que la correlación es:
+
+$$
+\begin{align*}
+\rho = \dfrac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}} = \dfrac{2.4}{\sqrt{4}\sqrt{9}} = \dfrac{2.4}{6} = 0.4
+\end{align*}
+$$
+
+Así, tenemos que:
+
+- $E[X] = - 1$
+- $E[Y] = 2$
+- $Var(X) = 4$
+- $Var(Y) = 9$
+- $\rho = 0.4$
+
+</DemBox>
+- *Obtener las distribuciones condicionadas y marginales*
+<DemBox title="Demostración">
+
+Al ser una normal bidimensional y notando que la matriz de covarianzas es simétrica, ya que $\Sigma = \Sigma^T$ y observando que:
+
+$$
+\begin{align*}
+det(\Sigma) = 4 \cdot 9 - (2.4)^2 = 36 - 5.76 = 30.24 > 0
+\end{align*}
+$$
+
+Podemos ver que la matriz de covarianzas es positiva definida, por lo que podemos aplicar que las variables unidimensionales componentes $X_i \rightsquigarrow \mathcal{N}(\mu_i, \sqrt{\Sigma_{ii}})$ son normales unidimensionales. Por lo que:
+
+$$
+\begin{align*}
+X & \rightsquigarrow \mathcal{N}(-1, 2)\\
+Y & \rightsquigarrow \mathcal{N}(2, 3)
+\end{align*}
+$$
+
+Para hallar la distribución marginal de $X$ y $Y$ condicionada a $X$ e $Y$, tenemos que las condicionadas son de la fórmula:
+
+$$
+\begin{align*}
+X |_{Y = y} \rightsquigarrow \mathcal{N} \left(\mu_{X|_{Y = y}}, \sqrt{\sigma_{X|_{Y = y}}}\right)
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+\mu_{X|_{Y = y}} & = \mu_X + \dfrac{\Sigma_{XY}}{\Sigma_{YY}}(y - \mu_Y) = -1 + \dfrac{2.4}{9}(y - 2)\\
+\sigma_{X|_{Y = y}} & = \sqrt{\Sigma_{XX} - \dfrac{\Sigma_{XY}^2}{\Sigma_{YY}}} = \sqrt{4 - \dfrac{(2.4)^2}{9}} = \sqrt{4 - 0.64} = \sqrt{3.36}
+\end{align*}
+$$
+
+Por lo que la distribución condicionada de $X$ es:
+
+$$
+\begin{align*}
+X |_{Y = y} \rightsquigarrow \mathcal{N} \left(-1 + \dfrac{2.4}{9}(y - 2), \sqrt{3.36}\right)
+\end{align*}
+$$
+
+De forma análoga, podemos hallar la distribución de $Y$ condicionada a $X$:
+
+$$
+\begin{align*}
+Y |_{X = x} \rightsquigarrow \mathcal{N} \left(\mu_{Y|_{X = x}}, \sqrt{\sigma_{Y|_{X = x}}}\right)
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+\mu_{Y|_{X = x}} & = \mu_Y + \dfrac{\Sigma_{XY}}{\Sigma_{XX}}(x - \mu_X) = 2 + \dfrac{2.4}{4}(x + 1)\\
+\sigma_{Y|_{X = x}} & = \sqrt{\Sigma_{YY} - \dfrac{\Sigma_{XY}^2}{\Sigma_{XX}}} = \sqrt{9 - \dfrac{(2.4)^2}{4}} = \sqrt{9 - 1.44} = \sqrt{7.56}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Supóngase que el cociente intelectual $X$ y la calificación $Y$ de alumnos de una determinada edad, tiene distrubución conjunta normal con vector de medias $(100, 3)$ y matriz de variaznas-covarianzas*:
+
+$$
+\begin{align*}
+\begin{pmatrix} 10 & 2.25\\ 2.25 & 3 \end{pmatrix} 
+\end{align*}
+$$
+
+- *Si el cociente intelectual de un alumno es 120, ¿qué calificación promedio cabe esperar que tenga?* 
+<DemBox title="Demostración">
+
+Así, tenemos que las variables son: 
+
+$$
+\begin{align*}
+X & = \text{Cociente intelectual de cada alumno}\\
+Y & = \text{Calificación en la prueba de cada alumno}
+\end{align*}
+$$
+
+Y tenemos que:
+
+$$
+\begin{align*}
+(X, Y) \rightsquigarrow \left(\begin{pmatrix} 100\\3 \end{pmatrix}, \begin{pmatrix}  10 & 2.25\\ 2.25 & 3 \end{pmatrix}\right)
+\end{align*}
+$$
+
+Entonces, queremos hallar la esperanza de $Y$ condicionada a que $X = 120$, es decir, queremos hacer una restricción en una aplicación. Como la matriz de covarianzas no es diagonal, sabemos a priori que no son independientes.
+
+Así, la esperanza de $Y$ condicionada a $X = 120$ es:
+
+$$
+\begin{align*}
+E(Y|_{X = 120}) = \int_{ - \infty}^{\infty} y \cdot f(y|_{X = 120}) \, dy = \int_{ - \infty}^{\infty} y \cdot \dfrac{f(x, y)}{f_X(120)} \, dy
+\end{align*}
+$$
+
+Y tenemos que:
+
+$$
+\begin{align*}
+Y|_{X = x} \rightsquigarrow \mathcal{N}\left(\mu_2 + \dfrac{(x - \mu_1)}{\sigma} \rho \sigma_2, \sigma_2 \sqrt{1 - \rho^2}\right)
+\end{align*}
+$$
+
+Entonces, la esperanza de $Y$ condicionada a $X = 120$ es:
+
+$$
+\begin{align*}
+E(Y|_{X = 120}) = \mu_2 + \dfrac{(120 - \mu_1)}{\sigma} \rho \sigma_2 = 3 + \dfrac{(120 - 100)}{\sqrt{10}} \dfrac{2.25}{\sqrt{10}} = 3 + \dfrac{20}{\sqrt{10}} \dfrac{2.25}{\sqrt{10}}
+\end{align*}
+$$
+
+donde $\rho$ viene dado por:
+
+$$
+\begin{align*}
+\rho = \dfrac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y} = \dfrac{2.25}{\sqrt{10} \cdot \sqrt{3}}
+\end{align*}
+$$
+
+Y oprando tenemos que:
+
+$$
+\begin{align*}
+Y|_{X = 120} \rightsquigarrow \mathcal{N}\left(7.5, 1.5792\right)
+\end{align*}
+$$
+
+</DemBox>
+- *Si el cociente intelectual es 120, obtener la probabilidad de que la calificación sea mayor que 3.5* 
+<DemBox title="Demostración">
+
+Para ello, vamos a hallar la probabilidad de que la calificación sea mayor que 3.5 condicionada a que el cociente intelectual sea 120, es decir:
+
+$$
+\begin{align*}
+P(Y > 3.5|_{X = 120}) = 1 - P(Y \leq 3.5|_{X = 120}) = 0.9943
+\end{align*}
+$$
+
+</DemBox>

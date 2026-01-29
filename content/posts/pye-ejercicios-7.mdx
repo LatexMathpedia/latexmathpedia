@@ -1,0 +1,2215 @@
+---
+title: "Ejercicios Resueltos Probabilidad y Estadística - Parte VII"
+date: "2026-01-29"
+description: "Resolución de ejercicios propuestos sobre variables aleatorias y funciones de distribución."
+tags: ["Probabilidad y Estadística", "Variables Aleatorias", "Funciones de Distribución"]
+---
+
+## Ejercicios Resueltos Tema 2
+### Ejercicio 1
+*La sangre humana se clasifica en cuatro grupos básicos. $A, B, AB$ y $0$, encontrándose éstos en una determinada etnia de proporciones 50\%, 10\%, 25\% y 15\% respectivamente. Elegidos al azar y con reemplazamiento 8 individuos de dicha etnia, cacular:*
+
+- *La probabilidad de obtener dos casos de cada grupo:*
+<DemBox title="Demostración">
+
+Queremos hallar la probabilidad de:
+
+$$
+\begin{align*}
+(X_1, X_2, X_3, X_4) = (2, 2, 2, 2)
+\end{align*}
+$$
+
+Donde $X_i$ es el número de individuos del grupo $A_i$ (con $A_1 = A, \, A_2 = B, \, A_3 = AB, \, A_4 = 0$). Así, tenemos que:
+
+$$
+\begin{align*}
+(X_1, X_2, X_3, X_4) \rightsquigarrow \mathcal{M}(8, p_1, p_2, p_3, p_4)
+\end{align*}
+$$
+
+Y sabemos que dichas probabilidades de éxito vienen dadas por:
+
+$$
+\begin{align*}
+p_1 = 0.5 \quad p_2 = 0.1 \quad p_3 = 0.25 \quad p_4 = 0.15
+\end{align*}
+$$
+
+Entonces:
+
+$$
+\begin{align*}
+(X_1, X_2, X_3, X_4) \rightsquigarrow \mathcal{M}(8, 0.5, 0.1, 0.25, 0.15)
+\end{align*}
+$$
+
+Así, podemos calcular:
+
+$$
+\begin{align*}
+P(X_1, X_2, X_3, X_4) = \dfrac{8!}{2!2!2!2!} \cdot 0.5^2 \cdot 0.1^2 \cdot 0.25^2 \cdot 0.15^2 = 0.0086
+\end{align*}
+$$
+
+</DemBox>
+- *¿Cuántos individuos cabe esperar que aparezcan del grupo sanguíneo $B$?*
+<DemBox title="Demostración">
+
+Queremos hallar la esperanza de individuos del grupo sanguíneo $B$, es decir, queremos hallar $E[X_2]$. Sabemos que:
+
+$$
+\begin{align*}
+E[X_2] = n \cdot p_2 = 8 \cdot 0.1 = 0.8
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Mostrar que dos variables aleatorias, definidas sobre un mismo espacio de probabilidad, pueden tener distribución normal sin tener distribución normal conjunta*
+
+<DemBox title="Demostración">
+
+Sea $X \rightsquigarrow \mathcal{N}(0, 1)$ y $Y = 4X \rightsquigarrow \mathcal{N}(0, 2)$ de manera que para cada $x \in \mathbb{R}$ la distribución condicionada de $Y$ por $X = x$ será degenerada en el valor $4x$. Así, la función de densidad conjunta en el punto $(1, 0)$ será:
+
+$$
+\begin{align*}
+f(1, 0) = f_1(1) \cdot P(Y = 0|X = 1) = f_1(1) \cdot 0 = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Problema 3
+*Sea $(X, Y)$ un vector aleatorio con distribución normal de vector esperanza (2, 3) y matriz de varianzas-covarianzas*:
+
+$$
+\begin{align*}
+\begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix} 
+\end{align*}
+$$
+
+- *Calcular: * $P(1.5 < X \leq 2.5)$
+<DemBox title="Demostración">
+
+Queremos hallar $P(1.5 < X \leq 2.5)$. Como sabemos que:
+
+$$
+\begin{align*}
+(X, Y) \rightsquigarrow \mathcal{N} \left(\begin{pmatrix} 2\\3 \end{pmatrix}, \begin{pmatrix} 4 & 2\\2 & 3 \end{pmatrix}\right)
+\end{align*}
+$$
+
+y las marginales de una normal bidimensional son normales, entonces:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{N}(2, \sqrt{4})
+\end{align*}
+$$
+
+Así, basta ver que:
+
+$$
+\begin{align*}
+P(1.5 < X \leq 2.5) & = P \left(\dfrac{1.5 - 2}{2} < \dfrac{X - 2}{2} \leq \dfrac{2.5 - 2}{2}\right) =\\[2ex]
+& = \Phi(0.25) - \Phi(-0.25) = 0.1974
+\end{align*}
+$$
+
+</DemBox>
+- *Calcular: * $P(2Y - X \leq 4)$
+
+<DemBox title="Demostración">
+
+Queremos hallar:
+
+$$
+\begin{align*}
+P(2Y - X \leq 4)
+\end{align*}
+$$
+
+Entonces integrando tenemos:
+
+$$
+\begin{align*}
+P(2Y - X \leq 2) & = \int_{\left\{(x, y) \in \mathbb{R}^2 \colon 2y - x \leq 4\right\}} f(x, y) \, dx \, dy = \\[2ex]
+& = \int_{ - \infty}^{\infty} \int_{ - \infty}^{2 + \frac{x}{2}} \dots 
+\end{align*}
+$$
+
+</DemBox>
+
+### Problema 4
+*Sean $X, Y$ las desviaciones (en metros) horizontal y vertical (sobre un plano) respectivamente, de un vehículo espacial, respecto de su punto de aterrizaje. Si $X$ e $Y$ son variables aleatorias con distribución normal de media cero, varianza común e independientes, calcular la máxima desviación típica para que haya una probabilidad de al menos 0.99 de que el vehículo aterrice a no maś de 500 metros, tanto en sentido vertical como horizontal*
+
+<DemBox title="Demostración">
+
+Queremos encontrar el valor de $\sigma$ tal que si:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{N}(0, \sigma) \quad Y \rightsquigarrow \mathcal{N}(0, \sigma)
+\end{align*}
+$$
+
+entonces se cumple que:
+
+$$
+\begin{align*}
+P(|X| \leq 500, |Y| \leq 500) \geq 0.99
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+P(|X| \leq 500, |Y| \leq 500) & = P(-500 \leq X \leq 500, -500 \leq Y \leq 500) = \\[2ex]
+& = P(-500 \leq X \leq 500) \cdot P(-500 \leq Y \leq 500) = \\[2ex]
+& = P\left(\dfrac{ - 500}{\sigma} \leq \mathcal{N}(0, 1) \leq \dfrac{500}{\sigma}\right) \cdot P\left(\dfrac{ - 500}{\sigma} \leq \mathcal{N}(0, 1) \leq \dfrac{500}{\sigma}\right) = \\[2ex]
+& = \left(P\left(\dfrac{ - 500}{\sigma} \leq \mathcal{N}(0, 1) \leq \dfrac{500}{\sigma}\right)\right)^2 = \\[2ex]
+& = \left(2 \Phi\left(\dfrac{500}{\sigma}\right) - 1\right)^2 \geq 0.99
+\end{align*}
+$$
+
+como $\sigma > 0$ entonces $\Phi\left(\frac{500}{\sigma}\right)$ y entonces $2\Phi\left(\frac{500}{\sigma}\right) - 1 > 0$ entonces:
+
+$$
+\begin{align*}
+2\Phi\left(\frac{500}{\sigma}\right) - 1 \geq \sqrt{0.99} \implies \Phi\left(\frac{500}{\sigma}\right) \geq \dfrac{1 + \sqrt{0.99}}{2}
+\end{align*}
+$$
+
+</DemBox>
+
+## Ejercicios Tema 3
+### Ejercicio 1
+*Sean $X_n$ variables aleatorias independientes con distribución uniforme $\mathcal{U}(0, b)$. Definimos las variables $Y_n = \max \{X_1, \ldots, X_n\}$. Estudiar la convergencia en distribución y en probabilidad de $Y_n$.*
+
+<DemBox title="Demostración">
+
+Para estudiar la convergencia en distribución, tenemos que ver que la función de distribución de $Y_n$ converge a la función de distribución de una variable aleatoria $Y$ en todo punto de continuidad de $F_Y$, es decir, que:
+
+$$
+\begin{align*}
+F_{Y_n} \longrightarrow F_{Y} \qquad \forall x \in \mathbb{R} \text{ tal que } F_Y \text{ es continua en } x
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F_{Y_n}(x) & = P(Y_n \leq x) = P(\max\{X_1, \dots , X_n\} \leq x) = P(X_1 \leq x, \dots, X_n \leq x)
+\end{align*}
+$$
+
+Como las variables son independientes, entonces:
+
+$$
+\begin{align*}
+P(X_1 \leq x, \dots, X_n \leq x) = P(X_1 \leq x) \cdot \ldots \cdot P(X_n \leq x) 
+\end{align*}
+$$
+
+Dado que $X_n \rightsquigarrow \mathcal{U} (0, b)$ entonces:
+
+$$
+\begin{align*}
+P(X_i \leq x) = \dfrac{x}{b} \quad \forall x \in [0, b]
+\end{align*}
+$$
+
+Entonces, tenemos que la expresión anterior es igual a:
+
+$$
+\begin{align*}
+P(X_1 \leq x) \cdot \dots \cdot P(X_n \leq x) = \left(\dfrac{x}{b}\right) \cdot \overset{\parbox{1cm}{\centering \text{\tiny $n$ veces}}}{\ldots \ldots} \cdot \left(\dfrac{x}{b}\right) = \left(\dfrac{x}{b}\right)^n \quad \forall x \in [0, b]
+\end{align*}
+$$
+
+Entonces, la función de distribución de $Y_n$ es:
+
+$$
+\begin{align*}
+F_{Y_n}(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x < 0\\[2ex]
+\left(\dfrac{x}{b}\right)^n & \text{ si } x \in [0, b]\\[2ex]
+1 & \text{ si } x > b
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, ahora vamos a estudiar el límite de $F_{Y_n}(x)$ cuando $n \to \infty$, para ello:
+
+- Si $x < b$ entonces:
+
+$$
+\begin{align*}
+\left(\frac{x}{b}\right)^n \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+- Si $x = b$ entonces:
+
+$$
+\begin{align*}
+\left(\frac{b}{b}\right)^n = 1^n = 1
+\end{align*}
+$$
+
+- Si $x > b$ entonces trivialmente $F_{Y_n}(x) = 1$ ya que:
+
+$$
+\begin{align*}
+P(X_i \leq x) = 1 \quad \forall x > b
+\end{align*}
+$$
+
+Por lo tanto, la función límite es:
+
+$$
+\begin{align*}
+F_Y(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x < b\\[2ex]
+1 & \text{ si } x \geq b
+\end{array}
+\right.
+\end{align*}
+$$
+
+Es decir, que es una función de distribución degenerada en $b$, es decir:
+
+$$
+\begin{align*}
+Y_n \xrightarrow{\mathcal{D}} <u>b</u>\\
+\end{align*}
+$$
+
+Para estudiar la convergencia en probabilidad de $Y_n$ hacia $b$, debemos mostrar que:
+
+$$
+\begin{align*}
+P(|Y_n - b| \geq \varepsilon) \xrightarrow[n \to \infty]{} 0 \quad \forall \varepsilon > 0
+\end{align*}
+$$
+
+Así, sea un $\varepsilon > 0$ cualquiera, entonces:
+
+$$
+\begin{align*}
+P(|Y_n - b| \geq \varepsilon) = P(Y_n \leq b - \varepsilon)
+\end{align*}
+$$
+
+Y por la función de distribución que hemos hallado antes, tenemos que:
+
+$$
+\begin{align*}
+P(Y_n \leq b - \varepsilon) = \left(\dfrac{b - \varepsilon}{b}\right)^n
+\end{align*}
+$$
+
+Dado que $\frac{b - \varepsilon}{b} < 1$, esta expresión cumplirá que:
+
+$$
+\begin{align*}
+\left(\dfrac{b - \varepsilon}{b}\right)^n \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+P(|Y_n - b| \geq \varepsilon) \xrightarrow[n \to \infty]{} 0 \quad \forall \varepsilon > 0 \implies Y_n \xrightarrow{\mathcal{P}} <u>b</u>
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Sean $X_n$ variables aleatorias independientes con distribución uniforme $\mathcal{U}(0, b)$. Definimos las variables $Y_n = \frac{\max \{X_1 , \ldots, X_n\}}{n}$. Estudiar la convergencia en distribución de $Y_n$.*
+
+<DemBox title="Demostración">
+
+Para estudiar la convergencia en distribución de $Y_n$, tenemos que ver que las funciones de distribución de $Y_n$ convergen a la función de distribución de una variable aleatoria $Y$, es decir, que:
+
+$$
+\begin{align*}
+F_{Y_n} \longrightarrow F_Y \quad \forall x \in \mathbb{R} \text{ tal que } F_Y \text{ es continua en } x
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F_{Y_n} (x) & = P(Y_n \leq x) = P\left(\dfrac{\max \{X_1, \ldots, X_n\}}{n} \leq x \right) =\\[2ex]
+& = P(\max \{X_1, \ldots, X_n\} \leq nx) = P(X_1 \leq nx, \ldots, X_n \leq nx)
+\end{align*}
+$$
+
+Como $X_i$ son variables aleatorias, entonces tenemos que:
+
+$$
+\begin{align*}
+P(X_1 \leq nx, \ldots, X_n \leq nx) = P(X_1 \leq nx) \cdot \ldots \cdot P(X_n \leq nx)
+\end{align*}
+$$
+
+Y, por ser uniformes, tenemos que:
+
+$$
+\begin{align*}
+P(X_i \leq nx) = \left\{
+\begin{array}{ll}
+0 & \text{ si } nx < 0\\[2ex]
+\dfrac{nx}{b} & \text{ si } nx \in [0, b]\\[2ex]
+1 & \text{ si } nx > b
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, la expresión anterior es igual a:
+
+$$
+\begin{align*}
+P(X_1 \leq nx) \cdot \ldots \cdot P(X_n \leq nx) = \left(\dfrac{nx}{b}\right)^n \quad \forall x \in \left[0, \dfrac{b}{n}\right]
+\end{align*}
+$$
+
+Entonces, la función de distribución de $Y_n$ es:
+
+$$
+\begin{align*}
+F_{Y_n}(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x < 0\\[2ex]
+\left(\dfrac{nx}{b}\right)^n & \text{ si } x \in \left[0, \dfrac{b}{n}\right]\\[2ex]
+1 & \text{ si } x > \dfrac{b}{n}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, ahora vamos a estudiar el límite de $F_{Y_n}(x)$ cuando $n \to \infty$, para ello:
+
+- Si $x = 0$ entonces:
+
+$$
+\begin{align*}
+P(Y_n \leq 0) = 0 \quad \forall n
+\end{align*}
+$$
+
+- Si $0 \leq x \leq \frac{b}{n}$ entonces, cuando $n \to \infty$ tenemos que:
+
+$$
+\begin{align*}
+\left(\frac{ny}{b}\right)^n = \left(\dfrac{x}{\frac{b}{n}}\right)^n
+\end{align*}
+$$
+
+Como $n \to \infty$ entonces, $\frac{b}{n} \to 0$ lo que implica que:
+
+$$
+\begin{align*}
+\left(\dfrac{x}{\frac{b}{n}}\right)^n \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+- Si $x > 0$, entonces cuando $n \to \infty$ tenemos que $\frac{b}{n} \to 0$ y por lo tanto:
+
+$$
+\begin{align*}
+P(Y_n \leq x) = 1 \quad \forall x > 0
+\end{align*}
+$$
+
+Por lo tanto, la función límite es la de la distribución degenerada en 0, es decir:
+
+$$
+\begin{align*}
+Y_n \xrightarrow{\mathcal{D}} <u>0</u>
+\end{align*}
+$$
+
+Hemos demostrado que $Y_n$ converge en distribución a una variable aleatoria degenerada en 0.
+
+</DemBox>
+
+### Ejercicio 3
+*Sean $X_n$ variables aleatorias independientes con distribución uniforme $\mathcal{U}(0,b)$. Definimos las variables $Y_n = n \cdot \min \{X_1, \ldots, X_n\}$. Estudiar la convergencia en distribución de $Y_n$.*
+<DemBox title="Demostración">
+
+Para estudiar la convergencia en distribución de $Y_n$, tenemos que ver que las funciones de distribución de $Y_n$ convergen a la función de distribución de una variable aleatoria $Y$, es decir, que:
+
+$$
+\begin{align*}
+F_{Y_n} \longrightarrow F_Y \quad \forall x \in \mathbb{R} \text{ tal que } F_Y \text{ es continua en } x
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+P(Y_n \leq y) & = P(n \cdot \min \{X_1, \ldots, X_n\} \leq y) = P\left(\min \{X_1, \ldots, X_n\} \leq \dfrac{y}{n}\right) =\\[2ex]
+& = 1 - P\left(\min \{X_1, \ldots, X_n\} > \dfrac{y}{n}\right) = 1 - P\left(X_1 > \dfrac{y}{n}, \ldots, X_n > \dfrac{y}{n}\right)
+\end{align*}
+$$
+
+Como las variables son independientes, entonces:
+
+$$
+\begin{align*}
+1 -P\left(X_1 > \dfrac{y}{n}, \ldots, X_n > \dfrac{y}{n}\right) = 1 - P(X_1 > \dfrac{y}{n}) \cdot \ldots \cdot P(X_n > \dfrac{y}{n})
+\end{align*}
+$$
+
+Y, por ser uniformes, tenemos que:
+
+$$
+\begin{align*}
+P\left(X_i > \frac{y}{n}\right) = \left\{
+\begin{array}{ll}
+1 & \text{ si } \frac{y}{n} < 0\\[2ex]
+1 - \dfrac{y}{b} & \text{ si } \frac{y}{n} \in [0, b]\\[2ex]
+0 & \text{ si } \frac{y}{n} > b
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, la expresión anterior es igual a:
+
+$$
+\begin{align*}
+1 - P\left(X_1 > \frac{y}{n}\right) \cdot\overset{\text{\centering \tiny $n$ veces}}{\ldots \ldots} \cdot P\left(X_n > \frac{y}{n}\right) =1 - \left[1 - F_{X_i}\left(\frac{y}{n}\right)\right]^n
+\end{align*}
+$$
+
+Para obtener la función de distribución de $Y_i$ sabemos que la función de densidad de la uniforme es:
+
+$$
+\begin{align*}
+f_{X_i}(x) = \left\{
+\begin{array}{ll}
+\dfrac{1}{b} & \text{ si } x \in [0, b]\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, integrando tenemos que:
+
+$$
+\begin{align*}
+F_{X_i}(x) & = P(X_1 \leq x) = P(\mathcal{U}(0, b) \leq x) = \\[2ex]
+& = \int_{ - \infty}^x f_{\mathcal{U}(0, b)}(t) \, dt = \left\{
+\begin{array}{ll}
+\displaystyle \int_{\infty}^x 0 \, dt = 0 & \text{ si } x < 0\\[4ex]
+\displaystyle \int_{ - \infty}^0	0 \, dt + \displaystyle \int_0^x \dfrac{1}{b} \, dt = \dfrac{x}{b} & \text{ si } x \in [0, b]\\[4ex]
+\displaystyle \int_{ - \infty}^b \dfrac{1}{b} \, dt = 1 & \text{ si } x > b
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, tenemos que la función de distribución de $F_{X_i}$ es:
+
+$$
+\begin{align*}
+F_{X_i}(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x < 0\\[2ex]
+\dfrac{x}{b} & \text{ si } x \in [0, b]\\[2ex]
+1 & \text{ si } x > b
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, la expresión anterior es igual a:
+
+$$
+\begin{align*}
+1 - \left[1 - F_{X_i}\left(\frac{y}{n}\right)\right]^n = 1 - \left[1 - \dfrac{y}{nb}\right]^n
+\end{align*}
+$$
+
+Entonces, la función de distribución de $Y_n$ es:
+
+$$
+\begin{align*}
+F_{Y_n}(y) = \left\{
+\begin{array}{ll}
+1 - \left[1 - 0\right] = 0 & \text{ si } y < 0\\[2ex]
+1 - \left[1 - \dfrac{y}{nb}\right]^n & \text{ si } y \in [0, nb]\\[2ex]
+1 - \left[1 - 1\right]^n = 1 & \text{ si } y > nb
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora, vamos a ver si existe el límite de $F_{Y_n}(y)$ cuando $n \to \infty$, para ello:
+
+- Si $y \leq 0$ entonces:
+
+$$
+\begin{align*}
+\forall n \in \mathbb{N} \colon F_n(y) = 0 \implies \lim_{n \to \infty} F_n(y) = \lim_{n \to \infty} 0 = 0
+\end{align*}
+$$
+
+- Si $y > 0$, podemos notar que la condición de que $y \in (0, nb)$ es equivalente a que:
+
+$$
+\begin{align*}
+0 < y < nb \iff \frac{1}{n} < \frac{b}{y} > 0
+\end{align*}
+$$
+
+Así, tenemos que $\frac{b}{y} > 0$ y por lo tanto $\exists n_0 \in \mathbb{N}$ tal que:
+
+$$
+\begin{align*}
+\forall n \geq n_0 \colon \frac{1}{n} < \frac{b}{y} & \implies \frac{y}{nb} < 1 \implies y < nb \implies \\[2ex]
+& \implies \forall n \geq n_0 \colon F_n(y) = 1 - \left[1 - \dfrac{y}{nb}\right]^n \implies \\[2ex]
+& \implies \lim_{n \to \infty} F_n(y) = \lim_{n \to \infty} 1 - \left[1 - \dfrac{y}{nb}\right]^n = 1 - \lim_{n \to \infty} 1 - \left(\dfrac{y}{nb}\right)^n
+\end{align*}
+$$
+
+Entonces, como por propiedades de sucesiones sabemos que si:
+
+$$
+\begin{align*}
+\lim_{n \to \infty} x_n = \infty \implies \lim_{n \to \infty} \left(1 + \frac{1}{x_n}\right)^{x_n} = e
+\end{align*}
+$$
+
+Entonces, podemos retocar la expresión anterior tomando $- \frac{y}{nb} = \frac{1}{x_n}$ y tenemos:
+
+$$
+\begin{align*}
+x_n = - \dfrac{nb}{y} \longrightarrow - \infty \implies n = x_n\left( - \frac{y}{b}\right)
+\end{align*}
+$$
+
+Y sustituyendo tenemos:
+
+$$
+\begin{align*}
+1 - \lim_{n \to \infty} 1 - \left(\dfrac{y}{nb}\right)^n = 1 - \lim_{n \to \infty} 1 - \left(1 + \dfrac{1}{x_n}\right)^{x_n} = 1 - e^{\frac{y}{b}}
+\end{align*}
+$$
+
+Entonces, llegamos a que:
+
+$$
+\begin{align*}
+\lim_{n \to \infty} F_n(y) = \left\{
+\begin{array}{ll}
+0 & \text{ si } y \leq 0\\[2ex]
+1 - e^{\frac{y}{b}} & \text{ si } y > 0
+\end{array}
+\right.
+\end{align*}
+$$
+
+Finalmente, como el límite de $F_n(y)$ existe en todo punto $y \in \mathbb{R}$ entonces, la sucesión $Y_n$ converge en distribución a una variable aleatoria $Y$ con función de distribución:
+
+$$
+\begin{align*}
+F_Y(y) = \left\{
+\begin{array}{ll}
+0 & \text{ si } y \leq 0\\[2ex]
+1 - e^{\frac{y}{b}} & \text{ si } y > 0
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Sea $X$ una variable aleatoria. Estudiar la convergencia en distribución, en probabilidad, en media cuadrática y casi seguro de $Y_n = \frac{X}{n}$* 
+
+<DemBox title="Demostración">
+
+- *Convergencia en distribución:* Para estudiar la convergencia en distribución de $Y_n$, tenemos que ver que la función de distribución de $Y_n$ converge a la función de distribución de una variable aleatoria $Y$, es decir, que:
+
+$$
+\begin{align*}
+F_{Y_n} \longrightarrow F_Y \quad \forall x \in \mathbb{R} \text{ tal que } F_Y \text{ es continua en } x
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F_{Y_n}(y) & = P(Y_n \leq y) = P\left(\frac{X}{n} \leq y\right) = P(X \leq ny)
+\end{align*}
+$$
+
+Dado que $X$ es fija y $n \to \infty$ entonces:
+
+- *Convergencia en probabilidad:* Para estudiar la convergencia en probabilidad de $Y_n$, debemos mostrar que:
+
+$$
+\begin{align*}
+P(|Y_n - 0| \geq \varepsilon) \xrightarrow[n \to \infty]{} 0 \quad \forall \varepsilon > 0
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+P(|Y_n - 0| \geq \varepsilon) = P \left(\dfrac{|X|}{n} \geq \varepsilon\right) = P(|X| \geq n \varepsilon)
+\end{align*}
+$$
+
+Ahora, aplicando la desigualdad de Markov, tenemos que:
+
+$$
+\begin{align*}
+P(|X| \geq n\varepsilon) \leq \dfrac{E[|X|]}{n\varepsilon} 
+\end{align*}
+$$
+
+Por tanto, si $X$ tiene momentos finitos, en concreto, esperanza finita, entonces:
+
+$$
+\begin{align*}
+\dfrac{E[|X|]}{n\varepsilon} \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+Por lo tanto, tenemos que:
+
+$$
+\begin{align*}
+P(|Y_n - 0| \geq \varepsilon) \xrightarrow[n \to \infty]{} 0 \quad \forall \varepsilon > 0 \implies Y_n \xrightarrow{\mathcal{P}} <u>0</u>\\
+\end{align*}
+$$
+
+- *Convergencia en media cuadrática:* Para estudiar la convergencia en media cuadrática de $Y_n$, debemos mostrar que:
+
+$$
+\begin{align*}
+E[(Y_n - 0)^2] \xrightarrow[n \to \infty]{} 0
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+E[(Y_n - 0)^2] = E[Y_n^2] = E\left[\left(\frac{X}{n}\right)^2\right] = \dfrac{[E[X^2]]}{n^2}
+\end{align*}
+$$
+
+Si $E[X^2]$ es finita, entonces se sigue que:
+
+$$
+\begin{align*}
+\dfrac{E[X^2]}{n^2} \xrightarrow[n \to \infty]{} 0 \implies Y_n \xrightarrow{\text{\tiny m.c.}} <u>0</u>\\
+\end{align*}
+$$
+
+- *Convergencia casi segura:* Para estudiar la convergencia casi segura de $Y_n$, debemos mostrar que:
+
+$$
+\begin{align*}
+P\left(\lim_{n \to \infty} Y_n = 0\right) = 1
+\end{align*}
+$$
+
+Dado que para cada $\omega$ la sucesión:
+
+$$
+\begin{align*}
+Y_n(\omega) = \dfrac{X(\omega)}{n} \xrightarrow[n \to \infty]{} 0 \implies P\left(\lim_{n \to \infty} Y_n = 0\right) = 1 \implies Y_n \xrightarrow{\text{\tiny c.s.}} <u>0</u>
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Sean $X_n$ variables aleatorias definidas en el espacio $(\mathbb{R}, \mathcal{B}_{\mathbb{R}}, P)$ donde $P$ es la distribución uniforme $\mathcal{U}(0, 1)$ dadas por:*
+
+$$
+\begin{align*}
+X_n(\omega) = \left\{
+\begin{array}{ll}
+2^{ - n} & \text{ si } \omega < \frac{1}{2} - \frac{1}{n}\\[2ex]
+1 & \text{ si } \frac{1}{2} - \frac{1}{n} \leq \omega < 1 - \frac{1}{n}\\[2ex]
+2^n & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Estudiar la convergencia en distribución, en probabilidad, en media cuadrática y casi seguro de $X_n$ a la variable $X$ dada por:*
+
+$$
+\begin{align*}
+X(\omega) = \left\{
+\begin{array}{ll}
+0 & \text{ si } \omega < \frac{1}{2}\\[2ex]
+1 & \text{ si } \frac{1}{2} \leq \omega < 1\\[2ex]
+2 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+- *Convergencia en distribución:* Para estudiar la convergencia en distribución de $X_n$, tenemos que ver que la función de distribución de $X_n$ converge a la función de distribución de una variable aleatoria $X$, es decir, que:
+
+$$
+\begin{align*}
+F_{X_n} \longrightarrow F_X \quad \forall x \in \mathbb{R} \text{ tal que } F_X \text{ es continua en } x
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F_{X_n}(x) & = P(X_n \leq x) 
+\end{align*}
+$$
+
+Así, vamos a estudiar la convergencia en los distintos intervalos:
+
+</DemBox>
+
+## Tema 4
+### Ejercicio 1
+*Sea $X \rightsquigarrow F_{2, 10}$. Calcular $P(X < 5.46), P(X > 4.1)$. Determinar el valor de $x \in \mathbb{R}$ tal que $P(X \leq x) = 0.99$. Sea $Y \rightsquigarrow F_{10, 2}$, determinar el valor de $P(Y \leq y) = 0.01$*
+
+<DemBox title="Demostración">
+
+Primero vamos a calcular $P(X < 5.46)$, para ello, partimos de que por hipótesis $X \rightsquigarrow F_{2, 10}$ por lo que vamos a emplear la función de distribución de $F$ con grados de libertad $2$ y $10$, es decir:
+
+$$
+\begin{align*}
+P(X < 5.46) = F_{2, 10}(5.46)
+\end{align*}
+$$
+
+En este caso, dado que para ver el resultado solo disponemos de una tabla, vamos a buscar los valores críticos de $f_{\alpha, 2, 10}$ tal que:
+
+$$
+\begin{align*}
+P(X > f_{\alpha, 2, 10}) = \alpha 
+\end{align*}
+$$
+
+Entonces, buscamos en la tabla el valor $5.46$ donde $n_1 = 2$ y $n_2 = 10$. Como tenemos que:
+
+![ej4.1-1](/blogs/images/ejercicios-pye_ej4.1-1.png)
+
+![ej4.1-2](/blogs/images/ejercicios-pye_ej4.1-2.png)
+
+Ya que tenemos que $5.46 \in (5.4564, 7.559)$ entonces podemos plantear una interpolación para sacar el valor aproximado notando que la tabla nos da $P(X > f_{\alpha, 2, 10})$ y no $P(X < f_{\alpha, 2, 10})$, por lo que tenemos que:
+
+$$
+\begin{align*}
+P(X < 5.46) = 1 - P(X > 5.46) \implies P(X < 5.46) = 1 - \alpha
+\end{align*}
+$$
+
+Así, tenemos para la interpolación:
+
+$$
+\begin{align*}
+\alpha = \alpha_1 + \dfrac{f_1 - x}{f_1 - f_2}(\alpha_2 - \alpha_1) 
+\end{align*}
+$$
+
+es decir:
+
+$$
+\begin{align*}
+\alpha \approx (1 - 0.025) + \dfrac{5.46 - 5.4564}{7.559 - 5.4564} \cdot ((1 - 0.01) - (1 - 0.025))
+\end{align*}
+$$
+
+Operando llegamos a que:
+
+$$
+\begin{align*}
+\alpha \approx 0.975 + \dfrac{5.46 - 5.4564}{7.559 - 5.4564} \cdot 0.015 \approx 0.975 + 0.00002568 = 0.97502568
+\end{align*}
+$$
+
+Por lo tanto, tenemos que:
+
+$$
+\begin{align*}
+P(X < 5.46) \approx 0.97502568
+\end{align*}
+$$
+
+Por otra parte, para determinar el valor de $P(X > 4.1)$ tenemos que seguir el mismo procedimiento solo que en este caso, tenemos directamente que:
+
+$$
+\begin{align*}
+P(X > f_{\alpha, 2, 10}) = \alpha
+\end{align*}
+$$
+
+Y buscamos el valor $4.1$ en la tabla, donde $n_1 = 2$ y $n_2 = 10$. Como tenemos que:
+
+![ej4.1-3](/blogs/images/ejercicios-pye_ej4.1-3.png)
+
+![ej4.1-4](/blogs/images/ejercicios-pye_ej4.1-4.png)
+
+Y de nuevo tenemos que $4.1 \in (2.92447, 4.1028)$ por lo que podemos plantear una interpolación para sacar el valor aproximado:
+
+$$
+\begin{align*}
+\alpha \approx 0.1 + \dfrac{4.1 - 2.7764}{4.1028 - 2.7764} \cdot (0.05 - 0.1) = 0.1 - 0.04989 = 0.05011
+\end{align*}
+$$
+
+Por lo tanto, tenemos que:
+
+$$
+\begin{align*}
+P(X > 4.1) \approx 0.05011
+\end{align*}
+$$
+
+Ahora vamos a ver el valor $x \in \mathbb{R}$ tal que $P(X \leq x) = 0.99$. Para ello buscamos:
+
+$$
+\begin{align*}
+P(X > x) = 1 - 0.99 = 0.01
+\end{align*}
+$$
+
+Es decir, que buscamos el valor $x$ tal que:
+
+$$
+\begin{align*}
+f_{0.01; 2, 10} = x
+\end{align*}
+$$
+
+Basta ver que:
+
+![ej4.1-5](/blogs/images/ejercicios-pye_ej4.1-5.png)
+
+donde vemos que:
+
+$$
+\begin{align*}
+f_{0.01; 2, 10} = 7.559\\
+\end{align*}
+$$
+
+Ahora, sea $Y \rightsquigarrow F_{10, 2}$, determinar el valor de $P(Y \leq y) = 0.01$. Para ello, buscamos el valor $y$ tal que:
+
+$$
+\begin{align*}
+P(Y \leq y) = 0.01 \implies P(Y > y) = 1 - 0.01 = 0.99
+\end{align*}
+$$
+
+Como no tenemos este caso tabulado, necesitamos buscar otra forma de hacerlo, para ello, recordamos que:
+
+$$
+\begin{align*}
+Y \rightsquigarrow F_{n_1, n_2} \implies \frac{1}{Y} \rightsquigarrow F_{n_2, n_1}
+\end{align*}
+$$
+
+Y por ello:
+
+$$
+\begin{align*}
+P(F_{10, 2} \leq y) = P\left(F_{2, 10} \geq \frac{1}{y}\right)
+\end{align*}
+$$
+
+Por lo tanto, aplicamos esto a nuestros datos y tenemos que:
+
+$$
+\begin{align*}
+P(Y \leq y) = 0.01 \implies P\left(F_{2, 10} \geq \frac{1}{y}\right) = 0.01
+\end{align*}
+$$
+
+Es decir, que buscamos:
+
+$$
+\begin{align*}
+P(F_{2, 10} > x) = 0.01
+\end{align*}
+$$
+
+Y como vimos antes, tenemos que:
+
+$$
+\begin{align*}
+f_{0.01; 2, 10} = 7.559 \implies \frac{1}{y} = 7.559 \implies y = \frac{1}{7.559} \approx 0.132
+\end{align*}
+$$
+
+Por lo tanto, tenemos que:
+
+$$
+\begin{align*}
+P(Y \leq y) = 0.01 \implies y \approx 0.132
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Sean $X_1, \dots , X_n$ variables aleatorias independientes con distribución $\mathcal{N}(0, 1)$ determinar la distribución de:*
+
+- $Y_1 = \displaystyle \sum_{i = 1}^{k}X_i$
+<DemBox title="Demostración">
+
+En este caso, tenemos que:
+
+$$
+\begin{align*}
+Y_1 = \displaystyle \sum_{i = 1}^{k} X_i
+\end{align*}
+$$
+
+Es la suma de $k$ variables $\mathcal{N}(0, 1)$ y, por la reproductividad de la normal tenemos que:
+
+$$
+\begin{align*}
+Y_1 \rightsquigarrow \mathcal{N}\left(\displaystyle \sum_{i = 1}^{k} 0, \sqrt{ \displaystyle \sum_{i = 1}^{k} 1}\right) = \mathcal{N}(0, \sqrt{k})
+\end{align*}
+$$
+
+</DemBox>
+- $Y_2 = \dfrac{\displaystyle \sum_{i = 1}^{k} X_i}{k}$
+<DemBox title="Demostración">
+
+Ahora, tenemos que ver:
+
+$$
+\begin{align*}
+Y_2 = \dfrac{\displaystyle \sum_{i = 1}^{k} X_i}{k}
+\end{align*}
+$$
+
+En este caso, como $X_i$ son independientes y $X_i \rightsquigarrow \mathcal{N}(0, 1)$ entonces podemos aplicar la reproductividad de la normal, así, calculamos los parámetros:
+
+$$
+\begin{align*}
+E[Y_2] & = E \left[\frac{1}{k} \displaystyle \sum_{i = 1}^{k} X_i\right] = \frac{1}{k} \displaystyle \sum_{i = 1}^{k} E[X_i] = \frac{1}{k} \cdot 0 = 0\\[2ex]
+Var(Y_2) & = Var \left(\frac{1}{k}\displaystyle \sum_{i = 1}^{k} X_i\right) = \frac{1}{k^2} \sum_{i = 1}^{k} Var(X_i) = \frac{1}{k^2} \displaystyle \sum_{i = 1}^{k} 1 = \frac{1}{k^2} \cdot k = \frac{1}{k}
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+Y_2 \rightsquigarrow \mathcal{N} \left(0, \sqrt{\frac{1}{k}}\right) = \mathcal{N} \left(0, \frac{1}{\sqrt{k}}\right)
+\end{align*}
+$$
+
+</DemBox>
+- $Y_3 = \dfrac{\displaystyle \sum_{i = 1}^{k} X_i}{\sqrt{k}}$
+<DemBox title="Demostración">
+
+Seguimos lo mismo de siempre, así que tenemos que:
+
+$$
+\begin{align*}
+E[Y_3] & = E \left[\frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{k} X_i\right] = \frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{\sqrt{k}} E[X_i] = \frac{1}{k} \cdot 0 = 0\\[2ex]
+Var(Y_3) & = Var \left(\frac{1}{\sqrt{k}}\displaystyle \sum_{i = 1}^{k} X_i\right) = \frac{1}{k} \sum_{i = 1}^{k} Var(X_i) = \frac{1}{k} \displaystyle \sum_{i = 1}^{k} 1 = \frac{1}{k} \cdot k = 1
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+Y_3 \rightsquigarrow \mathcal{N} \left(0, 1\right)
+\end{align*}
+$$
+
+</DemBox>
+- $Y_4 = \dfrac{\displaystyle \sum_{i = 1}^{k} X_i}{\sqrt{k}} + \dfrac{\displaystyle \sum_{i = k + 1 }^{n} X_i}{\sqrt{n - k}}$
+<DemBox title="Demostración">
+
+Seguimos el mismo procedimiento que antes, así que tenemos que:
+
+$$
+\begin{align*}
+E[Y_4] & = E \left[\frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{k} X_i + \frac{1}{\sqrt{n - k}} \displaystyle \sum_{i = k + 1}^{n} X_i\right] = \\[2ex]
+& = E \left[\frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{k} X_i\right] + E \left[\frac{1}{\sqrt{n - k}} \displaystyle \sum_{i = k + 1}^{n} X_i\right] = \\[2ex]
+& = \frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{k} E[X_i] + \frac{1}{\sqrt{n - k}} \displaystyle \sum_{i = k + 1}^{n} E[X_i] = \\[2ex]
+& = \frac{1}{\sqrt{k}} \cdot 0 + \frac{1}{\sqrt{n - k}} \cdot 0 = 0
+\end{align*}
+$$
+
+Y para la varianza tenemos que:
+
+$$
+\begin{align*}
+Var(Y_4) & = Var \left(\frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{k} X_i + \frac{1}{\sqrt{n - k}} \displaystyle \sum_{i = k + 1}^{n} X_i\right) = \\[2ex]
+& = Var \left(\frac{1}{\sqrt{k}} \displaystyle \sum_{i = 1}^{k} X_i\right) + Var \left(\frac{1}{\sqrt{n - k}} \displaystyle \sum_{i = k + 1}^{n} X_i\right) = \\[2ex]
+& = \frac{1}{k} \sum_{i = 1}^{k} Var(X_i) + \frac{1}{n - k} \sum_{i = k + 1}^{n} Var(X_i) = \\[2ex]
+& = \frac{1}{k} \cdot k + \frac{1}{n - k} \cdot (n - k) = 1 + 1 = 2
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+Y_4 \rightsquigarrow \mathcal{N} \left(0, \sqrt{2}\right)
+\end{align*}
+$$
+
+</DemBox>
+- $Y_5 = \dfrac{\displaystyle \sum_{i = 1}^{n} X_i^2}{n}$
+<DemBox title="Demostración">
+
+Dado que si $X_i \rightsquigarrow \mathcal{N}(0, 1)$ entonces $X_i^2 \rightsquigarrow \chi^2_1$, por lo que tenemos que:
+
+$$
+\begin{align*}
+\displaystyle \sum_{i = 1}^{n} X_i^2 \rightsquigarrow \chi^2_n
+\end{align*}
+$$
+
+Ahora tenemos realmente que:
+
+$$
+\begin{align*}
+Y_5 = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i^2 = \frac{1}{n} \cdot \chi^2_n
+\end{align*}
+$$
+
+</DemBox>
+- $Y_6 = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} (X_i - \overline{X_n})^2$
+<DemBox title="Demostración">
+
+Por el Teorema de Fisher, tenemos que:
+
+$$
+\begin{align*}
+\dfrac{(n - 1)\widehat{S}^2}{\sigma^2} \rightsquigarrow \chi^2_{n - 1}
+\end{align*}
+$$
+
+Y en este caso, podemos ver que:
+
+$$
+\begin{align*}
+\widehat{S}^2 = \frac{1}{n - 1} \displaystyle \sum_{i = 1}^{n} (X_i - \overline{X_n})^2 \implies (n - 1)\widehat{S}^2 = \displaystyle \sum_{i = 1}^{n} (X_i - \overline{X_n})^2
+\end{align*}
+$$
+
+Además, como $X_i \rightsquigarrow \mathcal{N}(0, 1) \implies \sigma = 1 \implies \sigma^2 = 1$ y por lo tanto:
+
+$$
+\begin{align*}
+\dfrac{(n - 1)\widehat{S}^2}{1} \rightsquigarrow \chi^2_{n - 1}
+\end{align*}
+$$
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+Y_6 = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} (X_i - \overline{X_n})^2 = \frac{1}{n} \cdot \dfrac{(n - 1)\widehat{S}^2}{1} \rightsquigarrow \frac{1}{n} \cdot \chi^2_{n - 1}
+\end{align*}
+$$
+
+</DemBox>
+- $Y_7 = \dfrac{\displaystyle \sum_{i = k + 1}^{n}X_i}{n - k}$ 
+<DemBox title="Demostración">
+
+En este caso, podemos seguir el mismo procedimiento que con los primeros, entonces:
+
+$$
+\begin{align*}
+E[Y_7] = E \left[\frac{1}{n - k} \displaystyle \sum_{i = k + 1}^{n} X_i\right] = \frac{1}{n - k} \displaystyle \sum_{i = k + 1}^{n} E[X_i] = \frac{1}{n - k} \cdot (n - k) \cdot 0 = 0
+\end{align*}
+$$
+
+Y para la varianza tenemos que:
+
+$$
+\begin{align*}
+Var(Y_7) & = Var \left(\frac{1}{n - k} \displaystyle \sum_{i = k + 1}^{n} X_i\right) = \frac{1}{(n - k)^2} \sum_{i = k + 1}^{n} Var(X_i) = \\[2ex]
+& = \frac{1}{(n - k)^2} \cdot (n - k) = \frac{1}{n - k}
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+Y_7 \rightsquigarrow \mathcal{N} \left(0, \sqrt{\frac{1}{n - k}}\right) = \mathcal{N} \left(0, \frac{1}{\sqrt{n - k}}\right)
+\end{align*}
+$$
+
+</DemBox>
+- $Y_8 = \dfrac{Y_2 + Y_7}{2}$
+<DemBox title="Demostración">
+
+Basta notar que como $Y_2$ depende de $X_1, \dots, X_k$ e $Y_7$ depende de $X_{k + 1}, \dots, X_n$ y son independientes, entonces vamos a calcular la esperanza y la varianza de $Y_8$:
+
+$$
+\begin{align*}
+E[Y_8] &= E \left[\frac{Y_2 + Y_7}{2}\right] = \frac{1}{2} E[Y_2] + \frac{1}{2} E[Y_7] = \frac{1}{2} \cdot 0 + \frac{1}{2} \cdot 0 = 0\\[2ex]
+Var(Y_8) & = Var \left(\frac{Y_2 + Y_7}{2}\right) = \frac{1}{4} Var(Y_2) + \frac{1}{4} Var(Y_7) = \\[2ex]
+& = \frac{1}{4} \cdot 1 + \frac{1}{4} \cdot \frac{1}{n - k} = \frac{1}{4} + \frac{1}{4(n - k)} = \frac{(n - k) + 1}{4(n - k)} = \frac{n - k + 1}{4(n - k)}
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+Y_8 \rightsquigarrow \mathcal{N} \left(0, \sqrt{\frac{n - k + 1}{4(n - k)}}\right) = \mathcal{N} \left(0, \frac{\sqrt{n - k + 1}}{2\sqrt{n - k}}\right)
+\end{align*}
+$$
+
+</DemBox>
+- $Y_9 = kY_2^2 + (n - k)Y_{7}^2$
+
+<DemBox title="Demostración">
+
+Aplicando un razonamiento similar al anterior, vamos a ver como se comportan los cuadrados de las variables $Y_2$ e $Y_7$. Como $Y_2 \rightsquigarrow \mathcal{N}\left(0, \frac{1}{\sqrt{k}}\right)$ entonces, como sabemos que si $X \rightsquigarrow \mathcal{N}(0, 1)$ entonces $X^2 \rightsquigarrow \chi^2_1$ y por lo tanto:
+
+$$
+\begin{align*}
+Y_2^2 = \left(\frac{1}{\sqrt{k}}\displaystyle \sum_{i = 1}^{k} X_i\right)^2 \rightsquigarrow \frac{1}{k} \cdot \chi^2_1 \implies kY_2^2 \rightsquigarrow \chi^2_1
+\end{align*}
+$$
+
+Análogamente:
+
+$$
+\begin{align*}
+Y_7^2 \rightsquigarrow \frac{1}{n - k} \cdot \chi^2_1 \implies (n - k)Y_7^2 \rightsquigarrow \chi^2_1
+\end{align*}
+$$
+
+Por lo tanto:
+
+$$
+\begin{align*}
+Y_9 = kY_2^2 + (n - k)Y_{7}^2 \rightsquigarrow \chi^2_1 + \chi^2_1 = \chi^2_2
+\end{align*}
+$$
+
+al ser la chi-cuadrado reproductiva respecto a los grados de libertad.
+
+</DemBox>
+- $Y_{10} = \dfrac{kY_2^2}{(n - k)Y^2_7}$
+
+<DemBox title="Demostración">
+
+Seguimos el mismo razonamiento que antes y como sabemos que:
+
+$$
+\begin{align*}
+W \rightsquigarrow \chi^2_{d_1} \quad V \rightsquigarrow \chi^2_{d_2} \implies \frac{W / d_1}{V / d_2} \rightsquigarrow F_{d_1, d_2}
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+Y_{10} = \dfrac{\chi_1^2 / k}{(n - k)\chi_2^2 / (n - k)} \rightsquigarrow F_{1, 1} \implies Y_{10} \rightsquigarrow F_{1, 1}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Sean $X_i$, $1 \leq i \leq 3$ variables aleatorias independientes con distribución $\mathcal{N}(0, \sigma)$ determina la distribución de:*
+
+$$
+\begin{align*}
+\dfrac{2X_1^2}{X_2^2 + X_3^2}
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Definimos las variables aleatorias:
+
+$$
+\begin{align*}
+Z_i = \dfrac{X_i}{\sigma} \rightsquigarrow \mathcal{N}(0, 1) \implies Z_i^2 \rightsquigarrow \chi^2_1
+\end{align*}
+$$
+
+Entonces tenemos que:
+
+$$
+\begin{align*}
+X_1^2 = \sigma^2 Z_1^2 \quad \text{y} \quad X_2^2 + X_3^2 = \sigma^2 (Z_2^2 + Z_3^2) \rightsquigarrow \sigma^2 \cdot \chi^2_2
+\end{align*}
+$$
+
+Entonces, sustituimos en la expresión original y tenemos que:
+
+$$
+\begin{align*}
+Z = \dfrac{2X_1^2}{X_2^2 + X_3^2} = \dfrac{2\sigma^2 Z_1^2}{\sigma^2 (Z_2^2 + Z_3^2)} = \dfrac{2Z_1^2}{Z_2^2 + Z_3^2}
+\end{align*}
+$$
+
+Y aplicando lo que sabemos de:
+
+$$
+\begin{align*}
+\dfrac{U / d_1}{V / d_2} \rightsquigarrow F_{d_1, d_2}
+\end{align*}
+$$
+
+Entonces:
+
+$$
+\begin{align*}
+Z = \dfrac{2Z_1^2 / 1}{Z_2^2 + Z_3^2 / 2} \rightsquigarrow F_{1, 2}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Un instrumento de precisión proporciona una medición física. Se pretende analizar la variabilidad de dicha medición. Sobre la base de experiencias previas, se sabe que dicha medición tiene distribución normal con desviación típica $\sigma = 0.1$ unidades. Se toma una muestra aleatoria simple de 25 mediciones, calcular la probabilidad de que el valor de la varianza muestral sea superior $0.014$ unidades cuadradas.*
+
+<DemBox title="Demostración">
+
+En este caso tenemos que $X$ es la variable aleatoria que representa la medición, y sabemos que $X \rightsquigarrow \mathcal{N}(0, 0.1)$. Además, tenemos una muestra $n = 25$ y queremos saber la probabilidad de que la varianza muestral sea superior a $0.014$ unidades cuadradas, es decir:
+
+$$
+\begin{align*}
+P(S^2 > 0.014)
+\end{align*}
+$$
+
+Como la varianza muestral viene dada por:
+
+$$
+\begin{align*}
+S^2 = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} (X_i - \overline{X})^2
+\end{align*}
+$$
+
+Podemos transformar la expresión para trabajar con la cuasi-varianza, es decir:
+
+$$
+\begin{align*}
+S^2 = \dfrac{ n - 1}{n} \widehat{S^2} \implies \widehat{S^2} = \frac{n}{n - 1} S^2
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+P(S^2 > 0.014) = P\left(\widehat{S^2} > \dfrac{n}{n - 1} \cdot 0.014\right) = P \left(\widehat{S^2} > \frac{25}{24} \cdot 0.014\right)
+\end{align*}
+$$
+
+Ahora, como sabemos que por el Teorema de Fisher, al estar bajo $X_i \rightsquigarrow \mathcal{N}(0, 0.1)$ y además estamos en un muestreo aleatorio simple, tenemos que:
+
+$$
+\begin{align*}
+\dfrac{(n - 1)\widehat{S^2}}{\sigma^2} \rightsquigarrow \chi^2_{ n - 1} \implies \dfrac{24 \cdot \widehat{S^2}}{0.1^2} \rightsquigarrow \chi^2_{24}
+\end{align*}
+$$
+
+Por lo que:
+
+$$
+\begin{align*}
+P \left(\widehat{S^2} > \frac{25}{24} \cdot 0.014\right) & = P \left(\frac{24 \cdot \widehat{S^2}}{0.01} > \dfrac{24 \cdot 25 \cdot 0.014}{24 \cdot  0.01}\right) = P \left(\chi^2_{24} > 35\right)
+\end{align*}
+$$
+
+Ahora, podemos ver la tabla de la chi-cuadrado y ver que:
+
+![ej4.4-1](/blogs/images/ejercicios-pye_ej4.4-1.png)
+
+Por lo que como $35 \in (33.196, 36.415)$ tenemos que interpolar para ver el valor de $\alpha$ que nos interesa, es decir:
+
+$$
+\begin{align*}
+\alpha = 0.1 + \dfrac{35 - 33.196}{36.415 - 33.196} \cdot (0.05 - 0.1) = 0.1 - 0.02802 = 0.07198
+\end{align*}
+$$
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+P(S^2 > 0.014) \approx 0.07198
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Supongamos una población cuya característica en estudio se encuentra normalmente distribuida con media 12 y varianza 16. Se considera una muestra aleatoria simple de tamaño 9. Se pide:*
+
+- *Probabilidad de que la característica del tercer elemento de la muestra tome un valor superior a 14.*
+<DemBox title="Demostración">
+
+Según el enunciado, tenemos que $X \rightsquigarrow \mathcal{N}(12, 4)$ y se toma una muestra aleatoria simple de tamaño 9. Se quiere saber la probabilidad de que la característica del tercer elemento de la muestra tome un valor superior a 14. Como la muestra es aleatoria simple, entonces cada elemento de la muestra se distribuye igual que la población, es decir:
+
+$$
+\begin{align*}
+X_i \rightsquigarrow \mathcal{N}(12, 4) \quad \forall i = 1, \dots, 9
+\end{align*}
+$$
+
+Lo que queremos calcular es:
+
+$$
+\begin{align*}
+P(X_3 > 14)
+\end{align*}
+$$
+
+Y para ello, podemos tipificar la variable aleatoria $X_3$ y tenemos que:
+
+$$
+\begin{align*}
+P(X_3 > 14) & = P\left(\dfrac{X_3 - 12}{3} > \dfrac{14 - 12}{4}\right) = P(\mathcal{N}(0, 1) > 0.5)
+\end{align*}
+$$
+
+Para mirarlo en la tabla, tenemos que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) > 0.5) = 1 - P(\mathcal{N}(0, 1) \leq  0.5)
+\end{align*}
+$$
+
+Y en la tabla tenemos que:
+
+![ej4.5-1](/blogs/images/ejercicios-pye_ej4.5-1.png)
+
+Es decir, que tenemos:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) \leq 0.5) = 0.6915 \implies P(\mathcal{N}(0, 1) > 0.5) = 1 - 0.6915 = 0.3085
+\end{align*}
+$$
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+P(X_3 > 14) \approx 0.3085
+\end{align*}
+$$
+
+</DemBox>
+- *¿Cuál es la probabilidad de que la media muestral tenga un valor superior a 14?*
+<DemBox title="Demostración">
+
+Ahora, queremos ver que la media muestral tenga un valor superior a 14, es decir:
+
+$$
+\begin{align*}
+P(\overline{X} > 14) 
+\end{align*}
+$$
+
+Para ello, veamos el comportamiento de la media muestral, que sabemos que:
+
+$$
+\begin{align*}
+\overline{X} = \frac{1}{n} \displaystyle \sum_{i = 1}^{n} X_i \rightsquigarrow \mathcal{N} \left(\frac{1}{n} \cdot n \mu, \dfrac{\sigma}{\sqrt{n}}\right) = \mathcal{N} \left(\mu, \dfrac{\sigma}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+Sustituyendo los valores, tenemos que:
+
+$$
+\begin{align*}
+\overline{X} \rightsquigarrow \mathcal{N} \left(12, \dfrac{4}{3}\right)
+\end{align*}
+$$
+
+Entonces, ahora solo hace falta tipificar la variable aleatoria $\overline{X}$ y tenemos que:
+
+$$
+\begin{align*}
+P(\overline{X} > 14) & = P\left(\dfrac{\overline{X} - 12}{\frac{4}{3}} > \dfrac{14 - 12}{\frac{4}{3}}\right) = P \left(\mathcal{N}(0, 1 ) >  \frac{2}{\frac{4}{3}}\right) = \\[2ex]
+& = P \left(\mathcal{N}(0, 1) > \frac{3}{2}\right) = 1 - P \left(\mathcal{N}(0, 1) \leq \frac{3}{2}\right)
+\end{align*}
+$$
+
+Por lo que miramos en la tabla y tenemos que:
+
+![ej4.5-2](/blogs/images/ejercicios-pye_ej4.5-2.png)
+
+Es decir, que tenemos que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) \leq \frac{3}{2}) = 0.9332 \implies P\left(\mathcal{N}(0, 1) > \frac{3}{2}\right) = 1 - 0.9332 = 0.0668
+\end{align*}
+$$
+
+Por lo que concluimos que:
+
+$$
+\begin{align*}
+P(\overline{X} > 14) \approx 0.0668
+\end{align*}
+$$
+
+</DemBox>
+- *¿Cuál es la varianza de la media muestral?*
+<DemBox title="Demostración">
+
+Para ver la varianza de la media muestral tenemos que calcular:
+
+$$
+\begin{align*}
+Var(\overline{X}) = Var \left(\frac{1}{n} \displaystyle \sum_{i = 1}^{n}X_i\right) = \frac{1}{n^2} \displaystyle \sum_{i = 1}^{n} Var(X_i) = \frac{1}{n^2} \cdot n \cdot \sigma^2 = \frac{\sigma^2}{n}
+\end{align*}
+$$
+
+Por lo que si sustituimos los valores, tenemos que:
+
+$$
+\begin{align*}
+Var(\overline{X}) = \dfrac{4^2}{9} = \dfrac{16}{9} \approx 1.778
+\end{align*}
+$$
+
+</DemBox>
+- *¿Se puede concluir estadísticamente que los valores tomados por la media muestral se encuentran menos dispersos que los valores poblacionales?*
+<DemBox title="Demostración">
+
+Para ver si se puede concluir estadísticamente que los valores tomados por la media muestral se encuentran menos dispersos que los valores poblacionales, tenemos que ver si:
+
+$$
+\begin{align*}
+Var(\overline{X}) < Var(X) \implies \frac{\sigma^2}{n} < \sigma^2 \implies \frac{1}{n} < 1
+\end{align*}
+$$
+
+Y como $n = 9$, entonces:
+
+$$
+\begin{align*}
+P(\overline{X}) < P(X) \implies 0.1111 < 1
+\end{align*}
+$$
+
+Por lo que podemos concluir que sí, los valores tomados por la media muestral se encuentran menos dispersos que los valores poblacionales.
+
+</DemBox>
+
+### Ejercicio 6
+*Una persona desea estimar el pH promedio de un campo del que conoce su desviación típica, siendo esta de 0.75. Para ello, selecciona $n$ muestras al azar e independientes y mide el pH de cada una de ellas.*
+
+- *Si esta persona selecciona 40 muestras, calcular la probabilidad aproximada de que el pH promedio de las 40 muestras quede a no más de 0.2 unidades del pH medio verdadero (es decir, poblacional) de ese campo.*
+<DemBox title="Demostración">
+
+Primero, vamos a plantear el problema. Para ello, definimos $X$ = campo y sabemos que la desviación típica del pH es $\sigma = 0.75$. Como sabemos que ha tomado $n = 40$ muestras entonces estamos en condiciones de aplicar el Teorema Central del Límite, por lo que tenemos que:
+
+$$
+\begin{align*}
+\overline{X} \rightsquigarrow \mathcal{N}\left(\mu, \dfrac{\sigma}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+Lo que queremos hallar es:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.2) 
+\end{align*}
+$$
+
+Y para ello, podemos añadir los datos que sabemos a la expresión de $\overline{X}$, es decir:
+
+$$
+\begin{align*}
+\overline{X} \rightsquigarrow \mathcal{N}\left(\mu, \dfrac{0.75}{\sqrt{40}}\right) \approx \mathcal{N} \left(\mu, 0.1186\right)
+\end{align*}
+$$
+
+Así, ya podemos calcular la probabilidad que nos interesa, es decir:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.2) & = P( - 0.2 \leq \overline{X} - \mu \leq 0.2 ) = \\[2ex]
+& = P \left(\dfrac{ - 0.2}{0.1186} \leq \dfrac{\overline{X} - \mu}{0.1186} \leq \dfrac{0.2}{0.1186}\right) = \\[2ex]
+& = P \left( - 1.685 \leq \mathcal{N}(0, 1) \leq 1.685\right) = \\[2ex]
+& = 2 \cdot P \left(\mathcal{N}(0, 1) \leq 1.685\right) - 1 
+\end{align*}
+$$
+
+Y ahora, miramos en la tabla de la normal y tenemos que:
+
+![ej4.6-1](/blogs/images/ejercicios-pye_ej4.6-1.png)
+
+Por lo que tenemos que $P(\mathcal{N}(0, 1) \leq 1.685) \approx 0.954$, por lo que tenemos que:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.2) & = 2 \cdot 0.954 - 1 = 0.908
+\end{align*}
+$$
+
+</DemBox>
+- *Si la persona desea que el promedio de la muestra esté a no más de 0.1 del promedio verdadero con una probabilidad de al menos 0.9, ¿cuántas muestras debe tomar? ¿Y si desea un error a lo sumo de 0.75?*
+<DemBox title="Demostración">
+
+En este caso lo que tenemos que hacer es:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.1) \geq 0.9
+\end{align*}
+$$
+
+Si dividimos la expresión entre $\frac{\sigma}{\sqrt{n}}$ tenemos que:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.1) = P \left(\left|\dfrac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}}\right| \leq \dfrac{0.1}{\frac{\sigma}{\sqrt{n}}}\right) = P\left( \left|\mathcal{N}(0, 1)\right| \leq \dfrac{0.1 \sqrt{n}}{0.75}\right) \geq 0.9
+\end{align*}
+$$
+
+Así, buscamos el valor $z$ tal que:
+
+$$
+\begin{align*}
+P( - z \leq \mathcal{N}(0, 1) \leq z) = 0.9 & \implies 2 \cdot P(\mathcal{N}(0, 1) \leq z) - 1 = 0.9 \implies \\[2ex]
+& \implies P(\mathcal{N}(0, 1) \leq z) = \dfrac{0.9 + 1}{2} = 0.95
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.6-2](/blogs/images/ejercicios-pye_ej4.6-2.png)
+
+Por lo que como $0.95 \in (0.9495, 0.9505)$ podemos interpolar y tenemos que:
+
+$$
+\begin{align*}
+z = 1.64 + \dfrac{0.95 - 0.9495}{0.9505 - 0.9495} \cdot (1.65 - 1.64) = 1.64 + 0.005 = 1.645
+\end{align*}
+$$
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+z = 1.645 & \implies \dfrac{0.1 \sqrt{n}}{0.75} = 1.645 \implies \sqrt{n} = \dfrac{1.645 \cdot 0.75}{0.1} \implies \\[2ex]
+& \implies n = \left(\dfrac{1.645 \cdot 0.75}{0.1}\right)^2 = \left(12.3375\right)^2 \approx 152.2
+\end{align*}
+$$
+
+En este caso, como el valor no es entero, tenemos que redondear hacia arriba ya que queremos garantizar que la probabilidad sea al menos $0.9$, por lo que tenemos que:
+
+$$
+\begin{align*}
+n = 153
+\end{align*}
+$$
+
+Ahora, si deseamos un error a lo sumo de $0.75$, tenemos que:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.75) \geq 0.9
+\end{align*}
+$$
+
+Entonces, siguiendo el mismo razonamiento que antes, tenemos que:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.75) &= P \left(\left|\dfrac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}}\right| \leq \dfrac{0.75}{\frac{\sigma}{\sqrt{n}}}\right) = P\left( \left|\mathcal{N}(0, 1)\right| \leq \dfrac{0.75 \sqrt{n}}{0.75}\right) = \\[2ex]
+& = P\left( \left|\mathcal{N}(0, 1)\right| \leq \sqrt{n}\right) = P\left( - \sqrt{n} \leq \mathcal{N}(0, 1) \leq \sqrt{n}\right) \geq 0.9
+\end{align*}
+$$
+
+Buscamos el valor $z$ tal que:
+
+$$
+\begin{align*}
+P( - z \leq \mathcal{N}(0, 1) \leq z) = 0.9 & \implies 2 \cdot P(\mathcal{N}(0, 1) \leq z) - 1 = 0.9 \implies \\[2ex]
+& \implies P(\mathcal{N}(0, 1) \leq z) = \dfrac{0.9 + 1}{2} = 0.95
+\end{align*}
+$$
+
+Que nos da el mismo resultado que antes, es decir:
+
+$$
+\begin{align*}
+z = 1.645 & \implies \sqrt{n} = 1.645 \implies n = (1.645)^2 \approx 2.7
+\end{align*}
+$$
+
+Por lo que tenemos que redondear hacia arriba, es decir:
+
+$$
+\begin{align*}
+n = 3
+\end{align*}
+$$
+
+Sin embargo, como el valor de $n$ es tan pequeño, no podemos garantizar nada ya que, como podemos recordar, estábamos trabajando con el Teorema Central del Límite y consideramos que una muestra de $n \geq 30$ es suficiente para que la aproximación sea válida. Así, tenemos que usar la desigualdad de Chebyshev, que nos dice que:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq \varepsilon) \geq 1 - \dfrac{Var(\overline{X})}{\varepsilon^2} &\implies P(|\overline{X} - \mu| \leq 0.75) \geq 1 - \dfrac{\sigma^2/n}{0.75^2} \implies \\[2ex]
+& \implies P(|\overline{X} - \mu| \leq 0.75) \geq 1 - \dfrac{0.75^2}{ n \cdot 0.75^2} \implies \\[2ex]
+& \implies P(|\overline{X} - \mu| \leq 0.75) \geq 1 - \dfrac{1}{n}
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+1 - \dfrac{1}{n} \geq 0.9 \implies \dfrac{1}{n} \leq 0.1 \implies n \geq 10
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Sea $X$ la variable aleatoria que representa la proporción de impurezas en muestras del mineral de hierro, cuya función de densidad viene dada por:*
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+3x^2 & \text{ si } x \in (0, 1)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Se toma una muestra aleatoria simple de 40 mediciones de impurezas en muestras de mineral de hierro. Un comprador potencial rechaza el mineral si $\overline{X_{40}} > 0.7$. Calcular la probabilidad aproximada de que el mineral sea rechazado*.
+
+<DemBox title="Demostración">
+
+En este caso, tenemos que la variable aleatoria $X$ es la proporción de impurezas en el mineral de hierro y sabemos que su función de densidad es:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+3x^2 & \text{ si } x \in (0, 1)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Si se toma una muestra aleatoria simple de $n = 40$ mediciones, queremos ver:
+
+$$
+\begin{align*}
+P(\overline{X_{40}} > 0.7)
+\end{align*}
+$$
+
+Para ello, como $n \geq 30$ vamos a aplicar el Teorema Central del Límite, por lo que tenemos que:
+
+$$
+\begin{align*}
+\overline{X_{40}} \rightsquigarrow \mathcal{N}\left(\mu, \frac{\sigma}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+Para ello, vamos a hallar la esperanza:
+
+$$
+\begin{align*}
+E[X] & = \int_0^1 3x^2 \cdot x \, dx = 3 \int_0^1 x^3 \, dx = 3 \cdot \frac{x^4}{4} \Big|_0^1 = 3 \cdot \frac{1}{4} = \frac{3}{4}
+\end{align*}
+$$
+
+Y ahora la varianza:
+
+$$
+\begin{align*}
+Var(X) = E[X^2] - E[X]^2
+\end{align*}
+$$
+
+Para ello, calculamos primero $E[X^2]$:
+
+$$
+\begin{align*}
+E[X^2] = \int_0^1 3x^2 \cdot x^2 \, dx = 3 \int_0^1 x^4 \, dx = 3 \cdot \frac{x^5}{5} \Big|_0^1 = 3 \cdot \frac{1}{5} = \frac{3}{5}
+\end{align*}
+$$
+
+Ahora, sustituimos en la expresión de la varianza:
+
+$$
+\begin{align*}
+Var(X) & = E[X^2] - E[X]^2 = \frac{3}{5} - \left(\frac{3}{4}\right)^2 = \frac{3}{5} - \frac{9}{16} = \frac{48 - 45}{80} = \frac{3}{80}
+\end{align*}
+$$
+
+Por lo que por el Teorema Central del Límite, tenemos que:
+
+$$
+\begin{align*}
+\overline{X_{40}} \rightsquigarrow \mathcal{N}\left(\frac{3}{4}, \frac{\sqrt{3/80}}{\sqrt{40}}\right) = \mathcal{N}\left(\frac{3}{4}, \sqrt{\dfrac{3}{40 \cdot (40 \cdot 2)}}\right) = \mathcal{N}\left(\frac{3}{4}, \dfrac{\sqrt{3}}{40\sqrt{2}}\right)
+\end{align*}
+$$
+
+Ahora, para calcular la probabilidad que nos interesa, tenemos que:
+
+$$
+\begin{align*}
+P(\overline{X_{40}} > 0.7) & = P\left(\dfrac{\overline{X_{40}} - \frac{3}{4}}{\frac{\sqrt{3}}{40\sqrt{2}}} > \dfrac{0.7 - \frac{3}{4}}{\frac{\sqrt{3}}{40\sqrt{2}}}\right) = P\left(\mathcal{N}(0, 1) > \dfrac{-0.05 \cdot 40\sqrt{2}}{\sqrt{3}}\right) = \\[2ex]
+& = P \left(\mathcal{N}(0, 1) > - 1.633\right) = P \left(\mathcal{N}(0, 1) < 1.633\right) 
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.7-1](/blogs/images/ejercicios-pye_ej4.7-1.png)
+
+Por lo que tenemos que $P(\mathcal{N}(0, 1) < 1.633) \approx 0.94845$, por lo que tenemos que:
+
+$$
+\begin{align*}
+P(\overline{X_{40}} > 0.7) & \approx 0.94845
+\end{align*}
+$$
+
+Es decir, que la probabilidad de que el mineral sea rechazado es aproximadamente $0.94845$. (cagadón histórico)
+
+</DemBox>
+
+### Ejercicio 8
+*La producción diaria de cierto artículo oscila aleatoriamente entre 6000 y 10.000 unidades. Determinar la probabilidad de que la producción media diaria en un año supere las 8.100 unidades, suponiendo que el año tiene 250 días laborables y que hay independencia entre los números de unidades producidas cada día.*
+<DemBox title="Demostración">
+
+En este caso, tenemos la variable $X$ que es la producción diaria de cierto artículo y sabemos que:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{U}[6000, 10000]
+\end{align*}
+$$
+
+Se observan $n = 250$ días y lo que queremos es:
+
+$$
+\begin{align*}
+P(\overline{X_{250}} > 8100)
+\end{align*}
+$$
+
+Como la producción diaria sabemos que es independiente y las muestras son aleatorias, podemos aplicar el Teorema Central del Límite ya que $n \geq 30$, en particular, $n = 250$. Así, tendremos que:
+
+$$
+\begin{align*}
+\overline{X_{250}} \rightsquigarrow \mathcal{N}\left(\mu, \frac{\sigma}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+Para ello, vamos a hallar la esperanza y la varianza de la variable aleatoria $X$:
+
+$$
+\begin{align*}
+E[X] & = \frac{6000 + 10000}{2} = \frac{16000}{2} = 8000 \\[2ex]
+Var(X) & = \frac{(10000 - 6000)^2}{12} = \frac{4000^2}{12} = \frac{16000000}{12} = 1\ 333\ 333.33
+\end{align*}
+$$
+
+Entonces, sustituyendo en la expresión de la normal, tenemos que:
+
+$$
+\begin{align*}
+\overline{X_{250}} \rightsquigarrow \mathcal{N}\left(8000, \dfrac{\sqrt{1\ 333\ 333.33}}{\sqrt{250}}\right) = \mathcal{N}\left(8000, \dfrac{1154.7}{\sqrt{250}}\right) = \mathcal{N}(8000, 73.01)
+\end{align*}
+$$
+
+Ahora, para calcular la probabilidad que nos interesa, tenemos que:
+
+$$
+\begin{align*}
+P(\overline{X_{250}} > 8100) & = P\left(\dfrac{\overline{X_{250}} - 8000}{73.01} > \dfrac{8100 - 8000}{73.01}\right) = P \left(\mathcal{N}(0, 1) > \dfrac{100}{73.01}\right) = \\[2ex]
+& = P \left(\mathcal{N}(0, 1) > 1.3697\right) = 1 - P \left(\mathcal{N}(0, 1) \leq 1.3697\right)
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.8-1](/blogs/images/ejercicios-pye_ej4.8-1.png)
+
+Donde obtenemos que:
+
+$$
+\begin{align*}
+P \left(\mathcal{N}(0, 1) > 1.3697\right) = 1 - P \left(\mathcal{N}(0, 1) \leq 1.3697\right) & \approx 1 - 0.91466 = 0.08534 
+\end{align*}
+$$
+
+Entonces tenemos que:
+
+$$
+\begin{align*}
+P(\overline{X_{250}} > 8100) & \approx 0.08534
+\end{align*}
+$$
+
+Es decir, que la probabilidad de que la producción media diaria en un año supere las 8100 unidades es aproximadamente $0.08534$. (Seguro que en TEMU esto se corregía fácilmente con una hora más de jornada laboral)
+
+</DemBox>
+
+### Ejercicio 9
+*Una máquina está programada para llenar recipientes con 10 litros de capacidad. Sin embargo, la variabilidad inherente a cualquier tipo de máquina es la causa de que las cantidades de contenido sean distintas de recipiente a recipiente. Si la distribución del contenido que arroja la máquina en cada recipiente es normal con una desviación típica de 0.02 litros:*
+
+1. *Determinar la cantidad media del contenido para que sólo el 5\% de los recipientes reciban menos de 10 litros.*
+<DemBox title="Demostración">
+
+En este caso tenemos que la variable $X$ mide el contenido que la máquina arroja en cada recipiente y sabemos que:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{N}(\mu, 0.02)
+\end{align*}
+$$
+
+Queremos que el $5\%$ de los recipientes reciban menos de $10$ litros, es decir:
+
+$$
+\begin{align*}
+P(X < 10) = 0.05
+\end{align*}
+$$
+
+Entonces tenemos que buscar $\mu$ que cumpla esto. Para ello, vamos a trabajar con la expresión:
+
+$$
+\begin{align*}
+P \left(X < 10\right) = 0.05 & \implies P \left(\dfrac{X - \mu}{0.02} < \dfrac{10 - \mu}{0.02}\right) = 0.05 \implies\\[2ex]
+& \implies  P \left(\mathcal{N}(0, 1) < \dfrac{10 - \mu}{0.02}\right) = 0.05
+\end{align*}
+$$
+
+Así buscamos el valor $z$ tal que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) < z) = 0.05
+\end{align*}
+$$
+
+Sin embargo, este valor no está en la tabla, por lo que tenemos que jugar con la simetría de la normal, es decir:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) < z) = 0.05 & \implies P(\mathcal{N}(0, 1) > -z) = 0.05 \implies \\[2ex]
+& \implies P(\mathcal{N}(0, 1) < -z) = 0.95
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.9-1](/blogs/images/ejercicios-pye_ej4.9-1.png)
+
+Por lo que el valor $z$ que buscamos es:
+
+$$
+\begin{align*}
+z \approx - 1.65
+\end{align*}
+$$
+
+Entonces, ahora hay que despejar $\mu$ de la expresión:
+
+$$
+\begin{align*}
+\dfrac{10 - \mu}{0.02} \approx -1.65 \iff \mu \approx  1.65 \cdot 0.02 + 10 = 10.033
+\end{align*}
+$$
+
+</DemBox>
+2. *De la producción de la máquina en cierto día se obtiene una muestra aleatoria simple de tres recipientes llenados. ¿Cuál es la probabilidad de que el contenido del primer recipiente exceda al tercero en, al menos, 0.03 litros?*
+<DemBox title="Demostración">
+
+Ahora tenemos que:
+
+- $X_1$ mide el contenido del primer recipiente
+- $X_3$ mide el contenido del tercer recipiente
+
+Y sabemos que ambas variables son independientes y siguen la misma distribución, es decir:
+
+$$
+\begin{align*}
+X_i \rightsquigarrow \mathcal{N}(\mu, 0.02) \quad \forall i = 1, 2, 3
+\end{align*}
+$$
+
+Queremos calcular la probabilidad de que el contenido del primer recipiente exceda al tercero en, al menos, $0.03$ litros, es decir:
+
+$$
+\begin{align*}
+P(X_1 - X_3 \geq 0.03)
+\end{align*}
+$$
+
+Así, como ambas son variables aleatorias normales, vamos a definir una nueva variable aleatoria $Y$ que es la diferencia entre ambas, es decir:
+
+$$
+\begin{align*}
+Y = X_1 - X_3 \rightsquigarrow \mathcal{N}(\mu - \mu, \sqrt{0.02^2 + 0.02^2}) = \mathcal{N}(0, \sqrt{2} \cdot 0.02) = \mathcal{N}(0, 0.0283)
+\end{align*}
+$$
+
+Entonces, la expresión anterior se convierte en:
+
+$$
+\begin{align*}
+P(Y \geq 0.03) &=  P\left(\dfrac{Y - 0}{0.0283} \geq \dfrac{0.03 - 0}{0.0283}\right) = P \left(\mathcal{N}(0, 1) \geq 1.06\right) =\\[2ex]
+& = 1 - P \left(\mathcal{N}(0, 1) \leq 1.06\right) 
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.9-2](/blogs/images/ejercicios-pye_ej4.9-2.png)
+
+Por lo que tenemos:
+
+$$
+\begin{align*}
+P(Y \geq 0.03) = 1 - 0.85543 = 0.14457
+\end{align*}
+$$
+
+Es decir, que la probabilidad de que el contenido del primer recipiente exceda al tercero en, al menos, $0.03$ litros es aproximadamente $0.14457$.
+
+</DemBox>
+3. *¿Cuántos recipientes deben incluirse en una muestra si se desea que el contenido medio de la misma esté a lo sumo a 0.01 litros del contenido medio con probabilidad de 0.95?*
+
+<DemBox title="Demostración">
+
+En este caso, queremos encontrar el tamaño muestral $n$ tal que:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.01) = 0.95
+\end{align*}
+$$
+
+Como son normales podemos aplicar directamente suma de normales y tenemos que:
+
+$$
+\begin{align*}
+\overline{X} \rightsquigarrow \mathcal{N}\left(\mu, \dfrac{0.02}{\sqrt{n}}\right)
+\end{align*}
+$$
+
+Por lo que podemos trabajar la expresión anterior como:
+
+$$
+\begin{align*}
+P(|\overline{X} - \mu| \leq 0.01) = P \left(\dfrac{|\overline{X} - \mu|}{\frac{0.02}{\sigma}} \leq \dfrac{0.01}{\frac{0.02}{\sqrt{n}}}\right) = P \left(|\mathcal{N}(0, 1)| \leq \dfrac{\sqrt{n}}{2}\right) \geq 0.95
+\end{align*}
+$$
+
+Ahora bien, esta expresión se transforma en:
+
+$$
+\begin{align*}
+P \left(-\dfrac{\sqrt{n}}{2} \leq \mathcal{N}(0, 1) \leq \dfrac{\sqrt{n}}{2}\right) = 2 \cdot P \left(\mathcal{N}(0, 1) \leq \dfrac{\sqrt{n}}{2}\right) - 1 \geq 0.95
+\end{align*}
+$$
+
+Entonces buscamos el valor tal que:
+
+$$
+\begin{align*}
+P \left(\mathcal{N}(0, 1) \leq z\right) \geq \dfrac{0.95 + 1}{2} = 0.975
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.9-3](/blogs/images/ejercicios-pye_ej4.9-3.png)
+
+Por lo que tenemos que $z = 1.96$ y, si despejamos la expresión anterior, tenemos que:
+
+$$
+\begin{align*}
+\dfrac{\sqrt{n}}{2} = 1.96 \implies \sqrt{n} = 2 \cdot 1.96 \implies n = (2 \cdot 1.96)^2 = (3.92)^2 = 15.3664
+\end{align*}
+$$
+
+Por lo que tenemos que redondear hacia arriba, es decir:
+
+$$
+\begin{align*}
+n = 16
+\end{align*}
+$$
+
+Por lo que tenemos que tomar $n = 16$ recipientes para que el contenido medio de la muestra esté a lo sumo a $0.01$ litros del contenido medio con probabilidad de $0.95$.
+
+</DemBox>
+
+### Ejercicio 10
+*Sea $X$ una variable aleatoria de la que se sabe que $E(X) = 0.11$ y $Var(X) = 0.0025$ entonces:*
+
+- *Se considera una muestra de 50 observaciones independientes de $X$. Buscar un intervalo con extremo superior igual a 0.13 en el que se encuentre la media muestral con probabilidad igual a 0.95*
+<DemBox title="Demostración">
+
+En este caso, lo que queremos ver es que, sea $I$ un intervalo:
+
+$$
+\begin{align*}
+P(\overline{X_{50}} \in I) = 0.95
+\end{align*}
+$$
+
+donde el extremo intervalo superior es $0.13$. Como $n \geq 30$, en particular $n = 50$, podemos aplicar el Teorema Central del Límite ya que se nos dice que las observaciones son independientes y son de $X$ entonces son i.i.d. Entonces, tenemos que:
+
+$$
+\begin{align*}
+\overline{X_{50}} \rightsquigarrow \mathcal{N} \left(0.11, \dfrac{0.05}{\sqrt{50}}\right)
+\end{align*}
+$$
+
+Entonces lo que buscamos es:
+
+$$
+\begin{align*}
+P(a \leq \overline{X_{50}} \leq 0.13) = 0.95
+\end{align*}
+$$
+
+Vamos a ver cuanta probabilidad se acumula debajo de $0.13$:
+
+$$
+\begin{align*}
+P\left(\overline{X_{50}} \leq 0.13\right) & = P\left(\dfrac{\overline{X_{50}} - 0.11}{0.05/\sqrt{50}} \leq \dfrac{0.13 - 0.11}{0.05/\sqrt{50}}\right) \approx P \left(\mathcal{N}(0, 1) \leq 2.83\right)
+\end{align*}
+$$
+
+Y mirando la tabla de la normal, tenemos que:
+
+![ej4.10-1](/blogs/images/ejercicios-pye_ej4.10-1.png)
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+P\left(\overline{X_{50}} \leq 0.13\right) & \approx 0.99767
+\end{align*}
+$$
+
+Entonces, tenemos que sustraer $0.95$ a la probabilidad que hemos hallado, es decir:
+
+$$
+\begin{align*}
+0.99767 - 0.95 & \approx 0.04767
+\end{align*}
+$$
+
+Por lo que ahora para la cota inferior tenemos que:
+
+$$
+\begin{align*}
+P\left(a \leq \overline{X_{50}} \leq 0.13\right) = P\left(\overline{X_{50}} \leq 0.13\right) - P\left(\overline{X_{50}} \leq a\right) = 0.95
+\end{align*}
+$$
+
+Entonces buscamos:
+
+$$
+\begin{align*}
+P(\overline{X_{50}} \leq a) = 0.04767 & \implies P\left(\dfrac{\overline{X_{50}} - 0.11}{0.05/\sqrt{50}} \leq \dfrac{a - 0.11}{0.05/\sqrt{50}}\right) = 0.04767 \implies \\[2ex]
+& \implies P\left(\mathcal{N}(0, 1) \leq \dfrac{a - 0.11}{0.05/\sqrt{50}}\right) = 0.04767
+\end{align*}
+$$
+
+Así, buscamos un valor $z$ tal que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) \leq z) = 0.04767 & \implies P(\mathcal{N}(0, 1) > -z) = 0.04767 \implies \\[2ex]
+& \implies P(\mathcal{N}(0, 1) < -z) = 0.95233
+\end{align*}
+$$
+
+Y mirando en la tabla de la normal, tenemos que:
+
+![ej4.10-2](/blogs/images/ejercicios-pye_ej4.10-2.png)
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) < -z) & \approx 0.95233 \implies z \approx 1.67
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+\dfrac{a - 0.11}{0.05/\sqrt{50}} & \approx -1.67 \implies a - 0.11 \approx -1.67 \cdot 0.05/\sqrt{50} \implies \\[2ex]
+& \implies a \approx 0.11 - 1.67 \cdot 0.05/\sqrt{50} = 0.11 - 0.01183 = 0.09817
+\end{align*}
+$$
+
+Por lo que tenemos que:
+
+$$
+\begin{align*}
+I = [0.09817, 0.13]
+\end{align*}
+$$
+
+Es decir, que el intervalo en el que se encuentra la media muestral con probabilidad $0.95$ es:
+
+$$
+\begin{align*}
+I = [0.09817, 0.13]
+\end{align*}
+$$
+
+</DemBox>
