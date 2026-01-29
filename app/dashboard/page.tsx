@@ -38,8 +38,24 @@ type Categories = {
 const sampleDataBlog = [
   { title: "Resolución Examen Análisis 2025", description: "Resolución del examen de análisis de 2025 con explicaciones detalladas.", date: "2025-09-01", estimatedReadTime: "5 min", tags: ["Análisis", "Exámenes", "Cálculo", "Integrales"], link: "/resolucion-examen-analisis-2025" },
   { title: "Ejercicios Resueltos Análisis III - Parte 1", description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo", date: "2026-01-12", estimatedReadTime: "150 min", tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebesgue"], link: "/analisis3-ejercicios-1" },
+  { title: "Ejercicios Resueltos Análisis III - Parte 2", description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo.", date: "2026-01-12", estimatedReadTime: "140 min", tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebesgue"], link: "/analisis3-ejercicios-2" },
+  { title: "Ejercicios Resueltos Análisis III - Parte 3", description: "Ejercicios resueltos de la asignatura Análisis III de la Universidad de Oviedo.", date: "2026-01-12", estimatedReadTime: "130 min", tags: ["Análisis III", "Ejercicios Resueltos", "Matemáticas", "Teoría de la Medida", "Lebesgue"], link: "/analisis3-ejercicios-3" },
+  { title: "Análisis 3 - Tema 1", description: "Conceptos básicos sobre conjuntos, cardinalidad y conjuntos numerables. Introducción a la teoría de conjuntos.", date: "2026-01-11", estimatedReadTime: "90 min", tags: ["Matemáticas", "Análisis", "Cardinalidad", "Conjuntos Numerables"], link: "/analisis-3-tema-1" },
+  { title: "Análisis 3 - Tema 2", description: "Introducción a los espacios de medida y sus propiedades fundamentales. Análisis de las σ-álgebras y medidas asociadas.", date: "2026-01-12", estimatedReadTime: "75 min", tags: ["Análisis III", "Medida", "Espacios de medida"], link: "/analisis-3-tema-2" },
+  { title: "Análisis 3 - Tema 3", description: "Espacio de medida de Lebesgue en R^N. Conjuntos medibles de Lebesgue. Medida de Lebesgue y sus propiedades.", date: "2026-01-12", estimatedReadTime: "85 min", tags: ["Análisis III", "Matemáticas", "Medida de Lebesgue"], link: "/analisis-3-tema-3" },
+  { title: "Análisis 3 - Tema 4", description: "Medibilidad de funciones. Operaciones con funciones medibles. Composición de funciones medibles y continuas.", date: "2026-01-12", estimatedReadTime: "70 min", tags: ["Análisis III", "Funciones Medibles", "Teoría de la Medida"], link: "/analisis-3-tema-4" },
+  { title: "Análisis 3 - Tema 5", description: "Integral de Lebesgue para funciones simples y no negativas, propiedades fundamentales. Espacio de funciones integrables y sumables.", date: "2026-01-12", estimatedReadTime: "180 min", tags: ["Análisis III", "Integral de Lebesgue", "Funciones simples", "Funciones no negativas", "Espacio L1"], link: "/analisis-3-tema-5" },
+  { title: "Análisis 3 - Tema 6", description: "Espacios Lp, normas y desigualdades fundamentales asociadas a dichos espacios. Espacios vectoriales seminormados.", date: "2026-01-12", estimatedReadTime: "95 min", tags: ["Análisis III", "Análisis Matemático", "Espacios Lp", "Normas", "Desigualdades de Hölder y Minkowski", "Espacios vectoriales seminormados"], link: "/analisis-3-tema-6" },
+  { title: "Análisis 3 - Tema 7", description: "Series de Fourier y sistemas ortonormales en espacios de Hilbert. Teorema de Óptima Aproximación, Identidad de Parseval y Teorema de Riesz-Fischer.", date: "2026-01-12", estimatedReadTime: "110 min", tags: ["Análisis III", "Series de Fourier", "Espacios de Hilbert", "Sistemas Ortonormales"], link: "/analisis-3-tema-7" },
+  { title: "Apuntes MOR - Tema 1", description: "Apuntes sobre Introducción a la Teoría de Grafos para la asignatura de Modelos de Optimización de Redes.", date: "2026-01-12", estimatedReadTime: "120 min", tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"], link: "/mor-tema-1" },
+  { title: "Apuntes MOR - Tema 2", description: "Apuntes sobre árboles y arborescencias en Modelos de Optimización de Redes. Definiciones, teoremas y algoritmos clave.", date: "2026-01-12", estimatedReadTime: "80 min", tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"], link: "/mor-tema-2" },
+  { title: "Apuntes MOR - Tema 3", description: "Apuntes sobre caminos de menor valor en Modelos de Optimización de Redes. Definiciones, teoremas y algoritmos clave.", date: "2026-01-12", estimatedReadTime: "90 min", tags: ["MOR", "Modelos de Optimización de Redes", "Teoría de Grafos", "Optimización"], link: "/mor-tema-3" },
   { title: "Apuntes MOR - Tema 4", description: "Apuntes sobre Introducción a la Teoría de Grafos para la asignatura de Modelos de Optimización de Redes", date: "2025-12-20", estimatedReadTime: "120 min", tags: ["MOR", "Grafos", "Optimización", "Redes"], link: "/mor-tema-4" },
   { title: "Apuntes TPP - Tema 1", description: "Principales conceptos sobre lenguajes y paradigmas de programación, incluyendo definiciones, clasificaciones y características destacadas", date: "2026-01-10", estimatedReadTime: "35 min", tags: ["TPP", "Programación", "Lenguajes de Programación", "Paradigmas"], link: "/tpp-tema-1" },
+  { title: "Inferencia - Tema 0", description: "Conceptos básicos de probabilidad y estadística necesarios para el estudio de la inferencia estadística.", date: "2026-01-12", estimatedReadTime: "45 min", tags: ["inferencia estadística", "Probabilidad", "Estadística"], link: "/inferencia-tema-0" },
+  { title: "Inferencia - Tema 1", description: "Estadígrafos de orden y sus propiedades en inferencia estadística. Definiciones y teoremas clave para el análisis de muestras ordenadas.", date: "2026-01-12", estimatedReadTime: "100 min", tags: ["inferencia estadística", "Estadígrafos de orden", "Muestras ordenadas"], link: "/inferencia-tema-1" },
+  { title: "Inferencia - Tema 2", description: "Suficiencia de un estadígrafo, Familia exponencial k-paramétrica, Estimación puntual y Método de los momentos", date: "2026-01-12", estimatedReadTime: "125 min", tags: ["Inferencia estadística", "Estadística", "Matemáticas"], link: "/inferencia-tema-2" },
+  { title: "Distribución Normal y Binomial: Relación y Aproximaciones", description: "Explicación detallada de las distribuciones binomial y normal, sus propiedades y su conexión a través del Teorema Central del Límite.", date: "2025-09-19", estimatedReadTime: "20 min", tags: ["Probabilidad", "Estadística", "Distribución normal", "Distribución binomial"], link: "/normal-binomial" },
 ]
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
@@ -196,7 +212,26 @@ function WelcomePage() {
   return (
     <>
       <div className="p-8 max-w-325 mx-auto">
-        <div className="bg-muted/50 rounded-xl w-full h-32" />
+        {/* <div className="bg-muted/50 rounded-xl w-full h-32" /> */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold mt-8">Blog</h2>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {sampleDataBlog.map((blog, index) => (
+              <BlogCard
+                key={index}
+                title={blog.title}
+                description={blog.description}
+                date={blog.date}
+                estimatedReadTime={blog.estimatedReadTime}
+                tags={blog.tags}
+                link={blog.link}
+              />
+            ))}
+          </div>
+        </section>
+        {/* <div className="bg-muted/50 rounded-xl w-full h-32 mt-12" /> */}
         <section className="mt-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">{pageTitle}</h2>
@@ -225,25 +260,6 @@ function WelcomePage() {
               <p className="text-gray-500">No se encontraron apuntes para esta categoría</p>
             </div>
           )}
-        </section>
-        <div className="bg-muted/50 rounded-xl w-full h-32 mt-12" />
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold mt-8">Blog</h2>
-          </div>
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {sampleDataBlog.map((blog, index) => (
-              <BlogCard
-                key={index}
-                title={blog.title}
-                description={blog.description}
-                date={blog.date}
-                estimatedReadTime={blog.estimatedReadTime}
-                tags={blog.tags}
-                link={blog.link}
-              />
-            ))}
-          </div>
         </section>
       </div>
     </>
