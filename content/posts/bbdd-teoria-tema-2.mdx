@@ -1,0 +1,694 @@
+---
+title: "Bases de Datos - Tema 2"
+date: "2026-01-30"
+description: "Conceptos fundamentales de bases de datos, incluyendo modelos de datos, lenguajes DDL y DML, arquitectura de bases de datos y roles de usuarios."
+tags: ["Bases de Datos", "SQL", "Comandos SQL", "Gestión de Tablas"]
+---
+
+## Estructura de una base de datos relacional
+### Definición
+El modelo relacional es un modelo de datos que representa la información en forma de tablas. Cada tabla se compone de filas y columnas, donde cada fila representa una entidad y cada columna un atributo de la entidad. Las tablas se relacionan entre sí mediante claves primarias y claves foráneas. Su representación sería como la siguiente tabla: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **Nombre** & **Edad** \\
+\hline
+1 & Diego & 21 \\
+2 & Juan & 22 \\
+3 & María & 20 \\
+\hline
+\end{array}
+$$
+
+### Elementos
+#### Atributos
+Los atributos son las columnas de la tabla, y representan las características de las entidades. En el ejemplo anterior, los atributos serían *ID*, *Nombre* y *Edad*.
+
+Se llama **dominio del atributo** al conjunto de valores permitidos para un atributo. Estos atributos normalmente tienen que ser atómicos, es decir, no pueden descomponerse en otros atributos. 
+
+Los atributos cuentan con un valor especial, el **null** que está en todos los dominios y expresa el desconocimiento del valor. Sin embargo, este valor puede causar complicaciones en la definición de algunas operaciones. 
+
+#### Tuplas
+Las tuplas son las filas de la tabla, y representan las entidades. En el ejemplo anterior, las tuplas serían *(1, Diego, 21)*, *(2, Juan, 22)* y *(3, María, 20)*.
+
+### Orden de las tuplas
+El orden de las tuplas no importa, ya que en una tabla relacional no hay un orden preestablecido. Por tanto, no se puede asumir que la primera tupla de una tabla sea la primera en ser insertada.
+
+## Esquema de la base de datos
+El **esquema de la base de datos** es la estructura lógica de la base de datos. Por otra parte, tenemos la **instancia de la base de datos**, que es una instantánea de la información de la base de datos en un momento concreto. 
+
+<EjemBox title="Ejemplo">
+
+Un posible esquema sería: 
+```
+Estudiantes(ID, Nombre, Edad)
+```
+
+Y para este esquema, una posible instancia sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **Nombre** & **Edad** \\
+\hline
+1 & Diego & 21 \\
+2 & Juan & 22 \\
+3 & María & 20 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Claves
+### Superclaves. Definición
+Sea $K \subseteq R$, donde $R$ es un conjunto de atributos de una relación, decimos que $K$ es una **superclave** de $R$ si los valores de $K$ son suficientes para identificar de forma única una tupla de cada posible relación $r(R)$. 
+
+<EjemBox title="Ejemplo">
+
+Consideramos la siguiente relación: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **Nombre** & **Edad** \\
+\hline
+1 & Diego & 21 \\
+2 & Juan & 22 \\
+3 & María & 21 \\
+4 & Diego & 20 \\
+\hline
+\end{array}
+$$
+
+En este caso en particular, tanto *\{ID\}* como *\{ID, Nombre\}* son superclaves, ya que permiten identificar de forma única una tupla.
+
+</EjemBox>
+
+### Claves candidatas. Definición
+Decimos que una superclave $K$ es una **clave candidata** si $K$ es minimal, es decir, si no contiene atributos innecesarios para la identificación de una única tupla. 
+
+<EjemBox title="Ejemplo">
+
+En el caso anterior, la clave candidata sería *\{ID\}*
+
+</EjemBox>
+
+### Clave primaria. Definición
+Llamamos **clave primaria** a una clave candidata que se ha seleccionado como clave principal de la relación. Esta clave debe de ser única y estable en el tiempo y, en general, suele ser la que tiene menos atributos. 
+
+<EjemBox title="Ejemplo">
+
+En el caso anterior, la clave primaria sería *\{ID\}*
+
+</EjemBox>
+
+### Clave foránea. Definición
+Llamamos **clave foránea** a un atributo (o conjunto de atributos) de una relación que hacen referencia a la clave primaria de otra relación. Así, se establecen dos relaciones:
+
+- **Relación referenciable:** La relación que contiene la clave foránea.
+- **Relación referenciada:** La relación que contiene la clave primaria a la que hace referencia la clave foránea.
+
+## Lenguajes de Consulta Relacionales
+
+### Clasificación de los lenguajes de consulta
+Los lenguajes de consulta en bases de datos pueden clasificarse en dos categorías principales:
+
+- **Lenguajes procedurales:** Especifican *cómo* obtener los datos, definiendo una secuencia de operaciones a realizar.
+- **Lenguajes no procedurales o declarativos:** Especifican *qué* datos se desean sin necesidad de indicar los pasos para obtenerlos.
+
+### Lenguajes ``puros''
+Existen tres lenguajes de consulta relacionales considerados ``puros'':
+
+- Álgebra relacional
+- Cálculo relacional de tuplas
+- Cálculo relacional de dominios
+
+Estos tres lenguajes son equivalentes en términos de capacidad computacional, lo que significa que cualquier consulta expresada en uno de ellos puede ser representada en los otros dos. 
+
+## Álgebra relacional
+En este capítulo nos enfocaremos en el estudio del **álgebra relacional**, el cual es un lenguaje procedural que consiste en un conjunto de operaciones que toman uno o dos conjuntos de entrada y producen una nueva relación como resultado. Algunas características básicas del álgebra relacional:
+
+- **No** es equivalente a una máquina de Turing.
+- Se compone de 6 operaciones básicas (seleccionar, proyectar, unir, restar, producto cartesiano y renombrar).
+
+### Seleccionar
+La operación de **selección** se encarga de seleccionar las tuplas que satisfacen un predicado dado. Se denota como:
+
+$$
+\begin{align*}
+\sigma_{p}(r)
+\end{align*}
+$$
+
+donde $r$ es una relación y $p$ es un predicado. 
+
+<EjemBox title="Ejemplo:">
+
+Consideramos la relación `alumnos` con las siguientes tuplas:
+
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **name** & **age** \\
+\hline
+1 & Diego & 21 \\
+2 & Juan & 22 \\
+3 & María & 21 \\
+4 & Diego & 20 \\
+\hline
+\end{array}
+$$
+
+Para seleccionar las tuplas cuyo nombre sea ``Diego''. La operación (*Query*) sería:
+
+$$
+\begin{align*}
+\sigma_{\text{\scriptsize name = ``Diego''}}(\text{alumnos})
+\end{align*}
+$$
+
+</EjemBox>
+
+En las operaciones de selección, el predicado $p$ admite los operadores de comparación comunes, es decir:
+
+$$
+\begin{align*}
+= \quad \neq \quad < \quad > \quad \leq \quad \geq
+\end{align*}
+$$
+
+Y para combinar predicados, se pueden usar los conectores lógicos usuales, es decir:
+
+$$
+\begin{align*}
+\land \, \, (\text{AND}) \qquad \lor \, \, (\text{OR}) \qquad \lnot \, \, (\text{NOT})
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+En la relación anterior, queremos las tuplas cuyo nombre sea ``Diego'' y edad 21:
+
+$$
+\begin{align*}
+\sigma_{\text{\scriptsize name = ``Diego''} \, \land\, \, \text{\scriptsize age = 21}}(\text{alumnos})
+\end{align*}
+$$
+
+</EjemBox>
+
+### Proyección
+La operación de **proyección** es unaria y devuelve la misma relación de entrada, pero omitiendo ciertos atributos. Se denota como:
+
+$$
+\begin{align*}
+\pi_{A_1, A_2, A_3, \dots, A_k} (r)
+\end{align*}
+$$
+
+donde:
+
+- $A_1, A_2, A_3, \dots, A_k$ son nombres de atributos.
+- $r$ es el nombre de la relación.
+
+El resultado de la proyección es una nueva relación que contiene únicamente los atributos seleccionados, eliminando las columnas que no están en la lista. Además, dado que las relaciones son conjuntos, se eliminan automáticamente las filas duplicadas. 
+
+<EjemBox title="Ejemplo">
+
+Consideramos la relación `alumnos` con las siguientes tuplas: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **name** & **age** \\
+\hline
+1 & Diego & 21 \\
+2 & María & 21 \\
+3 & Diego & 20 \\
+\hline
+\end{array}
+$$
+
+Y queremos proyectar las columnas *ID* y *name*. La operación sería:
+
+$$
+\begin{align*}
+\pi_{\text{\scriptsize ID, name}}(\text{alumnos})
+\end{align*}
+$$
+
+El resultado sería: 
+
+$$
+\begin{array}{|c|c|}
+\hline 
+**ID** & **name** \\
+\hline
+1 & Diego \\
+2 & María \\
+3 & Diego \\
+\hline
+\end{array}
+$$
+
+Como no hay repetidos, no se eliminaría ninguna fila. Sin embargo, si hacemos la proyección de *name*, es decir:
+
+$$
+\begin{align*}
+\pi_{\text{\scriptsize name}}(\text{alumnos})
+\end{align*}
+$$
+
+El resultado sería: 
+
+$$
+\begin{array}{|c|}
+\hline 
+**name** \\
+\hline
+Diego \\
+María \\
+\hline
+\end{array}
+$$
+
+Y se eliminaría una fila con el nombre ``Diego'' ya que hay dos filas con ese nombre.
+
+</EjemBox>
+
+### Producto Cartesiano
+La operación de **producto cartesiano** nos permite combinar información de dos relaciones distintas. Se denota con el símbolo $\times$ y su resultado es una nueva relación que contiene todas las combinaciones posibles de tuplas de ambas relaciones. 
+
+Si tenemos dos relaciones $A$ y $B$, su producto cartesiano se expresa como:
+
+$$
+\begin{align*}
+A \times B\\
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+Consideremos las relaciones `instructor` y `teaches`: 
+
+$$
+\begin{array}{|c|c|}
+\hline 
+**ID** & **name** \\
+\hline
+10101 & Srinivasan \\
+12121 & Wu \\
+15151 & Mozart \\
+\hline
+\end{tabular}
+\quad
+
+\begin{array}{|c|c|}
+\hline 
+**ID** & **course\_id** \\
+\hline
+10101 & CS101 \\
+15151 & MUS101 \\
+32343 & HIST101 \\
+\hline
+\end{array}
+$$
+
+El producto cartesiano de estas relaciones se expresa como:
+
+$$
+\begin{align*}
+\text{instructor} \times \text{teaches}\\
+\end{align*}
+$$
+
+**Nota:** Dado que ambas relaciones contienen el atributo `ID`, es necesario diferenciarlos, usando el nombre de la relación como prefijo:
+
+- `instructor.ID`
+- `teaches.ID`
+
+Así, el resultado sería: 
+$$
+\begin{array}{|c|c|c|c|}
+\hline 
+**instructor.ID** & **instructor.name** & **teaches.ID** & **teaches.course\_id** \\
+\hline
+10101 & Srinivasan & 10101 & CS101 \\
+10101 & Srinivasan & 15151 & MUS101 \\
+10101 & Srinivasan & 32343 & HIST101 \\
+12121 & Wu & 10101 & CS101 \\
+12121 & Wu & 15151 & MUS101 \\
+12121 & Wu & 32343 & HIST101 \\
+15151 & Mozart & 10101 & CS101 \\
+15151 & Mozart & 15151 & MUS101 \\
+15151 & Mozart & 32343 & HIST101 \\
+\hline
+\end{array}
+$$
+</EjemBox>
+
+### Composición de Operaciones
+El resultado de una operación del álgebra relacional es una relación, por lo que podemos componer múltiples operaciones en una única **expresión de álgebra relacional**. 
+
+<EjemBox title="Ejemplo">
+
+Consideramos la relación `alumnos` con las siguientes tuplas: 
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **name** & **age** \\
+\hline
+1 & Diego & 21 \\
+2 & Juan & 22 \\
+3 & María & 21 \\
+4 & Diego & 20 \\
+\hline
+\end{array}
+$$
+Si queremos seleccionar las tuplas cuyo nombre sea ``Diego'' y proyectar las columna *ID*, para ello, haríamos:
+
+$$
+\begin{align*}
+\pi_{\text{\scriptsize ID}}(\sigma_{\text{\scriptsize name = ``Diego''}}(\text{alumnos}))
+\end{align*}
+$$
+
+Y obtendríamos: 
+$$
+\begin{array}{|c|}
+\hline 
+**ID** \\
+\hline
+1 \\
+4 \\
+\hline
+\end{array}
+$$
+</EjemBox>
+
+### Join
+La operación de **join** (\bowtie) nos permite combinar información de dos relaciones mediante una condición específica sobre los atributos. Es el resultado de aplicar una **selección** sobre el **producto cartesiano** de dos relaciones. 
+
+Dado un predicado \theta y dos relaciones  r  y  s , la operación se define como:
+
+$$
+\begin{align*}
+r \bowtie_{\theta} s = \sigma_{\theta} (r \times s)
+\end{align*}
+$$
+
+<EjemBox title="Ejemplo">
+
+Consideramos las relaciones `instructor` y `teaches`: 
+
+$$
+\begin{array}{|c|c|}
+\hline 
+**ID** & **name** \\
+\hline
+1222 & Luciano \\
+4133 & Pedro \\
+1513 & Eva \\
+\hline
+\end{array}
+
+\quad
+\begin{tabular}{|c|c|}
+\hline 
+**ID** & **course\_id** \\
+\hline
+4133 & BBDD \\
+1222 & CPM \\
+8804 & ED \\
+\hline
+\end{array}
+$$
+
+Si queremos hacer un **join** de estas dos relaciones, seleccionando las tuplas cuyo `ID` sea el mismo, la operación sería:
+
+$$
+\begin{align*}
+\text{instructor} \bowtie_{\text{\scriptsize instructor.ID = teaches.ID}} \text{teaches}
+\end{align*}
+$$
+
+Y el resultado sería: 
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline 
+**instructor.ID** & **instructor.name** & **teaches.ID** & **teaches.course\_id** \\
+\hline
+1222 & Luciano & 1222 & CPM \\
+4133 & Pedro & 4133 & BBDD \\
+\hline
+\end{array}
+$$
+
+Notamos que la sintaxis del *query* sería equivalente a:
+
+$$
+\begin{align*}
+\sigma_{\text{\scriptsize instructor.ID = teaches.ID}}(\text{instructor} \times \text{teaches})
+\end{align*}
+$$
+
+</EjemBox>
+
+### Unión
+La operación de **unión** nos permite combinar dos relaciones que tienen la misma estructura. Se denota como:
+
+$$
+\begin{align*}
+r \cup s
+\end{align*}
+$$
+
+donde $r$ y $s$ son relaciones. 
+
+Para que la unión sea válida, se deben cumplir las siguientes condiciones:
+
+1. $r$ y $s$ deben tener la misma **aridad** (mismo número de atributos).
+2. Los dominios de los atributos deben ser **compatibles**, es decir, cada columna en $r$ debe contener el mismo tipo de datos que la columna correspondiente en $s$.
+
+<EjemBox title="Ejemplo">
+
+Consideramos las relaciones `alumnos` con las siguientes tuplas: 
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline 
+**ID** & **name** & **age** & **birthMonth** \\
+\hline
+1 & Diego & 20 & 5 \\
+2 & Juan & 22 & 6 \\
+3 & María & 21 & 2 \\
+4 & Samuel & 20 & 10 \\
+5 & Ana & 23 & 11 \\
+6 & Pedro & 26 & 4 \\      
+\hline
+\end{array}
+$$
+
+Si queremos seleccionar los nombres de los alumnos que tienen 21 años o menos y nacieron en los primeros 4 meses del año y los nombres de los alumnos que tienen 21 o más años y nacieron en los primeros 6 meses del año (y los que cumplen ambas), la operación sería:
+
+$$
+\begin{align*}
+\pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize age }\leq 21 \, \land \, \text{\scriptsize birthMonth} \leq 4}(\text{alumnos})) \cup \pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize age $\geq$ 21} \, \land \, \text{\scriptsize birthMonth} \leq 6}(\text{alumnos}))
+\end{align*}
+$$
+
+Y el resultado sería: 
+
+$$
+\begin{array}{|c|}
+\hline 
+**name** \\
+\hline
+Diego \\
+Juan \\
+María \\
+Pedro \\      
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### Intersección
+La operación de **intersección** nos permite obtener las tuplas que están presentes en ambas relaciones de entrada. Se denota como:
+
+$$
+\begin{align*}
+r \cap s
+\end{align*}
+$$
+
+donde $r$ y $s$ son relaciones. 
+
+Para que la intersección sea válida, se deben cumplir las siguientes condiciones:
+
+1. $r$ y $s$ deben tener la misma **aridad**.
+2. Los dominios de los atributos deben ser **compatibles**.
+
+<EjemBox title="Ejemplo">
+
+Siguiendo el ejemplo anterior, si queremos seleccionar aquellos que cumplen las dos condiciones anteriores, es decir, los nombres de los alumnos que tienen 21 años o menos y nacieron en los primeros 4 meses del año y los nombres de los alumnos que tienen 21 o más años y nacieron en los primeros 6 meses del año, la operación sería:
+
+$$
+\begin{align*}
+\pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize age }\leq 21 \, \land \, \text{\scriptsize birthMonth} \leq 4}(\text{alumnos})) \cap \pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize age $\geq$ 21} \, \land \, \text{\scriptsize birthMonth} \leq 6}(\text{alumnos}))
+\end{align*}
+$$
+
+Y el resultado sería: 
+
+$$
+\begin{array}{|c|}
+\hline 
+**name** \\
+\hline
+María \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### Diferencia de Conjuntos
+La operación de **diferencia de conjuntos** nos permite encontrar las tuplas que están en una relación pero no en otra. Se denota como:
+
+$$
+\begin{align*}
+r - s
+\end{align*}
+$$
+
+donde $r$ y $s$ son relaciones. 
+
+Para que la diferencia de conjuntos sea válida, se deben cumplir:
+
+1. $r$ y $s$ deben tener la misma **aridad**.
+2. Los dominios de los atributos deben ser **compatibles**.
+
+<EjemBox title="Ejemplo">
+
+Queremos seleccionar aquellos alumnos que cumplen la condición de tener 21 años o menos y nacieron en los primeros 4 meses del año, pero no cumplen la condición de tener 21 o más años y haber nacido en los primeros 6 meses del año. La operación sería:
+
+$$
+\begin{align*}
+\pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize age }\leq 21 \, \land \, \text{\scriptsize birthMonth} \leq 4}(\text{alumnos})) - \pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize age $\geq$ 21} \, \land \, \text{\scriptsize birthMonth} \leq 6}(\text{alumnos}))
+\end{align*}
+$$
+
+Y el resultado sería: 
+
+$$
+\begin{array}{|c|}
+\hline 
+**name** \\
+\hline
+Diego \\     
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### Asignación
+En algunas situaciones, es conveniente escribir una expresión de álgebra relacional asignando partes de la consulta a variables temporales. La operación de **asignación** se denota con el símbolo $\leftarrow$ y funciona de manera similar a la asignación en los lenguajes de programación. 
+
+<EjemBox title="Ejemplo">
+
+Consideramos la relación `alumnos` con las siguientes tuplas: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline 
+**ID** & **name** & **studyField** \\
+\hline
+1 & Diego & Informática \\
+2 & Juan & Matemáticas \\
+3 & María & Física \\
+4 & Samuel & Informática \\
+5 & Ana & Física \\
+6 & Pedro & Matemáticas \\      
+\hline
+\end{array}
+$$
+
+Si queremos seleccionar los nombres de los alumnos que estudian Informática o Matemáticas, la operación sería:
+
+$$
+\begin{align*}
+\text{EstudiantesInfor} & \longleftarrow \pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize studyField = ``Informática''}}(\text{alumnos}))\\
+\text{EstudiantesMates} & \longleftarrow \pi_{\text{\scriptsize name}}(\sigma_{\text{\scriptsize studyField = ``Matemáticas''}}(\text{alumnos}))
+\end{align*}
+$$
+
+Y ahora bastaría con hacer la unión de estas dos variables:
+
+$$
+\begin{align*}
+\text{EstudiantesInfor} \cup \text{EstudiantesMates}
+\end{align*}
+$$
+
+Y el resultado sería: 
+
+$$
+\begin{array}{|c|}
+\hline 
+**name** \\
+\hline
+Diego \\
+Juan \\
+Samuel \\
+Pedro \\      
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+Con la operación de asignación, un *query* puede ser escrito como un programa secuencial consistente en una serie de asignaciones seguidas de una expresión final cuyo resultado es la respuesta a la consulta.
+
+</EjBox>
+
+### Renombrar
+Los resultados de las operaciones de álgebra relacional no tienen un nombre que podamos usar para referirnos a ellos. Para ello, podemos usar el operador **renombrar** ($\rho$) que nos permite asignar un nombre a una relación. 
+
+Sea $E$ una expresión de algebra relacional, entonces:
+
+$$
+\begin{align*}
+\rho_x (E)
+\end{align*}
+$$
+
+devuelve el resultado de $E$ con el nombre $x$. 
+
+También, se pueden renombrar los atributos de una relación como:
+
+$$
+\begin{align*}
+\rho_{x(A_1, A_2, A_3, \dots, A_n)} (E)
+\end{align*}
+$$
+
+donde $A_1, A_2, A_3, \dots, A_n$ son los atributos de la relación $E$. 
+
+### Consultas equivalentes
+En el álgebra relacional, existen múltiples formas de expresar una misma consulta sin alterar el resultado. La elección de una u otra forma puede afectar únicamente a la eficiencia de la consulta. 
+
+En los casos en los que dos consultas no idénticas en estructura arrojan el mismo resultado para cualquier conjunto diremos que son **equivalentes**. 
+
+<EjBox title="Nota">
+
+Notar que no todas las consultas que arrojen el mismo resultado son equivalentes. Para que dos consultas sean equivalentes, deben arrojar el mismo resultado para cualquier conjunto de datos.
+
+</EjBox>

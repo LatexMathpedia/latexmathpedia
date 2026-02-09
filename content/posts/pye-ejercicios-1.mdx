@@ -1,0 +1,1766 @@
+---
+title: "Ejercicios Resueltos Probabilidad y Estadística - Parte I"
+date: "2026-01-29"
+description: "Resolución de ejercicios propuestos sobre variables aleatorias y funciones de distribución."
+tags: ["Probabilidad y Estadística", "Variables Aleatorias", "Funciones de Distribución"]
+---
+
+
+## Tema Inicial - Problemas propuestos
+### Ejercicio 1
+*Se considera el espacio medible dado por $(\mathbb{R}, \mathcal{A})$ donde $\mathcal{A} = \{A \subset \mathbb{R} \colon A $ es finito numerable, o bien $A^c$ es finito numerable$\}$. Se definen las aplicaciones $X, Y \colon \mathbb{R} \longrightarrow \mathbb{R}$ con:*
+$$
+\begin{align*}
+X(\omega) = \omega \quad \text{ e } \quad Y(\omega) = \left\{ \begin{array}{ll}
+1 & \text{ si } \omega \notin \mathbb{Q}\\
+0 & \text{ si } \omega \in \mathbb{Q}
+\end{array}
+\right.
+\end{align*}
+$$
+*¿Son estas aplicaciones medibles cuando sobre el espacio de llegada se considera la $\sigma$-álgebra de Borel $\mathcal{B}_{\mathbb{R}}$?*
+
+<DemBox title="Resolución">
+
+Consideremos primero el caso de $X(\omega) = \omega$. 
+
+Tenemos que $X \colon \mathbb{R} \longrightarrow \mathcal{B}_\mathbb{R}$ entonces, para que $X$ sea medible, necesitamos que:
+$$
+\begin{align*}
+\forall B \in \mathcal{B}_{\mathbb{R}} \quad X^{-1}(B) \in \mathbb{R}
+\end{align*}
+$$
+Sabemos que:
+$$
+\begin{align*}
+X^{ - 1} (B) = \{\omega \in \Omega \text{ tq } X(\omega) \in B\}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Sean $X$ e $Y$ variables aleatorias definidas sobre un mismo espacio de probabilidad. Demostrar que las aplicaciones $W = \max\{X, Y\}$ y $Z = \min \{X, Y\}$ son variables aleatorias* 
+<DemBox title="Resolución">
+
+Partamos con el caso de $W = \max\{X, Y\}$. 
+
+Queremos ver que $W$ es una variable aleatoria, es decir, que cumple con la condición de medibilidad. Así, tenemos que:
+$$
+\begin{align*}
+W = \max\{X, Y\} = \left\{ \begin{array}{ll}
+X & \text{ si } X \geq Y\\
+Y & \text{ si } X < Y
+\end{array}
+\right.
+\end{align*}
+$$
+De esta forma, hay que comprobar que, dado $B \in \mathcal{B}_{\mathbb{R}}$ se cumple que:
+$$
+\begin{align*}
+W^{ - 1}(B) = \{\omega \in \Omega \text{ tq } W(\omega) \in B\} \in \mathcal{A}
+\end{align*}
+$$
+Así, tenemos que:
+$$
+\begin{align*}
+W^{ - 1}(B) & = \{\omega \in \Omega \text{ tq } W(\omega) \in B\} = \{ \omega \in \Omega \text{ tq } \max{X, Y}(\omega) \in B\} = \\
+& = \{\omega \in \Omega \text{ tq } X(\omega) \in B \lor Y (\omega) \in B\} = X^{ - 1}(B) \cup Y^{ - 1}(B)
+\end{align*}
+$$
+Así, como $X$ e $Y$ son variables aleatorias, entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+X^{ - 1}(B) \in \mathcal{A}\\
+Y^{ - 1}(B) \in \mathcal{A}
+\end{array}
+\right\} \implies X^{ - 1}(B) \cup Y^{ - 1}(B) \in \mathcal{A} \implies W^{ - 1}(B) \in \mathcal{A}
+\end{align*}
+$$
+Así, hemos demostrado que $W$ es una variable aleatoria. 
+
+Para demostrar que $Z = \min \{X, Y\}$ es variable aleatoria seguiremos un procedimiento análogo, sin embargo, en este caso, tenemos que:
+$$
+\begin{align*}
+Z^{ - 1}(B) & = \{\omega \in \Omega \text{ tq } \min\{X, Y\} (\omega) \in B\} = \\
+& = \{\omega \in \Omega \text{ tq } X(\omega) \in B \land Y(\omega) \in B\} = X^{ - 1}(B) \cap Y^{ - 1}(B)
+\end{align*}
+$$
+Así, como $X$ e $Y$ son variables aleatorias, entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+X^{ - 1}(B) \in \mathcal{A}\\
+Y^{ - 1}(B) \in \mathcal{A}
+\end{array}
+\right\} \implies X^{ - 1}(B) \cap Y^{ - 1}(B) \in \mathcal{A} \implies Z^{ - 1}(B) \in \mathcal{A}
+\end{align*}
+$$
+Así, hemos demostrado que $Z$ es una variable aleatoria.
+
+</DemBox>
+
+### Ejercicio 3
+*Sea $(\Omega, \mathcal{A}, P)$ un espacio probabilístico. Demostrar que:*
+
+1. *$X$ es variable aleatoria si y solo si $X^{-1}((-\infty, a)) \in \mathcal{A} \quad \forall a \in \mathbb{R}$*
+
+<DemBox title="Demostración">
+
+Procederemos por doble contenido:
+
+- **$\Rightarrow$)** Hay que ver que, si $X$ es v.a. $\implies X^{-1}((-\infty, a)) \in \mathcal{A} \quad \forall a \in \mathbb{R}$. 
+
+Si $X$ es variable aleatoria entonces cumple la condición de medibilidad, es decir, que sea $B \in \mathcal{B}_{\mathbb{R}}$ se cumple que:
+$$
+\begin{align*}
+X^{ - 1}(B) = \{\omega \in \Omega \text{ tq } X(\omega) \in B\} \in \mathcal{A}	
+\end{align*}
+$$
+Así, nos bastaría con ver que $(-\infty, a) \in \mathcal{B}_{\mathbb{R}}$ para demostrar lo que queremos. 
+
+Como sabemos que $\mathcal{B}_{\mathbb{R}}$ es la $\sigma$-álgebra generada por complementación, unión e intersección numerable de intervalos de la forma $(-\infty, a]$, nos basta con expresar $(-\infty, a)$ en términos de la $\sigma$-álgebra de Borel, para ello:
+$$
+\begin{align*}
+( - \infty, a) = \displaystyle \bigcup_{n = 1}^{\infty} \left( - \infty ,a - \frac{1}{n} \right]
+\end{align*}
+$$
+Como $(-\infty, a) \in \mathcal{B}_\mathbb{R}$ y $X$ variable aleatoria, se cumple:
+$$
+\begin{align*}
+X^{ - 1}(( - \infty, a)) \in \mathcal{A} \quad \forall a \in \mathbb{R}
+\end{align*}
+$$
+- **$\Leftarrow$)** Hay que ver que si $X^{-1}((-\infty, a)) \in \mathcal{A} \quad \forall a \in \mathcal{A} \implies X$ es v.a. 
+
+Tenemos que $X$ es variable aleatoria si es medible, es decir, si:
+$$
+\begin{align*}
+\forall B \in \mathcal{B}_\mathbb{R} \quad X^{ - 1}(B) \in \mathcal{A}
+\end{align*}
+$$
+Esto es equivalente a que:
+$$
+\begin{align*}
+\forall c \in \mathbb{R} \colon X^{ - 1} (( - \infty, c]) = (X \leq c) = \{\omega \in \Omega \colon X(\omega) \leq c\} \in \mathcal{A}
+\end{align*}
+$$
+Sabemos que $\forall c \in \mathbb{R} \quad \exists a \in \mathbb{R}$ tal que $a > c$, entonces, para cada intervalo $(-\infty, c]$, existe $a \in \mathbb{R}$ tal que:
+$$
+\begin{align*}
+(-\infty, c] \subseteq ( - \infty, a)
+\end{align*}
+$$ 
+Así, como por hipótesis tenemos que $X^{-1}(B) \in \mathcal{A}$ entonces:
+$$
+\begin{align*}
+\forall c \in \mathbb{R}, \, \exists a \in \mathbb{R} \text{ tq } X^{ - 1} ( ( - \infty, c]) & = \{\omega \in \Omega \colon X(\omega) \leq c\} \subset\\
+& \subset \{\omega \in \Omega \colon X(\omega) < a\} = X^{ - 1}(B)\in \mathcal{A} 
+\end{align*}
+$$
+
+</DemBox>
+2. *$X$ es variable aleatoria si y solo si $X^{-1}((a, \infty)) \in \mathcal{A} \quad \forall a \in \mathbb{R}$*
+
+<DemBox title="Demostración">
+
+Procederemos por doble contenido:
+
+- **$\Rightarrow$)** Hay que ver que, si $X$ es v.a. $\implies X^{-1}(( a, \infty)) \in \mathcal{A} \quad \forall a \in \mathbb{R}$. 
+
+Si $X$ es variable aleatoria entonces cumple la condición de medibilidad, es decir, que sea $B \in \mathcal{B}_{\mathbb{R}}$ se cumple que:
+$$
+\begin{align*}
+X^{ - 1}(B) = \{\omega \in \Omega \text{ tq } X(\omega) \in B\} \in \mathcal{A}	
+\end{align*}
+$$
+Así, nos bastaría con ver que $( a, \infty) \in \mathcal{B}_{\mathbb{R}}$ para demostrarlo.
+
+Como sabemos que $\mathcal{B}_{\mathbb{R}}$ es la $\sigma$-álgebra generada por complementación, unión e intersección numerable de intervalos de la forma $(-\infty, a]$, nos basta con expresar $( a, \infty) $ en términos de la $\sigma$-álgebra de Borel, para ello:
+$$
+\begin{align*}
+( a, \infty)  = ( - \infty, a]^c
+\end{align*}
+$$
+Como $( a, \infty) \in \mathcal{B}_\mathbb{R}$ y $X$ variable aleatoria, se cumple:
+$$
+\begin{align*}
+X^{ - 1}(( a, \infty) ) \in \mathcal{A} \quad \forall a \in \mathbb{R}
+\end{align*}
+$$
+- **$\Leftarrow$)** Hay que ver que si $X^{-1}(( a, \infty) ) \in \mathcal{A} \quad \forall a \in \mathcal{A} \implies X$ es v.a. 
+
+Tenemos que $X$ es variable aleatoria si es medible, es decir, si:
+$$
+\begin{align*}
+\forall B \in \mathcal{B}_\mathbb{R} \quad X^{ - 1}(B) \in \mathcal{A}
+\end{align*}
+$$
+Esto es equivalente a que:
+$$
+\begin{align*}
+\forall c \in \mathbb{R} \colon X^{ - 1} (( - \infty, c]) = (X \leq c) = \{\omega \in \Omega \colon X(\omega) \leq c\} \in \mathcal{A}
+\end{align*}
+$$
+
+Así, podemos elegir un $a_i \in \mathbb{R}$ cada vez más pequeño, tal que:
+
+$$
+\begin{align*}
+a_1 > \dots > a_n > \dots
+\end{align*}
+$$
+
+entonces, tenemos que podemos extender el intervalo $(a, \infty)$ a $(-\infty, \infty)$ y así, $\forall c \in \mathbb{R}$ se tiene que:
+$$
+\begin{align*}
+(\infty, c] \in ( - \infty, \infty)
+\end{align*}
+$$
+Así, como por hipótesis tenemos que $X^{-1}(B) \in \mathcal{A}$ entonces:
+$$
+\begin{align*}
+\forall c \in \mathbb{R} \colon  X^{ - 1} ( ( - \infty, c]) & = \{\omega \in \Omega \colon X(\omega) \leq c\} \subset\\
+& \subset \{\omega \in \Omega \colon X(\omega) < \infty\} = X^{ - 1}(B)\in \mathcal{A} 
+\end{align*}
+$$
+
+</DemBox>
+
+*El resto de apartados se resolverían de forma análoga*
+
+### Ejercicio 4
+*Se considera el espacio de probabilidad $((0, 1), \mathcal{B}_{(0,1)}, P)$ con: 
+$$
+\begin{align*}
+P(A) = \displaystyle \int_A 1 \, dx \quad \forall A \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+Demostrar que las aplicaciones $X, Y \colon (0, 1) \longrightarrow \mathbb{R}$ dadas por:*
+$$
+\begin{align*}
+X(\omega) = \left\{
+\begin{array}{ll}
+\dfrac{1}{8} & \text{ si } 0 < \omega < \dfrac{1}{6}\\[2ex]
+1 & \text{ si } \dfrac{1}{6} \leq  \omega < \dfrac{2}{3}\\[2ex]
+8 & \text{ si } \dfrac{2}{3} \leq \omega < 1
+\end{array}
+\right. \quad \text{ e } \quad Y(\omega) = 2 \omega
+\end{align*}
+$$
+*son variables aleatorias y obtener las funciones de distribución asociadas* 
+
+<DemBox title="Demostración">
+
+*Vamos a demostrar que $X$ es variable aleatoria.* 
+Si $X$ es variable aleatoria, entonces cumple la condición de medibilidad, es decir:
+$$
+\begin{align*}
+\forall B \in \mathcal{B}_{\mathbb{R}} \quad X^{ - 1}(B) \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+O, equivalentemente, que:
+$$
+\begin{align*}
+\forall x \in \mathbb{R} \quad X^{ - 1} (( - \infty, x]) \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+Así, vamos a ver que $X$ cumple con esto. Tenemos que $X$ es de la forma:
+$$
+\begin{align*}
+X \colon ((0, 1), \mathcal{B}_{(0,1)}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \left\{
+\begin{array}{ll}
+\dfrac{1}{8} & \text{ si } 0 < \omega < \dfrac{1}{6}\\[1ex]
+1 & \text{ si } \dfrac{1}{6} \leq  \omega < \dfrac{2}{3}\\[1ex]
+8 & \text{ si } \dfrac{2}{3} \leq  \omega < 1
+\end{array} \right.
+\end{align*}
+$$
+
+- Para $x < \frac{1}{8}$ tenemos que:
+$$
+\begin{align*}
+X^{ - 1} (( - \infty, x]) = \{\omega \in (0, 1) \colon X(\omega) \leq x\} = \emptyset \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+- Para $\dfrac{1}{8} \leq x < 1$ tenemos que:
+$$
+\begin{align*}
+X^{ - 1}(( - \infty, x]) = \{\omega \in (0, 1) \colon X(\omega) \leq x\} = \left(0, \frac{1}{6}\right)\in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+- Para $1 \leq x < 8$ tenemos que:
+$$
+\begin{align*}
+X^{ - 1} ( ( - \infty, x]) = \{\omega \in (0, 1) \colon X(\omega) \leq x\} = \left(0, \frac{2}{3}\right)\in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+- Para $x \geq 8$ tenemos que:
+$$
+\begin{align*}
+X^{ - 1} (( - \infty, x]) = \{\omega \in (0, 1) \colon X(\omega) \leq x\} = (0, 1) \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+
+Entonces, tenemos que para cada caso, la antiimagen de $X$ en el intervalo $(-\infty, x]$ está en $\mathcal{B}_{(0,1)}$, por lo que $X$ es medible $\implies  X$ es variable aleatoria. 
+
+*Ahora, vamos a demostrar que $Y$ es variable aleatoria.* 
+
+Para que $Y$ sea variable aleatoria, necesitamos que $Y$ cumpla con la condición de medibilidad. Como $Y$ es de la forma:
+$$
+\begin{align*}
+Y \colon ((0, 1), \mathcal{B}_{(0,1)}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Y)\\
+\omega & \longmapsto Y(\omega) = 2\omega
+\end{align*}
+$$
+Entonces, tenemos que ver que:
+$$
+\begin{align*}
+\forall y \in \mathbb{R} \quad Y^{ - 1} (( - \infty, y]) \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+Es decir, que:
+$$
+\begin{align*}
+Y^{ - 1} (( - \infty, y]) & = \{\omega \in (0, 1) \colon Y(\omega) \leq y\} = \{\omega \in (0, 1) \colon 2\omega \leq y\} = \\
+& = \left\{\omega \in (0, 1) \colon \omega \leq \frac{y}{2}\right\} = \left(0, \frac{y}{2}\right) \in \mathcal{B}_{(0,1)}
+\end{align*}
+$$
+Entonces, tenemos que $Y$ es variable aleatoria. 
+
+*Ahora vamos a calcular la función de distribución de $X$* 
+
+Tenemos que la función de distribución de $X$ es:
+$$
+\begin{align*}
+F_X(x) = P(X \leq x) = \int_{X^{ - 1}(( - \infty, x])} 1 \, dx
+\end{align*}
+$$
+Así, podemos particularizar para cada intervalo:
+
+- Si $x < \dfrac{1}{8}$ entonces:
+$$
+\begin{align*}
+F_X(x) = P(X \leq x) = \int_\emptyset 1 \, dx = 0
+\end{align*}
+$$
+- Si $\dfrac{1}{8} \leq x < 1$ entonces:
+$$
+\begin{align*}
+F_X(x) = P(X \leq x) = \int_{0}^{\frac{1}{6}} 1 \, dx = x \Big|_0^{\frac{1}{6}} = \frac{1}{6}
+\end{align*}
+$$
+- Si $x \leq 1 < 8$ entonces:
+$$
+\begin{align*}
+F_X(x) = P(X \leq x) = \int_{0}^{\frac{2}{3}} 1 \, dx = x \Big|_0^{\frac{2}{3}} = \frac{2}{3}
+\end{align*}
+$$
+- Si $x \geq 8$ entonces:
+$$
+\begin{align*}
+F_X(x) = P(X \leq x) = \int_{0}^{1} 1 \, dx = x \Big|_0^1 = 1
+\end{align*}
+$$
+
+Así, tenemos que la función de distribución de $X$ es:
+$$
+\begin{align*}
+F_X(x) = \left\{
+\begin{array}{ll}	
+0 & \text{ si } x < \dfrac{1}{8}\\[1ex]
+\frac{1}{6} & \text{ si } \dfrac{1}{8} \leq x < 1\\[1ex]
+\frac{2}{3} & \text{ si } 1 \leq x < 8\\[1ex]
+1 & \text{ si } x \geq 8
+\end{array}
+\right.
+\end{align*}
+$$
+Y gráficamente se vería como:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_0.svg)
+
+*Ahora, vamos a calcular la función de distribución de $Y$* 
+Tenemos que la función de distribución de $Y$ viene dada por:
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = \int_{Y^{ - 1}(( - \infty, y])} 1 \, dx
+\end{align*}
+$$
+Así, podemos obtener su función de distribución como:
+
+- Si $y < 0$ entonces:
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = \int_\emptyset 1 \, dx = 0
+\end{align*}
+$$
+- Si $0 \leq y < 2$ entonces:
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = \int_{0}^{\frac{y}{2}} 1 \, dx = x \Big|_0^{\frac{y}{2}} = \frac{y}{2} = \frac{y}{2}
+\end{align*}
+$$
+- Si $y \geq 2$ entonces:
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = \int_{0}^{1} 1 \, dx = x \Big|_0^1 = 1
+\end{align*}
+$$
+Entonces, la función de distribución de $Y$ es:
+$$
+\begin{align*}
+F_Y(y) = \left\{
+\begin{array}{ll}
+0 & \text{ si } y < 0\\
+\frac{y}{2} & \text{ si } 0 \leq y < 2\\
+1 & \text{ si } y \geq 2
+\end{array}
+\right.
+\end{align*}
+$$
+Y gráficamente se vería como:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_1.svg)
+
+</DemBox>
+
+#### Ejercicio 5
+*Sea $F$ una función de distribución y $P$ la probabilidad asociada a dicha función. Expresar a partir de la función $F$ las siguientes probabilidades, donde $a, b \in \mathbb{R}$ con $a < b$*
+$$
+\begin{align*}
+P(( - \infty, a]) \quad P(( - \infty, a)) \quad P((a, \infty)) \quad P([a, \infty])\\
+P((a, b)) \quad P((a, b]) \quad P([a, b)) \quad P([a, b]) \quad \, \, 
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Vamos a expresar cada una de las probabilidades en función de la función de distribución $F$. Para ello, vamos a recordar que la función de distribución $F$ se defino como:
+$$
+\begin{align*}
+F(x) = P(X \leq x)
+\end{align*}
+$$
+donde $X$ es una variable aleatoria. 
+Entonces, podemos calcular cada una de las probabilidades como:
+$$
+\begin{align*}
+& P(( - \infty, a]) = P(X \leq a) = F(a)\\[2ex]
+& P(( - \infty, a)) = P(X < a) = \lim_{x \to a^-} F(x) \\[2ex]
+& P((a, \infty)) = P(X > a) = 1 - P(X \leq a) = 1 - F(a)\\[2ex]
+& P([a, \infty)) = P(X \geq a) = 1 - P(X < a) = 1 - \lim_{x \to a^-} F(x)\\[2ex]
+& P((a, b)) = P(a < x < b) = P(X < b) - P(X \leq a) = \lim_{x \to b^{ - }} F(x) - F(a)\\[2ex]
+& P((a, b]) = P(a < x \leq b) = P(X \leq b) - P(X \leq a) = F(b) - F(a)\\[2ex]
+& P([a, b)) = P(a \leq x < b) = P(X < b) - P(X < a) = \lim_{x \to b^{ - }} F(x) - \lim_{x \to a^-} F(x)\\[2ex]
+& P([a, b]) = P(a \leq x \leq b) = P(X \leq b) - P(X < a) = F(b) - \lim_{x \to a^-} F(x)
+\end{align*}
+$$
+Notar que no podemos asumir que $F$ sea continua, es decir, que no podemos afirmar que:
+$$
+\begin{align*}
+P(X < a) = \lim_{x \to a^-} F(x) = F(a) = P(X \leq a)
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Sea considera la función $F \colon \mathbb{R} \longrightarrow \mathbb{R}$ dada por:*
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+1 - \dfrac{1}{2^{x + 1}} - \dfrac{1}{2^{[x] + 1}} & \text{ si } x \geq 0\\[2ex]
+0 & \text{ si } x < 0
+\end{array}
+\right.
+\end{align*}
+$$
+*Demostrar que $F$ es función de distribución. Para la probabilidad asociada a dicha función de distribución, calcular la probabilidad de los puntos de discontinuidad de la función $F$* 
+
+<DemBox title="Demostración">
+
+*Primero, vamos a demostrar que $F$ es función de distribución.* 
+
+Para que $F$ sea función de distribución, necesitamos que cumpla las siguientes propiedades:
+
+- $\displaystyle lim_{x \to -\infty} F(x) = 0$
+$$
+\begin{align*}
+\lim_{x \to -\infty} F(x) = \lim_{x \to -\infty} 0 = 0
+\end{align*}
+$$
+- $\displaystyle lim_{x \to \infty} F(x) = 1$
+$$
+\begin{align*}
+\lim_{x \to \infty} F(x) = \lim_{x \to \infty} 1 - \frac{1}{2^{x + 1}} - \frac{1}{2^{[x] + 1}} = 1 - 0 - 0 = 1
+\end{align*}
+$$
+- $F$ es no decreciente, es decir, que si $x_1 < x_2$ entonces $F(x_1) \leq F(x_2)$
+
+Sean $x_1, x_2 \in \mathbb{R}$ con $x_1 < x_2$, entonces:
+
+- $F$ es continua por la derecha, es decir $F(x_0) = F(x_0^+)$
+
+- Si $x_0 < 0$ entonces:
+$$
+\begin{align*}
+F(x_0^{ + }) = \lim_{x \to x_0^ + } F(x) = \lim_{x \to x_0^ + } 0 = 0 = F(x_0)
+\end{align*}
+$$
+- Si $x \geq 0$ entonces:
+$$
+\begin{align*}
+F(x_0^{ + }) = \lim_{x \to x_0^ + } F(x) & = \lim_{x \to x_0^ + } 1 - \frac{1}{2^{x + 1}} - \frac{1}{2^{[x] + 1}} =\\
+& = 1 - \frac{1}{2^{x_0 + 1}} - \frac{1}{2^{[x_0] + 1}} = F(x_0)
+\end{align*}
+$$
+
+Así, queda demostrado que es una función de distribución. 
+
+*Ahora, vamos a calcular la probabilidad de los puntos de discontinuidad de $F$* 
+
+Vemos que la función $F$ es discontinua en los puntos $x = 0$ y $x \in \mathbb{N}$. Así, vamos a calcular la probabilidad de esos puntos. 
+
+- Para $x = 0$ tenemos que:
+$$
+\begin{align*}
+P(X = 0) & = P(X \leq 0) - P(X < 0) = F(0) - \lim_{x \to 0^{ - }} F(x) =\\
+& = 1 - \frac{1}{2} - \frac{1}{2} - \lim_{x \to 0} \left(1 - \frac{1}{2} \right) = \frac{1}{2}
+\end{align*}
+$$
+- Para $x \in \mathbb{N}$ tenemos que:
+$$
+\begin{align*}
+P(X = n) & = P(X \leq n) - P(X < n) = F(n) - \lim_{x \to n^-} F(x) =\\
+& = 1 - \frac{1}{2^{n + 1}} - \frac{1}{2^{n + 1}} -\left(1 - \frac{1}{2^{n + 1}} \right) = \frac{1}{2^{n + 1}} 
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Sea $F \colon \mathbb{R} \longrightarrow \mathbb{R}$ dada por*
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+\displaystyle \displaystyle \sum_{i = 1}^{[x]} \left(\frac{1}{2}\right)^i & \text{si } x \geq 1\\[2ex]
+0 & \text{si } x < 1
+\end{array}
+\right.
+\end{align*}
+$$
+*Demostrar que $F$ es función de distribución* 
+<DemBox title="Demostración">
+
+Tenemos que ver que $F$ cumple con las propiedades de una función de distribución:
+
+- $\displaystyle \lim_{x \to -\infty} F(x) = 0$
+$$
+\begin{align*}
+\lim_{x \to -\infty} F(x) = \lim_{x \to -\infty} 0 = 0
+\end{align*}
+$$
+- $\displaystyle \lim_{x \to \infty} F(x) = 1$
+$$
+\begin{align*}
+\lim_{x \to \infty} F(x) & = \lim_{x \to \infty} \displaystyle \sum_{i = 1}^{[x]} \left(\frac{1}{2}\right)^i = \displaystyle \sum_{i = 1}^{\infty} \left(\frac{1}{2}\right)^i = 1
+\end{align*}
+$$
+- $F$ es no decreciente, es decir, que sea $x_1 < x_2$ entonces $F(x_1) \leq F(x_2)$.
+
+Sean $x_1, x_2 \in \mathbb{R}$ con $x_1 < x_2$, entonces:
+
+- $F$ es continua por la derecha, es decir: $F(x_0) = F(x_0^+)$
+$$
+\begin{align*}
+F(x_0^ + ) = \lim_{x \to x_0^ + } F(x) = \lim_{x \to x_0^ + } \displaystyle \sum_{i = 1}^{[x]} \left(\frac{1}{2}\right)^i = \displaystyle \sum_{i = 1}^{[x]} \left(\frac{1}{2}\right)^i = F(x_0)
+\end{align*}
+$$
+
+Así, queda demostrado que $F$ es función de distribución.
+
+</DemBox>
+
+### Ejercicio 8
+*Sea $f \colon \mathbb{R} \longrightarrow \mathbb{R}$ una función monótona. Sea $D_f$ el conjunto de puntos de discontinuidad de $f$. Demostrar que $D_f$ es finito o infinito numerable* 
+
+<DemBox title="Demostración">
+
+Como $D_f$ es el conjunto de puntos de discontinuidad de $f$ y en una función monótona sabemos que $\exists f(x^+)$ y $\exists f(x^-)$ aunque no necesariamente $f(x^+) = f(x^-)$ (las discontinuidades son de salto), podemos definir:
+$$
+\begin{align*}
+D_f = \left\{x \in \mathbb{R} \text{ tq } f(x^ + ) \neq f(x^ - ) \right\}
+\end{align*}
+$$
+Como $f$ es monótona, entonces en cualquier intervalo cerrado y acotado $[a, b]$, el número de puntos de discontinuidad no puede ser infinito no numerable ya que los valores de los saltos de $f$ en los puntos de discontinuidad son disjuntos (no se solapan). Fuera de un intervalo acotado el argumento es similar al ser $\mathbb{R}$ completo. 
+
+Ahora, para cada punto $x \in D_f$, definimos:
+$$
+\begin{align*}
+s_x = f(x^ + ) - f(x^ - ) \implies s_x \neq 0 \, \text{ y } \, s_x \in \mathbb{R}
+\end{align*}
+$$
+Los saltos $s_x$ son disjuntos, es decir, si $x_1, x_2 \in D_f$ con $x_1 \neq x_2$ entonces $s_{x_1} \neq s_{x_2}$. Esto es porque corresponden a distintos puntos de discontinuidad. 
+
+Ahora supongamos que $D_f$ fuera infinito no numerable. Esto implicaría que tendríamos una cantidad no numerable de valores disjuntos $s_x$ (lo cual es imposible en $\mathbb{R}$ ya que $\mathbb{R}$ es separable y cualquier conjunto disjunto en $\mathbb{R}$ es, a lo sumo, numerable). Así, tenemos que $D_f$ es finito o infinito numerable.
+
+</DemBox>
+
+### Ejercicio 9
+*Sea $F$ una función de distribución. Demostrar que existen dos funciones de distribución $F_1$ y $F_2$ y $s \in [0,1]$ tal que $F = sF_1 + (1 - s)F_2$, donde $F_1$ toma a lo sumo una cantidad numerable de valores distintos y $F_2$ es una función continua* 
+
+<DemBox title="Demostración">
+
+Sea $F$ una función de distribución, entonces tenemos que demostrar:
+
+- Existe $F_1$ función de distribución que toma a lo sumo una cantidad numerable de valores distintos (es una función escalonada)
+- Existe $F_2$ función de distribución continua
+- Existe $s \in [0, 1]$ tal que $F = sF_1 + (1 - s)F_2$
+
+Para ello, podemos definir $F_1$ como la suma de los saltos de $F$ en los puntos de discontinuidad de $F$, es decir, donde $P(x) > 0$. Si denotamos como $D_F$ al conjunto de puntos de discontinuidad de $F$, entonces, para $x \in D_F$ el salto es:
+$$
+\begin{align*}
+s_x = F(x) - F(x^- )
+\end{align*}
+$$
+Entonces, $F_1$ se define como:
+$$
+\begin{align*}
+F_1(x) = \sum_{x \in D_F} s_x 
+\end{align*}
+$$
+Así, $F_1$ es una función de distribución que toma a lo sumo una cantidad numerable de valores distintos. 
+
+Sea $F_2$ la función continua obtenida representando la parte discreta de $F$:
+$$
+\begin{align*}
+F_2 = F - F_1
+\end{align*}
+$$
+Entonces, $F_2$ es una función de distribución continua porque $F$ y $F_1$ coinciden en los puntos de discontinuidad de $F$ eliminando los saltos. Además $F_2$ es monótona no decreciente (diferencia de dos funciones no decrecientes). 
+
+Por último, definimos $s \in [0, 1]$ tal que:
+$$
+\begin{align*}
+F = sF_1 + (1 - s)F_2
+\end{align*}
+$$
+donde:
+
+- Si $s = 0$ entonces $F = F_2$
+- Si $s = 1$ entonces $F = F_1$
+- Si $0 < s < 1$ entonces $F$ es una combinación mixta de $F_1$ y $F_2$
+
+</DemBox>
+
+### Ejercicio 10
+*Se considera la siguiente función de distribución:*
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \in (-\infty, 0)\\
+\frac{x}{3} & \text{ si } x \in [0, 1)\\
+\frac{x}{3} + \frac{1}{12} & \text{ si } x \in [1, 2)\\
+\frac{5}{6} & \text{ si } x \in [2, 4)\\
+1 & \text{ si } x \in [4, \infty)
+\end{array}
+\right.
+\end{align*}
+$$
+*Encontrar la descomposición de $F$ referida en el ejercicio anterior* 
+
+<DemBox title="Demostración">
+
+Para encontrar la descomposición de $F$ tal que:
+$$
+\begin{align*}
+F = sF_1 + (1 - s)F_2
+\end{align*}
+$$
+Vamos a buscar los puntos de discontinuidad de $F$ y los saltos en esos puntos. 
+
+Vemos que $f$ continua en $\mathbb{R}\setminus \{0, 1, 2, 4\}$. Vamos a ver que ocurre en cada uno de estos puntos:
+
+- Si $x = 0$ entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\displaystyle \lim_{x \to 0^ - } F(x) = \displaystyle \lim_{x \to 0^ - } 0 = 0\\[2ex]
+\displaystyle \lim_{x \to 0^ + } F(x) = \displaystyle\, \lim_{x \to 0^ + } \frac{x}{3} = \frac{0}{3} = 0\\[2ex]
+F(0) = 0
+\end{array}
+\right\} \implies F \text{ continua en } x = 0
+\end{align*}
+$$
+- Si $x = 1$ entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\displaystyle \lim_{x \to 1^ - } F(x) = \displaystyle\, \lim_{x \to 1^ - } \frac{x}{3} = \frac{1}{3}\\[2ex]
+\displaystyle \lim_{x \to 1^ + } F(x) = \displaystyle\, \lim_{x \to 1^ + } \frac{x}{3} + \frac{1}{12} = \frac{1}{3} + \frac{1}{12} = \frac{5}{12}\\[2ex]
+F(1) = \dfrac{1}{3}
+\end{array}
+\right\} \implies F \text{ discontinua en } x = 1
+\end{align*}
+$$
+- Si $x = 2$ entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+\displaystyle \lim_{x \to 2^ - } F(x) = \displaystyle\, \lim_{x \to 2^ - } \frac{x}{3} + \frac{1}{12} = \frac{2}{3} + \frac{1}{12} = \frac{9}{12}\\[2ex]
+\displaystyle \lim_{x \to 2^ + } F(x) = \dfrac{5}{6}\\[2ex]
+F(2) = \dfrac{5}{6}
+\end{array}
+\right\} \implies F \text{ discontinua en } x = 2
+\end{align*}
+$$
+- Si $x = 4$ entonces:
+$$
+\begin{align*}
+\left.
+\begin{array}{ll}
+\lim_{x \to 4^ - } F(x) = \lim_{x \to 4^ - }\dfrac{5}{6} = \dfrac{5}{6}\\[2ex]
+\lim_{x \to 4^ + } F(x) = \lim_{x \to 4^ + }  1 = 1\\[2ex]
+F(4) = 1
+\end{array}
+\right\} \implies F \text{ discontinua en } x = 4
+\end{align*}
+$$
+
+Así, tenemos que $F$ es discontinua en $x=1, 2, 4$. Ahora vamos a calcular los saltos en esos puntos:
+$$
+\begin{align*}
+\left\{
+\begin{array}{l}
+s_1 = F(1) - F(1^ - ) = \dfrac{1}{3} + \dfrac{1}{12} - \dfrac{1}{3} = \dfrac{1}{12}\\[2ex]
+s_2 = F(2) - F(2^ - ) = \dfrac{5}{6} - \left(\dfrac{2}{3} + \dfrac{1}{12}\right) = \dfrac{5}{6} - \dfrac{9}{12} = \dfrac{1}{12}\\[2ex]
+s_4 = F(4) - F(4^ - ) = 1 - \dfrac{5}{6} = \dfrac{1}{6}
+\end{array}
+\right.
+\end{align*}
+$$
+Entonces, tenemos que:
+$$
+\begin{align*}
+F_1(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \in (-\infty, 1)\\
+\frac{1}{12} & \text{ si } x \in [1, 2)\\
+\frac{1}{12} & \text{ si } x \in [2, 4)\\
+\frac{1}{6} & \text{ si } x \in [4, \infty)
+\end{array}
+\right.
+\end{align*}
+$$
+Para calcular $F_2$ tenemos que:
+$$
+\begin{align*}
+F_2 = F - F_1
+\end{align*}
+$$
+Entonces, tenemos que:
+$$
+\begin{align*}
+F_2(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \in (-\infty, 1)\\[2ex]
+\dfrac{x}{3} + \dfrac{1}{12} - \dfrac{1}{12} = \dfrac{x}{3}& \text{ si } x \in [1, 2)\\[2ex]
+\dfrac{5}{6} - \dfrac{1}{12} = \dfrac{2}{3} & \text{ si } x \in [2, 4)\\[2ex]
+1 - \dfrac{1}{6} & \text{ si } x \in [4, \infty)
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 11
+*Se considera la función*
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \leq  0\\
+kx^2 & \text{ si } 0 < x < k\\
+1 & \text{ si } x \geq  k
+\end{array}
+\right.
+\end{align*}
+$$
+*donde $k \in (0, \infty)$:*
+
+1. *Determinar los valores de $k$ para los que $F$ es función de distribución* 
+<DemBox title="Demostración">
+
+Tenemos que $F(x)$ es función de distribución si cumple con las siguientes propiedades:
+
+- $\displaystyle \lim_{x \to -\infty} F(x) = 0$
+$$
+\begin{align*}
+\lim_{x \to -\infty} F(x) =\lim_{x \to -\infty} 0 =  0 \quad \forall k \in (0, \infty)
+\end{align*}
+$$
+- $\displaystyle \lim_{x \to \infty} F(x) = 1$
+$$
+\begin{align*}
+\lim_{x \to \infty} F(x) = \lim_{x \to \infty} 1 = 1 \quad \forall k \in (0, \infty)
+\end{align*}
+$$
+- $F$ es no decreciente, es decir, que si $x_1 < x_2$ entonces $F(x_1) \leq F(x_2)$
+
+- $F$ es continua por la derecha, es decir: $F(x_0) = F(x_0^+)$
+
+- Si $x < 0$ entonces:
+$$
+\begin{align*}
+F(x_0^ + ) = \lim_{x \to x_0^ + } F(x) = \lim_{x \to x_0^ + } 0 = 0 = F(x_0)
+\end{align*}
+$$
+- Si $x = 0$ entonces:
+$$
+\begin{align*}
+\lim_{x_0^ + } F(x) = \lim_{x \to 0^ + } kx^2 = 0 = F(0)
+\end{align*}
+$$
+- Si $0 < x_0 < k$ entonces:
+$$
+\begin{align*}
+\lim_{x_0^ + } F(x) = \lim_{x \to x_0^ + } kx^2 = kx_0^2 = F(x_0)
+\end{align*}
+$$
+- Si $x = k$ entonces:
+$$
+\begin{align*}
+\lim_{x_0^ + } F(x) = \lim_{x \to k^ + } 1 = 1 = F(k)
+\end{align*}
+$$
+- Si $x > k$ entonces:
+$$
+\begin{align*}
+\lim_{x_0^ + } F(x) = \lim_{x \to x_0^ + } 1 = 1 = F(x_0)
+\end{align*}
+$$
+
+Así, tenemos que $F$ es continua por la derecha $\forall k \in (0, \infty)$
+
+Faltaría ver que pasa si $x=k$, donde tenemos que:
+$$
+\begin{align*}
+F(k^ - ) = \lim_{x \to k^ - } kx^2 = k \cdot k^2 = k^3 \quad \text{ y } \quad F(k) = 1
+\end{align*}
+$$
+Entonces, para que $F$ sea función de distribución, tiene que cumplirse que:
+$$
+\begin{align*}
+k^3 = 1 \implies k = 1	
+\end{align*}
+$$
+Así, $F$ es función de distribución si $k = 1$.
+
+</DemBox>
+2. *Calcular las probabilidades $P\left(X \in \left(\left. \dfrac{1}{3}, \dfrac{2}{3} \right] \right.\right)$ y $P\left(X \in \left( \dfrac{1}{3}, \dfrac{2}{3} \right)\right)$* 
+<DemBox title="Demostración">
+
+Sabemos que:
+$$
+\begin{align*}
+P\left(X \in \left(\left. \dfrac{1}{3}, \dfrac{2}{3} \right] \right.\right) & = P \left(X \leq \dfrac{2}{3}\right) - P\left(X \leq \dfrac{1}{3}\right) = \\[2ex]
+& = F\left(\dfrac{2}{3}\right) - F\left(\dfrac{1}{3}\right) = \dfrac{4}{9} - \dfrac{1}{9} = \dfrac{1}{3}
+\end{align*}
+$$
+Para calcular la otra probabilidad, tenemos que:
+$$
+\begin{align*}
+P\left(X \in \left( \dfrac{1}{3}, \dfrac{2}{3} \right) \right) & = P \left(X \leq \dfrac{2}{3}\right) - P\left(X < \dfrac{1}{3}\right) = \\[2ex]
+& = F\left(\dfrac{2}{3}\right) - F\left(\dfrac{1}{3}^ - \right) = \dfrac{4}{9} - \dfrac{1}{9} = \dfrac{1}{3}
+\end{align*}
+$$
+
+</DemBox>
+
+*Calcular la probabilidad en el conjunto de los irracionales* 
+<DemBox title="Demostración">
+
+Como $F(x)$ continua en todo su dominio, no hay masa puntual en ningún punto, por lo que
+$$
+\begin{align*}
+P(X \in \mathbb{I}) = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 12
+*Sea una variable aleatoria $X$ con función de densidad*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+k(1 + x^2) & \text{ si } x \in (0, 3)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+1. *Determinar el valor de $k$* 
+<DemBox title="Demostración">
+
+Al ser $f$ función de densidad, tiene que cumplir que:
+
+- $f(x) \geq 0 \quad \forall x \in \mathbb{R}$
+
+- $\int_{ - \infty}^{\infty} f(x) \, dx = 1$
+Tenemos que:
+$$
+\begin{align*}
+\int_{ - \infty}^{\infty} f(x) \, dx & = \int_{ - \infty}^{0} 0 \, dx + \int_{0}^{3} k(1 + x^2) \, dx + \int_{3}^{\infty} 0 \, dx =\\[2ex]
+& = \int_{0}^{3} k(1 + x^2) \, dx = k \left[x + \dfrac{x^3}{3}\right]_0^3 = \\[2ex]
+& = k \left[3 + \frac{27}{3} - (0 - \frac{0}{3})\right] = k (3 + 9) = 12k
+\end{align*}
+$$
+Entonces, como $\displaystyle \int_{ - \infty}^{\infty} f(x) \, dx = 1$:
+$$
+\begin{align*}
+12 k = 1 \implies k = \frac{1}{12}
+\end{align*}
+$$
+
+</DemBox>
+2. *Obtener la función de distribución asociada a $X$* 
+<DemBox title="Demostración">
+
+Como tenemos que:
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\frac{1}{12}(1 + x^2) & \text{ si } x \in (0, 3)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+Entonces, la función de distribución asociada a $X$ es:
+
+- Si $x \leq 0$:
+$$
+\begin{align*}
+F(x) = \int_{ - \infty}^{x} f(t) \, dt = \int_{ - \infty}^{x} 0 \, dt = 0
+\end{align*}
+$$
+- Si $0 < x < 3$:
+$$
+\begin{align*}
+F(x) & = \int_{ - \infty}^{x} f(t) \, dt = \int_{ - \infty}^{0} 0 \, dt + \int_{0}^{x} \frac{1}{12}(1 + t^2) \, dt = \\[2ex]
+& =\int_{0}^{x} \frac{1}{12}(1 + t^2) \, dt = \frac{1}{12} \left[t + \frac{t^3}{3}\right]_0^x = \frac{1}{12} \left[x + \frac{x^3}{3}\right]
+\end{align*}
+$$
+Si $x \geq 3$:
+$$
+\begin{align*}
+F(x) & \int_{ - \infty}^{x} f(t) \, dt = \int_{ - \infty}^{0} 0 \, dt + \int_{0}^{3} \frac{1}{12}(1 + t^2) \, dt + \int_{3}^{x} 0 \, dt = \\[2ex]
+& = \int_{0}^{3} \frac{1}{12}(1 + t^2) \, dt = \frac{1}{12} \left[t + \frac{t^3}{3}\right]_0^3 = \frac{1}{12} \left[3 + 9\right] = 1
+\end{align*}
+$$
+
+Así, podemos escribir la función de distribución como:
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \leq 0\\
+\frac{1}{12} \left[x + \frac{x^3}{3}\right] & \text{ si } 0 < x < 3\\
+1 & \text{ si } x \geq 3
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+3. *Calcular la probabilidad de que $X$ tome valores en $(1, 2)$ y de $X$ menor que 1* 
+<DemBox title="Demostración">
+
+Vamos a calcular la probabilidad de que $X$ tome valores en $(1, 2)$:
+$$
+\begin{align*}
+P(X \in (1, 2)) & = P(X < 2) - P(X \leq 1) = \lim_{x \to 2^- } F(x) - F(1) = \\[2ex]
+& = \lim_{x \to 2^ - } \left[ \frac{1}{12} \left(x + \dfrac{x^3}{3}\right) \right] - \frac{1}{12} \left(1 + \dfrac{1^3}{3}\right) = \\[2ex]
+& = \frac{1}{12} \left(2 + \dfrac{2^3}{3}\right) - \frac{1}{12} \left(1 + \dfrac{1}{3}\right) = \frac{5}{18}
+\end{align*}
+$$
+Vamos a calcular ahora la probabilidad de que $X$ sea menor que 1:
+$$
+\begin{align*}
+P(X \leq 1) = F(1) = \frac{1}{12} \left(1 + \dfrac{1}{3}\right) = \frac{1}{6}
+\end{align*}
+$$
+
+</DemBox>
+4. *Calcular la probabilidad de que $X$ sea menor que 2, sabiendo que es mayor que 1* 
+<DemBox title="Demostración">
+
+Lo que queremos calcular es:
+$$
+\begin{align*}
+P(X < 2 |_{X > 1}) & = \frac{P(X < 2 \cap X > 1)}{P(X > 1)} = \frac{P(X \in (1, 2))}{ 1 - P(X \leq 1)} = \\[2ex]
+& = \dfrac{\dfrac{5}{18}}{1 - \dfrac{1}{6}} = \frac{5 \cdot 6}{18 \cdot 5} =\frac{1}{3} 
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 13
+*Sea $X$ una variable aleatoria con función de densidad:*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+| 1 - x| & \text{ si } x \in (0, 2)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*Determinar la función de distribución asociada* 
+
+<DemBox title="Demostración">
+
+Sabemos que la función de distribución viene dada por:
+$$
+\begin{align*}
+F(x) = \int_{ - \infty}^{x} f(t) \, dt
+\end{align*}
+$$
+Notar que $|1 - x|$ no es inyectiva, entonces vamos a descomponer el valor absoluto en dos partes. Despejando, obtenemos que:
+$$
+\begin{align*}
+|1 - x| = 0 \iff x = 1
+\end{align*}
+$$
+Entonces, ahora podemos escribir la función $|1 - x|$ como:
+$$
+\begin{align*}
+|1 - x| = \left\{
+\begin{array}{ll}
+1 - x & \text{ si } x \leq 1\\
+x - 1 & \text{ si } x > 1
+\end{array}
+\right.
+\end{align*}
+$$
+Ahora, podemos reescribir $f(x)$ como:
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+1 - x & \text{ si } x \in (0, 1]\\
+x - 1 & \text{ si } x \in (1, 2)\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+Así, podemos calcular la función de distribución como:
+
+- Si $x \leq 0$:
+$$
+\begin{align*}
+F(x) = \int_{ - \infty}^{x} f(x) = \int_{ - \infty}^{0} 0 \, dt = 0
+\end{align*}
+$$
+- Si $0 < x \leq 1$:
+$$
+\begin{align*}
+F(x) = \int_{ - \infty}^{x} f(x) = \int_{ - \infty}^{0} 0 \, dt + \int_{0}^{x} (1 - t) \, dt = \left[t - \dfrac{t^2}{2}\right]_0^x = x - \dfrac{x^2}{2}
+\end{align*}
+$$
+- Si $1 < x < 2$:
+$$
+\begin{align*}
+F(x) = \int_{ - \infty}^{x} f(x) & = \int_{ - \infty}^0 0 \, dt + \int_0^1 (1 - t) \, dt + \int_1^x (t - 1) \, dt = \\[2ex]
+& = \left[t - \dfrac{t^2}{2}\right]_0^1 + \left[\dfrac{t^2}{2} - t \right]_1^x =\\[2ex]
+& = \left(1 - \dfrac{1}{2} - \left(0 - \dfrac{0}{2}\right)\right) + \left(\dfrac{x^2}{2} - x -\left(\dfrac{1^2}{2} - 1\right)\right) =\\[2ex]
+& = \dfrac{x^2}{2} - x + 1
+\end{align*}
+$$
+- Si $x \geq 2$:
+$$
+\begin{align*}
+F(x) = \int_{ - \infty}^{x} f(x) & = \int_{ - \infty}^0 0 \, dt + \int_0^1 (1 - t) \, dt + \int_1^x (t - 1) \, dt + \int_{2}^{\infty} 0 \, dt = \\[2ex]
+& = \left[t - \dfrac{t^2}{2}\right]_0^1 + \left[\dfrac{t^2}{2} - t \right]_1^2 =\\[2ex]
+& = \left(1 - \dfrac{1}{2} - \left(0 - \dfrac{0}{2}\right)\right) + \left(\dfrac{2^2}{2} - 2 -\left(\dfrac{1^2}{2} - 1\right)\right) =\\[2ex]
+& = \dfrac{1}{2} + \dfrac{1}{2} = 1
+\end{align*}
+$$
+
+Así, la función de distribución asociada a $X$ es:
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x \leq 0\\
+x - \dfrac{x^2}{2} & \text{ si } 0 < x \leq 1\\[2ex]
+\dfrac{x^2}{2} - x + 1 & \text{ si } 1 < x < 2\\[2ex]
+1 & \text{ si } x \geq 2
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 14
+*Sea $X$ una variable aleatoria discreta con distribución de probabilidad simétrica respecto del punto 0. Además, se tiene que $P(X = \dfrac{1}{k}) = (k! \cdot 2e)^{-1}$ para todo $k \in \mathbb{N}$ y $P(X = 0) = e^{-1}$. Calcular la función de distribución de $|X|$ y $[X]$* 	
+<DemBox title="Demostración">
+
+Por hipótesis, tenemos que:
+$$
+\begin{align*}
+P\left(X = \dfrac{1}{k}\right) = \dfrac{1}{k! \cdot 2e} \quad \text{ y } \quad P(X = 0) = e^{-1}
+\end{align*}
+$$
+Como $X$ es simétrica respecto de 0, entonces:
+$$
+\begin{align*}
+P(X = x) = P(X = -x) \quad \forall x \in \mathbb{R} \setminus \{0\}
+\end{align*}
+$$
+Entonces, podemos calcular la función de distribución de $|X|$ como:
+
+- $|X| = 0$ con $P(X = 0) = e^{-1}$
+- $|X| = \dfrac{1}{k}$ con $P(X = \dfrac{1}{k}) + \dfrac{1}{k! \cdot 2e}$
+
+Por la simetría de $X$ respecto de 0, tenemos que:
+$$
+\begin{align*}
+P\left(|X| = \dfrac{1}{k}\right) = P\left(X = \dfrac{1}{k}\right) + P\left(X = -\dfrac{1}{k}\right) = 2 P(X = \dfrac{1}{k}) = \dfrac{1}{k! \cdot e}
+\end{align*}
+$$
+Así, la distribución de $|X|$ es:
+$$
+\begin{align*}
+P\left(|X| = x\right) = \left\{
+\begin{array}{ll}
+e^{-1} & \text{ si } x = 0\\
+\dfrac{1}{k! \cdot e} & \text{ si } x = \dfrac{1}{k}
+\end{array}
+\right.
+\end{align*}
+$$
+Ahora, vamos a calcular la de $[X]$:
+
+- $[X] = 0$ con $P(X = 0) = e^{-1}$
+- $[X] = \dfrac{1}{k}$ y $[X] = -\dfrac{1}{k}$ con $[X] = 0$ porque $\frac{1}{k} \in (0, 1)$
+
+Por lo tanto:
+$$
+\begin{align*}
+P([X] = 0) & = P(X = 0) + \sum_{k = 1}^{ \infty} \left(P\left(X = \dfrac{1}{k}\right) + P\left(X = -\dfrac{1}{k}\right)\right) = \\[2ex]
+& = P(X = 0) + \sum_{k = 1}^{ \infty} 2 P\left(X = \dfrac{1}{k}\right)  = e^{-1} +  \sum_{k = 1}^{ \infty} \dfrac{1}{k! \cdot e}  = \\[2ex]
+& = e^{ - 1} + \dfrac{1}{e} \sum_{k = 1}^{ \infty} \dfrac{1}{k!} = e^{ - 1} + \dfrac{1}{e} \left(e - 1\right) = 1
+\end{align*}
+$$
+Así, tenemos que la función de distribución de $[X]$ es $P([X] = 0) = 1$
+
+</DemBox>
+
+### Ejercicio 15
+*SSea $X$ una variable aleatoria cuya distribución está determinada por la función de densidad*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\dfrac{3x^2}{2} & \text{ si } x \in ( - 1, 1)\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*Determinar la distribución de las variables definidas como:*
+$$
+\begin{align*}
+Y = e^X \quad \text{ y } \quad Z = \left\{
+\begin{array}{ll}
+5 & \text{ si } X < \dfrac{1}{2} \\[2ex]
+7 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Vamos a calcular la distribución de $Y = e^X$. 
+
+Notamos que $Y$ es una variable aleatoria continua y que podemos hallar fácilmente la relación entre $X$ y $Y$:
+$$
+\begin{align*}
+Y = e^X \implies X = \ln Y
+\end{align*}
+$$
+Así, la densidad de $Y$ se obtiene como:
+$$
+\begin{align*}
+f_Y (y) = f_X(x) \left| \dfrac{dx}{dy}\right| = f_X(\ln y) \cdot \dfrac{1}{y}
+\end{align*}
+$$
+Así, si $x \in (-1, 1)$ entonces:
+$$
+\begin{align*}
+f_X(x) = \frac{3x^2}{2} \implies  f_X(\ln y) = \frac{3(\ln y)^2}{2} \implies f_Y(y) = \frac{3(\ln y)^2}{2y}
+\end{align*}
+$$
+Como $x \in (-1, 1) \implies y \in (e^{-1}, e^1)$ y obtendríamos que:
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+\dfrac{3(\ln y)^2}{2y} & \text{ si } y \in (e^{-1}, e)\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora, vamos a hallar la distribución de $Z$. 
+
+Notamos que $Z$ es una variable aleatoria discreta donde $Z \in \{5, 7\}$, entonces:
+
+- $P(Z = 5)$
+
+$Z = 5$ si $X < \dfrac{1}{2}$, entonces:
+$$
+\begin{align*}
+P(Z = 5) = P\left(X < \dfrac{1}{2}\right) & = \int_{ - \infty}^{\frac{1}{2}} f(x) \, dx = \int_{ - 1}^{\frac{1}{2}} \dfrac{3x^2}{2} \, dx = \\[2ex]
+& = \dfrac{x^3}{2} \Big|_{ - 1}^{\frac{1}{2}} = \dfrac{1}{2^4} - \dfrac{ - 1}{2} = \dfrac{9}{16}
+\end{align*}
+$$
+- $P(Z = 7)$
+
+$Z = 7$ si $X \geq \dfrac{1}{2}$ entonces:
+$$
+\begin{align*}
+P(Z = 7) = P\left(X \geq \dfrac{1}{2}\right) & = 1 - P\left(X < \dfrac{1}{2}\right) = 1 - \dfrac{9}{16} = \dfrac{7}{16}
+\end{align*}
+$$
+
+Así, la distribución de $Z$ viene dada por:
+$$
+\begin{align*}
+f_Z(z) = \left\{
+\begin{array}{ll}
+\dfrac{9}{16} & \text{ si } z = 5\\[2ex]
+\dfrac{7}{16} & \text{ si } z = 7
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 16
+*Sea $X$ una variable aleatoria cuya distribución está determinada por la densidad*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+ae^{ - ax} & \text{ si } x > 0\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*donde $a > 0$. Obtener la función de las variables $Y = e^{X^2}$ y $Z = (X - k)^2$ donde $k$ es una constante positiva* 
+
+<DemBox title="Demostración">
+
+Primero, vamos a obtener la función de densidad de $Y = e^{X^2}$. 
+
+Podemos hallar la relación entre $X$ e $Y$ como:
+$$
+\begin{align*}
+Y = e^{X^2} \implies X = \sqrt{\ln Y}
+\end{align*}
+$$
+Así, si $x > 0$ entonces:
+$$
+\begin{align*}
+f_X(x) = ae^{ - ax} \implies f_X(\sqrt{\ln y}) = a e^{ - a \sqrt{\ln y}}
+\end{align*}
+$$
+Así, la función de densidad de $Y$ viene dada por:
+$$
+\begin{align*}
+f_Y(y) = f_X(\sqrt{\ln y}) \left| \dfrac{dx}{dy}\right| = a e^{ - a \sqrt{\ln y}} \cdot \dfrac{1}{2 \sqrt{\ln y}} = \dfrac{a}{2 \sqrt{y}} e^{ - a \sqrt{\ln y}}
+\end{align*}
+$$
+Notar que la función de densidad de $Y$ está definida así cuando $X>0 \implies X^2 \geq 0 \implies Y \geq 1$. Así, la función de densidad de $Y$ es:
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+\dfrac{ae^{ - a \sqrt{\ln y}}}{2y \sqrt{\ln y}} & \text{ si } y \geq 1\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora, vamos con la de $Z$. 
+
+Hallamos primero el rango de $Z$:
+$$
+\begin{align*}
+X > 0 \implies (X - k)^2 \geq 0 \implies Z \geq 0
+\end{align*}
+$$
+Podemos hallar la relación entre $X$ e $Z$ como:
+$$
+\begin{align*}
+Z = (X - k)^2 \implies X = k \pm \sqrt{Z} 
+\end{align*}
+$$
+Como $X > 0$, tomamos únicamente $X = k + \sqrt{Z}$, así:
+$$
+\begin{align*}
+f_Z (z) = f_X(k + \sqrt{z}) \left|\frac{dx}{dz}\right| = a e^{ - a(k + \sqrt{z})} \cdot \frac{1}{2 \sqrt{z}}
+\end{align*}
+$$
+Así, la función de densidad de $Z$ es:
+$$
+\begin{align*}
+f_Z(z) = \left\{
+\begin{array}{ll}
+\dfrac{a e^{ - a(k + \sqrt{z})}}{2 \sqrt{z}} & \text{ si } z \geq 0\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 17
+*Sea $X$ una variable aleatoria continua con función de distribución*
+$$
+\begin{align*}
+F(x) = \left\{
+\begin{array}{ll}
+1 - e^{ - x} & \text{ si } x \geq 0\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*Se considera la variable aleatoria $Y$ determinada por:*
+$$
+\begin{align*}
+Y = \left\{
+\begin{array}{ll}
+X & \text{ si } X < 2\\[2ex]
+\frac{1}{X} & \text{ si } X \geq 2
+\end{array}
+\right.
+\end{align*}
+$$
+*Determinar la distribución de $Y$* 
+<DemBox title="Demostración">
+
+Para hallar la distribución de $Y$, vamos a hallar la función de densidad de $Y$. 
+
+Por ello, vamos a dividir en tramos la función de $Y$:
+
+- Si $x < 0$ entonces:
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = P(X \leq y) = 0
+\end{align*}
+$$
+- Si $0 < x < 2$ entonces:
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = P(X \leq y) = 1 - e^{ - y}
+\end{align*}
+$$
+- Si $x \geq 2$
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) & = P\left(\frac{1}{X} \leq y\right) = P \left(X \geq \dfrac{1}{y}\right) =\\[1ex]
+& = 1 - P(X < \dfrac{1}{y}) = 1 - (1 - e^{ - \frac{1}{y}}) = e^{ - \frac{1}{y}}
+\end{align*}
+$$
+
+Entonces, tenemos que:
+$$
+\begin{align*}
+F_Y(y) = \left\{
+\begin{array}{ll}
+0 & \text{ si } y \leq  0\\[2ex]
+1 - e^{ - y} & \text{ si } 0 < y < 2\\[2ex]
+e^{ - \frac{1}{y}} & \text{ si } y \geq 2
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 18
+*Sea $X$ una variable aleatoria continua con función de densidad*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+e^{2 - x} & \text{ si } x > 2\\[1ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*Determinar la distribución de la variable aleatoria $Y$:*
+$$
+\begin{align*}
+Y = \left\{
+\begin{array}{ll}
+\frac{1}{X} & \text{ si } X \geq 1\\[1ex]
+X^2 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+<DemBox title="Demostración">
+
+Dado que $X > 2$ según la densidad de $X$ entonces siempre $X \geq 1$, por lo que únicamente consideramos este caso:
+$$
+\begin{align*}
+Y = \frac{1}{X} \quad \text{ si } X \geq 1
+\end{align*}
+$$
+De hecho, notar que $Y = X^2$ no se aplica realmente ya que $X$ nunca está en ese rango (con un valor definido, ya que en $x \leq 2$ la función de densidad es 0). 
+
+Dado que $Y = \frac{1}{X}$ entonces, obtenemos la inversa para $X$:
+$$
+\begin{align*}
+X = \frac{1}{Y}
+\end{align*}
+$$
+Así, la densidad transformada se obtiene mediante:
+$$
+\begin{align*}
+f_Y(y) = f_X\left(\frac{1}{y}\right) \left| \frac{dx}{dy}\right|
+\end{align*}
+$$
+Para derivar $X$ en función de $Y$, tenemos que:
+$$
+\begin{align*}
+x = \dfrac{1}{y} \implies \dfrac{dx}{dy} = - \dfrac{1}{y^2} \implies \left| \dfrac{dx}{dy}\right| = \dfrac{1}{y^2}
+\end{align*}
+$$
+Para encontrar el soporte de $Y$, consideramos el soporte de $X$ que es $x > 2$ y, en ese caso, como $y = \dfrac{1}{x}$ entonces:
+$$
+\begin{align*}
+0 < y < \dfrac{1}{2} \implies f_Y(y) = f_X\left(\dfrac{1}{y}\right) \cdot \dfrac{1}{y^2} = e^{2 - \frac{1}{y}} \cdot \dfrac{1}{y^2}
+\end{align*}
+$$
+Así, la función de densidad de $Y$ es:
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+e^{2 - \frac{1}{y}} \cdot \dfrac{1}{y^2} & \text{ si } 0 < y < \dfrac{1}{2}\\[2ex]
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 19
+*Sea $X$ una variable aleatoria discreta tal que $P(X = k) = \left(\frac{1}{2}\right)^k$ para $k \in \mathbb{N}$. Calcular su esperanza*
+
+<DemBox title="Demostración">
+
+Sabemos que la esperanza de una variable aleatoria discreta se calcula como:
+$$
+\begin{align*}
+E(X) = \sum_{k = 1}^{ \infty} k \cdot P(X = k) = \displaystyle \sum_{k = 1}^{\infty} k \cdot \left(\dfrac{1}{2}\right)^k = \frac{\dfrac{1}{2}}{\left(1 - \dfrac{1}{2}\right)^2} = 2
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 20
+*Sea $X$ una variable aleatoria discreta cuyo soporte (conjunto de valores de la variable) es el conjunto $\mathbb{X} = \mathbb{N}$. Si su función de probabilidad verifica que $P(X = r) = k(1- \theta)^{r-1}$ con $\theta \in (0, 1)$, determinar el valor de $k$ y obtener la media y la varianza de dicha variable*
+
+<DemBox title="Demostración">
+
+Primero, vamos a ver que valor de $k$ satisface las condiciones de que sea función de probabilidad. Para ello, vamos a calcular la suma de todas las probabilidades:
+$$
+\begin{align*}
+\sum_{r = 1}^{ \infty} P(X = r) &= \displaystyle \sum_{r = 1}^{\infty} k (1 - \theta)^{r - 1} = k \displaystyle \sum_{r = 1}^{\infty} (1 - \theta)^{r - 1} =\\[2ex]
+& = k\displaystyle \sum_{j = 0}^{\infty} (1 - \theta)^j = k \dfrac{1}{1 - (1 - \theta)} = k \dfrac{1}{\theta}
+\end{align*}
+$$
+Para que sea función de probabilidad, tenemos que:
+$$
+\begin{align*}
+\sum_{r = 1}^{ \infty} P(X = r) = 1 \implies \dfrac{k}{\theta} = 1 \implies \theta = k
+\end{align*}
+$$
+Así, tenemos que $k = \theta$. 
+
+Ahora, vamos a calcular su esperanza:
+$$
+\begin{align*}
+E(X) & = \sum_{r = 1}^{\infty} r \cdot P(X = r) = \sum_{r = 1}^{\infty} r \cdot \theta (1 - \theta)^{r - 1} = \theta \sum_{r = 1}^{\infty} r \cdot (1 - \theta)^{r - 1} =\\[2ex]
+& = \theta \sum_{r = 1}^{\infty} \dfrac{d}{d \theta} (1 - \theta)^r = \theta \dfrac{d}{d \theta} \sum_{r = 1}^{\infty} (1 - \theta)^r = \theta \dfrac{d}{d \theta} \dfrac{1}{1 - (1 -\theta)} - (1 - \theta)^0 = \\[2ex]
+& = \theta \dfrac{d}{d\theta}\left(\frac{1}{ - \theta}  - 1 \right)= \theta \dfrac{ 1}{\theta^2} = \frac{ 1}{\theta}
+\end{align*}
+$$
+
+Ahora, vamos a calcular su varianza:
+$$
+\begin{align*}
+Var(X) = E(X^2) - E(X)^2
+\end{align*}
+$$
+Para ello, calculamos $E(X^2)$:
+$$
+\begin{align*}
+E(X^2) = \sum_{r = 1}^{\infty} r^2 \cdot P(X = r) = \sum_{r = 1}^{\infty} r^2 \cdot \theta (1 - \theta)^{r - 1} = \theta \sum_{r = 1}^{\infty} r^2 \cdot (1 - \theta)^{r - 1}
+\end{align*}
+$$
+Tenemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{r = 1}^{\infty} x^r = \dfrac{x}{1 - x} \quad \text{ con } |x| < 1
+\end{align*}
+$$
+Así, podemos derivar en ambos lados y tenemos que:
+$$
+\begin{align*}
+\frac{d}{dx} \left( \displaystyle \sum_{r = 1}^{\infty} x^r \right) = \frac{d}{dx} \left(\frac{x}{1 - x}\right) \iff \displaystyle \sum_{r = 1}^{\infty} r x^{r - 1} = \frac{1}{(1 - x)^2}
+\end{align*}
+$$
+Ahora, podemos volver a derivar, para ello, empezamos por el lado izquierdo
+$$
+\begin{align*}
+\frac{d}{dx} \left(\displaystyle \sum_{r = 1}^{\infty} r x^{r - 1}\right) & =\displaystyle \sum_{r = 1}^{\infty} r \frac{d(x^{r - 1})}{dx}  = \displaystyle \sum_{r = 1}^{\infty} r(r - 1) x^{r - 2} = \\[2ex]
+& = \displaystyle \sum_{r = 1}^{\infty} r^2 x^{r - 2} - \displaystyle \sum_{r = 1}^{\infty} r x^{r - 2} \overset{*}{ = } \displaystyle \sum_{r = 1}^{\infty} r^2 x^{r - 2}
+\end{align*}
+$$
+(*) Nos podemos ``cargar'' el segundo sumatorio porque en el infinito $r^2$ tiene mucho más peso que $r$ 
+
+Ahora, derivamos el otro lado de la igualdad:
+$$
+\begin{align*}
+\frac{d}{dx} \left(\frac{1}{(1 - x)^2}\right) = - 2 \frac{1}{(1 - x)^3} \cdot ( - 1)
+\end{align*}
+$$
+Así, tenemos que:
+$$
+\begin{align*}
+\displaystyle \sum_{r = 1}^{\infty} r^2 x^{r - 2} = \frac{2}{(1 - x)^3}
+\end{align*}
+$$
+Y, para hacerlo coincidir con nuestro caso, podemos multiplicar por $x$ en ambos lados, es decir:
+$$
+\begin{align*}
+x \displaystyle \sum_{r = 1}^{\infty} r^2 x^{r - 2} = x \frac{2}{(1 - x)^3} \implies \displaystyle \sum_{r = 1}^{\infty} r^2 x^{r - 1} = \frac{2x}{(1 - x)^3}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 21
+*Sea $X$ una variable aleatoria discreta con función de densidad*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\dfrac{x + 1}{2} & \text{ si } - 1 < x < 1\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*calcular la esperanza de $Y = \frac{1}{X}$*
+<DemBox title="Demostración">
+
+Como $X$ es una variable aleatoria continua, podemos calcular la esperanza de $Y$ como:
+$$
+\begin{align*}
+E(Y) & = \int_{ - 1}^{1} \dfrac{1}{x} \cdot f(x) \, dx = \int_{ - 1}^1 \frac{1}{x} \cdot \frac{x + 1}{2} \, dx = \frac{1}{2}\int_{ - 1}^1 \frac{x + 1}{x} \, dx = \\[2ex]
+& = \frac{1}{2} \int_{ - 1}^1 \left(1 + \frac{1}{x} \right) \, dx = \frac{1}{2} \left[x + \ln |x| \right]_{ - 1}^1 = \frac{1}{2} \left(1 + \ln 1 - \left( - 1 + \ln 1\right)\right) = 1
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 26
+*El número de averías por mes de una máquina tiene de promedio 4 y su desviación típica es 0.8*
+
+1. *Determinar un intervalo no trivial de modo que la probabilidad de que el número de averías pertenezca a dicho intervalo sea, al menos, 0.9*
+<DemBox title="Demostración">
+
+Para ello, vamos a emplear la desigualdad de Chebyshev, que nos dice que:
+$$
+\begin{align*}
+P(|X - E(X)| \geq \varepsilon) \leq \frac{Var(X)}{\varepsilon^2}
+\end{align*}
+$$
+Es decir, en este caso tenemos que:
+$$
+\begin{align*}
+P(|X - 4| < \varepsilon) \geq 0.9
+\end{align*}
+$$
+Por la desigualdad de Chebyshev, tenemos que:
+$$
+\begin{align*}
+P(|X - 4| < \varepsilon) \geq 1 - \frac{Var(X)}{\varepsilon^2} \implies 1 - \frac{0.8^2}{\varepsilon^2} \geq 0.9 \implies \frac{0.8^2}{\varepsilon^2} \leq 0.1
+\end{align*}
+$$
+Así, podemos despejar y obtenemos que:
+$$
+\begin{align*}
+\varepsilon \geq \frac{0.8}{\sqrt{0.1}} = 2.53
+\end{align*}
+$$
+Así, el intervalo en cuestión es de la forma $[a, b]$ donde:
+$$
+\begin{align*}
+[a, b] = [E(x) - \varepsilon, E(x) + \varepsilon] = [4 - 2.53, 4 + 2.53] = [1.47, 6.53]
+\end{align*}
+$$
+
+</DemBox>
+*La fábrica de la máquina garantiza que el número de averías por mes, rara vez será ocho o más, ¿es esto cierto?*
+<DemBox title="Demostración">
+
+En este caso, queremos calcular $P(X \geq 8)$, es decir:
+$$
+\begin{align*}
+P(X \geq 8) = P(|X - E(X)| \geq 4)
+\end{align*}
+$$
+Por la desigualdad de Chebyshev, tenemos que:
+$$
+\begin{align*}
+P(|X - E(X)| \geq \varepsilon) \leq \frac{Var(X)}{\varepsilon^2} \implies P(|X - 4| \geq 4) \leq \frac{0.8^2}{4^2} = \frac{0.64}{16} = 0.04
+\end{align*}
+$$ 
+Así, tenemos que:
+$$
+\begin{align*}
+P(X \geq 8) \leq 0.04
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 27
+*La demanda media mensual de un producto es 28, con una desviación típica de 4. ¿Cuántos productos deben tenerse a principio de mes para asegurar que la demanda será mayor o igual que la oferta con probabilidad no superior a 0.1?*
+<DemBox title="Demostración">
+
+En este caso, queremos ver que:
+$$
+\begin{align*}
+P(X \geq c) \leq 0.1
+\end{align*}
+$$
+donde $X$ es la demanda de productos. 
+
+Por la desigualdad de Chebyshev, tenemos que:
+$$
+\begin{align*}
+P(|X - E(X)| \geq \varepsilon) \leq \frac{Var(X)}{\varepsilon^2} \implies P(|X - 28| \geq \varepsilon) \leq \frac{4^2}{\varepsilon^2} \leq 0.1
+\end{align*}
+$$
+Entonces, queremos ver:
+$$
+\begin{align*}
+\frac{16}{\varepsilon^2} \leq 0.1 \implies \varepsilon^2 \geq \frac{16}{0.1} = 160 \implies \varepsilon \geq \sqrt{160} = 12.65
+\end{align*}
+$$
+Por lo que, para asegurar que la demanda será mayor o igual que la oferta con probabilidad no superior a 0.1, se deben tener al menos $28 + 13 = 41$ productos.
+
+</DemBox>
+
+### Ejercicio 29
+*Sea $X$ una variable aleatoria continua con función de densidad*
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+x & \text{ con } 0 \leq  x < 1\\
+2 - x & \text{ con } 1 \leq x < 2\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+*Calcular la esperanza y la varianza de $X$ a partir de la función generatriz de momentos*
+
+<DemBox title="Demostración">
+
+Para calcular la esperanza y la varianza de $X$ a partir de la función generatriz de momentos, vamos a calcular primero la función generatriz de momentos. 
+
+La función generatriz de momentos se define como:
+$$
+\begin{align*}
+g_X(t) = E(e^{tX}) = \int_{ - \infty}^{ \infty} e^{tx} f(x) \, dx
+\end{align*}
+$$
+Así, en este caso, tenemos que:
+$$
+\begin{align*}
+M_X(t) = \int_{0}^{1} e^{tx} \cdot x \, dx + \int_{1}^{2} e^{tx} \cdot (2 - x) \, dx = \int_{0}^{1} x e^{tx} \, dx + \int_{1}^{2} (2 - x) e^{tx} \, dx
+\end{align*}
+$$
+Para la primera integral, tenemos que, aplicando partes:
+$$
+\begin{align*}
+u = x \quad & \quad dv = e^{tx} \, dx\\
+du = dx \quad & \quad v = \frac{1}{t} e^{tx}
+\end{align*}
+$$
+Así, tenemos que:
+$$
+\begin{align*}
+\int x e^{tx} \, dx = \frac{x}{t} e^{tx} - \frac{1}{t} \int e^{tx} \, dx = \frac{x}{t} e^{tx} - \frac{1}{t^2} e^{tx}
+\end{align*}
+$$
+Para la segunda integral, tenemos que, aplicando partes:
+$$
+\begin{align*}
+u = 2 - x \quad & \quad dv = e^{tx} \, dx\\
+du = - dx \quad & \quad v = \frac{1}{t} e^{tx}
+\end{align*}
+$$
+Así, tenemos que:
+$$
+\begin{align*}
+\int (2 - x) e^{tx} \, dx = (2 - x) \frac{1}{t} e^{tx} - \frac{1}{t} \int e^{tx} \, dx = (2 - x) \frac{1}{t} e^{tx} - \frac{1}{t^2} e^{tx}
+\end{align*}
+$$
+Así, la función generatriz de momentos es:
+$$
+\begin{align*}
+g_X(t) = \left[\frac{x}{t} e^{tx} - \frac{1}{t^2} e^{tx}\right]_{0}^{1} + \left[(2 - x) \frac{1}{t} e^{tx} - \frac{1}{t^2} e^{tx}\right]_{1}^{2} = \frac{1}{t} e^t - \frac{1}{t^2} e^t + \frac{1}{t} e^{2t} - \frac{1}{t^2} e^{2t}
+\end{align*}
+$$
+
+</DemBox>
