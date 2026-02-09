@@ -1,0 +1,1335 @@
+---
+title: "Ejercicios Resueltos Arquitectura de Computadores . Parte II"
+date: "2026-01-30"
+description: "Resolución de ejercicios propuestos sobre representación de números en diferentes formatos y operaciones binarias."
+tags: ["Arquitectura de Computadores", "Representación de Números", "Operaciones Binarias"]
+---
+
+## Tema 3
+### Ejercicio 1
+*Se tiene la siguiente sentencia en lenguaje `C++`:*
+
+```
+a = b;
+```
+
+*Sabiendo que `a` se almacena en `r0` y `b` en `r1`, traduce la anterior sentencia al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+
+```
+MOV r0, r1
+```
+
+</DemBox>
+
+### Ejercicio 2
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = 45;
+```
+
+*Sabiendo que `a` se almacena en `r0`, traduce la sentencia anterior al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+MOVL r0, 45
+MOVH r0, 00
+```
+
+En realidad, el `MOVH` no sería necesario, pero seguro que en el examen lo pondrían mal si no lo pones.
+
+</DemBox>
+
+### Ejercicio 3
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = b;
+```
+
+*Sabiendo que `a` se almacena en `r0` y `b` en la dirección de memoria `2010`$_h$, traduce la sentencia anterior al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+MOVH r1, 20h
+MOVL r1, 10h
+MOV r0, [r1]
+```
+
+</DemBox>
+
+### Ejercicio 4
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = b
+```
+
+*Sabiendo que `a` se almacena en la dirección de memoria `3456`$_h$ y `b` en `r3`, traduce la sentencia al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+El código en el lenguaje `CT` sería:
+```
+MOVH r0, 34h
+MOVL r0, 56h
+MOV [r0], r3
+```
+
+</DemBox>
+
+### Ejercicio 5
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = b
+```
+
+*Sabiendo que `a` se almacena en la dirección de memoria `3456`$_h$ y `b` en la dirección de memoria `AB12`$h$, traduce la sentencia anterior al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+El código en el lenguaje `CT` sería:
+```
+MOVH r0, 34h
+MOVL r0, 56h
+MOVH r1, ABh
+MOVL r1, 12h
+MOV r2, [r1]
+MOV [r0], r2
+```
+
+</DemBox>
+
+### Ejercicio 6
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = b + 5;
+```
+
+*Sabiendo que `a` se almacena en `r0` y `b` en `r1`, traduce la sentencia anterior al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+MOVH r2, 0
+MOVL r2, 5
+ADD r0, r1, r2
+```
+
+</DemBox>
+
+### Ejercicio 7
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = b - c
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en la posición de memoria `4567`$_h$, traduce la sentencia anterior al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+En el lenguaje `CT` sería:
+```
+MOVH r2, 45h
+MOVL r2, 67h
+MOV r3, [r2]
+SUB r0, r1, r3
+```
+
+</DemBox>
+
+### Ejercicio 8
+*Se tiene la siguiente sentencia en `C++`:*
+```
+a = (b + c) - (a + 1024)
+```
+
+*Sabiendo que `a` se almacena en la dirección de memoria `1000`$_h$, `b` en `r1` y `c` en `r2`, traduce la sentencia anterior al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+Primero pasamos 1024 a hexadecimal:
+
+$$
+\begin{align*}
+1024 = 0100\, 0000\, 0000 = 400_h
+\end{align*}
+$$
+
+En el lenguaje `CT` sería: 
+```
+MOVH r3, 10h
+MOVL r3, 00h ; Carga de la dirección de memoria de a
+MOV r0, [r3] ; Carga del valor de a
+MOVH r4, 04h
+MOVL r4, 00h ; Carga de 1024 en hex
+ADD r1, r1, r2 ; (b + c)
+ADD r0, r0, r4 ; (a + 1024)
+SUB r0, r1, r0 ; (b + c) - (a + 1024)
+MOV [r3], r0 ; Guardamos el resultado en memoria
+```
+
+</DemBox>
+
+### Ejercicio 9
+*Se tiene la siguiente sentencia en `C++`:*
+```
+if (a == b)
+c = c + 1;
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en `r2`, traduce la sentencia anterior al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+En el lenguaje `CT` sería:
+```
+CMP r0, r1 ; Comparamos a y b haciendo la resta a - b
+BRZ consecuente ; Si ZF = 1 --> a = b --> saltamos a consecuente
+JPM siguiente ; Si no saltamos a siguiente
+consecuente:
+MOVL r3, 1
+MOVH r3, 0
+ADD r2, r2, r3
+siguiente:
+```
+
+</DemBox>
+
+### Ejercicio 10
+*Se tienen las siguientes sentencias en `C++`:*
+```
+if (a != b)
+c = c - a;
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en tx`r2`, traduce la sentencia anterior al lenguaje `CT`.*
+
+<DemBox title="Demostración">
+
+En el lenguaje `CT` sería:
+```
+CMP r0, r1 ; Comparamos a y b haciendo la resta a - b
+BRNZ consecuente ; Si ZF = 0 --> a != b --> saltamos a consecuente
+JPM siguiente 
+consecuente:
+SUB r2, r2, r0
+siguiente:
+```
+
+</DemBox>
+
+### Ejercicio 11
+*Se tienen las siguientes sentencias en `C++`:*
+```
+if (a < b)
+c = 0;
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en `r2`, realiza la traducción al lenguaje del CT. Las variables `a`, `b` y `c` almacenan números naturales*
+
+<DemBox title="Demostración">
+
+En el lenguaje *CT* sería:
+```
+CMP r0, r1 ; Resta a - b
+BRC consecuente ; Si CF = 1 --> a < b ya que hay acarreo
+JPM siguiente
+consecuente:
+XOR r2, r2, r2 ; c = 0
+siguiente:
+```
+
+Notar que cuando hacemos la resta de dos números naturales, si el sustraendo es mayor que el minuendo entonces, en la *ALU*, el bit de acarreo (`CF`) se pone a 1.
+
+</DemBox>
+
+### Ejercicio 12
+*Se tienen las siguientes sentencias en `C++`:*
+```
+if (a <= b)
+c = 27;
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en `r2`, realiza la traducción al lenguaje del CT. Las variables `a`, `b` y `c` almacenan números naturales.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+CMP r0, r1
+BRC consecuente ; Si CF = 1 --> a < b
+BRZ consecuente ; Si ZF = 1 --> a = b
+JPM siguiente
+consecuente:
+MOVL r2, 27
+MOVH r2, 0
+siguiente:
+```
+
+</DemBox>
+
+### Ejercicio 13
+*Se tienen las siguientes sentencias en `C++`:*
+```
+if ((a == b) && (a != c))
+a = 0;
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en `r2`, realiza la traducción al lenguaje del CT. Las variables `a`, `b` y `c` almacenan números naturales.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+CMP r0, r1
+BRNZ siguiente ; Si ZF = 0 --> a != b
+CMP r0, r2
+BRZ siguiente ; Si ZF = 1 --> a = c
+XOR r0, r0, r0 ; a = 0
+siguiente:
+```
+
+Notar que en este caso, se han empleado las leyes de De Morgan, es decir:
+
+$$
+\begin{align*}
+(a == b) \land (a != c) \iff \neg ((a \neq b) \lor (a = c))
+\end{align*}
+$$
+
+Alternativamente, se podría haber hecho:
+```
+CMP r0, r1
+BRZ segunda_comprobacion ; Si ZF = 1 --> a = b
+JMP siguiente
+segunda_comprobacion:
+CMP r0, r2
+BRNZ consecuente ; Si ZF = 0 --> a != c
+JMP siguiente
+consecuente:
+XOR r0, r0, r0 ; a = 0
+siguiente:
+```
+
+</DemBox>
+
+### Ejercicio 14
+*Se tienen las siguientes sentencias en `C++`:*
+```
+if ((a == b) || (a != c))
+a = 0;
+```
+
+*Sabiendo que `a` se almacena en `r0`, `b` en `r1` y `c` en `r2`, realiza la traducción al lenguaje del CT. Las variables `a`, `b` y `c` almacenan números naturales.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+CMP r0, r1
+BRZ consecuente ; Si ZF = 1 --> a = b
+CMP r0, r2
+BRNZ consecuente ; Si ZF = 0 --> a != c
+JMP siguiente
+consecuente:
+XOR r0, r0, r0 ; a = 0
+siguiente:
+```
+
+</DemBox>
+
+### Ejercicio 15
+*Se tienen las siguientes sentencias en `C++`:*
+```
+for (i = 0; i < 100; i++)
+a = a - i;
+```
+
+*Sabiendo que `a` se almacena en `r5`, `i` en `r0` y es natural, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+XOR r0, r0, r0 ; i = 0
+MOVH r1, 0
+MOVL r1, 100 ; Cargamos 100 en r1
+
+inicio_for:
+CMP r0, r1
+BRNC fin_for ; Si CF = 0 --> i >= 100
+
+SUB r5, r5, r0 ; a = a - i
+
+INC r0 ; i++
+JMP inicio_for
+fin_for:
+```
+
+</DemBox>
+
+### Ejercicio 16
+*Se tienen las siguientes sentencias en `C++`:*
+```
+i = 0;
+while (i < 100){ 
+a = a - i;
+i++;
+}
+```
+
+*Sabiendo que `a` se almacena en `r5` e `i` en `r0` y es natural, realiza la traducción al lenguaje del `CT`.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+XOR r0, r0, r0 ; i = 0
+MOVL r1, 100
+MOVH r1, 0 ; Cargamos 100 en r1
+
+inicio_while:
+CMP r0, r1
+BRNC fin_while ; Si CF = 0 --> i >= 100
+
+SUB r5, r5, r0 ; a = a - i
+INC r0 ; i++
+
+JMP inicio_while
+fin_while:
+```
+
+</DemBox>
+
+### Ejercicio 17
+*Se tienen las siguientes sentencias en `C++`:*
+```
+i = 0;
+do {
+a = a - i;
+i++;
+} while (i < 100);
+```
+
+*Sabiendo que `a` se almacena en `r5` e `i` en `r0` y es natural, realiza la traducción al lenguaje del `CT`.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+XOR r0, r0, r0 ; i = 0
+MOVL r1, 100
+MOVH r1, 0 ; Cargamos 100 en r1
+
+inicio_do_while:
+SUB r5, r5, r0 ; a = a - i
+INC r0 ; i++
+
+CMP r0, r1
+BRC inicio_do_while ; Si CF = 1 --> i < 100
+```
+
+</DemBox>
+
+### Ejercicio 18
+*Se tienen las siguientes sentencias en `C++`:*
+```
+x = Min(a, b);
+```
+
+*Sabiendo que `a` se almacena en `r4`, `b` se almacena en `r5`, `x` en `r6`, el paso de parámetros se realiza a través de los registros `r1` y `r2` para el primer y segundo parámetro respectivamente y que el valor de retorno se almacena en `r0`, realiza la traducción al lenguaje del `CT`.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+MOV r1, r4 ; Pasamos el primer parámetro
+MOV r2, r5 ; Pasamos el segundo parámetro
+CALL Min ; Llamamos a la función Min
+MOV r6, r0 ; Guardamos el valor de retorno en x
+```
+
+</DemBox>
+
+### Ejercicio 19
+*Se tiene la siguiente sentencia en `C++`:*
+```
+x = Min(a, b);
+```
+
+*Sabiendo que `a` se almacena en `r4`, `b` en `r5`, `x` en `r6`, el paso de parámetros se realiza a través de la pila de derecha a izquierda por valor y que el valor de retorno se almacena en `r0`, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+PUSH r5 ; Pasamos el segundo parámetro
+PUSH r4 ; Pasamos el primer parámetro
+CALL Min ; 
+INC r7
+INC r7 ; Ajustamos el puntero de pila
+MOV r6, r0 ; Guardamos el valor de retorno en x
+```
+
+</DemBox>
+
+### Ejercicio 20
+*Se tienen las siguientes sentencias en `C++`:*
+```
+int Min (unsigned int a, unsigned int b){
+if (a < b)
+return a;
+else
+return b;
+}
+```
+
+*Sabiendo que `a` y `b` se han pasado como parámetros a través de los registros `r1` y `r2` respectivamente y que el valor de retorno se almacena en `r0`, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+Min:
+CMP r1, r2
+BRNC consecuente:
+MOV r0, r2
+JMP siguiente
+consecuente:
+MOV r0, r1
+siguiente:
+RET
+```
+
+</DemBox>
+
+### Ejercicio 21
+*Se tienen las siguientes sentencias en `C++`:*
+```
+int Min (unsigned int a, unsigned int b){
+if (a < b)
+return a;
+else
+return b;
+}
+```
+
+*Sabiendo que `a` y `b` se han pasado como parámetros a través de la pila de derecha a izquierda y que el valor de retorno se almacena en `r0`, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje `CT` sería:
+```
+Min:
+PUSH r6 ; Guardamos el valor de r6
+MOV r6, r7 ; Guardamos el puntero de pila en r6
+
+PUSH r1 ; Guardamos lo que hay en r1
+PUSH r2 ; Guardamos lo que hay en r2
+INC r6 
+INC r6 ; Ajustamos el puntero de pila para los parámetros
+
+MOV r1, [r6] ; Cargamos el primer parámetro -> a
+INC r6 ; Ajustamos el puntero de pila para el segundo parámetro
+MOV r2, [r6] ; Cargamos el segundo parámetro -> b
+
+CMP r1, r2
+BRC consecuente: ; Si CF = 1 --> a < b
+MOV r0, r2 ; Retornamos b
+JMP siguiente
+consecuente:
+MOV r0, r1 ; Retornamos a
+siguiente:
+POP r2 ; Recuperamos lo que había en r2
+POP r1 ; Recuperamos lo que había en r1
+POP r6 ; Recuperamos el valor de r6
+RET
+```
+
+</DemBox>
+
+### Ejercicio 22
+*Se tiene la siguiente sentencia en `C++`:*
+```
+Min(x, a, b);
+```
+
+*Sabiendo que `a` se almacena en `r4`, b}se almacena en `r5`, `x` en la dirección de memoria `1000`$_h$, el paso de parámetros se realiza a través de la pila de derecha a izquierda, `x` se pasa por dirección y los otros dos parámetros por valor y que el valor de retorno se almacena en `r0`, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+PUSH r5 ; Pasamos b
+PUSH r4 ; Pasamos a
+MOVL r0, 0
+MOVH r0, 10h
+PUSH r0 ; Pasamos la dirección de memoria de x
+CALL Min
+INC r7
+INC r7
+INC r7 ; Ajustamos el puntero de pila
+```
+
+</DemBox>
+
+### Ejercicio 23
+*Se tiene la siguiente sentencia en `C++`:*
+```
+void Min (unsigned int& x, unsigned int a, unsigned int b){
+if (a < b)
+x = a;
+else
+x = b;
+}
+```
+
+*Sabiendo que `x`, `a` y `b` se han pasado como parámetros a través de l pila de derecha a izquierda, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+La traducción al lenguaje *CT* sería:
+```
+Min:
+PUSH r6
+MOV r6, r7
+
+PUSH r1 
+PUSH r2 
+PUSH r3 ; Salvaguardamos los valores que hay en r1, r2 y r3
+INC r6 
+INC r6 ; Ajustamos el puntero de pila para los parámetros
+
+MOV r1, [r6] ; Cargamos el primer parámetro -> x
+INC r6 ; Ajustamos el puntero de pila para a
+MOV r2, [r6] ; Cargamos el segundo parámetro -> a
+INC r6 ; Ajustamos el puntero de pila para b
+MOV r3, [r6] ; Cargamos el tercer parámetro -> b
+
+CMP r2, r3
+BRC consecuente ; Si CF = 1 --> a < b
+MOV [r1], r3 ; x = b (x no es local)
+JMP siguiente
+consecuente:
+MOV [r1], r2 ; x = a
+siguiente:
+POP r3
+POP r2
+POP r1
+POP r6 ; Recuperamos los valores de r1, r2, r3 y r6
+RET
+```
+
+</DemBox>
+
+### Ejercicio 24
+*Se tiene la siguiente sentencia en `C++`:*
+```
+int SumaAcumulada(int Vector[], unsigned int NumElems){
+int Suma;
+unsigned int i;
+
+Suma = 0;
+for (i = 0; i < NumElems; i++)
+Suma = Suma + Vector[i];
+return Suma;
+}
+```
+
+*Sabiendo que `Vector` y `NumElemns` se han pasado como parámetros a través de la pila de derecha a izquierda, que el valor de retorno se almacena en `r0`, que la variable local `Suma` se almacena en la pila y la variable local `i` en `r3`, realiza la traducción al lenguaje del CT.*
+
+<DemBox title="Demostración">
+
+El código en lenguaje *CT* sería:
+```
+SumaAcumulada:
+PUSH r6
+MOV r6, r7 ; Prólogo
+
+DEC r7 ; Reservamos espacio para variable Suma
+
+PUSH r1
+PUSH r2
+PUSH r3
+PUSH r4
+PUSH r5 ; Salvaguardamos los valores de r1, r2, r3, r4 y r5
+
+INC r6
+INC r6 
+MOV r1, [r6] ; Cargamos el primer parámetro -> Vector
+INC r6 
+MOV r2, [r6] ; Cargamos el segundo parámetro -> NumElems
+
+MOVL r4, 4
+MOVH r4, 0 
+SUB r6, r6, r4 ; r6 = &Suma (ver *)
+
+XOR r4, r4, r4
+MOV [r6], r4 ; Suma = 0
+
+XOR r3, r3, r3 ; i = 0
+
+inicio_for:
+CMP r3, r2
+BRNC fin_for ; Si CF = 0 --> i >= NumElems
+
+ADD r5, r1, r3 ; dirección de la posición i-ésima de Vector
+MOV r5, [r5] ; r5 = Vector[i]
+
+MOV r4, [r6] ; r4 = Suma
+ADD r4, r4, r5 ; Suma = Suma + Vector[i]
+MOV [r6], r4 ; Guardamos el valor de Suma en la pila
+
+INC r3 ; i++ 
+JMP inicio_for
+fin_for:
+MOV r0, [r6] ; r0 = Suma
+
+POP r5
+POP r4
+POP r3
+POP r2
+POP r1
+INC r7
+POP r6
+RET
+```
+
+(*) Cargamos un 4 en `r4` para que, al restarle 4 a `r6`, apuntemos a la dirección de memoria de `Suma` ya que hemos incrementado 3 veces `r6` y el espacio de la variable `Suma` está uno por encima. Basta notar que:
+
+![stack1](/blogs/images/fcr-ejercicios_stack1.png)
+
+</DemBox>
+
+## Tema 5
+### Ejercicio 1
+*Codificar la siguientes instrucciones:*
+
+- `MOV r1, r0`
+
+<DemBox title="Demostración">
+
+Para codificar la instrucción vemos que:
+
+1. El `MOV` es un direccionamiento a registro, es decir
+
+$$
+\begin{align*}
+`MOV Rd, Rs`
+\end{align*}
+$$
+
+2. La codificación de la orden `MOV` es:
+
+$$
+\begin{align*}
+`MOV Rd, Rs` = 00\ 001\ `Rd`\ `Rs` \ 00000
+\end{align*}
+$$
+
+3. Como `r0` es `000`$_b$ y `r1` es `001`$_b$, la codificación de la instrucción sería:
+
+$$
+\begin{align*}
+`MOV r1, r0` = 00\ 001 \ `Rd`\ `Rs` \ 00000 = 00\ 001\ 001\ 000\ 00000
+\end{align*}
+$$
+
+4. Podemos pasar a hexadecimal:
+
+$$
+\begin{align*}
+`MOV r1, r0` = \underbrace{0000}_{0} \ \underbrace{1001}_{9} \ \underbrace{0000}_{0} \ \underbrace{0000}_{0} = `0900`_h
+\end{align*}
+$$
+
+</DemBox>
+- `MOV r1, [r0]`
+
+<DemBox title="Demostración">
+
+Ahora iremos directamente:
+
+$$
+\begin{align*}
+`MOV r1, [r0]` = 00 \ 010 \ `r1` \ `r0` \ 00000 = \underbrace{0001}_{1} \ \underbrace{0001}_{1} \ \underbrace{0000}_{0} \ \underbrace{0000}_{0} = `1100`_h
+\end{align*}
+$$
+
+</DemBox>
+- `MOV [r0], r1`
+<DemBox title="Demostración">
+
+La codificación de la instrucción sería:
+
+$$
+\begin{align*}
+`MOV [r0], r1` = 00 \ 011 `Rd` \ `Rs` \ 00000 = \underbrace{0001}_{1} \ \underbrace{1000}_{8} \ \underbrace{0010}_{2} \ \underbrace{0000}_{0} = `1820`_h
+\end{align*}
+$$
+
+</DemBox>
+- `MOVH r1, 27h`
+<DemBox title="Demostración">
+
+La codificación de la instrucción sería:
+
+$$
+\begin{align*}
+`MOVH r1, 27h` = 00 \ 101 \ `Rd` \ `Inm8` = \underbrace{0010}_{2} \ \underbrace{1001}_{9} \ \overbrace{\underbrace{0002}_{2} \ \underbrace{0111}_{7}}^{`27`_h} = `2927`_h
+\end{align*}
+$$
+
+</DemBox>
+- `SUB r0, r1, r2`
+<DemBox title="Demostración">
+
+La codificación será:
+
+$$
+\begin{align*}
+`SUB r0, r1, r2` = 01 \ 001 \ `Rd` \ `Rs1` \ `Rs2` \ 00 = \underbrace{0100}_{4} \underbrace{1000}_{8} \underbrace{0010}_{2} \underbrace{1000}_{8} = `4828`_h
+\end{align*}
+$$
+
+</DemBox>
+- `CMP r0, r1`
+<DemBox title="Demostración">
+
+La codificación será:
+
+$$
+\begin{align*}
+`CMP r0, r1` = 01 \ 101 \ `Rs1` \ `Rs2` \ 000 \ 00 = \underbrace{0110}_{6} \underbrace{1000}_{8} \underbrace{0010}_{4} \underbrace{0000}_{0} = `6840`_h
+\end{align*}
+$$
+
+</DemBox>
+- `DEC r1`
+<DemBox title="Demostración">
+
+La codificación será:
+
+$$
+\begin{align*}
+`DEC r1` = 10 \ 010 `Rd` \ 0000 \ 0000 = \underbrace{1001}_{9} \underbrace{0001}_{1} \underbrace{0000}_{0} \underbrace{0000}_{0} = `9100`_h
+\end{align*}
+$$
+
+</DemBox>
+- `JMP -2`
+<DemBox title="Demostración">
+
+La codificación será:
+
+$$
+\begin{align*}
+`JMP -2` = 11 \ 000 \ 000 \ `Inm8` = \underbrace{1100}_{C} \underbrace{0000}_0 \underbrace{1111}_F \underbrace{1110}_E = `C0FE`_h
+\end{align*}
+$$
+
+Notar que:
+
+$$
+\begin{align*}
+|- 2| = 2 = 0000\ 0010 \implies - 2 = 1111\ 1110 = `Inm8`
+\end{align*}
+$$
+
+</DemBox>
+- `BRNO 80h`
+<DemBox title="Demostración">
+
+La codificación sería la siguiente:
+
+$$
+\begin{align*}
+`BRNO 80h` = 11 \ 110 \ `Cond` \ `Inm8` = \underbrace{1111}_F \underbrace{0011}_{3} \underbrace{1000}_{8} \underbrace{0000}_{0} = `F380`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Se considera el siguiente fragmento de código*
+```
+XOR r1, r1, r1
+MOVL r2, 15
+MOVH r2, 0
+bucle:
+MOV r5, [r0]
+CMP r2, r5
+BRNZ seguir
+INC r1
+seguir:
+INC r0
+DEC r6
+BRNZ bucle
+```
+
+*¿Cuál es la codificación de la instrucción `BRNZ seguir`? ¿Y la de `BRNZ bucle`?*
+
+<DemBox title="Demostración">
+
+Para la codificación de `BRNZ seguir` tenemos que saltar a `seguir` que está a 1 instrucción de distancia, por lo que la codificación sería:
+
+$$
+\begin{align*}
+`BRNZ seguir` = 11 \ 110 \ 101 \ 0000 \ 0001 = `F501`_h
+\end{align*}
+$$
+
+Y para `BRNZ bucle` tenemos que saltar a `bucle` que está 7 instrucciones hacia atrás, es decir, -7:
+
+$$
+\begin{align*}
+|- 7| = 7 = 0000 \ 0111 \implies - 7 = 1111 \ 1001 = `Inm8`
+\end{align*}
+$$
+
+Entonces la codificación será:
+
+$$
+\begin{align*}
+`BRNZ bucle` = 11 \ 110 \ 101 \ 1111 \ 1001 = `F5F9`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*El siguiente fragmento de código está cargado en la dirección `500`$_h$ de la memoria de un computador teórico:*
+```
+MOV r1, [r0]
+INC r0
+bucle:
+MOV r2, r1
+MOV r1, [r0]
+CMP r2, r1
+BRZ seguir
+INC r0
+JMP bucle
+seguir:
+```
+
+*¿Qué valor hay en la dirección `505`$_h$? ¿Y en la `507`$_h$*?
+
+<DemBox title="Demostración">
+
+Como empieza en la `500`$_h$, entonces en esta estará la codificación de `MOV r1, [r0]`. Así, podemos seguir avanzando y tenemos que la siguiente será `INC r0`, luego `MOV r2, r1`, luego `MOV r1, [r0]` y luego `CMP r2, r1`. Por lo tanto, en la dirección `505`$_h$ estará la codificación de `BRZ seguir`.
+
+Para hallar ahora su codificación, tenemos que `seguir` está a 2 instrucciones de distancia, por lo que la codificación será:
+
+$$
+\begin{align*}
+`BRZ seguir` = 11 \ 110 \ 100 \ 0000 \ 0010 = `F402`_h
+\end{align*}
+$$
+
+Por último, en la dirección `507`$_h$ estará la codificación de `JMP bucle`. Como `bucle` está a -6 instrucciones de distancia:
+
+$$
+\begin{align*}
+|- 6| = 6 = 0000 \ 0110 \implies - 6 = 1111 \ 1010 = `Inm8` = `FA`_h
+\end{align*}
+$$
+
+Y la codificación será:
+
+$$
+\begin{align*}
+`JMP bucle` = 11 \ 000 \ 000 \ 1111\ 1010 = `C0FA`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Se quiere añadir una nueva instrucción al juego de instrucciones del COmputador Teórico. Se trata de la instrucción `CMP [Ri], Inm8` que compara el contenido de la posición de memoria apuntada por el registro `Ri` con un valor inmediato de 8 bits. Escribir, en el menor número de pasos posible, las señales que debería generar la unidad de control para ejecutar la instrucción `CMP [r0], 25` a partir del cuarto paso.*
+
+<DemBox title="Demostración">
+
+La idea es hacer la resta de los dos valores en la ALU, para ello, vamos a pasar primero el valor de `r0` al `MAR` para seleccionar la dirección que queremos leer, así empleamos
+
+$$
+\begin{align*}
+`R0-IB`,\quad `IB-MAR`,\quad `READ`
+\end{align*}
+$$
+
+Ahora hay que hacer un ciclo de espera para que se cargue el dato en el `MDR`, por lo que no hacemos nada.
+
+$$
+\begin{align*}
+\dots 
+\end{align*}
+$$
+
+Ya tenemos el dato que estaba almacenado en la posición de memoria a la que apuntaba `r0` en el `MDR`, así, vamos a leerlo y pasarselo al registro temporal de la ALU, es decir:
+
+$$
+\begin{align*}
+`MDR-IB`,\quad `IB-TMPE`
+\end{align*}
+$$
+
+Ahora, vamos a cargar el segundo valor, es decir, el `Inm8` haciendo una extensión de signo en el `IB` para hacer la resta en la ALU y ver el resultado de los bits de estado. Así, empleamos:
+
+$$
+\begin{align*}
+`ExtIRL-IB`,\quad `SUB`,\quad `ALU-SR`, \quad `FIN`
+\end{align*}
+$$
+
+Y ya hemos terminado ya que hemos hecho la comparación de los dos valores.
+
+</DemBox>
+
+### Ejercicio 5
+*Si en un momento determinado el valor de `SR` es `C=0, O=0, Z=1, N=0`, ¿qué señales de control se generan en el paso T4 de la instrucción BRNZ?*
+
+<DemBox title="Demostración">
+
+Como tenemos que `Z = 1` y queremos ver con `BRNZ` si `Z = 0`, entonces no se cumple la condición y no se salta, por lo que las señales de control serán:
+
+$$
+\begin{align*}
+`FIN`
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Sabiendo que el registro `TMPE` del computador teório contienen el valor `AB65`$_h$ y que el bus interno contiene el valor `72CC`$_h$, ¿qué valor habrá en el `TMPS` y en los flags `ZCOS` del `SR` tras la activación de las señales de control `SUB`, `ALU-TMPS` y `ALU-SR`?. Responder en hexadecimal.*
+
+<DemBox title="Demostración">
+
+Si en el registro temporal tenemos el valor `AB65`$_h$ y en el `IB` el valor `72CC`$_h$ y hacemos la resta (`SUB`) tenemos que:
+
+$$
+\begin{align*}
+`AB65`_h = 1010 \ 1011 \ 0110 \ 0101 \quad `72CC`_h = 0111 \ 0010 \ 1100 \ 1100
+\end{align*}
+$$
+
+Así, hacemos para la resta el complemento a 2 del segundo valor:
+
+$$
+\begin{align*}
+`72CC`_h = 0111 \ 0010 \ 1100 \ 1100 \implies 1000\ 1101 \ 0011 \ 0100
+\end{align*}
+$$
+
+$$
+\begin{array}{ccccccccccccccccc}
+& 1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
++ & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\textcolor{red}{1}& 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1
+\end{array}
+$$
+
+Así, el valor resultante que se almacena en `TMPS` es:
+
+$$
+\begin{align*}
+0011 \ 1000 \ 1001 \ 1001 = `3899`_h    
+\end{align*}
+$$
+
+Y para los flags, tenemos que:
+
+- El resultado no es cero, entonces `Z = 0`
+- El sustraendo (interpretado como natural) es menor que el minuendo, entonces `C = 0`
+- El resultado tiene overflow, entonces `O = 1`
+- El resultado como entero es positivo, entonces `S = 0`
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+ZCOS = 0010 = `2`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Se quiere implementar una nueva instrucción en el computador teórico que apile un valor inmediato de 8 bits extendiendo el signo a 16. El mnemónico de la instrucción que se quiere implementar será: `PUSH Inm8`. El dato inmediato irá codificado en el byte de menor peso.*
+
+*Indicar la secuencia de pasos de control (pasos 4 y posteriores) necesarios para ejecutar dicha instrucción. No se debe añadir ninguna señal de control en el paso 4 y 5.*
+
+<DemBox title="Demostración">
+
+Lo primero será será cargar el valor inmediato en el `IB` extendido de signo y pasarlo al `MDR` para luego apilarlo. Así, tenemos:
+
+$$
+\begin{align*}
+`ExtIRL-IB`, \quad `IB-MDR`
+\end{align*}
+$$
+
+Ahora, tenemos que pasar la dirección de memoria que apunta a la cima de la pila al `MAR` pero decrementando una unidad para que apunte a la siguiente dirección de memoria. Así, empleamos:
+
+$$
+\begin{align*}
+`R7-IB`, \quad `TMPE-SET`, \quad `ADD`, `ALU-TMPS`
+\end{align*}
+$$
+
+Y finalmente se lo pasamos al `MAR` y le decimos que escriba en la dirección de memoria que apunta el `MAR` el valor que hay en el `MDR`:
+
+$$
+\begin{align*}
+`TMPS-IB`, `IB-MAR`, `WRITE`
+\end{align*}
+$$
+
+Esperamos un ciclo para que se escriba y finalizamos.
+
+$$
+\begin{align*}
+`FIN`
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 8
+*Se quiere añadir una nueva instrucción al juego de instrucciones del CT. Se trata de una instrucción aritmética `DUP Rd/s` que, como su propio mnemónico indica, duplica el contenido del registro `Rd/s`. Escribir en el menor número de pasos posible, las señales que debería de generar la unidad de contro para ejecutar `DUP r0`*.
+
+<DemBox title="Demostración">
+
+Primero hay que realizar las tres instrucciones comunes a todos las instrucciones (ver en teoría las epxlicaciones):
+
+$$
+\begin{align*}
+1º & \longrightarrow `PC-IB`, \quad `TMPE-CLR`, \quad `ADD`, \quad `CARRY-IN`, \quad `ALU-TMPS`, \quad `IB-MAR`, \quad `READ`\\
+2º & \longrightarrow `TMPS-IB`, \quad `IB-PC`\\
+3º & \longrightarrow `MDR-IB`, \quad `IB-IR`
+\end{align*}
+$$
+
+Podemos hacer la operación sumando dos veces el valor almacenado en el registro `r0`. Además, como vamos a sacar el registro al `IB` para meterlo al `TMPE` podemos hacer la suma directamente (ya que tenemos tanto en el `TMPE` como en el `IB` el valor de `r0`). Así, empleamos:
+
+$$
+\begin{align*}
+`R0-IB`, \quad `IB-TMPE`, \quad `ADD`, \quad `ALU-TMPS`
+\end{align*}
+$$
+
+Ahora, pasamos el valor del `TMPS` al `IB` para poder escribirlo en el registro `r0`:
+
+$$
+\begin{align*}
+`TMPS-IB`, \quad `IB-R0`, \quad `FIN`
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 9
+*En un ciclo determinado aparece en `IR` el valor `13C0`$_h$. ¿Qué señales de control se activarán en los ciclos posteriores?*
+
+<DemBox title="Demostración">
+
+Lo primero que hay que hacer es decodificar la instrucción que aparece en el `IR`. Así, tenemos que:
+
+$$
+\begin{align*}
+\underbrace{0001}_{1} \underbrace{0011}_3 \underbrace{1100}_{C} \underbrace{0000}_{0} = 00010 ` Rd ` `Ri ` 00000 = `MOV r3, r6`
+\end{align*}
+$$
+
+Así, una vez se ha cargado esto en el `IR`, las señales de control que se generarán son las siguientes
+
+Primero, hay que conseguir el valor que está en la dirección a la que apunta `r6` para ello:
+
+$$
+\begin{align*}
+`R6-IB`, \quad `IB-MAR`, \quad `READ`
+\end{align*}
+$$
+
+Ahora, hay un ciclo de espera ya que no podemos hacer nada hasta que no llegue el dato al `MDR`.
+
+Una vez que ha llegado, tenemos que pasarlo al registro `r3`, para ello:
+
+$$
+\begin{align*}
+`MDR-IB`, \quad `IB-R3`, \quad `FIN`
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 10
+*Durante la ejecución de un programa paso a paso en el CR se han observado los valores de algunos registros. Dichos valores se muestran en la siguiente tabla.*
+
+$$
+\begin{array}{c||c|c|c}
+Paso & `PC` & `MAR` & `r7`\\
+\hline
+k & 040F & 0419 & 0419\\
+k+1 & 040F & 040F & 0419\\
+k+2 & 0410 & 040F & 0419\\
+k+3 & 0410 & 040F & 0419\\
+k+4 & 0410 & 040F & 0419\\
+k+5 & 0410 & 040F & 0419\\
+k+6 & 0410 & 0418 & 0418\\
+k+7 & 0410 & 0418 & 0418\\
+k+8 & 0400 & 0418 & 0418\\
+k+9 & 0400 & 0400 & 0418\\
+k+10 & 0401 & 0400 & 0418\\
+\end{array}
+$$
+
+*Durante los pasos anteriores se ha ejecutado el final de una instrucción `A`, una instrucción completa `B` y el principio de una instrucción `C`. Cuál es la codificación de la instrucción `B`? Responde en hexadecimal.*
+
+<DemBox title="Demostración">
+
+Como en la iteración $k$ estábamos en la instrucción `A` y vemos que en las siguientes dos iteraciones llegamos a que `PC = 0410`, entonces vemos que se ha sumado uno al `PC`, es decir, que estamos actualizando el valor de `PC` por ser el inicio de una nueva instrucción. En este caso, la instrucción `B` empezará en `k + 1`. Podemos ver que dura hasta `k + 8` (incluido) ya que en `k + 10` se actualiza el valor de `PC` incrementando uno, que es el paso 2 de las instrucciones comunes para cada instrucción, por lo que `C` se empezó a desarrllar en $k + 9$.
+
+Veamos que hace la instrucción `B`. Los pasos $k + 1 \to k + 3$ son los tres pasos generales que se hacen para cada instrucción. Podemos ver que en la instrucción `k + 8` el `PC` pasa a `0400` por lo que podemos suponer que la instrucción modifica este valor, por lo que puede ser un salto `JMP` o una llamada a una subrutina `CALL`. Como se ha modificado también el valor de `r7`, podemos ver que se ha apilado algo en la pila, es decir, que se ha llamado a una subrutina y se ha apilado la dirección de retorno. Por ello, lo que tenemos una instrucción `CALL` que salta a la dirección `0400`.
+
+Así, como estábamos en `0410` y hemos saltado a `0400`, tenemos que la instrucción `B` es un `CALL` a la dirección `0400` que está 16 posiciones por detrás. Por lo que la codificación de la instrucción será:
+
+$$
+\begin{align*}
+`CALL - 16` = 11010 \ 000 `-16`_d = \underbrace{1101}_{D} \underbrace{0000}_{0} \underbrace{1111}_{F} \underbrace{0000}_{4} = `D0F0`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 11
+*En un paso de ejecución del computador teórico, el valor del `TMPE` es `ACDF`$_h$, el valor del `r0` es `7FB3` y se encuentran activadas las siguientes señales de control:*
+
+$$
+\begin{align*}
+`R0-IB`, \quad `ALU-SR`, \quad `ALU-TMPS`, \quad `XOR`
+\end{align*}
+$$
+
+*¿Cuál será el valor del `TMPS` y del `SR` (ZCOS) al final del paso? Responder en Hex*
+<DemBox title="Demostración">
+
+Como tenemos que en el `TMPE` está el valor `ACDF`$_h$ y en el `r0` el valor `7FB3`$_h$ y se está mandando al `IB` con el `R0-IB`. Dado que en la *ALU* hay un `XOR` entonces decodificamos ambos valores y tenemos que:
+
+$$
+\begin{align*}
+`ACDF`_h & = \underbrace{1010}_A \ \underbrace{1100}_C \ \underbrace{1101}_{D} \ \underbrace{1111}_F \\
+`7FB3`_h & = \underbrace{0111}_7 \ \underbrace{1111}_F \ \underbrace{1011}_B \ \underbrace{0011}_3
+\end{align*}
+$$
+
+Así, hacemos la operación:
+
+$$
+\begin{array}{ccccccccccccccccc}
+& 1 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 1\\
+`XOR` & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 1\\
+\hline
+& 1 & 1 & 0 & 1 & 0 & 0 & 1 &1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 0
+\end{array}
+$$
+
+Por lo que el resultado en hexadecimal será:
+
+$$
+\begin{align*}
+`TMPS` = \underbrace{D}_{1101} \ \underbrace{3}_{0011} \ \underbrace{6}_{0110} \ \underbrace{C}_{1100} = `D36C`_h
+\end{align*}
+$$
+
+Y el valor de los flags será:
+
+- `Z` = 0 ya que el resultado no es cero
+- `C` = 1 ya que el la suma de bits más significativos genera carry
+- `O` = 0 ya que no hay overflow
+- `S` = 1 ya que el resultado es negativo
+
+Por lo que el valor de los flags será:
+
+$$
+\begin{align*}
+ZCOS = 0101 = `5`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 12
+*En un determinado paso de ejecución de una instrucción correspondiente al juego de instrucciones del computador teórico, el valor del registros `r4` es igual a `5678`$_h$, el valor del registro `TMPE` es `1234`$_h$ y se encuentran activadas las señales de control `R4-IB`, `ALU-TMPS`, `SUB`, `ALU-SR`. ¿Qué valor contendrán el registro `TMPS` y el registro de estado `ZCOS` al finalizar dicho paso de ejecución?. Responder en hexadecimal.*
+<DemBox title="Demostración">
+
+Vamos a decodificar los valores que tenemos:
+
+$$
+\begin{align*}
+`1234`_h &= \underbrace{0001}_{1} \ \underbrace{0010}_{2} \ \underbrace{0011}_{3} \ \underbrace{0100}_{4}\\
+`5678`_h &= \underbrace{0101}_{5} \ \underbrace{0110}_{6} \ \underbrace{0111}_{7} \ \underbrace{1000}_{8}
+\end{align*}
+$$
+
+Por lo que, para hacer la resta hacemos el complemento a 2 del sustraendo:
+
+$$
+\begin{align*}
+0101 \ 0110 \ 0111 \ 1000 \implies 1010 \ 1001 \ 1000 \ 1000
+\end{align*}
+$$
+
+Y ahora hacemos la suma:
+
+$$
+\begin{array}{cccccccccccccccccc}
+& 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 &  0 & 1 & 1 & 0 & 1 & 0 & 0\\
+`ADD` & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+\hline
+& 1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 0
+\end{array}
+$$
+
+Así, el restultado que aparecerá en el `TMPS` es:
+
+$$
+\begin{align*}
+\underbrace{B}_{1011} \ \underbrace{B}_{1011} \ \underbrace{B}_{1011} \ \underbrace{C}_{1100} = `BBBC`_h
+\end{align*}
+$$
+
+Y los bits de estado serán:
+
+- `Z` = 0 ya que el resultado no es cero
+- `C` = 1 ya que interpretando la resta como naturales el sustraendo es mayor que el minuendo
+- `O` = 0 ya que no hay overflow
+- `S` = 1 ya que el resultado es negativo
+
+Por lo que el valor de los flags será:
+
+$$
+\begin{align*}
+ZCOS = 0101 = `5`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 13
+*El circuito de la figura muestra una parte del circuito generador de señales de una unidad de control cableada para la CPU teórica. La parte mostrada está orientada a la generación de señal `CARRY\_IN`*
+
+![ucc1](/blogs/images/fcr-ejercicios_ucc1.png)
+
+*¿Cuáles son las señales generadas por el contador de pasos necesarias en `a)` y `b)` (Señales `T\_n` donde `N` es el número de paso en el bloque que se activaría esa línea)*
+<DemBox title="Demostración">
+
+</DemBox>

@@ -1,0 +1,2629 @@
+---
+title: "Bases de Datos: Teoría de Laboratorio"
+date: "2026-01-30"
+description: "Conceptos teóricos fundamentales para el laboratorio de bases de datos, incluyendo comandos SQL y gestión de tablas."
+tags: ["Bases de Datos", "SQL", "Comandos SQL", "Gestión de Tablas"]
+---
+## Comandos básicos
+### `INSERT`
+El comando `INSERT` se utiliza para insertar una tupla o registro en una tabla indicada, su sintaxis es:
+```
+INSERT INTO <nombreTabla> [Ai] VALUES <valores>;
+```
+
+Donde:
+
+- **`Ai`:** Atributos a insertar en la tabla, entre paréntesis y separados por comas. Si no se especifican, se insertarán todos los atributos.
+- **`valores`:** Valores a insertar en la tabla, entre paréntesis y separados por comas. Deben coincidir en número y tipo con los atributos de la tabla o con los atributos especificados en `Ai`.
+
+<EjemBox title="Ejemplo">
+
+Supongamos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 20 \\
+María & López & 22 \\
+\hline
+\end{array}
+$$
+
+Para insertar un nuevo alumno con DNI `11111111C`, nombre `Pedro`, apellidos `García` y edad `21`, se haría de la siguiente forma: 
+```
+INSERT INTO alumnos VALUES ('Pedro', 'García', 21);
+```
+
+O, equivalentemente: 
+```
+INSERT INTO alumnos (Apellidos, Edad, Nombre) 
+VALUES ('García', 21, 'Pedro');
+```
+
+Notar que el orden de los atributos en la segunda consulta no coincide con el orden de la tabla.
+
+Y así, la tabla quedaría como (tras ejecutar una consulta): 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 20 \\
+María & López & 22 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `UPDATE`
+El comando `UPDATE` se utiliza para modificar los valores de uno o varios registros de una tabla, su sintaxis es:
+```
+UPDATE <nombre_tabla> 
+SET nombreAtributo1 = <expr1> [, nombreAtributo2 = <expr2>, ...]
+[WHERE <condiciones>];
+```
+
+Donde:
+
+- **`nombreAtributo$_i$`:** Atributos a modificar en la tabla.
+- **`expr$_i$`:** Expresiones que indican los nuevos valores de los atributos.
+- **`condiciones`:** Condiciones que deben cumplir los registros a modificar. Si no se especifican, se modificarán todos los registros.
+
+<EjemBox title="Ejemplo">
+
+Supongamos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 20 \\
+María & López & 22 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+Para modificar la edad de los alumnos con nombre `Juan` a `21`, emplearíamos: 
+```
+UPDATE alumnos SET edad = 21 WHERE nombre = 'Juan';
+```
+
+Y así, la tabla quedaría como (tras ejecutar la consulta): 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 21 \\
+María & López & 22 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+Si no se especifica la cláusula `WHERE`, se modificarán todos los registros de la tabla: 
+```
+UPDATE alumnos SET nombre = 'Pedro';
+```
+
+Y así, la tabla quedaría como (tras ejecutar las dos consultas): 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Pedro & Pérez & 21 \\
+Pedro & López & 22 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `DELETE`
+El comando `DELETE` se utiliza para eliminar uno o varios registros (o tuplas) de una tabla, su sintaxis es:
+```
+DELETE FROM <nombre_tabla> [WHERE <condiciones>];
+```
+
+Donde:
+
+- **`condiciones`:** Condiciones que deben cumplir los registros a eliminar. Si no se especifican, se eliminarán todos los registros.
+
+<EjemBox title="Ejemplo">
+
+Supongamos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Pedro & Pérez & 21 \\
+Juan & López & 22 \\
+Ramiro & García & 23 \\
+\hline
+\end{array}
+$$
+
+Para eliminar los alumnos con nombre `Pedro`, emplearíamos: 
+```
+DELETE FROM alumnos WHERE nombre = 'Pedro';
+```
+
+Y así, la tabla quedaría como (tras ejecutar la consulta): 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & López & 22 \\
+Ramiro & García & 23 \\
+\hline
+\end{array}
+$$
+
+Si no se especifica la cláusula `WHERE`, se eliminarán todos los registros de la tabla: 
+```
+DELETE FROM alumnos;
+```
+
+Y así, la tabla quedaría vacía (tras ejecutar la consulta).
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+& & \\
+\hline
+\end{array}
+$$
+
+Por ello, hay que tener cuidado al ejecutar consultas de eliminación sin la cláusula `WHERE`.
+
+Por otra parte, si hay más tablas, solo se eliminarán los registros de la tabla indicada, aún así, es recomendable usar la cláusula `WHERE` para evitar errores.
+
+</EjemBox>
+
+### `SELECT`
+El comando `SELECT` se utiliza para seleccionar registros de una o varias tablas, su sintaxis es:
+```
+SELECT [ALL | DISTINCT] <a1> [AS <aliasA1>] [, <a2> [AS <aliasA2>], ...]
+FROM <t1> [<aliasT1>] [, <t2> [<aliasT2>], ...]
+[WHERE <condiciones>]
+```
+
+Donde:
+
+- **`ALL | DISTINCT`:** Opción para indicar si se quieren todos los registros o solo los que sean distintos, es decir, que se quiere mantener la estructura de álgebra relacional. Por defecto, si no se especifica, se selecciona `ALL`, es decir, se seleccionan todos los registros.
+- **`a$_i$`:** Atributos a seleccionar de las tablas (admite operaciones y funciones).
+- **`aliasA$_i$`:** Alias para los atributos seleccionados.
+- **`t$_i$`:** Tablas de las que se seleccionan los registros.
+- **`aliasT$_i$`:** Alias para las tablas seleccionadas.
+- **`condiciones`:** Condiciones que deben cumplir los registros seleccionados.
+
+<EjemBox title="Ejemplo">
+
+Supongamos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Díaz & 22\\
+\hline
+\end{array}
+$$
+
+Para seleccionar los nombres de los alumnos cuya edad sea mayor o igual a `21`, emplearíamos: 
+```
+SELECT nombre FROM alumnos WHERE edad >= 21;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+Juan \\
+Pedro \\
+Juan \\
+\hline
+\end{array}
+$$
+
+Pero vemos que en esta tabla, al hacer la proyección de los nombres, hay una entrada repetida, lo cual no sigue la estructura de álgebra relacional.
+
+Esto no necesariamente es un error, pero si se quiere evitar, se puede usar la opción `DISTINCT` en la consulta: 
+```
+SELECT DISTINCT nombre FROM alumnos WHERE edad >= 21;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+Juan \\
+Pedro \\
+\hline
+\end{array}
+$$
+
+Esta consulta sería equivalente a la siguiente, usando un alias para la tabla (quizá en este caso no tiene mucho sentido, pero cuando se manejan varias tablas, puede ser útil): 
+```
+SELECT DISTINCT a.nombre FROM alumnos a WHERE a.edad >= 21;
+```
+
+Y el resultado sería exactamente el mismo que la tabla inmediatamente anterior.
+
+Podemos notar que, aunque el alias se define después de la tabla, se puede usar en la selección de atributos (y en otras partes de la consulta).
+
+Si queremos seleccionar todos los atributos de la tabla, empleamos carácter `*`: 
+```
+SELECT DISTINCT * FROM alumnos WHERE edad >= 21;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+Pedro & García & 21 \\
+Juan & Díaz & 22\\
+\hline
+\end{array}
+$$
+
+Y podemos notar que en este caso, aunque empleemos el `DISTINCT`, nos da 3 registros ya que, al no proyectar solo los nombres sino todos los atributos, no hay registros repetidos. 
+
+Finalmente, si queremos mostrar un determinado atributo pero con un nombre distinto, podemos usar la opción `AS`: 
+```
+SELECT nombre AS NombreAlumno FROM alumnos WHERE edad >= 21;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**NombreAlumno** \\
+\hline
+Juan \\
+Pedro \\
+Juan \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Gestión de tablas
+### `CREATE TABLE`
+El comando `CREATE TABLE` se utiliza para crear una tabla en la base de datos, su sintaxis es:
+```
+CREATE TABLE <nombreTabla> (
+campo tipoCampo
+[, campo tipoCampo]
+[, CONSTRAINT nombreClavePrimaria PRIMARY KEY (campo [, campo])]
+[, CONSTRAINT nombreClaveCandidata UNIQUE (campo [, campo])]
+[, CONSTRAINT nombreClaveExterna FOREIGN KEY (campo [, campo])
+REFERENCES tablaDeReferencia (campo [, campo])]
+[, CONSTRAINT nombreCheck CHECK (condicion)]
+);
+```
+
+Donde:
+
+- **`campo`:** Nombre del atributo de la tabla.
+- **`tipoCampo`:** Tipo de dato del atributo.
+- **`nombreClavePrimaria`:** Nombre de la clave primaria de la tabla.
+- **`nombreClaveCandidata`:** Nombre de la clave candidata de la tabla.
+- **`nombreClaveExterna`:** Nombre de la clave externa de la tabla.
+- **`nombreCheck`:** Nombre de la restricción `CHECK` de la tabla.
+- **`condicion`:** Condición que deben cumplir los registros de la tabla.
+
+<EjemBox title="Ejemplo">
+
+Para crear una tabla `alumnos` con los atributos `nombre` (`VARCHAR(50)`), `apellidos` (`VARCHAR(50)`) y `edad` (`INT`), con `nombre` como clave primaria y queremos añadir una clave candidata `DNI` (`VARCHAR(9)`) y una clave externa `nombreProfesor` (`VARCHAR(50)`) que haga referencia a la tabla `profesores`, entonces: 
+```
+CREATE TABLE alumnos (
+nombre VARCHAR(50),
+apellidos VARCHAR(50),
+edad INT,
+DNI VARCHAR(9),
+nombreProfesor VARCHAR(50),
+CONSTRAINT pk_alumnos PRIMARY KEY (nombre),
+CONSTRAINT ck_DNI UNIQUE (DNI),
+CONSTRAINT fk_nombreProfesor FOREIGN KEY (nombreProfesor)
+REFERENCES profesores (nombre)
+);
+```
+
+</EjemBox>
+
+### `DROP TABLE`
+El comando `DROP TABLE` se utiliza para eliminar una tabla de la base de datos, su sintaxis es:
+```
+DROP TABLE <nombreTabla>;
+```
+
+Donde:
+
+- **`nombreTabla`:** Nombre de la tabla a eliminar.
+
+<EjemBox title="Ejemplo">
+
+Para eliminar la tabla `alumnos`, se haría: 
+```
+DROP TABLE alumnos;
+```
+
+</EjemBox>
+
+## Selección `WHERE`
+### Operadores de comparación
+La cláusula `WHERE` se utiliza para filtrar los registros de una tabla, su sintaxis es:
+```
+WHERE <predicado>;
+```
+
+Donde:
+
+- **`predicado`:** Expresión lógica que debe cumplir un registro para ser seleccionado.
+
+Esta expresión lógica puede ser de la siguiente forma:
+
+```
+<pred> ::= <expr1> OR <expr2> | <expr1> AND <expr2> | NOT <expr>
+```
+
+Donde se pueden emplear:
+
+- **Operadores de relación:** `=, <>, <, >, <=, >=`.
+- **Constantes cadena:** Se deben escribir entre comillas simples.
+- **Operadores de relación:** aplicados a cadenas de texto las comparan alfabéticamente.
+
+Por otra parte, es importante saber que el operador lógico `NOT` tiene mayor prioridad que `AND` y a su vez, `AND` tiene mayor prioridad que `OR`. Por ello, si se quieren combinar varios predicados, es recomendable usar paréntesis para evitar confusiones.
+<EjemBox title="Ejemplo">
+
+Sea la siguiente taba `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Díaz & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los alumnos con nombre `Juan` y edad `>22` de la siguiente forma: 
+```
+SELECT * FROM alumnos WHERE nombre = 'Juan' AND edad > 22;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Díaz & 24\\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `LIKE`
+El operador `LIKE` se utiliza para comparar una cadena con un patrón (y va acompañando a la cláusula `WHERE`), su sintaxis es:
+```
+WHERE <cadena> [NOT] LIKE <patron>;
+```
+
+Donde un patrón es una cadena que puede contener los siguientes caracteres especiales:
+
+- **`\%`:** A partir de este carácter, puede haber cualquier número de caracteres y de cualquier tipo.
+- **`\_`:** Representa un único carácter, que puede ser cualquier tipo pero solo uno y en la posición indicada (se pueden emplear también varios `\_`).
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los nombres que empiecen por `Ju` de la siguiente forma: 
+```
+SELECT * FROM alumnos WHERE nombre LIKE 'Ju%';
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Sin embargo, si queremos aquellos, cuyo nombre no empiece por `Ju` y tenga exactamente 4 letras, emplearíamos: 
+```
+SELECT * FROM alumnos WHERE nombre NOT LIKE 'Ju__';
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+María & López & 20 \\
+Pedro & García & 21 \\
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `IS NULL`
+El operador `IS NULL` se utiliza para comparar un atributo con el valor nulo (y va acompañando a una cláusula `WHERE`), su sintaxis es:
+```
+WHERE <atributo> IS [NOT] NULL;
+```
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & `null`\\
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los alumnos cuya edad no está definida de la siguiente forma: 
+```
+SELECT * FROM alumnos WHERE edad IS NULL;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Pedro & García & \\
+\hline
+\end{array}
+$$
+
+O, si queremos seleccionar aquellos cuya edad está definida, emplearíamos: 
+```
+SELECT * FROM alumnos WHERE edad IS NOT NULL;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `BETWEEN`
+El operador `BETWEEN` se utiliza para comparar un atributo con un rango de valores (y va acompañando a una cláusula `WHERE`), su sintaxis es:
+```
+WHERE <atributo> [NOT] BETWEEN <valor1> AND <valor2>;
+```
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los alumnos cuya edad esté entre `20` y `22` de la siguiente forma: 
+```
+SELECT * FROM alumnos WHERE edad BETWEEN 20 AND 22;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+Si queremos seleccionar aquellos cuya edad no esté entre `20` y `22`, emplearíamos: 
+```
+SELECT * FROM alumnos WHERE edad NOT BETWEEN 20 AND 22;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Julian & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Ordenación
+### `ORDER BY`
+La cláusula `ORDER BY` se utiliza para ordenar los registros o tuplas de una tabla, su sintaxis es:
+```
+ORDER BY {<atrib|posAtrib|expr> [DESC|ASC] [NULLS FIRST|NULLS LAST]} 
+[, {<atrib|posAtrib|expr> [DESC|ASC] [NULLS FIRST|NULLS LAST]} ...];
+```
+
+Donde:
+
+- **`atrib`:** Atributo de la tabla por el que se quiere ordenar.
+- **`posAtrib`:** Entero que indica el numero de la columna por la que se desea ordenar en la tabla (debe de ser mayor que 0 y menor o igual que el número de columnas seleccionadas en el `SELECT`).
+- **`expr`:** Expresión que se puede emplear para ordenar.
+- **`DESC|ASC`:** Opción para indicar si se quiere ordenar de forma descendente o ascendente. Por defecto, si no se especifica, se ordena de forma ascendente.
+- **`NULLS FIRST|NULLS LAST`:** Opción para indicar si se quieren los registros nulos al principio o al final. Por defecto, si no se especifica, se ordenan al final (depende del sistema gestor, en *Oracle* creo que es al final).
+
+En caso de que haya varios campos por los que se quiere ordenar, se ordenará primero por el primer campo, y si hay registros con el mismo valor en el primer campo, se ordenará por el segundo campo y así sucesivamente.
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los alumnos y ordenarlos por edad ascendentemente de la siguiente forma: 
+
+```
+SELECT * FROM alumnos ORDER BY edad;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Pérez & 22 \\
+Juan & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Si queremos ordenar por edad ascendentemente, emplearíamos: 
+```
+SELECT * FROM alumnos ORDER BY edad DESC;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Martínez & 24\\
+Juan & Pérez & 22 \\
+Pedro & García & 21 \\
+María & López & 20 \\
+\hline
+\end{array}
+$$
+
+Si queremos ordenar por nombre ascendentemente y, en caso de que haya nombres iguales, por apellido descendentemente, emplearíamos: 
+```
+SELECT * FROM alumnos ORDER BY nombre ASC, apellidos DESC;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+Juan & Martínez & 24\\
+María & López & 20 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+Finalmente, supongamos que hubiera algún registro con el nombre nulo, por ejemplo:
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Martínez & 24\\
+& Martínez & 25\\
+\hline
+\end{array}
+$$
+
+Si quisiéramos ordenar por nombre, pero queremos que los registros con nombre nulo aparezcan al principio, emplearíamos: 
+```
+SELECT * FROM alumnos ORDER BY nombre NULLS FIRST;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+& Martínez & 25\\
+Juan & Pérez & 22 \\
+Juan & Martínez & 24\\
+María & López & 20 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+Finalmente, para unir un poco todas las sentencias, si quisiéramos ordenar los alumnos por nombre de forma descendente y con los nulos al final y, en caso de que haya nombres iguales, por edad de forma ascendente, emplearíamos: 
+```
+SELECT * FROM alumnos ORDER BY nombre DESC NULLS LAST, edad ASC;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Pedro & García & 21 \\
+María & López & 20 \\
+Juan & Pérez & 22 \\
+Juan & Martínez & 24\\
+& Martínez & 25\\
+\hline
+\end{array}
+$$
+
+Además, habíamos mencionado que se podía emplear un entero para indicar la posición de la columna por la que se quiere ordenar, por ejemplo, si quisiéramos ordenar por el tercer atributo de la tabla, es decir, por edad, emplearíamos:
+```
+SELECT * FROM alumnos ORDER BY 3;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Pérez & 22 \\
+Juan & Martínez & 24\\
+& Martínez & 25\\
+\hline
+\end{array}
+$$
+
+Es conveniente notar que como tiene que ser el entero mayor estricto que 0, las filas no empiezan en la 0 sino en la 1 siguiendo una ordenación natural.
+
+</EjemBox>
+
+### `OFFSET`
+La cláusula `OFFSET` se utiliza para indicar el número de registros que se quieren saltar antes de empezar a seleccionar registros (y va acompañado de `ORDER BY`), su sintaxis es:
+```
+OFFSET [n] <ROW|ROWS>;
+```
+
+Donde:
+
+- **`n`:** Número de registros que se quieren saltar.
+- **`ROW|ROWS`:** Son sinónimos y hay que poner uno de los dos obligatoriamente.
+
+<EjemBox title="Ejemplo --> Revisar">
+
+Consideremos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 22 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los alumnos y ordenarlos por edad ascendentemente y saltar los dos primeros registros de la siguiente forma: 
+```
+SELECT * FROM alumnos ORDER BY edad OFFSET 2 ROWS;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Pedro & García & 21 \\
+Juan & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+O, equivalentemente: 
+```
+SELECT * FROM alumnos ORDER BY edad OFFSET 2 ROW;
+```
+
+Y así, la tabla resultante sería la misma que la anterior: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Pedro & García & 21 \\
+Juan & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `FETCH`
+La cláusula `FETCH` se utiliza para indicar el número de registros que se quieren seleccionar (y va acompañado de `ORDER BY`), su sintaxis es:
+```
+FETCH <FIRST|NEXT> [n| n PERCENT] <ROW|ROWS> <ONLY, WITH TIES>;
+```
+
+Donde:
+
+- **`FIRST,NEXT`:** Son sinónimos y hay que poner uno de los dos obligatoriamente.
+- **`n,n PERCENT`:** Número de registros que se quieren seleccionar o porcentaje de registros que se quieren seleccionar.
+- **`ROW,ROWS`:** Son sinónimos y hay que poner uno de los dos obligatoriamente.
+- **`ONLY, WITH TIES`:** Opción para recuperar exactamente el número de tuplas $n$ (o $n\%$ si se usa `PERCENT`) o para retornar tuplas adicionales si tienen el mismo valor que la clave de ordenación de la última fila obtenida.
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `alumnos`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 21 \\
+María & López & 20 \\
+Pedro & García & 21 \\
+Juan & Martínez & 24\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los alumnos y ordenarlos por edad ascendentemente y seleccionar los dos primeros registros de la siguiente forma: 
+```
+SELECT * FROM alumnos 
+ORDER BY edad FETCH FIRST 2 ROWS ONLY;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+María & López & 20 \\
+Juan & Pérez & 21 \\
+\hline
+\end{array}
+$$
+
+Pudiendo cambiar `FIRST` por `NEXT` o `ROW` por `ROWS` y obteniendo el mismo resultado: 
+```
+SELECT * FROM alumnos 
+ORDER BY edad FETCH NEXT 2 ROW ONLY;
+```
+
+Sin embargo, podemos notar que hay dos alumnos con edad 21, si quisiéramos seleccionar los dos primeros registros y, en caso de que haya registros con la misma edad que el segundo, seleccionarlos también, emplearíamos: 
+```
+SELECT * FROM alumnos 
+ORDER BY edad FETCH FIRST 2 ROWS WITH TIES;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+María & López & 20 \\
+Juan & Pérez & 21 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+Esto puede resultar útil en ciertos casos, por ejemplo, si se quiere seleccionar los 10 alumnos con mejor nota, pero hay varios con la misma nota y se quieren ver todos. 
+
+Por otra parte, podemos querer ver el 50\% de los alumnos, en este caso, si quisiéramos seleccionar el 50\% de los alumnos con menor edad, emplearíamos: 
+```
+SELECT * FROM alumnos 
+ORDER BY edad FETCH FIRST 50 PERCENT ROWS ONLY;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+María & López & 20 \\
+Juan & Pérez & 21 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+<EjBox title="Combinación de `OFFSET` y `FETCH`">
+
+En la tabla anterior, podríamos querer seleccionar los dos alumnos con menor edad habiendo saltado el primero, emplearíamos: 
+```
+SELECT * FROM alumnos 
+ORDER BY edad OFFSET 1 ROW FETCH FIRST 2 ROWS ONLY;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Apellidos** & **Edad** \\
+\hline
+Juan & Pérez & 21 \\
+Pedro & García & 21 \\
+\hline
+\end{array}
+$$
+
+</EjBox>
+
+## Operaciones de conjuntos
+### `UNION`
+La operación `UNION` se utiliza para combinar los resultados de dos o más consultas en un solo conjunto de resultados, su sintaxis es:
+```
+<consulta1> UNION <consulta2>;
+```
+
+Donde:
+
+- **`consulta1, consulta2`:** Consultas que se quieren combinar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `vendedores` y `compradores`: 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **Obtenido** \\
+\hline
+Luis & Madrid & 1000 \\
+María & Barcelona & 2000 \\
+Pedro & Oviedo & 1500 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **Gastado** \\
+\hline
+Luis & León & 500 \\
+María & Barcelona & 1000 \\
+Lucia & Tenerife & 800 \\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los nombres de las personas que han obtenido más de 1200€ o gastado menos de 600€ de la siguiente forma: 
+```
+(SELECT nombre FROM vendedores WHERE obtenido > 1200)
+UNION
+(SELECT nombre FROM compradores WHERE gastado < 600);
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+María \\
+Pedro \\
+Luis \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `INTERSECT`
+La operación `INTERSECT` se utiliza para combinar las tuplas de dos consultas en un solo conjunto de resultados, su sintaxis es:
+```
+<consulta1> INTERSECT <consulta2>;
+```
+
+Donde:
+
+- **`consulta1, consulta2`:** Consultas que se quieren combinar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `vendedores` y `compradores`: 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **Obtenido** \\
+\hline
+Luis & Madrid & 1000 \\
+María & Barcelona & 2000 \\
+Pedro & Oviedo & 1500 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **Gastado** \\
+\hline
+Luis & León & 500 \\
+María & Barcelona & 1000 \\
+Lucia & Tenerife & 800 \\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los nombres de las personas que han obtenido más de 1200€ y gastado más de 600€ de la siguiente forma: 
+```
+(SELECT nombre FROM vendedores WHERE obtenido > 1200)
+INTERSECT
+(SELECT nombre FROM compradores WHERE gastado > 600);
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+María \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `MINUS`
+La operación `MINUS` se utiliza para combinar las tuplas de una consulta que no están en otra consulta en un solo conjunto de resultados, su sintaxis es:
+```
+<consulta1> MINUS <consulta2>;
+```
+
+Donde:
+
+- **`consulta1, consulta2`:** Consultas que se quieren combinar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `vendedores` y `compradores`: 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **Obtenido** \\
+\hline
+Luis & Madrid & 1000 \\
+María & Barcelona & 2000 \\
+Pedro & Oviedo & 1500 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **Gastado** \\
+\hline
+Luis & León & 500 \\
+María & Barcelona & 1000 \\
+Lucia & Tenerife & 800 \\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los nombres de las personas que han obtenido más de 900€ y no han gastado más de 600€ de la siguiente forma: 
+```
+(SELECT nombre FROM vendedores WHERE obtenido > 900)
+MINUS
+(SELECT nombre FROM compradores WHERE gastado > 600);
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+Luis\\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Subconsultas anidadas
+### `IN` y `NOT IN`
+La operación `IN` se utiliza para comparar un valor con una lista de valores o subconsulta (y va acompañada de `WHERE`), su sintaxis es:
+```
+WHERE <atributo> IN | NOT IN <subconsulta>;
+```
+
+Donde:
+
+- **`atributo`:** Atributo de la tabla que se quiere comparar.
+- **`subconsulta`:** Subconsulta que se quiere comparar.
+
+Y además, es necesario que el `atributo` y el atributo de la `subconsulta` tienen que ser un tipo compatible.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `ciudadanos` (de España) y `delincuentes` (en una determinada cárcel):
+
+Ciudadanos  Delincuentes 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **ID** \\
+\hline
+Luis & Madrid & 1A \\
+María & Barcelona & 3B \\
+Pedro & Oviedo & 7A \\
+Laura & Valladolid & 2B\\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **ID** \\
+\hline
+Luis & Madrid & 1A \\
+Laura & Valladolid & 2B\\
+Sophia & Nueva York & 4C\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los nombres de los ciudadanos españoles que son delincuentes de la siguiente forma: 
+```
+SELECT nombre FROM ciudadanos 
+WHERE id IN (SELECT id FROM delincuentes);
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+Luis \\
+Laura \\
+\hline
+\end{array}
+$$
+
+También podría interesarnos por ejemplo, seleccionar todos los españoles que no sean de Madrid o Barcelona de la siguiente forma: 
+```
+SELECT nombre FROM ciudadanos 
+WHERE ciudad NOT IN ('Madrid', 'Barcelona');
+```
+
+Y la tabla serían los nombres de Pedro y Laura.
+
+</EjemBox>
+
+### `SOME` y `ALL`
+La operación `SOME` se emplea para determinar si algún valor de un conjunto de valores cumple una condición, mientras que `ALL` se emplea para determinar si todos los valores de un conjunto de valores cumplen una condición, su sintaxis es:
+```
+WHERE <atributo> <operadorDeComparacion> SOME | ALL <subconsulta>;
+```
+
+Donde:
+
+- **`atributo`:** Atributo de la tabla que se quiere comparar.
+- **`operadorDeComparacion`:** Operador de comparación que se quiere emplear.
+- **`subconsulta`:** Subconsulta que se quiere comparar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+Luis & 1000 & Ventas \\
+María & 3000 & Ventas \\
+Saul & 1700 & Marketing \\
+Pedro & 2000 & Ventas \\
+Laura & 2500 & Marketing \\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar los nombres de los empleados de Ventas que tienen un salario mayor que algún empleado del departamento de Marketing de la siguiente forma: 
+```
+SELECT nombre FROM empleados 
+WHERE departamento = 'Ventas' AND salario > SOME (
+SELECT salario FROM empleados WHERE departamento='Marketing');
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Nombre** \\
+\hline
+María \\
+Pedro \\
+\hline
+\end{array}
+$$
+
+Por otro lado, si quisiéramos seleccionar los nombres de los empleados de Ventas que tienen un salario mayor que todos los empleados del departamento de Marketing, emplearíamos: 
+```
+SELECT nombre FROM empleados 
+WHERE departamento = 'Ventas' AND salario > ALL (
+SELECT salario FROM empleados WHERE departamento='Marketing');
+```
+
+Y así, la tabla resultante sería una con el nombre de María.
+
+</EjemBox>
+
+### `EXISTS` y `NOT EXISTS`
+La operación `EXISTS` se emplea para determinar si una subconsulta devuelve algún resultado, mientras que `NOT EXISTS` se emplea para determinar si una subconsulta no devuelve ningún resultado, su sintaxis es:
+```
+WHERE EXISTS | NOT EXISTS <subconsulta>;
+```
+
+Donde:
+
+- **`subconsulta`:** Subconsulta que se quiere comparar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `ciudades` y `personas`: 
+
+Ciudades  Personas 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Ciudad** & **Población** \\
+\hline
+Madrid & 3000000 \\
+Barcelona & 2000000 \\
+Valladolid & 500000 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Ciudad** & **edad**\\
+\hline
+Luis & Madrid & 30 \\
+María & Barcelona & 25 \\
+Pedro & Barcelona & 40 \\
+Laura & Valladolid & 35\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar las ciudades que tienen personas con más de 32 años (y además queremos ver su población) de la siguiente forma: 
+```
+SELECT * FROM ciudades c WHERE EXISTS (
+SELECT * FROM personas p 
+WHERE p.ciudad = c.ciudad AND p.edad > 32);
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Ciudad** & **Población** \\
+\hline
+Madrid & 3000000 \\
+Valladolid & 500000 \\
+\hline
+\end{array}
+$$
+
+Podríamos hacer el caso contrario, es decir, seleccionar las ciudades que no tienen personas con más de 32 años de la siguiente forma: 
+```
+SELECT * FROM ciudades c WHERE NOT EXISTS (
+SELECT * FROM personas p 
+WHERE p.ciudad = c.ciudad AND p.edad > 32);
+```
+
+Y así, la tabla resultante sería una con el nombre de Barcelona y su población.
+
+</EjemBox>
+
+## Producto
+### `INNER JOIN`
+La operación `INNER JOIN` se utiliza para combinar las tuplas de dos tablas que tienen una relación en común, su sintaxis es:
+```
+FROM <t1> INNER JOIN <tabla2> ON <t1>.<atributo1> = <t2>.<atributo2>;
+```
+
+Donde:
+
+- **`t1, t2`:** Tablas que se quieren combinar.
+- **`atributo$_i$`:** Atributo de la tabla que se quiere comparar, es decir, el atributo que tienen en común.
+
+<EjBox title="Nota">
+
+Notar que esto es equivalente a realizar un producto cartesiano y después aplicar un `WHERE` para seleccionar las tuplas que cumplan la condición.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `vendedores` y `compradores`: 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Obtenido** & **ID** \\
+\hline
+Luis & 1000 & 1A \\
+María & 1200 & 3B \\
+Pedro & 4300 & 7A \\
+Laura & 3020 & 2B\\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Gastado** & **ID** \\
+\hline
+Luis & 1080 & 1A \\
+María & 100 & 3B \\
+Lucia & 320 & 2B\\
+\hline
+\end{array}
+$$
+
+Podemos seleccionar el nombre e ID de los vendedores que también son compradores (es decir, que tienen el mismo ID) de la siguiente forma: 
+```
+SELECT v.nombre, v.id FROM vendedores v 
+INNER JOIN compradores c ON v.id = c.id;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Nombre** & **ID** \\
+\hline
+Luis & 1A \\
+María & 3B \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `LEFT JOIN`
+La operación `LEFT JOIN` se utiliza para combinar las tuplas de dos tablas que tienen una relación en común y además, todas las tuplas de la tabla de la izquierda. Es decir, nos sirve para obtener las mismas tuplas que en un `INNER JOIN` y además, todas las tuplas de la tabla izquierda (aunque no tengan correspondencia en la tabla derecha), su sintaxis es:
+```
+FROM <t1> LEFT JOIN <tabla2> ON <t1>.<atributo1> = <t2>.<atributo2>;
+```
+
+Donde:
+
+- **`t1, t2`:** Tablas que se quieren combinar.
+- **`atributo$_i$`:** Atributo de la tabla que se quiere comparar, es decir, el atributo que tienen en común.
+
+<EjemBox title="Ejemplo">
+
+Siguiendo con las tablas anteriores, `vendedores` y `compradores`: 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Obtenido** & **ID** \\
+\hline
+Luis & 1000 & 1A \\
+María & 1200 & 3B \\
+Pedro & 4300 & 7A \\
+Laura & 3020 & 2B\\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Gastado** & **ID** \\
+\hline
+Luis & 1080 & 1A \\
+María & 100 & 3B \\
+Lucia & 320 & 2B\\
+\hline
+\end{array}
+$$
+
+Podemos hacer las consultas análogas con un `LEFT JOIN`, por ejemplo, seleccionar el nombre e ID de los vendedores que también son compradores (es decir, que tienen el mismo ID) de la siguiente forma: 
+```
+SELECT v.nombre, v.id FROM vendedores v 
+LEFT JOIN compradores c ON v.id = c.id;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Nombre** & **ID** \\
+\hline
+Luis & 1A \\
+María & 3B \\
+Pedro & 7A \\
+Laura & 2B \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `RIGHT JOIN`
+La operación `RIGHT JOIN` se utiliza para combinar las tuplas de dos tablas que tienen una relación en común y además, todas las tuplas de la tabla de la derecha. Es decir, nos sirve para obtener las mismas tuplas que en un `INNER JOIN` y además, todas las tuplas de la tabla derecha (aunque no tengan correspondencia en la tabla izquierda), su sintaxis es:
+```
+FROM <t1> RIGHT JOIN <tabla2> ON <t1>.<atributo1> = <t2>.<atributo2>;
+```
+
+Donde:
+
+- **`t1, t2`:** Tablas que se quieren combinar.
+- **`atributo$_i$`:** Atributo de la tabla que se quiere comparar, es decir, el atributo que tienen en común.
+
+<EjemBox title="Ejemplo">
+
+Siguiendo con las tablas anteriores, `vendedores` y `compradores`: 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Obtenido** & **ID** \\
+\hline
+Luis & 1000 & 1A \\
+María & 1200 & 3B \\
+Pedro & 4300 & 7A \\
+Laura & 3020 & 2B\\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Gastado** & **ID** \\
+\hline
+Luis & 1080 & 1A \\
+María & 100 & 3B \\
+Lucia & 320 & 2B\\
+\hline
+\end{array}
+$$
+
+Podemos hacer las consultas análogas con un `RIGHT JOIN`, por ejemplo, seleccionar el nombre e ID de los vendedores que también son compradores (es decir, que tienen el mismo ID) de la siguiente forma: 
+```
+SELECT v.nombre, v.id FROM vendedores v 
+RIGHT JOIN compradores c ON v.id = c.id;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Nombre** & **ID** \\
+\hline
+Luis & 1A \\
+María & 3B \\
+Laura & 2B \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `NATURAL`
+En `INNER JOIN`, `LEFT JOIN` y `RIGHT JOIN` se puede emplear `NATURAL` para hacer un `JOIN` en el que no hay que indicar con el `ON` los atributos que se utilizan para unir tablas, se considerarán automáticamente los atributos con el mismo nombre en ambas tablas (y no hay columnas duplicadas en su salida), su sintaxis es:
+```
+FROM <t1> NATURAL INNER JOIN <tabla2>;
+```
+
+```
+FROM <t1> NATURAL LEFT JOIN <tabla2>;
+```
+
+```
+FROM <t1> NATURAL RIGHT JOIN <tabla2>;
+```
+
+<EjemBox title="Ejemplo">
+
+Siguiendo con las tablas anteriores, `vendedores` y `compradores` (y modificando el nombre de la columna `Nombre` para evitar dudas entre sobre que actúa el `JOIN`): 
+
+Vendedores  Compradores 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**NombreV** & **Obtenido** & **ID** \\
+\hline
+Luis & 1000 & 1A \\
+María & 1200 & 3B \\
+Pedro & 4300 & 7A \\
+Laura & 3020 & 2B\\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**NombreC** & **Gastado** & **ID** \\
+\hline
+Luis & 1080 & 1A \\
+María & 100 & 3B \\
+Lucia & 320 & 2B\\
+\hline
+\end{array}
+$$
+
+Podemos hacer las consultas análogas con un `NATURAL JOIN`, por ejemplo, seleccionar el nombre e ID de los vendedores que también son compradores (es decir, que tienen el mismo ID) de la siguiente forma: 
+```
+SELECT nombrev, id FROM vendedores 
+NATURAL JOIN compradores;
+```
+
+Y así, la tabla resultante sería: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**NombreV** & **ID** \\
+\hline
+Luis & 1A \\
+María & 3B \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Funciones de agregación
+### `COUNT`
+La función `COUNT` se utiliza para contar el número de tuplas que cumplen una condición, su sintaxis es:
+```
+SELECT COUNT(<atributo>) FROM <tabla>;
+```
+
+Donde:
+
+- **`atributo`:** Atributo de la tabla que se quiere contar.
+- **`tabla`:** Tabla de la que se quiere contar.
+
+<EjBox title="Nota">
+
+Se pueden emplear en cualquier dominio: tuplas, números, fechas, cadenas, etc.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+Luis & 1000 & Ventas \\
+María & 3000 & Ventas \\
+Saul & 1700 & Marketing \\
+Pedro & 2000 & Ventas \\
+Laura & 2500 & Marketing \\
+\hline
+\end{array}
+$$
+
+Podemos contar el número de empleados de la tabla de la siguiente forma: 
+```
+SELECT COUNT(nombre) FROM empleados;
+```
+
+Notar que daría igual que atributo de la tabla elegir para contar, ya que lo que cuenta es el número de tuplas que cumplen la condición.
+
+Y así, el resultado sería una tabla con un único valor, el número de empleados, en este caso, 5.
+
+También podríamos contar el número de empleados del departamento de Ventas de la siguiente forma: 
+```
+SELECT COUNT(salario) FROM empleados WHERE departamento = 'Ventas';
+```
+
+Y así, el resultado sería un 3.
+
+</EjemBox>
+
+### `SUM`
+La función `SUM` se utiliza para sumar los valores de un atributo de las tuplas que cumplen una condición, su sintaxis es:
+```
+SELECT SUM(<atributo>) FROM <tabla>;
+```
+
+Donde:
+
+- **`atributo`:** Atributo de la tabla que se quiere sumar.
+- **`tabla`:** Tabla de la que se quiere sumar.
+
+<EjBox title="Nota">
+
+El dominio de `SUM` es numérico, es decir, solo se puede emplear con atributos numéricos.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+Luis & 1000 & Ventas \\
+María & 3000 & Ventas \\
+Saul & 1700 & Marketing \\
+Pedro & 2000 & Ventas \\
+Laura & 2500 & Marketing \\
+\hline
+\end{array}
+$$
+
+Podemos sumar los salarios de los empleados de la tabla de la siguiente forma: 
+```
+SELECT SUM(salario) FROM empleados;
+```
+
+Y así, el resultado sería una tabla con un único valor, la suma de los salarios de los empleados, en este caso, 10200.
+
+Combinando `SUM` y `COUNT` podríamos calcular el sueldo medio de los empleados del departamento de Ventas de la siguiente forma: 
+```
+SELECT SUM(salario) / COUNT(salario) AS sueldoM FROM empleados 
+WHERE departamento = 'Ventas';
+```
+
+Y así, el resultado sería una tabla como la siguiente:
+
+$$
+\begin{array}{|c|}
+\hline
+**sueldoM** \\
+\hline
+2000 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `AVG`
+La función `AVG` se utiliza para calcular la media de los valores de un atributo de las tuplas que cumplen una condición, su sintaxis es:
+```
+SELECT AVG(<atributo>) FROM <tabla>;
+```
+
+Donde:
+
+- **`atributo`:** Atributo de la tabla del que se quiere calcular la media.
+- **`tabla`:** Tabla de la que se quiere calcular la media.
+
+<EjBox title="Nota">
+
+El dominio de `AVG` es numérico, es decir, solo se puede emplear con atributos numéricos.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+Luis & 1000 & Ventas \\
+María & 3000 & Ventas \\
+Saul & 1700 & Marketing \\
+Pedro & 2000 & Ventas \\
+Laura & 2500 & Marketing \\
+\hline
+\end{array}
+$$
+
+Podemos calcular la media de los salarios de los empleados de la tabla de la siguiente forma: 
+```
+SELECT AVG(salario) FROM empleados;
+```
+
+Y así, el resultado sería una tabla con un único valor, la media de los salarios de los empleados, en este caso, 2040.
+
+También podríamos calcular la media de los salarios de los empleados del departamento de Marketing de la siguiente forma: 
+```
+SELECT AVG(salario) FROM empleados 
+WHERE departamento = 'Marketing';
+```
+
+Y así, el resultado sería una tabla con un único valor, la media de los salarios de los empleados del departamento de Marketing, en este caso, 2100 y sería análoga a: 
+```
+SELECT SUM(salario) / COUNT(salario) FROM empleados 
+WHERE departamento = 'Marketing';
+```
+
+</EjemBox>
+
+### `MAX` y `MIN`
+Las funciones `MAX` y `MIN` se utilizan para calcular el máximo y mínimo valor de un atributo de las tuplas que cumplen una condición, respectivamente, su sintaxis es:
+```
+SELECT MAX(<atributo>) FROM <tabla>;
+```
+
+```
+SELECT MIN(<atributo>) FROM <tabla>;
+```
+
+Donde:
+
+- **`atributo`:** Atributo de la tabla del que se quiere calcular el máximo o mínimo.
+- **`tabla`:** Tabla de la que se quiere calcular el máximo o mínimo.
+
+<EjBox title="Nota">
+
+El dominio de `MAX` y `MIN` es tanto numérico como compatible con fechas y cadenas.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+Luis & 1000 & Ventas \\
+María & 3000 & Ventas \\
+Saul & 1700 & Marketing \\
+Pedro & 2000 & Ventas \\
+Laura & 2500 & Marketing \\
+\hline
+\end{array}
+$$
+
+Podemos calcular el salario máximo de los empleados de la tabla de la siguiente forma: 
+```
+SELECT MAX(salario) FROM empleados;
+```
+
+Y así, el resultado sería una tabla con un único valor, el salario máximo de los empleados, en este caso, 3000.
+
+También, podríamos calcular el nombre más pequeño (en orden alfabético) de los empleados del departamento de Ventas de la siguiente forma: 
+```
+SELECT MIN(nombre) FROM empleados 
+WHERE departamento = 'Ventas';
+```
+
+Y así, el resultado sería una tabla con un único valor, el nombre más pequeño de los empleados del departamento de Ventas, en este caso, Luis.
+
+</EjemBox>
+
+### `GROUP BY`
+La operación `GROUP BY` se utiliza para agrupar las tuplas de una tabla que tengan el mismo valor en un atributo, su sintaxis es:
+```
+GROUP BY <atributo1>, [<atributo2>, ...];
+```
+
+Donde:
+
+- **`atributo$_i$`:** Atributo de la tabla por el que se quiere agrupar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** & **Edad** \\
+\hline
+Luis & 1000 & Ventas & 30 \\
+María & 3000 & Ventas & 25 \\
+Saul & 1700 & Marketing & 25 \\
+Pedro & 2000 & Ventas & 30\\
+Laura & 2500 & Marketing & 25 \\
+\hline
+\end{array}
+$$
+
+Podemos agrupar los empleados por departamento de la siguiente forma: 
+```
+SELECT departamento FROM empleados 
+GROUP BY departamento;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|}
+\hline
+**Departamento** \\
+\hline
+Ventas \\
+Marketing \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+<EjBox title="Nota">
+
+Esta operación se suele emplear en combinación con funciones de agregación, ya que permite agrupar las tuplas por un atributo y aplicar una función de agregación a cada grupo. 
+
+Estas funciones son las que se han visto anteriormente: `COUNT`, `SUM`, `AVG`, `MAX` y `MIN` y con ellas se pueden hacer consultar para obtener información más detallada de la tabla.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+En el mismo caso del anterior, podemos querer contabilizar los empleados de cada departamento, para ello: 
+```
+SELECT departamento, COUNT(nombre) AS numEmpleados FROM empleados 
+GROUP BY departamento;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Departamento** & **numEmpleados** \\
+\hline
+Ventas & 3 \\
+Marketing & 2 \\
+\hline
+\end{array}
+$$
+
+O podemos querer saber el salario medio de los empleados de cada edad, para ello: 
+```
+SELECT edad, AVG(salario) AS salarioMedio FROM empleados 
+GROUP BY edad;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Edad** & **salarioMedio** \\
+\hline
+30 & 1500 \\
+25 & 2400 \\
+\hline
+\end{array}
+$$
+
+O podemos querer saber la edad máxima de los empleados de cada departamento: 
+```
+SELECT departamento, MAX(edad) AS edadMax FROM empleados 
+GROUP BY departamento;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Departamento** & **edadMax** \\
+\hline
+Ventas & 30 \\
+Marketing & 25 \\
+\hline
+\end{array}
+$$
+
+O podemos querer saber el salario mínimo de los empleados de cada departamento: 
+```
+SELECT departamento, MIN(salario) AS salarioMin FROM empleados 
+GROUP BY departamento;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Departamento** & **salarioMin** \\
+\hline
+Ventas & 1000 \\
+Marketing & 1700 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### `HAVING`
+La operación `HAVING` se utiliza para filtrar los **grupos** de tuplas que cumplen una condición, su sintaxis es:
+```
+HAVING <condicion>;
+```
+
+Donde:
+
+- **`condicion`:** Condición que se quiere aplicar a los grupos.
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** & **Edad** \\
+\hline
+Luis & 1000 & Ventas & 30 \\
+María & 3000 & Ventas & 25 \\
+Inés & 2500 & Web & 25\\
+Saul & 1700 & Marketing & 25 \\
+Ramiro & 2000 & Ventas & 20\\
+Pedro & 2000 & Web & 30\\
+Laura & 2500 & Marketing & 25 \\
+Paula & 1890 & Web & 20\\
+\hline
+\end{array}
+$$
+
+Podemos querer saber el salario medio de los empleados de cada departamento, pero solo de aquellos departamentos que tengan más de 2 empleados, para ello: 
+```
+SELECT departamento, AVG(salario) AS salarioMedio FROM empleados 
+GROUP BY departamento HAVING COUNT(nombre) > 2;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Departamento** & **salarioMedio** \\
+\hline
+Ventas & 2000 \\
+\hline
+\end{array}
+$$
+
+O por ejemplo, queremos ver el sueldo medio de los departamentos pero solo si este sueldo medio es mayor que 2000, para ello: 
+```
+SELECT departamento, AVG(salario) AS salarioMedio FROM empleados 
+GROUP BY departamento HAVING AVG(salario) > 2000;
+```
+
+Y así, el resultado sería la tabla: 
+
+$$
+\begin{array}{|c|c|}
+\hline
+**Departamento** & **salarioMedio** \\
+\hline
+Web & 2130 \\
+Marketing & 2100 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Combinación de consultas, inserción, modificación y borrado
+### Combinación de consultas con `INSERT`
+Se pueden combinar consultas con `INSERT` para insertar en una tabla el resultado de una consulta, su sintaxis es:
+```
+INSERT INTO <tabla> (<nombreAtrib1>, <nombreAtrib2>, ...) 
+(SELECT <atributo1>, <atributo2>, ... FROM <tabla2>
+[WHERE <condicion>]);
+```
+
+Donde:
+
+- **`tabla`:** Tabla en la que se quiere insertar.
+- **`nombreAtrib$_i$`:** Atributos de la tabla en la que se quiere insertar.
+- **`atributo$_i$`:** Atributos de la tabla de la que se quiere insertar.
+- **`tabla2`:** Tabla de la que se quiere insertar.
+- **`condicion`:** Condición que se quiere aplicar a la tabla de la que se quiere insertar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `recibidos` y `inventario`: 
+
+`recibidos`  `inventario` 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+3 & Clavos & 150 \\
+4 & Martillos & 20 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+1 & Tornillos & 50 \\
+2 & Tuercas & 100 \\
+\hline
+\end{array}
+$$
+
+Podemos querer insertar en la tabla `inventario` los productos que se han recibido, para ello: 
+```
+INSERT INTO inventario (ID, Nombre, Cantidad) 
+(SELECT ID, Nombre, Cantidad FROM recibidos);
+```
+
+Y así, la tabla `inventario` quedaría de la siguiente forma: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+3 & Clavos & 150 \\
+4 & Martillos & 20 \\
+1 & Tornillos & 50 \\
+2 & Tuercas & 100 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### Combinación de consultas con `UPDATE`
+Se pueden combinar consultas con `UPDATE` para modificar los valores de una tabla con el resultado de una consulta, su sintaxis es:
+```
+UPDATE <tabla> SET <atributo1> = <valor1>, <atributo2> = <valor2>, ...
+(SELECT <atributo1>, <atributo2>, ... FROM <tabla2>
+[WHERE <condicion>]);
+```
+
+Donde:
+
+- **`tabla`:** Tabla en la que se quiere modificar.
+- **`atributo$_i$`:** Atributos de la tabla que se quieren modificar.
+- **`valor$_i$`:** Valores que se quieren asignar a los atributos.
+- **`tabla2`:** Tabla de la que se quiere modificar.
+- **`condicion`:** Condición que se quiere aplicar a la tabla de la que se quiere modificar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `recibidos` y `inventario`: 
+
+`recibidos`  `inventario` 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+1 & Tornillos & 10 \\
+2 & Tuercas & 10 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+1 & Tornillos & 50 \\
+2 & Tuercas & 100 \\
+3 & Clavos & 150 \\
+\hline
+\end{array}
+$$
+
+Y queremos actualizar la cantidad de los productos que ya están en el inventario, para ello: 
+```
+UPDATE inventario SET Cantidad = Cantidad + 
+(SELECT Cantidad FROM recibidos WHERE inventario.ID = recibidos.ID);
+```
+
+Y así, la tabla `inventario` quedaría de la siguiente forma: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+1 & Tornillos & 60 \\
+2 & Tuercas & 110 \\
+3 & Clavos & 150 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+### Combinación de consultas con `DELETE`
+Se pueden combinar consultas con `DELETE` para borrar las tuplas de una tabla con el resultado de una consulta, su sintaxis es:
+```
+DELETE FROM <tabla> 
+(SELECT <atributo1>, <atributo2>, ... FROM <tabla2>
+[WHERE <condicion>]);
+```
+
+Donde:
+
+- **`tabla`:** Tabla de la que se quiere borrar.
+- **`atributo$_i$`:** Atributos de la tabla que se quieren borrar.
+- **`tabla2`:** Tabla de la que se quiere borrar.
+- **`condicion`:** Condición que se quiere aplicar a la tabla de la que se quiere borrar.
+
+<EjemBox title="Ejemplo">
+
+Consideremos las siguientes tablas `recibidos` y `inventario`: 
+
+`recibidos`  `inventario` 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+1 & Tornillos & 10 \\
+2 & Tuercas & 10 \\
+4 & Martillos & 20 \\
+\hline
+\end{array}
+$$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+1 & Tornillos & 50 \\
+2 & Tuercas & 100 \\
+3 & Clavos & 150 \\
+\hline
+\end{array}
+$$
+
+Y queremos borrar los productos que ya están en el inventario, para ello: 
+```
+DELETE FROM recibidos WHERE ID IN 
+(SELECT ID FROM inventario WHERE recibidos.ID = inventario.ID);
+```
+
+Y así, la tabla `recibidos` quedaría de la siguiente forma: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**ID** & **Nombre** & **Cantidad** \\
+\hline
+4 & Martillos & 20 \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Vistas
+### `CREATE VIEW`
+La operación `CREATE VIEW` se utiliza para crear una vista, es decir, una tabla virtual que se compone de los resultados de una consulta, su sintaxis es:
+```
+CREATE VIEW <nombreVista> AS <consulta>;
+```
+
+Donde:
+
+- **`nombreVista`:** Nombre de la vista que se quiere crear.
+- **`consulta`:** Consulta cuyos resultados se quieren en la vista.
+
+<EjBox title="Nota">
+
+En las vistas se guarda el código de la consulta (a no ser que sea una vista materializada) mientras que en las tablas convencionales se guardan los datos insertados en las tablas. 
+
+Las vistas normalmente no son actualizables, es decir, no se pueden insertar, modificar o borrar tuplas en ellas, pero sí se pueden hacer consultas sobre ellas.
+
+</EjBox>
+
+<EjemBox title="Ejemplo">
+
+Consideremos la siguiente tabla `empleados`: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+María & 3000 & Ventas \\
+Saul & 1700 & Marketing \\
+Pedro & 2000 & Ventas \\
+Laura & 2500 & Marketing \\
+\hline
+\end{array}
+$$
+
+Podemos querer crear una vista con los empleados del departamento de Ventas, para ello: 
+```
+CREATE VIEW empleadosVentas AS 
+SELECT * FROM empleados WHERE departamento = 'Ventas';
+```
+
+Y así, la vista `empleadosVentas` sería una tabla con los empleados del departamento de Ventas: 
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+**Nombre** & **Salario** & **Departamento** \\
+\hline
+María & 3000 & Ventas \\
+Pedro & 2000 & Ventas \\
+\hline
+\end{array}
+$$
+
+</EjemBox>
+
+## Fechas en Oracle
+### Tipo `DATE`
+El tipo `DATE` en Oracle se utiliza para almacenar fechas y horas (año, mes, día, hora, minuto y segundo) y **no** funciona como el estándar (que almacena solo año, mes y día). 
+
+Si no se especifica la hora, se toma como las 00:00:00. En caso de que no se especifique la fecha (pero sí la hora), se toma por defecto el 1e día del mes actual del año actual. 
+
+Su formato es: 
+
+`YYYY-MM-DD HH24:MI:SS`
+
+Para especificar una fecha en Oracle se puede:
+
+- Emplear una cadena de caracteres con el formato `YYYY-MM-DD HH24:MI:SS`.
+- Cualquier formato admisible empleando la función `TO\_DATE`.
+
+### Tipo `TIMESTAMP`
+El tipo `TIMESTAMP` es una extensión de `DATE` que permite una mayor precisión y permite almacenar:
+
+- La zona horaria (UTC):
+```
+SELECT SYSTIMESTAMP AT TIME ZONE 'UTC' FROM DUAL;
+```
+- La región horaria 
+```
+SELECT SYSTIMESTAMP AT TIME ZONE 'America/Canary' FROM DUAL;
+```
+
+### Funciones de fechas
+#### `SYSDATE`
+La función `SYSDATE` devuelve la fecha y hora actuales del sistema y no recibe ningún argumento. 
+```
+SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') FROM tabla;
+```
+
+Y devolverá la fecha y hora actuales en el formato `YYYY-MM-DD HH24:MI:SS`.
+
+#### `SYSTIMESTAMP`
+La función `SYSTIMESTAMP` devuelve la fecha y hora actuales del sistema con la zona horaria y no recibe ningún argumento. 
+```
+SELECT SYSTIMESTAMP FROM DUAL;
+```
+
+Y devolverá algo como: `10-NOV-21 12.00.00.000000000 PM -05:00`.
+
+#### `DBTIMEZONE`
+La función `DBTIMEZONE` devuelve la zona horaria de la base de datos y no recibe ningún argumento. 
+```
+SELECT DBTIMEZONE FROM DUAL;
+```
+
+Y devolverá la zona horaria de la base de datos (`+01:00`).
+
+#### `ADD\_MONTHS(fecha, meses)`
+La función `ADD\_MONTHS` se utiliza para sumarle un número de meses a una fecha, su sintaxis es: 
+```
+SELECT ADD_MONTHS(fecha, meses) FROM tabla;
+```
+
+Donde:
+
+- **`fecha`:** Fecha a la que se le quieren sumar los meses.
+- **`meses`:** Número de meses que se le quieren sumar a la fecha.
+
+#### `LAST\_DAY(fecha)`
+La función `LAST\_DAY` se utiliza para obtener el último día del mes de una fecha, su sintaxis es: 
+```
+SELECT LAST_DAY(fecha) FROM tabla;
+```
+
+Donde:
+
+- **`fecha`:** Fecha de la que se quiere obtener el último día del mes.
+
+#### `MONTHS\_BETWEEN(fecha1, fecha2)`
+La función `MONTHS\_BETWEEN` se utiliza para obtener el número de meses entre dos fechas, su sintaxis es: 
+```
+SELECT MONTHS_BETWEEN(fecha1, fecha2) FROM tabla;
+```
+
+Donde:
+
+- **`fecha1`:** Fecha inicial.
+- **`fecha2`:** Fecha final.
+
+#### `NEXT\_DAY(fecha, dia)` 
+La función `NEXT\_DAY` se utiliza para obtener el siguiente día de la semana a partir de una fecha, su sintaxis es: 
+```
+SELECT NEXT_DAY(fecha, dia) FROM tabla;
+```
+
+Donde:
+
+- **`fecha`:** Fecha de la que se quiere obtener el siguiente día de la semana.
+- **`dia`:** Día de la semana del que se quiere obtener el siguiente.
+
+#### `ROUND(fecha [,unidad])`
+La función `ROUND` se utiliza para redondear una fecha a la unidad especificada (en caso de no especificarlo, se toman días), su sintaxis es: 
+```
+SELECT ROUND(fecha [,unidad]) FROM tabla;
+```
+
+Donde:
+
+- **`fecha`:** Fecha que se quiere redondear.
+- **`unidad`:** Unidad a la que se quiere redondear la fecha (YYYY, MM, DD, etc.).
+
+#### `TRUNC(fecha [,unidad])`
+La función `TRUNC` se utiliza para truncar una fecha a la unidad especificada (en caso de no especificarlo, se toman días), su sintaxis es: 
+```
+SELECT TRUNC(fecha [,unidad]) FROM tabla;
+```
+
+Donde:
+
+- **`fecha`:** Fecha que se quiere truncar.
+- **`unidad`:** Unidad a la que se quiere truncar la fecha (YYYY, MM, DD, etc.).
+
+#### `EXTRACT(Field FROM fecha)`
+La función `EXTRACT` se utiliza para extraer un campo de una fecha, su sintaxis es: 
+```
+SELECT EXTRACT(Field FROM fecha) FROM tabla;
+```
+
+Donde:
+
+- **`Field`:** Campo que se quiere extraer de la fecha (TIMEZONE\_REGION, YEAR, MONTH, TIMEZONE\_HOUR, etc.).
+- **`fecha`:** Fecha de la que se quiere extraer el campo.
+
+### Funciones de conversión de fechas
+#### `TO\_CHAR(fecha [, formato [, 'parametro\_nls']])`
+La función `TO\_CHAR` se utiliza para convertir una fecha (tipo `DATE`) en una cadena de caracteres tipo `VARCHAR2` con el formato especificado como argumento, su sintaxis es: 
+```
+SELECT TO_CHAR(fecha [, formato [, 'parametro_nls']]) FROM tabla;
+```
+
+Donde:
+
+- **`fecha`:** Fecha que se quiere convertir en una cadena de caracteres.
+- **`formato`:** Formato en el que se quiere convertir la fecha.
+- **`parametro\_nls`:** Parámetro de localización de la fecha.
+
+<EjemBox title="Ejemplo">
+
+```
+SELECT TO_CHAR(SYSDATE, 'DAY,DD/Month/YYYY') FROM tabla;
+```
+
+Y devolverá algo como: `WEDNESDAY, 10/NOVEMBER/2021`.
+
+O por ejemplo: 
+```
+SELECT TO_CHAR(SYSDATE, 'Day,DD/Month/YYYY',
+'NLS_DATE_LANGUAGE=America') FROM dual;
+```
+
+Y devolverá algo como: `Tuesday, '10/December/2013`.
+
+</EjemBox>
+
+#### `TO\_DATE(cadena [, formato [, parametros\_nls]])`
+La función `TO\_DATE` se utiliza para convertir una cadena de caracteres `CHAR` o `VARCHAR2` en una fecha (tipo `DATE`) con el formato especificado como argumento, su sintaxis es: 
+```
+SELECT TO_DATE(cadena [, formato [, parametros_nls]]) FROM tabla;
+```
+
+Donde:
+
+- **`cadena`:** Cadena de caracteres que se quiere convertir en una fecha.
+- **`formato`:** Formato en el que se quiere convertir la cadena.
+- **`parametros\_nls`:** Parámetro de localización de la fecha.
+
+<EjemBox title="Ejemplo">
+
+```
+SELECT TO_DATE('January 15, 1989, 11:00 A.M.',
+'Month dd, YYYY, HH:MI A.M.',
+'NLS_DATE_LANGUAGE=American') FROM dual;
+```
+
+</EjemBox>
+
+### Funciones de conversión
+#### `TO\_CHAR(number [, formato [, 'parametro\_nls']])`
+La función `TO\_CHAR` se utiliza para convertir un número en una cadena de caracteres, su sintaxis es: 
+```
+SELECT TO_CHAR(number [, formato [, 'parametro_nls']]) FROM tabla;
+```
+
+Donde:
+
+- **`number`:** Número que se quiere convertir en una cadena de caracteres.
+
+#### `TO\_NUMBER(cadena [, formato [, 'parametro\_nls']])`
+La función `TO\_NUMBER` se utiliza para convertir una cadena de caracteres en un número, su sintaxis es: 
+```
+SELECT TO_NUMBER(cadena [, formato [, 'parametro_nls']]) FROM tabla;
+```
+
+Donde:
+
+- **`cadena`:** Cadena de caracteres que se quiere convertir en un número.
+
+## Otras operaciones
+### `TRUNCATE TABLE`
+La operación `TRUNCATE TABLE` se utiliza para eliminar todas las tuplas de una tabla, pero sin la posibilidad de hacer un **rollback** o un **commit**. 
+
+Hay veces que hay que eliminar muchos datos, lo que implica mucho tiempo y espacio para poder deshacer la operación **rollback**, por ello, podemos emplear `TRUNCATE TABLE` que:
+
+- No permite hacer rollback
+- No permite filtrar registros a eliminar (sin `WHERE`)
+- Es mucho más rápido que `DELETE`
+
+Su sintaxis es: 
+```
+TRUNCATE TABLE <tabla>;
+```
+
+### `MERGE`
+La operación `MERGE` se utiliza para combinar las operaciones `INSERT`, `UPDATE` y `DELETE` en una sola operación en tablas de uno o más orígenes, su sintaxis es: 
+```
+MERGE INTO <tablaDestino>
+USING (SELECT ... FROM <tablaOrigen> WHERE ...)
+ON (condicion)
+WHEN MATCHED THEN
+UPDATE SET atributo1 = valor1, atributo2 = valor2, ...
+WHEN NOT MATCHED THEN
+INSERT (atributo1, atributo2, ...) VALUES (valor1, valor2, ...)
+```
+
+Notar que se han usado comandos específicos pero podrían ser otros, por ejemplo, `DELETE`. 
+
+## Expresiones condicionales
+### `CASE`
+La operación `CASE` se utiliza para realizar una evaluación condicional, su sintaxis es: 
+```
+CASE
+WHEN condicion1 THEN resultado1
+[WHEN ...]
+[ELSE resultadoDefault]
+END
+```
+
+Donde:
+
+- **`condicion$_i$`:** Condición que se quiere evaluar.
+- **`resultado$_i$`:** Resultado si se cumple la condición.
+- **`resultadoDefault`:** Resultado si no se cumple ninguna condición.
+
+Además, es importante que cada condición debe ser una expresión que devuelva un valor booleano. En caso de que no se especifique el `ELSE`, si no se cumple ninguna condición, devolverá `NULL`. 
+
+### `CASE` con una expresión
+La operación `CASE` se puede utilizar con una expresión, su sintaxis es: 
+```
+CASE expresion
+WHEN valor1 THEN resultado1
+[WHEN ...]
+[ELSE resultadoDefault]
+END
+```
+
+En este caso, se evalúa la expresión y se compara con las cláusulas `WHEN` y se sigue el mismo procedimiento que en el caso anterior. 
+
+### `COALESCE`
+La operación `COALESCE` se utiliza para devolver el primer valor no nulo de una lista de expresiones, su sintaxis es: 
+```
+COALESCE(expresion1, expresion2, ...)
+```
+
+En este caso, todos los argumentos deben ser de tipos compatibles y, en caso de que todos sean nulos, devolverá `NULL`. 
+
+### `NULLIF`
+La operación `NULLIF` se utiliza para devolver `NULL` si dos expresiones son iguales, su sintaxis es: 
+```
+NULLIF(expresion1, expresion2)
+```
+
+En caso de que las dos expresiones no sean iguales, devolverá la primera expresión y todos sus argumentos deben ser de tipos compatibles.

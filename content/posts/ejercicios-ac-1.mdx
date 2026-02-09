@@ -1,0 +1,1819 @@
+---
+title: "Ejercicios Resueltos Arquitectura de Computadores - Parte I"
+date: "2026-01-30"
+description: "Resolución de ejercicios propuestos sobre representación de números en diferentes formatos y operaciones binarias."
+tags: ["Arquitectura de Computadores", "Representación de Números", "Operaciones Binarias"]
+---
+
+## Tema 1
+### Ejercicio 1
+*Representación del número 61 en binario natural:*
+<DemBox title="Demostración">
+
+Para pasar el número 61 a binario, basta con dividir sucesivamente por 2 y quedarse con el resto. Así, tenemos:
+
+$$
+\begin{array}{r|c}
+**División** & **Resto**\\ \hline
+61 \div 2 = 30 & 1\\
+30 \div 2 = 15 & 0\\
+15 \div 2 = 7 & 1\\
+7 \div 2 = 3 & 1\\
+3 \div 2 = 1 & 1\\
+1 \div 2 = 0 & 1      
+\end{array}
+$$
+
+Basta leer los restos de abajo hacia arriba y tenemos que:
+
+$$
+\begin{align*}
+61 = 11\, 1101_b
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Representación del número 61 en hexadecimal:*
+<DemBox title="Demostración">
+
+Partiendo de que su codificación en binario natural es `11 1101`$_b$, entonces agrupamos de 4 en 4 y pasamos a hexadecimal:
+
+$$
+\begin{align*}
+\underbrace{0011}_{3} \, \underbrace{1101}_{D} \implies 61 = `3D`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+`Representación decimal del número \texttt{11 1100}$_b$:`
+<DemBox title="Demostración">
+
+Procedemos de forma inversa a la conversión a binario natural es decir, multiplicamos cada bit por la potencia de 2 correspondiente y sumamos. Así, tenemos:
+
+$$
+\begin{align*}
+11\, 1100_b &= 0 \cdot 2^0 + 0 \cdot 2^1 + 1 \cdot 2^2 + 1 \cdot 2^3 + 1 \cdot 2^4 + 1 \cdot 2^5 =\\[2ex]
+& = 0 + 0 + 4 + 8 + 16 + 32 = 60
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Representación en hexadecimal del número `111 1101 0001`$_b$:*
+<DemBox title="Demostración">
+
+Agrupamos de 4 en 4 y pasamos a hexadecimal:
+
+$$
+\begin{align*}
+\underbrace{0111}_{7} \, \underbrace{1101}_{D} \, \underbrace{0001}_{1} \implies `111 1101 0001`_b = `7D1`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Representación en binario del número `4CE`$_h$:*
+<DemBox title="Demostración">
+
+Seguimos el proceso inverso al de pasar de binario a hexadecimal. Así, tenemos:
+
+$$
+\begin{align*}
+\underbrace{4}_{0100} \, \underbrace{C}_{1100} \, \underbrace{E}_{1110} \implies `4CE`_h = `0100 1100 1110`_b
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Representación en binario del número 0.8125:*
+<DemBox title="Demostración">
+
+Dividimos el número en su parte entera $(0)$ y su parte decimal $(0.8125)$ y procedemos a convertir cada parte por separado. Para la parte entera, basta con convertir el 0 a binario, es decir:
+
+$$
+\begin{align*}
+0 = 0_b
+\end{align*}
+$$
+
+Para la parte decimal, multiplicamos por 2 y nos quedamos con la parte entera, así:
+
+$$
+\begin{array}{r|c}
+**Multiplicación** & **Parte entera**\\ \hline
+0.8125 \cdot 2 = 1.625 & 1\\
+0.625 \cdot 2 = 1.25 & 1\\
+0.25 \cdot 2 = 0.5 & 0\\
+0.5 \cdot 2 = 1.0 & 1
+\end{array}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+0.8125 = 0.1101_b
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Representación decimal de `0.1011 01`$_b$:*
+<DemBox title="Demostración">
+
+Procedemos de forma inversa a la conversión a binario natural es decir, multiplicamos cada bit por la potencia de 2 correspondiente y sumamos. Así, tenemos:
+
+$$
+\begin{align*}
+1011 \, 01_b & = 1 \cdot 2^{ - 1} + 0 \cdot 2^{ - 2} + 1 \cdot 2^{ - 3} + 1 \cdot 2^{ - 4} + 0 \cdot 2^{ - 5} + 1 \cdot 2^{ - 6} =\\[2ex]
+& = 0.5 + 0 + 0.125 + 0.0625 + 0 + 0.015625 = 0.703125
+\end{align*}
+$$
+
+Como la parte entera es `0` entonces el número es $0.703125$.
+
+</DemBox>
+
+### Ejercicio 8
+*Representación del número 14.375 en binario:*
+<DemBox title="Demostración">
+
+Primero, codificamos la parte entera:
+
+$$
+\begin{array}{r|c}
+**División** & **Resto**\\ \hline
+14 \div 2 = 7 & 0\\
+7 \div 2 = 3 & 1\\
+3 \div 2 = 1 & 1\\
+1 \div 2 = 0 & 1
+\end{array}
+$$
+
+Y ahora, codificamos la parte decimal:
+
+$$
+\begin{array}{r|c}
+**Multiplicación** & **Parte entera**\\ \hline
+0.375 \cdot 2 = 0.75 & 0\\
+0.75 \cdot 2 = 1.5 & 1\\
+0.5 \cdot 2 = 1.0 & 1
+\end{array}
+$$
+
+Entonces, juntando ambas partes tenemos que:
+
+$$
+\begin{align*}
+14 = 1110_b \quad \text{y} \quad 0.375 = 0.011_b \implies 14.375 = 1110.011_b
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 9
+*Suma de los números `0100 0000`$_b$ y `0001 0101`$_b$:*
+<DemBox title="Demostración">
+
+Sumamos bit a bit:
+
+$$
+\begin{array}{ccccccccc}
+& 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
++& 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\ \hline
+& 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1
+\end{array}
+$$
+
+Por lo tanto, la suma de los dos números es `0101 0101`$_b$.
+
+</DemBox>
+
+### Ejercicio 10
+*¿Cuál es la suma de los números `1 1100 1011`$_b$ y `1 0111 1010`$_b$:*
+<DemBox title="Demostración">
+
+Sumamos término a término:
+
+$$
+\begin{array}{cccccccccc}
+\overset{(1)}{\phantom{0}}& \overset{(1)}{1} & \overset{(1)}{1} & \overset{(1)}{1} & \overset{(1)}{0} & \overset{(1)}{0} & 1 &\overset{(1)}{0}& 1 & 1\\
++& 1 & 0 & 1 & 1 & 1 & 1 & 0& 1 & 0\\ \hline
+1& 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 1
+\end{array}
+$$
+
+Por lo tanto, la suma de los dos números es `110100 0101`$_b$.
+
+</DemBox>
+
+### Ejercicio 11
+*¿Cuál es la suma de los números `1010 0110`$_b$ y `0010 0100`$_b$:*
+<DemBox title="Demostración">
+
+Sumamos término a término:
+
+$$
+\begin{array}{ccccccccc}
+& 1 & \overset{(1)}{0} & 1 & 0 &\overset{(1)}{0} & 1 & 1 & 0\\
++& 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0\\ \hline
+& 1 & 1 & 0 & 0 & 1 & 0 & 1 & 0
+\end{array}
+$$
+
+Por lo tanto, la suma de los dos números es `1100 1010`$_b$.
+
+</DemBox>
+
+### Ejercicio 12
+*¿Cuál es el rango de representación con 7 bits usando binario natural? Expresar en decimal* 
+<DemBox title="Demostración">
+
+El rango de representación en binario natural viene dado por:
+
+$$
+\begin{align*}
+\text{Rango} = [0, 2^n - 1] = [0, 2^7 - 1] = [0, 127]
+\end{align*}
+$$
+
+Por lo tanto, el rango de representación con 7 bits en binario natural es $[0, 127]$.
+
+</DemBox>
+
+### Ejercicio 13
+*¿Cual es la representación del 3 en signo magnitud con 5 bits?*
+<DemBox title="Demostración">
+
+Consideramos que el primer bit es el signo y los siguientes 4 bits son la magnitud. Así, tenemos que:
+
+$$
+\begin{align*}
+3 = 0011_b
+\end{align*}
+$$
+
+Entonces, como $3 \in \mathbb{R}^{ + }$ tenemos que el bit de signo es 0, así que:
+
+$$
+\begin{align*}
+3 = 0\, 0011_b
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 14
+*¿Cual es la representación del -3 en signo magnitud con 5 bits?*
+<DemBox title="Demostración">
+
+Al igual que antes, la magnitud se codifica como:
+
+$$
+\begin{align*}
+|- 3| = 3 = 0011_b
+\end{align*}
+$$
+
+Entonces, como en este caso es negativo, el bit de signo es `1` entonces:
+
+$$
+\begin{align*}
+- 3 = 1\, 0011_b
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 15
+*¿Cuál es el rango de representación con 7 bits utilizando signo magnitud? Expresar en decimal*
+<DemBox title="Demostración">
+
+Por un lado, tenemos que la magnitud se expresará con 6 bits ya que uno queda reservado para el signo, así que tenemos que, podemos ver que el rango de la magnitud es:
+
+$$
+\begin{align*}
+\text{Rango magnitud} = [0, 2^6 - 1] = [0, 63]
+\end{align*}
+$$
+
+Sin embargo, como el bit más significativo determina el signo, tenemos este rango también hacia los negativos, así el rango completo es:
+
+$$
+\begin{align*}
+\text{Rango} = [- 63, 63]
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 16
+*¿Cuál es la representación del 3 en complemento a 2 con 5 bits?*
+<DemBox title="Demostración">
+
+Para hacer la representación en complemento a 2 podemos seguir dos procedimientos para hacerlo de forma rápida, en este caso, lo representaremos en binario natural:
+
+$$
+\begin{align*}
+3 = 0\, 0011_b
+\end{align*}
+$$
+
+Y a continuación, como es positivo, no tenemos que hacer nada más. Por lo tanto, la representación de 3 en complemento a 2 con 5 bits es `0 0011`$_b$.
+
+</DemBox>
+
+### Ejercicio 17
+*¿Cuál es la representación del -3 en complemento a 2 con 5 bits?*
+<DemBox title="Demostración">
+
+En este caso, seguiremos el mismo procedimiento, entonces:
+
+$$
+\begin{align*}
+|- 3| = 3 = 0011_b
+\end{align*}
+$$
+
+Pero como es negativo, entonces invertimos todos los bits a partir del primer 1 empezando de derecha a izquierda, es decir:
+
+$$
+\begin{array}{ccccc}
+0 & 0 & 0 & 1 & 1\\ \hline
+1 & 1 & 1 & 0 & 1
+\end{array}
+$$
+
+Entonces la representación de -3 en complemento a 2 con 5 bits es `1 1101`$_b$.
+
+También, se puede representar en complemento a 1 y sumar 1 unidad, es decir:
+
+$$
+\begin{align*}
+3 = 00011_b \longrightarrow 11100_b + 1 = 11101_b
+\end{align*}
+$$
+
+(complemento a 1 es invertir los bits)
+
+</DemBox>
+
+### Ejercicio 18
+*Valor decimal de un número representado en complemento a 2 en 6 bits cuyo valor es `01 0010`$_b$:*
+<DemBox title="Demostración">
+
+En este caso, como el primer bit es 0, entonces es positivo, por lo que basta con convertir el número a decimal:
+
+$$
+\begin{align*}
+01\, 0010_b = 0 \cdot 2^5 + 1 \cdot 2^4 + 0 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 0 \cdot 2^0 = 16 + 2 = 18
+\end{align*}
+$$
+
+Por lo tanto, el valor decimal del número representado en complemento a 2 en 6 bits cuyo valor es `01 0010`$_b$ es 18.
+
+</DemBox>
+
+### Ejercicio 19
+*Valor decimal de un número representado en complemento a 2 en 6 bits cuyo valor es `11 0111`$_b$:*
+<DemBox title="Demostración">
+
+En este caso, como el bit más significativo es `1` entonces, hay que invertir los bits a partir del primer 1 para volver a pasarlo a binario natural:
+
+$$
+\begin{array}{cccccc}
+1 & 1 & 0 & 1 & 1 & 1\\ \hline
+0 & 0 & 1 & 0 & 0 & 1
+\end{array}
+$$
+
+Y ahora, basta pasar el resultado obtenido a decimal y habremos obtenido la magnitud:
+
+$$
+\begin{align*}
+00 \, 1001_b = 2^3 + 2^0 = 8 + 1 = 9
+\end{align*}
+$$
+
+Como era negativo, entonces el número es $- 9$.
+
+</DemBox>
+
+### Ejercicio 20
+*Rango de representación con 7 bits utilizando complemento a 2:*
+
+<DemBox title="Demostración">
+
+Podemos observar que el número negativo más grande posible es:
+
+$$
+\begin{align*}
+100 \, 0000_b = - 2^6 = - 64
+\end{align*}
+$$
+
+Y que el más grande positivo es:
+
+$$
+\begin{align*}
+011\, 1111_b = 2^6 - 1 = 63
+\end{align*}
+$$
+
+Entonces el rango de representación con 7 bits utilizando complemento a 2 es $[- 64, 63]$.
+
+</DemBox>
+
+### Ejercicio 21
+*Un computador utiliza 4 bits para representar números enteros. Si se suman las cantidades `1001`$_b$ y `0101`$_b$, ¿se produce carry u overflow? ¿Cuál es el resultado en decimal interpretado como número natural y como número entero representado en complemento a 2?* 
+<DemBox title="Demostración">
+
+Sumamos bit a bit:
+
+$$
+\begin{array}{ccccc}
+& 1 & 0 & \overset{(1)}{0} & 1\\
++& 0 & 1 & 0 & 1\\ \hline
+& 1 & 1 & 1 & 0
+\end{array}
+$$
+
+Como vemos, no se produce carry ni overflow. Por lo tanto, el resultado en decimal interpretado como número natural es:
+
+$$
+\begin{align*}
+1110_b = 2^3 + 2^2 + 2^1 = 8 + 4 + 2 = 14
+\end{align*}
+$$
+
+Y como número entero representado en complemento a 2 es:
+
+$$
+\begin{align*}
+1110_b \longrightarrow 0010_b = 2 \implies - 2
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 22
+*Un computador utiliza 4 bits para representar números enteros. Si se suman las cantidades `0111`$_b$ y `0101`$_b$, ¿se produce carry u overflow?*
+
+<DemBox title="Demostración">
+
+Sumamos bit a bit:
+
+$$
+\begin{array}{ccccc}
+& \overset{(1)}{0} & \overset{(1)}{1} & \overset{(1)}{1} & 1\\
++& 0 & 1 & 0 & 1\\ \hline
+& 1 & 1 & 0 & 0
+\end{array}
+$$
+
+Como vemos, no se produce carry pero sí overflow. El resultado interpretado como natural es:
+
+$$
+\begin{align*}
+1100_b = 2^3 + 2^2 = 8 + 4 = 12
+\end{align*}
+$$
+
+Y como entero:
+
+$$
+\begin{align*}
+1100_b \longrightarrow 0100_b = 4 \implies - 4
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 23
+*En un sumador para cantidades de 5 bits se introducen el número -7 codificado en signo-magnitud y el número -16 codificado e complemento a 2. ¿Qué resultado se obtendrá a la salida del sumador interpretado en complemento a 2? Contestar en decimal.* 
+
+<DemBox title="Demostración">
+
+Primero codifiquemos ambos números:
+
+$$
+\begin{align*}
+- 7 & \longrightarrow |- 7| = 7 = 0111_b \implies - 7 = 1\, 0111_b\\
+- 16 & \longrightarrow - 1 6 = 10000_b
+\end{align*}
+$$
+
+Ahora, sumamos ambos números:
+
+$$
+\begin{array}{cccccc}
+\overset{(1)}{\phantom{0}}& 1 & 0 & 1 & 1 & 1\\
++& 1 & 0 & 0 & 0 & 0\\ \hline
+\textcolor{red}{1}& 0 & 0 & 1 & 1 & 1
+\end{array}
+$$
+
+Como vemos, se produce overflow. Como el sumador es de 5 bits, en realidad el resultado es:
+
+$$
+\begin{align*}
+0\, 00111_b = 7
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 24
+*En un sumador para cantidades de $n$ bits, con $n = 4$ se introducen el mayor número entero positivo y el menor número entero negativo, ambos codificados en complemento a 2. ¿Qué resultado se obtendrá a la salida del sumador interpretado como un número entero codificado en signo-magnitud? Contestar en decimal.* 
+<DemBox title="Demostración">
+
+En representación de 4 bits en complemento a 2, el mayor número positivo es $0111_b = 7$ y el menor número negativo es $1000_b = - 8$. Sumamos ambos números:
+
+$$
+\begin{array}{ccccc}
+& 0 & 1 & 1 & 1 \\
++& 1 & 0 & 0 & 0 \\ \hline
+& 1 & 1 & 1 & 1
+\end{array}
+$$
+
+Interpretado como signo-magnitud, al tener 1 en el bit más significativo será negativo y como la magnitud es:
+
+$$
+\begin{align*}
+111_b = 2^2 + 2^1 + 2^0 = 4 + 2 + 1 = 7
+\end{align*}
+$$
+
+Entonces es $- 7$.
+
+</DemBox>
+
+### Ejercicio 25
+*Sea un sumador para cantidades de $n = 5$ bits. En uno de sus operandos se introduce el mayor número positivo representable en formato signo-magnitud y en el otro operando el menor número entero representable en formato complemento a 2. ¿Cuál será el resultado de sumar dichos valores? Interpretar el resultado en binario natural y responder en hexadecimal* 
+
+<DemBox title="Demostración">
+
+Dichos números serán:
+
+$$
+\begin{align*}
+01111_b = 15 \quad \text{y} \quad 10000_b = - 16
+\end{align*}
+$$
+
+Sumamos ambos números:
+
+$$
+\begin{array}{cccccc}
+& 0 & 1 & 1 & 1 & 1\\
++& 1 & 0 & 0 & 0 & 0\\ \hline
+& 1 & 1 & 1 & 1 & 1
+\end{array}
+$$
+
+Interpretando el resultado en binario natural tenemos que:
+
+$$
+\begin{align*}
+1\,1111_b = 2^4 + 2^3 + 2^2 + 2^1 + 2^0 = 16 + 8 + 4 + 2 + 1 = 31
+\end{align*}
+$$
+
+Y en hexadecimal será:
+
+$$
+\begin{align*}
+\underbrace{1}_{1} \, \underbrace{1111}_{F} = `1F`_h
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 26
+*¿Cuántos bits serían necesarios para un formato que pudiese representar -126 y 128 en complemento a 2?* 
+<DemBox title="Demostración">
+
+Para representar 128 en complemento a 2 necesitamos representarlo en binario natural y luego añadir un bit más y que el bit más significativo no sea 1, es decir:
+
+$$
+\begin{array}{r|c}
+**División** & **Resto**\\ \hline
+128 \div 2 = 64 & 0\\
+64 \div 2 = 32 & 0\\
+32 \div 2 = 16 & 0\\
+16 \div 2 = 8 & 0\\
+8 \div 2 = 4 & 0\\
+4 \div 2 = 2 & 0\\
+2 \div 2 = 1 & 0\\
+1 \div 2 = 0 & 1
+\end{array}
+$$
+
+Es decir, que 128 en binario natural es $1000\, 0000_b$. Sin embargo, en complemento a 2 no puede empezar por 1 por ser negativo, entonces:
+
+$$
+\begin{align*}
+1000\, 0000 \longrightarrow 0\, 1000 \, 0000_b
+\end{align*}
+$$
+
+Es decir, para representar el 128 necesitamos 9 bits. Ahora vamos a por el -126:
+
+$$
+\begin{align*}
+|- 126| = 126 
+\end{align*}
+$$
+
+Entonces, representado en binario natural:
+
+$$
+\begin{array}{r|c}
+**División** & **Resto**\\ \hline
+126 \div 2 = 63 & 0\\
+63 \div 2 = 31 & 1\\
+31 \div 2 = 15 & 1\\
+15 \div 2 = 7 & 1\\
+7 \div 2 = 3 & 1\\
+3 \div 2 = 1 & 1\\
+1 \div 2 = 0 & 1
+\end{array}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+|- 126| = 126 = 111\, 1110_b
+\end{align*}
+$$
+
+Como vemos, el valor absoluto de 126 en binario natural es de 7 bits pero empieza con un 1, lo cual no nos sirve porque debería ser positivo, es decir, empezar con un cero. Por ello, añadimos un bit más y tenemos que 126 es `0111 1110`$_b$. Ahora, invertimos a partir del primer 1 empezando por la derecha
+
+$$
+\begin{array}{ccccccc}
+0 & 1 & 1 & 1 & 1 & 1 & 0\\ \hline
+1 & 0 & 0 & 0 & 0 & 1 & 0
+\end{array}
+$$
+
+Así, vemos que necesitamos 8 bits pero como para el 128 necesitábamos 9 bits, entonces necesitamos 9 bits para representar ambos números.
+
+</DemBox>
+
+### Ejercicio 27
+*Se desea un formato que sea capaz de representar con números enteros en complemento a 2 en el rango [-1024, 1023] ¿Cuántos bits serían necesarios?* 
+<DemBox title="Demostración">
+
+Podríamos seguir un proceso similar al del ejercicio anterior, sin embargo, en este caso podemos emplear los rangos de representación en complemento a 2. Así, tenemos que:
+
+$$
+\begin{align*}
+\text{Rango} = [-2^{n - 1}, 2^{n - 1} - 1] = [-1024, 1023]
+\end{align*}
+$$
+
+Por lo tanto, vamos a resolver las ecuaciones y elegir el máximo $n$:
+
+$$
+\begin{align*}
+- 2^{n - 1} = - 1024 & \iff 2^{n - 1} = 1024 = 2^{10} \iff n - 1 = 10 \iff n = 11\\[2ex]
+2^{n - 1} - 1 = 1023 & \iff 2^{n - 1} = 1024 = 2^{10} \iff n - 1 = 10 \iff n = 11
+\end{align*}
+$$
+
+Es decir, necesitaríamos 11 bits
+
+</DemBox>
+
+### Ejercicio 28
+*Se dispone de un sumador que opera con magnitudes de 6 bits. En una de sus entradas se pone el mayor número positivo en complemento a 2 y en la otra el menor positivo en signo-magnitud (no el cero). Interpreta la suma obtenida como un número en complemento a 2 y expresa el resultado en decimal* 
+<DemBox title="Demostración">
+
+El mayor número en complemento 2 de 6 bits es:
+
+$$
+\begin{align*}
+01 \, 1111_b
+\end{align*}
+$$
+
+Y el menor número positivo en signo-magnitud es:
+
+$$
+\begin{align*}
+00\, 0001_b
+\end{align*}
+$$
+
+Entonces, si sumamos bit a bit:
+
+$$
+\begin{array}{ccccccc}
+& \overset{(1)}{0} & \overset{(1)}{1} & \overset{(1)}{1} & \overset{(1)}{1} & \overset{(1)}{1} & 1\\
++&0 & 0 & 0  & 0 & 0 & 1\\ \hline
+& 1 & 0 & 0 & 0 & 0 & 0
+\end{array}
+$$
+
+Entonces, interpretado en complemento a 2, como es negativo al ser su bit más significativo un 1, tenemos que invertir todos los 1 a partir del primer uno empezando por la derecha. Podemos observar que en realidad, el único 1 es el bit más significativo, es decir, que es el número más negativo en complemento a 2 de 6 bits. Por lo tanto, el resultado es:
+
+$$
+\begin{align*}
+- 2^{6 - 1} = - 2^5 = - 32
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 29
+*Se sabe que la secuencia de bits `45800C00`$_h$ representa un valor numérico expresado en formato IEEE 754 de precisión simple. ¿Cuál es el valor decimal de dicho número?* 
+<DemBox title="Demostración">
+
+Para ello, vamos a proceder por partes:
+
+1. Obtener el valor en binario del número:
+
+$$
+\begin{align*}
+\underbrace{4}_{0100} \, \underbrace{5}_{0101} \, \underbrace{8}_{1000} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000} \, \underbrace{C}_{1100} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000}
+\end{align*}
+$$
+
+2. Separamos el número en los componentes del formato IEEE 754:
+
+$$
+\begin{align*}
+\underbrace{0}_{\text{\tiny Signo}} \, \underbrace{1000 \, 1011}_{\text{\tiny Exponente}} \, \underbrace{000 \, 0000 \, 0000 \, 1100 \, 0000 \, 0000}_{\text{\tiny Mantisa}}
+\end{align*}
+$$
+
+3. Calculamos el signo:
+
+$$
+\begin{align*}
+0 \implies \text{Positivo}
+\end{align*}
+$$
+
+4. Calculamos el exponente en exceso a 127:
+
+$$
+\begin{align*}
+1000\, 1011 = 2^7 + 2^3 + 2^1 + 2^0 = 128 + 8 + 2 + 1 = 139 - 127 = 12
+\end{align*}
+$$
+
+5. Calculamos la mantisa (añadiendo el 1 implícito):
+
+$$
+\begin{align*}
+1. 000\, 0000\, 0000\, 1100\, 0000\, 0000
+\end{align*}
+$$
+
+Y movemos la coma 12 posiciones a la derecha:
+
+$$
+\begin{align*}
+1000 \, 0000\, 0000\, 1.100\, 0000\, 0000
+\end{align*}
+$$
+
+Decodificamos la parte entera:
+
+$$
+\begin{align*}
+1\, 0000 \, 0000\, 0001 = 2^{12} + 2^0 = 4096 + 1 = 4097
+\end{align*}
+$$
+
+Y la parte decimal:
+
+$$
+\begin{align*}
+0.1000\, 0000\, 000 = 2^{ - 1} = 0.5
+\end{align*}
+$$
+
+6. Agrupamos ambas partes:
+
+$$
+\begin{align*}
+4097 + 0.5 = 4097.5
+\end{align*}
+$$
+
+Por lo tanto, el valor decimal del número representado en formato IEEE 754 de precisión simple `45800C00`$_h$ es 4097.5.
+
+</DemBox>
+
+### Ejercicio 30
+*Se sabe que la secuencia de bits `42880000`$_h$ representa un valor numérico expresado en formato IEEE 754 de precisión simple. ¿Cuál es el valor hexadecimal de dicho número?* 
+<DemBox title="Demostración">
+
+Seguimos un procedimiento similar al ejercicio anterior:
+
+1. Obtener el valor en binario del número:
+
+$$
+\begin{align*}
+\underbrace{4}_{0100} \, \underbrace{2}_{0010} \, \underbrace{8}_{1000} \, \underbrace{8}_{1000} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000}
+\end{align*}
+$$
+
+2. Separamos el número en los componentes del formato IEEE 754:
+
+$$
+\begin{align*}
+\underbrace{0}_{\text{\tiny Signo}} \, \underbrace{1000 \, 0101}_{\text{\tiny Exponente}} \, \underbrace{000 \, 1000 \, 0000 \, 0000 \, 0000 \, 0000}_{\text{\tiny Mantisa}}
+\end{align*}
+$$
+
+3. Calculamos el signo:
+
+$$
+\begin{align*}
+0 \implies \text{Positivo}
+\end{align*}
+$$
+
+4. Calculamos el exponente en exceso a 127:
+
+$$
+\begin{align*}
+1000\, 0101 = 2^7 + 2^2 + 2^0 = 128 + 4 + 1 = 133 - 127 = 6
+\end{align*}
+$$
+
+5. Calculamos la mantisa (añadiendo el 1 implícito):
+
+$$
+\begin{align*}
+1. 000\, 1000 \, 0000 \, 0000 \, 0000 \, 0000
+\end{align*}
+$$
+
+Y movemos la coma 6 posiciones a la derecha:
+
+$$
+\begin{align*}
+1000 \, 100.0 \, 0000 \, 0000 \, 0000 \, 0000
+\end{align*}
+$$
+
+El número no tiene decimales, por lo que el valor en hexadecimal es:
+
+$$
+\begin{align*}
+\underbrace{100}_{4} \, \underbrace{0100}_{4}
+\end{align*}
+$$
+
+Por lo tanto, el valor hexadecimal del número representado en formato IEEE 754 de precisión simple `42880000`$_h$ es `44`$_h$.
+
+</DemBox>
+
+### Ejercicio 31
+*¿Cuál es la codificación del mayor número positivo que se puede representar en formato IEEE 754 de precisión simple?. Responder en hexadecimal (no se considera el infinito)* 
+
+<DemBox title="Demostración">
+
+Extraemos cada parte del número:
+
+- Como es positivo, el signo es 0.
+- El exponente es el mayor posible representado en exceso a 127:
+
+$$
+\begin{align*}
+1111\, 1110
+\end{align*}
+$$
+
+Ya que el caso particular de `1111 1111`$_b$ en este caso se reserva para el infinito.
+- La mantisa es:
+
+$$
+\begin{align*}
+1. 1111\, 1111\, 1111\, 1111\, 1111\, 111
+\end{align*}
+$$
+
+Entonces el número codificado en hexadecimal en formato IEEE 754 de precisión simple es:
+
+$$
+\begin{align*}
+\underbrace{0111}_{7} \, \underbrace{1111}_{F} \, \underbrace{0111}_{7} \, \underbrace{1111}_{F} \, \underbrace{1111}_{F} \, \underbrace{1111}_{F} \, \underbrace{1111}_{F} \, \underbrace{1111}_{F}
+\end{align*}
+$$
+
+Es decir, `7F7FFFFF`$_h$.
+
+</DemBox>
+
+### Ejercicio 32
+*Que número decimal representa `C1500000`$_h$ en formato IEE 754 de precisión simple?* 
+
+<DemBox title="Demostración">
+
+Seguimos el mismo proceso de siempre:
+
+- Convertimos el número a binario:
+
+$$
+\begin{align*}
+\underbrace{C}_{1100} \, \underbrace{1}_{0001} \, \underbrace{5}_{0101} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000} \, \underbrace{0}_{0000} \, \underbrace{0}_ {0000}
+\end{align*}
+$$
+
+- Separamos el número en sus componentes:
+
+$$
+\begin{align*}
+\underbrace{1}_{\text{\tiny Signo}} \, \underbrace{1000 \, 0010}_{\text{\tiny Exponente}} \, \underbrace{101 \, 0000 \, 0000 \, 0000 \, 0000 \, 0000}_{\text{\tiny Mantisa}}
+\end{align*}
+$$
+
+- Calculamos el signo:
+
+$$
+\begin{align*}
+1 \implies \text{Negativo}
+\end{align*}
+$$
+
+- Calculamos el exponente en exceso a 127:
+
+$$
+\begin{align*}
+1000 \, 0010 = 2^7 + 2^1 = 128 + 2 = 130 \longrightarrow 130 - 127 = 3
+\end{align*}
+$$
+
+- Calculamos la mantisa (añadiendo el 1 implícito):
+
+$$
+\begin{align*}
+1.101 \, 0000 \, 0000 \, 0000 \, 0000 \, 0000
+\end{align*}
+$$
+
+Y movemos la coma 3 posiciones a la derecha:
+
+$$
+\begin{align*}
+1101. \, 0000 \, 0000 \, 0000 \, 0000 \, 0000
+\end{align*}
+$$
+
+Entonces, nos basta con decodificar la parte entera (no tiene decimal):
+
+$$
+\begin{align*}
+1101 = 2^3 + 2^2 + 2^0 = 8 + 4 + 1 = 13
+\end{align*}
+$$
+
+- Juntamos todo, como es negativo añadimos el menos:
+
+$$
+\begin{align*}
+- 13
+\end{align*}
+$$
+
+Por lo tanto, el número decimal representado en formato IEEE 754 de precisión simple por `C1500000`$_h$ es -13.
+
+</DemBox>
+
+### Ejercicio 33
+*Representar el número -12.25 en formato IEEE 754 de precisión simple en hexadecimal* 
+<DemBox title="Demostración">
+
+Para ello, vamos a seguir los siguientes pasos:
+
+- Pasamos el número a binario. Primero la parte entera:
+
+$$
+\begin{align*}
+12 = 1100_b
+\end{align*}
+$$
+
+Y la parte decimal:
+
+$$
+\begin{array}{r|c}
+**Multiplicación** & **Parte entera**\\ \hline
+0.25 \cdot 2 = 0.5 & 0\\
+0.5 \cdot 2 = 1.0 & 1
+\end{array}
+$$
+
+Entonces, la magnitud codificada en binario es:
+
+$$
+\begin{align*}
+1100.01
+\end{align*}
+$$
+
+- Movemos la coma para dejar un único 1 a la izquierda:
+
+$$
+\begin{align*}
+1100.01 = 1.10001 \cdot 2^3
+\end{align*}
+$$
+
+Entonces el exponente es 3.
+- Representamos el exponente en exceso a 127:
+
+$$
+\begin{align*}
+127 + 3 = 130 = 128 + 2 = 1000\, 0000 + 0000\, 0010 = 1000\, 0010_b
+\end{align*}
+$$
+
+- El signo es negativo, por lo que el bit de signo es 1.
+- La mantisa es:
+
+$$
+\begin{align*}
+100\, 0100\, 0000\, 0000\, 0000\, 0000
+\end{align*}
+$$
+
+- Juntamos todo y convertimos a hexadecimal:
+
+$$
+\begin{align*}
+\underbrace{1100}_{C} \, \underbrace{0001}_{1} \, \underbrace{0100}_{4} \, \underbrace{0100}_{4} \, \underbrace{0000}_{0} \, \underbrace{0000}_{0} \,  \underbrace{0000}_{0} \, \underbrace{0000}_{0} \, 
+\end{align*}
+$$
+
+Por lo tanto, el número -12.25 en formato IEEE 754 de precisión simple en hexadecimal es `C1440000`$_h$.
+
+</DemBox>
+
+### Ejercicio 34
+*¿Cuál es el menor número positivo normalizado que se puede representar en el formato IEEE-754 de precisión simple? Contestar en potencias de 2* 
+<DemBox title="Demostración">
+
+Extraemos la información de cada componente:
+
+- Es positivo, por lo que el signo es 0.
+- Tiene que ser el menor, por lo que el exponente es el menor posible:
+
+$$
+\begin{align*}
+0000\, 0001
+\end{align*}
+$$
+
+- La mantisa es:
+
+$$
+\begin{align*}
+000\, 0000\, 0000\, 0000\, 0000\, 0000
+\end{align*}
+$$
+
+Por lo tanto, el menor número positivo normalizado que se puede representar en el formato IEEE-754 de precisión simple es:
+
+$$
+\begin{align*}
+2^{-126}
+\end{align*}
+$$
+
+ya que el exponente en exceso a 127 es:
+
+$$
+\begin{align*}
+1 - 127 = -126
+\end{align*}
+$$
+
+Y la mantisa es:
+
+$$
+\begin{align*}
+1.000\, 0000\, 0000\, 0000\, 0000\, 0000 = 1
+\end{align*}
+$$
+
+Entonces, el número es:
+
+$$
+\begin{align*}
+2^{-126} \cdot 1.0 = 2^{-126}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 35
+*¿Cuál es la máxima diferencia entre dos números positivos consecutivos en el formato de coma flotante IEEE-754 de precisión simple? Responder en potencia de dos* 
+<EjBox title="Nota">
+
+Tal y como está el enunciado podríamos decir que es infinito, ya que la diferencia entre dos infinitos consecutivos es infinita. Sin embargo, vamos a suponer que se refiere a la máxima diferencia entre dos números positivos consecutivos representables en el formato IEEE-754 de precisión simple que no sean infinitos.
+
+</EjBox> 
+
+<DemBox title="Demostración">
+
+Para ello, vamos a ver cuál es el mayor número representable en el formato IEEE-754 de precisión simple y cuál es el siguiente número representable. Como su exponente es el máximo posible, es decir:
+
+$$
+\begin{align*}
+1111\, 1110 = 254 \longrightarrow 254 - 127 = 127
+\end{align*}
+$$
+
+La mantisa sería:
+
+$$
+\begin{align*}
+1.111\, 1111\, 1111\, 1111\, 1111\, 111
+\end{align*}
+$$
+
+Este número sería:
+
+$$
+\begin{align*}
+(2 - 2^{-23}) \cdot 2^{127} \approx 2^{128}
+\end{align*}
+$$
+
+Como la distancia entre dos números consecutivos en un mismo rango de exponentes viene dada por:
+
+$$
+\begin{align*}
+2^{e - 23}
+\end{align*}
+$$
+
+Para el mayor número de exponente posible $e = 127$ tenemos que:
+
+$$
+\begin{align*}
+2^{127 - 23} = 2^{104}
+\end{align*}
+$$
+
+Es decir, la máxima diferencia entre dos números positivos consecutivos en el formato de coma flotante IEEE-754 de precisión simple es $2^{104}$.
+
+</DemBox>
+
+## Tema 2
+### Ejercicio 1
+*Calcula la tabla de verdad del siguiente circuito. ¿Qué operación lógica básica se realiza entre las entradas A y B?*
+
+![circ1](/blogs/images/fcr-ejercicios_circ1.png)
+
+<DemBox title="Demostración">
+
+Para hallar la tabla de verdad tenemos:
+
+$$
+\begin{array}{cc|c}
+A & B & S\\\hline
+0 & 0 & 0\\
+0 & 1 & 1\\
+1 & 0 & 1\\
+1 & 1 & 0      
+\end{array}
+$$
+
+Por lo tanto, la operación lógica básica entre las entradas A y B es la operación XOR.
+
+</DemBox>
+
+### Ejercicio 2
+*Calcula la tabla de verdad del siguiente circuito. ¿Qué operación lógica básica se realiza entre las entradas A y B?*
+
+![circ2](/blogs/images/fcr-ejercicios_circ2.png)
+
+<DemBox title="Demostración">
+
+Dado que el multiplexor de 4 entradas funciona de la siguiente manera:
+
+$$
+\begin{array}{cc|c}
+c_0 & c_1 & e_i\\\hline
+0 & 0 & e_0\\
+1 & 0 & e_1\\
+0 & 1 & e_2\\
+1 & 1 & e_3
+\end{array}
+$$
+
+La tabla de verdad es:
+
+$$
+\begin{array}{cc|c}
+A & B & S\\\hline
+0 & 0 & 0\\
+0 & 1 & 0\\
+1 & 0 & 0\\
+1 & 1 & 0
+\end{array}
+$$
+
+Por lo tanto, la operación lógica básica entre las entradas A y B es $S = 0$
+
+</DemBox>
+
+### Ejercicio 3
+*Calcula la tabla de verdad del siguiente circuito. ¿Qué operación lógica básica se realiza entre las entradas A y B?*
+
+![circ3](/blogs/images/fcr-ejercicios_circ3.png)
+
+<DemBox title="Demostración">
+
+La tabla de verdad es:
+
+$$
+\begin{array}{cc|c}
+A & B & S\\\hline
+0 & 0 & 0\\
+0 & 1 & 1\\
+1 & 0 & 1\\
+1 & 1 & 0
+\end{array}
+$$
+
+Por lo tanto, la operación lógica básica entre las entradas A y B es XOR.
+
+</DemBox>
+
+### Ejercicio 4
+*Dado el siguiente circuito, ¿qué valor se obtendrá en la salida $S$?*
+
+![circ4](/blogs/images/fcr-ejercicios_circ4.png)
+
+<DemBox title="Demostración">
+
+Podemos ver que la salida que nos interesa de los multiplexores es la del `MUX2` de debajo del `SUM1` del centro y esta está seleccionada por la entrada $a_0$ que viene que tiene un valor 0, entonces se selecciona la entrada $e_0$. Vemos que la entrada 0 de este `MUX2` viene del `MUX2` que está inmediatamente debajo del `SUM1` de la izquierda. En este caso, este mux está controlado por la entrada $a_0$ a la que le llega voltaje (un 1 entonces) y por tanto, está seleccionada la entrada $e_1$. Vemos que la entrada $e_1$ viene dada por un 1, así, la salida del `MUX2` del centro es 1.
+
+Ahora, al primer sumador empezando por la derecha, le llegan dos 1's por las entradas y un 0 por el $C_{in}$, por lo que su salida será 0 y un carry de 1, es decir $S_0 = 0$
+
+Ahora nos vamos con el `SUM1` de la izquierda ya que es al que le llega el carry in del sumador de la derecha y, además, es el que enviará el carry al sumador del medio. Así, también le llegan dos 1's por las entradas pero un 1 por el carry in, por lo que su salida será 1 y un carry de 1, es decir $S_1 = 1$.
+
+Finalmente, en el sumador del medio, le llegan dos 1's por las entradas y un 1 por el carry in, por lo que su salida será 1 y un carry de 1, es decir $S_2 = 1$ y $C_{out} = 1$.
+
+El número resultante es $S = 110_b = 6$.
+
+</DemBox>
+
+### Ejercicio 5
+*Suministra la función lógica y diseña un circuito que dados dos números naturales de 1 bit, A y B, ponga la salida a uno cuando A sea mayor que B. Puede haber múltiples soluciones válidas*
+<DemBox title="Demostración">
+
+Primero, vamos a ver cual sería la tabla de verdad de la función que queremos obtener:
+
+$$
+\begin{array}{cc|c}
+**A** & **B** & **S**\\\hline
+0 & 0 & 0\\
+0 & 1 & 0\\
+1 & 0 & 1\\
+1 & 1 & 0
+\end{array}
+$$
+
+Ahora, vamos a seleccionar los minterms que tienen salida 1, es decir:
+
+$$
+\begin{align*}
+m_2 = A \cdot \overline{B}
+\end{align*}
+$$
+
+Como es el único, la función lógica es la suma de los minterms:
+
+$$
+\begin{align*}
+S = A \cdot \overline{B}
+\end{align*}
+$$
+
+Y el circuito sería un AND entre A y la negación de B.
+
+</DemBox>
+
+### Ejercicio 6
+*Suministra la función lógica y diseña un circuito que ponga la salida a uno cuando el número de tres bits que recibe como entrada sea mayor que 5. Puede haber múltiples soluciones válidas.* 
+
+<DemBox title="Demostración">
+
+En este caso, procedemos igual que antes haciendo la tabla de verdad:
+
+$$
+\begin{array}{ccc|c}
+**A** & **B** & **C** & **S**\\\hline
+0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 1 & 0 & 0\\
+0 & 1 & 1 & 0\\
+1 & 0 & 0 & 0\\
+1 & 0 & 1 & 0\\
+1 & 1 & 0 & 1\\
+1 & 1 & 1 & 1
+\end{array}
+$$
+
+Obtenemos los minterms con salida 1:
+
+$$
+\begin{align*}
+m_6 & A \cdot B \cdot \overline{C}\\
+m_7 & A \cdot B \cdot C
+\end{align*}
+$$
+
+Por lo tanto, la función lógica es:
+
+$$
+\begin{align*}
+S = A \cdot B \cdot \overline{C} + A \cdot B \cdot C
+\end{align*}
+$$
+
+Hacer circuito a mano.
+
+</DemBox>
+
+### Ejercicio 7
+*Suministra la función lógica y diseña un circuito que ponga la salida a uno cuando el número de tres bits que se recibe como entrada sea par (el cero se considera par). Puede haber múltiples soluciones válidas.* 
+
+<DemBox title="Demostración">
+
+Obtenemos la tabla de verdad:
+
+$$
+\begin{array}{ccc|c}
+**A** & **B** & **C** & **S**\\\hline
+0 & 0 & 0 & 1\\
+0 & 0 & 1 & 0\\
+0 & 1 & 0 & 1\\
+0 & 1 & 1 & 0\\
+1 & 0 & 0 & 1\\
+1 & 0 & 1 & 0\\
+1 & 1 & 0 & 1\\
+1 & 1 & 1 & 0
+\end{array}
+$$
+
+Obtenemos los minterms con salida 1:
+
+$$
+\begin{align*}
+m_0 & = \overline{A} \cdot \overline{B} \cdot \overline{C}\\
+m_2 & = \overline{A} \cdot B \cdot \overline{C}\\
+m_4 & = A \cdot \overline{B} \cdot \overline{C}\\
+m_6 & = A \cdot B \cdot \overline{C}
+\end{align*}
+$$
+
+Por lo tanto, la función lógica es:
+
+$$
+\begin{align*}
+S = \overline{A} \cdot \overline{B} \cdot \overline{C} + \overline{A} \cdot B \cdot \overline{C} + A \cdot \overline{B} \cdot \overline{C} + A \cdot B \cdot \overline{C}
+\end{align*}
+$$
+
+Se podría simplificar.
+
+</DemBox>
+
+### Ejercicio 8
+*A una ALU de 4 bits análoga a la vista en clase se le pide realizar varias operaciones sobre los operando naturales A=4, B=12. Indicar el resultado en binario de las operaciones y el de los bits de estado. Nota: el valor de los bits de carry y overflow debe ignorarse en las operaciones no aritméticas y puede indicarse con un guión* 
+
+- *SUMA:*
+<DemBox title="Demostración">
+
+Primero, pasamos a binario natural los números:
+
+$$
+\begin{align*}
+4 = 0100_b \quad 12 = 1100_b
+\end{align*}
+$$
+
+Ahora, sumamos término a término:
+
+$$
+\begin{array}{ccccc}
+\overset{(1)}{\phantom{0}}& \overset{(1)}{0} & 1 & 0 & 0\\
++ & 1 & 1 & 0 & 0\\ \hline
+1 & 0 & 0 & 0 & 0
+\end{array}
+$$
+
+Por tanto, como es una ALU de 4 bits, el resultado solo comprende los 4 bits menos significativos.
+
+- **Resultado:** `0000`$_b$
+- **ZF:** 1 (porque el resultado es 0)
+- **CF:** 1 (porque hay acarreo interpretando los números como naturales)
+- **OF:** 0 (porque no hay desbordamiento interpretando los números como enteros en complemento a 2, un positivo y un negativo pueden dar un positivo)
+- **SF:** 0 (porque el resultado interpretado como entero en complemento a 2 es positivo)
+
+</DemBox>
+- *RESTA:*
+<DemBox title="Demostración">
+
+Para restar pasamos a complemento a 2 el segundo término y sumamos, es decir:
+
+$$
+\begin{align*}
+12 = 1100_b \longrightarrow 0100_b
+\end{align*}
+$$
+
+Y ahora sumamos:
+
+$$
+\begin{array}{ccccc}
+& \overset{(1)}{0} & 1 & 0 & 0\\
++& 0 & 1 & 0 & 0\\ \hline
+& 1 & 0 & 0 & 0
+\end{array}
+$$
+
+Por tanto:
+
+- **Resultado:** `1000`$_b$
+- **ZF:** 0 (porque el resultado no es 0)
+- **CF:** 1 (porque al restar naturales el sustraendo es mayor que el minuendo)
+- **OF:** 1 (la suma de dos positivos no puede ser negativa interpretando los números como enteros en complemento a 2)
+- **SF:** 1 (porque el resultado interpretado como entero en complemento a 2 es negativo)
+
+</DemBox>
+- *AND:*
+<DemBox title="Demostración">
+
+Hacemos la operación bit a bit:
+
+$$
+\begin{array}{ccccc}
+& 0 & 1 & 0 & 0\\
+AND & 1 & 1 & 0 & 0\\ \hline
+& 0 & 1 & 0 & 0
+\end{array}
+$$
+
+Entonces:
+
+- **Resultado:** `0100`$_b$
+- **ZF:** 0 (porque el resultado no es 0)
+- **CF:** - (no se tiene en cuenta en operaciones lógicas)
+- **OF:** - (no se tiene en cuenta en operaciones lógicas)
+- **SF:** 0 (porque el resultado interpretado como entero en complemento a 2 es positivo)
+
+</DemBox>
+- *OR:*
+<DemBox title="Demostración">
+
+Hacemos la operación bit a bit:
+
+$$
+\begin{array}{ccccc}
+& 0 & 1 & 0 & 0\\
+OR & 1 & 1 & 0 & 0\\ \hline
+& 1 & 1 & 0 & 0
+\end{array}
+$$
+
+Entonces:
+
+- **Resultado:** `1100`$_b$
+- **ZF:** 0 (porque el resultado no es 0)
+- **CF:** - (no se tiene en cuenta en operaciones lógicas)
+- **OF:** - (no se tiene en cuenta en operaciones lógicas)
+- **SF:** 1 (porque el resultado interpretado como entero en complemento a 2 es negativo)
+
+</DemBox>
+- *XOR:*
+<DemBox title="Demostración">
+
+Hacemos la operación bit a bit:
+
+$$
+\begin{array}{ccccc}
+& 0 & 1 & 0 & 0\\
+XOR & 1 & 1 & 0 & 0\\ \hline
+& 1 & 0 & 0 & 0
+\end{array}
+$$
+
+Entonces:
+
+- **Resultado:** `1000`$_b$
+- **ZF:** 0 (porque el resultado no es 0)
+- **CF:** - (no se tiene en cuenta en operaciones lógicas)
+- **OF:** - (no se tiene en cuenta en operaciones lógicas)
+- **SF:** 1 (porque el resultado interpretado como entero en complemento a 2 es negativo)
+
+</DemBox>
+
+### Ejercicio 9
+*Una ALU de 6 bits análoga a la vista en clase tiene todas sus entradas a 1 a excepción de las entradas $a_4, a_3, a_2, a_1$ y $a_0$. Indica el resultado de la ALU en decimal, interpretando como natural e interpretando como entero así como el valor de los bits de estado* 
+<DemBox title="Demostración">
+
+Primero, vamos a ver que números se están introduciendo:
+
+$$
+\begin{align*}
+A = 10 \, 0000_b \quad B = 11 \, 1111_b \quad O_1, O_2, C_{in}, \text{Comp-1} = 1111
+\end{align*}
+$$
+
+Entonces, estamos haciendo una resta, es decir, sumando un complemento a 1 + 1 en $B$. Para ello:
+
+$$
+\begin{align*}
+B = 11 \, 1111_b \longrightarrow 00 \, 0000_b + 1 = 00 \, 0001_b
+\end{align*}
+$$
+
+Entonces, sumamos bit a bit:
+
+$$
+\begin{array}{ccccccc}
+& 1 & 0 & 0 & 0 & 0 & 0\\
++ & 0 & 0 & 0 & 0 & 0 & 1\\ \hline
+& 1 & 0 & 0 & 0 & 0 & 1
+\end{array}
+$$
+
+Entonces:
+
+- **Resultado:** `100001`$_b$
+- **ZF:** 0 (porque el resultado no es 0)
+- **CF:** 1 (porque al restar naturales el sustraendo es mayor que el minuendo)
+- **OF:** 0 (porque no hay desbordamiento interpretando los números como enteros en complemento a 2, un positivo y un negativo pueden dar un positivo)
+- **SF:** 1 (porque el resultado interpretado como entero en complemento a 2 es negativo)
+
+Entonces, interpretando el resultado como natural tenemos que:
+
+$$
+\begin{align*}
+10 \, 0001_b = 2^5 + 2^0 = 32 + 1 = 33
+\end{align*}
+$$
+
+Y como entero en complemento a 2:
+
+$$
+\begin{align*}
+10 \, 0001_b \longrightarrow 01 \, 1111_b = - 2^4 + 2^3 + 2^2 + 2^1 + 2^0 = 16 + 8 + 4 + 2 + 1 = 31 \implies - 31
+\end{align*}
+$$
+
+Y el ZCOS sería 0101
+
+</DemBox>
+
+### Ejercicio 10
+*Una ALU de 4 bits similar a la bista en clase realiza una operación aritmético-lógica tras la que losbits del registro de estado quedan con los siguinetes valores ZCOS=1110. Se sabe que todas las señales de entrada están a 0 a excepción de $a_3, b_3, OP_0, OP_1$ de las que se desconoce su valor. Teniendo en cuenta la información propocionada, ¿Cual serán los valores de $a_3, b_3, OP_1$.* 
+<DemBox title="Demostración">
+
+Para ello, vamos a recopilar la información que tenemos:
+
+$$
+\begin{align*}
+A = \_000 \quad B = \_000 \quad ZCOS = 1110 \quad C_{in} = 0 \quad \text{Comp-1} = 0
+\end{align*}
+$$
+
+Por lo tanto, sabemos que la operación no puede ser una resta. Además, como el ZF es 0, entonces el restulado es 0. Además, se ha producido acarreo, por lo que al hacer la suma de naturales se ha desbordado.
+
+De hecho, a partir de este dato, sabemos que, como los términos menos significativos en ambos números $A$ y $B$ son cero, entonces la suma de $a_3$ y $b_3$ ha producido un acarreo. Por lo tanto, $a_3 = b_3 = 1$.
+
+Además, como el OF es 1, entonces también hubo desbordamiento en la suma de enteros en complemento a 2. Por lo tanto, como $A$ y $B$ son negativos, la suma de dos negativos debería de ser negativa y en este caso, ha sido positiva, lo cual hace ver que la operación de $a_3$ y $b_3$ ha dado 0. Por lo tanto, solo puede ser o una operación XOR o una suma. Entonces $OP_1 = 0$.
+
+</DemBox>
+
+### Ejercicio 11
+*Se desea construir una ALU que sea capaz de operar con números enteros expresados en complemento a 2 en el rango [-1024, 1023]. ¿Cuántos sumadores elementales son necesarios para construir esta ALU?* 
+
+<DemBox title="Demostración">
+
+Para ello, vamos a ver cuántos bits necesitamos para representar el rango de números:
+
+$$
+\begin{align*}
+\text{Rango Comp-2} = [ - 2^{n - 1}, 2^{n - 1} - 1]
+\end{align*}
+$$
+
+Entonces:
+
+$$
+\begin{align*}
+- 1024 = - 2^{n - 1} &\iff 2^10 = 2^{n - 1} \iff 10 = n - 1 \iff n = 11\\
+1023 = 2^{n - 1} - 1 & \iff 2^{10} = 2^{n - 1} \iff 10 = n - 1 \iff n = 11
+\end{align*}
+$$
+
+Por lo tanto, necesitamos 11 bits para representar el rango de números. Entonces, para construir la ALU necesitamos 11 sumadores elementales.
+
+</DemBox>
+
+## Ejercicios
+### EJercicio 1
+Sea la variable `int var = -240`.
+
+1. Primero la magnitud en binario:
+
+$$
+\begin{align*}
+240 = 1111\,0000_b
+\end{align*}
+$$
+
+Y como estamos representandolo en complemento a 2 tiene que empezar por 0, entonces:
+
+$$
+\begin{align*}
+01111\, 0000
+\end{align*}
+$$
+
+y ahora para representar a complemento a 2 invertimos a partir del primer 1:
+
+$$
+\begin{align*}
+01111\, 0000 \longrightarrow 10001\, 0000
+\end{align*}
+$$
+
+Sin embargo, no está en 32 bits, entonces habría que añadir 0 en el original o 1's en el invertido, así queda:
+
+$$
+\begin{align*}
+1\ldots 110001 \, 0000
+\end{align*}
+$$
+
+Y para pasarlo a hex y como son grupos de cuatro y a la izquierda solo tenemos 1, nos queda:
+
+$$
+\begin{align*}
+FFFF FF10
+\end{align*}
+$$
+
+### Ejercicio 1
+En un ordenador se realiza la siguinete operación, calcular el valor interprentado los operandos y el resultado interpretandolos como naturales y como enteros en complemento a 2
+
+$$
+\begin{array}{cccccccc}
+&1 & 1 & 0 & 1 & 0 & 1 &0\\
++&0 & 1 & 0 & 1 & 1 & 0 & 0\\ \hline
+1 & 0 & 0 & 1 & 0 & 1 & 1 & 0
+\end{array}
+$$
+
+Así, el restulado sería (quetando el carry) $22$ como natural y $22$ como entero. Sin embargo, como hay acarreo no son correctos los resultados al interpretarlos como naturales. Como enteros el resultado es correcto por el cambio de signo.
+
+Podemos ver que el primero de los dos en decimal sería $- 22$ y luego $44$ que da 22.
+
+### Ejercicio 2
+El número natural más grande que sumado a este anterior produce un resultado válido interpretando las cosas como enteros
+
+$$
+\begin{array}{cccccccc}
+&1 & 1 & 0 & 1 & 0 & 1 &0\\
++&x & x & x & x & x & x & x\\ \hline
+\end{array}
+$$
+
+Arriba tengo -22 y lo que quiero es que no se salga del rango de representación, que viene dado por:
+
+$$
+\begin{align*}
+\text{Rango} = [-2^{n - 1}, 2^{n - 1} - 1] = [-2^{7 - 1}, 2^{7 - 1} - 1] = [-64, 63]
+\end{align*}
+$$
+
+Por lo tanto, el número más grande que puedo sumar es 63, así:
+
+$$
+\begin{align*}
+- 64 = - 22 + x \implies x = - 42
+\end{align*}
+$$
+
+Entonces, basta con ver la codificación del 42 en complemento a 2:
+
+$$
+\begin{align*}
+42 = 0101010_b \overset{\text{invertir}}{\longrightarrow} 1010110_b
+\end{align*}
+$$
+
+Entonces el natural más grande será:
+
+$$
+\begin{align*}
+1010110_b = 86
+\end{align*}
+$$
+
+### Ejercicio 3
+Convertir el siguiente número, C5378000H
+
+$$
+\begin{align*}
+C5378000H = 1100\,0101\,0011\,0111\,1000\,0000\,0000\,0000
+\end{align*}
+$$
+
+Ahora tenemos que el primero es un 1, por lo que es negativo, a continuación, tenemos el exponente que sería:
+
+$$
+\begin{align*}
+1000\, 1010 \longrightarrow 138 \implies E = 138 - 127 = 11
+\end{align*}
+$$
+
+Y la mantisa sería:
+
+$$
+\begin{align*}
+1.011\,0111\,1000\,0000\,0000\,0000 \cdot 2^{11} 
+\end{align*}
+$$
+
+Entonces tenemos que:
+
+$$
+\begin{align*}
+1011\, 0111\, 1000.\, 0000\, 0000\, 0000\, 0000
+\end{align*}
+$$
+
+Codificando en decimal la parte entera tenemos que:
+
+$$
+\begin{align*}
+1011 \, 0111\, 1000 = 2936
+\end{align*}
+$$
+
+Por lo tanto, el número sería:
+
+$$
+\begin{align*}
+- 2936
+\end{align*}
+$$
+
+### Ejercicio 4	
+Convertir el siguiente número, -22.75:
+
+1. Signo es $-$ entonces $S = 1$:
+2. La parte entera de 22 es $10110_b$, por lo que la parte entera sería $10110_b$.
+3. La parte decimal de 0.75 es $0.11_b$, por lo que la parte decimal sería $0.11_b$.
+4. Por lo tanto, el número sería:
+
+$$
+\begin{align*}
+10110.11_b
+\end{align*}
+$$
+5. Metemos el exponente:
+
+$$
+\begin{align*}
+1.011011 \cdot 2^4
+\end{align*}
+$$
+6. El exponente en exceso a 127 sería:
+
+$$
+\begin{align*}
+4 + 127 = 131 = 1000\,0011_b
+\end{align*}
+$$
+7. Por lo tanto, el número sería:
+
+$$
+\begin{align*}
+1100\, 0001\, 1011\, 0110\, 0000\, 0000\, 0000\, 0000
+\end{align*}
+$$

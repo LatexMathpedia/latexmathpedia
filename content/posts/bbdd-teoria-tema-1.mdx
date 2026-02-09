@@ -1,0 +1,188 @@
+---
+title: "Bases de Datos - Tema 1"
+date: "2026-01-30"
+description: "Conceptos fundamentales de bases de datos, incluyendo modelos de datos, lenguajes DDL y DML, arquitectura de bases de datos y roles de usuarios."
+tags: ["Bases de Datos", "SQL", "Comandos SQL", "Gestión de Tablas"]
+---
+
+## Introducción
+### Propósito de las bases de datos
+Inicialmente, las aplicaciones de bases de datos estaban construidas de tal forma que operaban directamente sobre los archivos del sistema operativo. Sin embargo, esto presentaba una serie de problemas:
+
+- **Redundancia de datos e inconsistencia:** Los datos se almacenaban en diferentes formatos dando lugar a duplicación de datos almacenados en diferentes ficheros.
+- **Dificultad de acceso a los datos:** Los datos estaban dispersos en diferentes ficheros y era difícil acceder a ellos. Era necesario crear un programa llevar a cabo las diferentes tareas.
+- **Aislamiento de datos:** Los datos estaban aislados y no se podían compartir entre diferentes aplicaciones.
+- **Integridad de los datos:** Las restricciones de integridad (`CONSTRAINTS` o `CHECKS`) quedaban relegadas al código del programa, estimación del error.n lugar de indicarse explícitamente en la base de datos. Esto podía llevar a errores en caso de que alguien se saltase la capa de la aplicación. Además, esto hacía que fuera más difícil modificar o añadir nuevas `CONSTRAINTS`.
+- **Atomicidad de los datos:** Evitar que un fallo dejen los datos en un estado inconsistente, por ejemplo, que una acción se quede a medias y no se complete.
+- **Acceso concurrente:** Permitir que varios usuarios accedan a la vez a los datos sin que se produzcan problemas.
+- **Problemas de seguridad:** Controlar el acceso a los datos y garantizar que solo los usuarios autorizados puedan acceder a determinados datos.
+
+## Modelos de datos
+Son una colección de herramientas para describir los datos, sus relaciones, semántica y restricciones. Existen varios modelos de datos, entre los que destacan:
+
+- Modelo relacional
+- Modelo de Entidad-Relación
+- Modelo de Objetos
+- Modelo semi-estructurado (XML)
+- Otros como Network, Jerárquico, etc.
+
+### Modelo relacional
+Este modelo consiste en almacenar la información en tablas. 
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+ID & Name & Dept\_name & Salary \\
+\hline
+1 & John Doe & Computer Science & 50000 \\
+2 & Jane Smith & Mathematics & 55000 \\
+3 & Emily Davis & Physics & 60000 \\
+4 & Michael Brown & Chemistry & 58000 \\
+\hline
+\end{array}
+$$
+
+
+### Niveles de abstracción e instancias
+Dentro de las bases de datos distinguiremos los siguientes niveles de abstracción e instancias:
+
+- **Nivel físico:** Nivel formado por toda la estructura física de la base de datos.
+- **Nivel lógico/conceptual:** Nivel formado por las estructuras lógicas de la base de datos.
+- **Nivel de vista o de visión:** Se encarga de cómo se ven los datos.
+- **Instancia:** Contenido real de la base de datos en un momento específico
+
+### Independencia de datos físicos
+La independencia de datos físicos es la capacidad de modificar el nivel físico sin tener que modificar el nivel lógico.
+
+- Las aplicaciones dependen del nivel lógico, no del físico.
+- Es importante definir bien las interfaces entre los distintos niveles, así nos aseguraremos de que los cambios de un parte no afecten a las demás.
+
+## Lenguaje de datos
+### Data Definition Language (DDL)
+Llamamos **Data Definition Language (DDL)** al lenguaje que se utiliza para definir la estructura de la base de datos. El compilador DDL traduce las instrucciones DDL a un conjunto de tablas almacenadas en un diccionario de datos. 
+
+El diccionario de datos contiene algunos metadatos (datos sobre los datos) como:
+
+- Esquemas de la base de datos
+- Restricciones de integridad
+- Autorizaciones
+
+### Data Manipulation Language (DML)
+Llamamos **Data Manipulation Language (DML)** o al lenguaje utilizado para acceder y actualizar los datos organizados en el apropiado modelo de datos. Este lenguaje también es conocido como **lenguaje de consulta**. 
+
+Dentro de este podemos encontrar dos tipos de lenguajes:
+
+- **Puro:** Usado para demostrar propiedades sobre la computación y para potenciar la optimización. Algunos ejemplos de estos es la algebra relacional o el calculo relacional.
+- **Comercial:** Usado en sistemas comerciales. Siendo SQL el lenguaje comercial más conocido.
+
+Hay dos tipos de lenguajes de manipulación de datos en función de cómo se especifica la consulta. Estos son:
+
+1. **DML procedural:** El usuario especifica que datos necesita y cómo obtenerlos.
+2. **DML declarativo:** El usuario solo especifica que datos necesita, pero no cómo obtenerlos.
+
+Los lenguajes DML declarativos son más fáciles de usar y usualmente se referirán a ellos como lenguajes DML no procedurales.
+Al conjunto de lenguajes DML que implican la obtención de datos se les denomina como **lenguajes de consulta**. 
+
+### Lenguaje de consulta SQL
+El lenguaje de consulta SQL es un lenguaje **no procedural**. Una consulta toma los valores de una o más tablas y devuelve un resultado. Notar que SQL no es un lenguaje equivalente a una máquina de Turing. Además, las aplicaciones acceden a las bases de datos a través de:
+
+- **SQL embebido:** SQL dentro de un lenguaje de programación.
+- **Interfaces de aplicaciones:** Interfaces que permiten consultas SQL que se enviarán a una base de datos.
+
+Es importante conocer que SQL no soporta acciones como entradas proporcionadas por usuarios, salidas a dispositivos o comunicación a través de redes. Por ello se utilizan lenguajes de programación para realizar estas acciones usando SQL embebido. 
+
+### Diseño de la base de datos
+El proceso de diseñar la estructura general de la base de datos se divide en dos fases:
+
+- **Diseño lógico:** Se centra principalmente en diseñar el esquema represente de forma adecuada la información que se quiere almacenar. Para ello tenemos en cuenta tanto las decisiones
+del negocio como las decisiones de la informática.
+- **Diseño físico:** Decidir el diseño físico de la base de datos.
+
+## Motor de la base de datos
+Un sistema de base de datos se divide en módulos que se ocupan cada uno de una tarea específica. Los componentes funcionales de la base de datos se puede dividir en:
+
+- Administrador de almacenamiento
+- Administrador de consultas
+- Administrador de transacciones
+
+### Administrador de almacenamiento
+El **administrado de almacenamiento** es el módulo encargado de proveer la interfaz entre los datos de bajo nivel almacenados en la base de datos y las aplicaciones y consultas enviadas al sistema. Es decir, es el encargado de las siguientes tareas:
+
+- Interacción con el sistema de archivos
+- Almacenamiento eficiente de los datos y la recuperación y actualización de estos.
+
+Los componentes del administrador de almacenamiento son:
+
+- Administrador de integridad y autorización
+- Administrador de transacciones
+- Administrador de ficheros
+- Administrador de buffer
+
+El administrador de almacenamiento implementa estructura de datos como parte de la implementación del nivel físico como pueden ser archivos de datos, diccionarios de datos o indices.
+
+### Administrador de consultas
+El **administrador de consultas** es el módulo encargado de la traducción de las consultas de alto nivel en un plan de ejecución que el motor de evaluación de consultas entiende, sus componentes son los siguientes:
+
+- **Intérprete DDL:** Interpreta las instrucciones DDL y las almacena en el diccionario de datos.
+- **Compilador DML:** Traduce las instrucciones DML en un plan de evaluación que el motor de evaluación de consultas entiende.
+- **Motor de evaluación de consultas(Query evaluation engine):** Ejecuta los planes de ejecución generados por el compilador DML.
+
+El motor de evaluación de consultas se divide en tres fases principales:
+
+1. Parsing y traducción.
+2. Optimización.
+3. Evaluación.
+
+### Administrador de transacciones
+Una **transacción** es una secuencia de operaciones que se ejecutan como una única función lógica en una base de datos. 
+
+El **administrador de transacciones** asegura que la base de datos sigue en un estado consistente a pesar el que el sistema falle. El **administrador de control de concurrencia** es el encargado de controlar la iteración entre las transacciones concurrentes, para asegurar la consistencia de la base de datos. 
+
+<EjBox title="Nota">
+
+La concurrencia es la capacidad de múltiples usuarios de acceder a la base de datos al mismo tiempo. La concurrencia puede llevar a problemas como la pérdida de actualizaciones o la lectura sucia. 
+
+Por otra parte, es importante el administrador de tareas para asegurar la atomicidad de los datos. Basta recurrir a la técnica de **rollback** para deshacer los cambios realizados en caso de que una transacción no se complete correctamente. 
+
+Se puede hacer referencia al ejemplo típico de una transacción de banco en la que se realiza una transferencia de dinero de una cuenta a otra. Si tras sacar el dinero de la cuenta emisora el sistema colapsa y no se se ha implementado la técnica de **rollback**, el dinero se habrá perdido ya que no volverá al emisor ni llegará al receptor. 
+
+Así, entendemos por atomicidad de los datos al hecho de ser indivisibles, es decir, que una transacción se ejecute completamente o no se ejecute en absoluto.
+
+</EjBox>
+
+## Arquitectura de la base de datos
+Nos podemos encontrar con el siguiente tipo de arquitecturas:
+
+- **Bases de datos centralizadas:** Uno o unos pocos núcleos y memoria compartida.
+- **Cliente-servidor:** Una máquina actúa como servidor y ejecuta tareas en nombre de varias máquinas cliente.
+- **Bases de datos paralelas:** Estas bases de datos tienen múltiplos núcleos, cada procesador tiene su propia memoria pero todas acceden a los mismos datos.
+- **Bases de datos distribuidas:** Distribución geográfica y presenta heterogeneidad en el esquema o los datos.
+
+## Aplicaciones de bases de datos
+Las aplicaciones de bases de datos normalmente están dividas en dos o tres niveles. 
+
+### Arquitectura de dos niveles
+La arquitectura de dos niveles **(Two-tier architecture)** es aquella arquitectura en la que la aplicación reside en la máquina del cliente, desde esta se invoca la funcionalidad de la base de datos en la máquina servidor. 
+
+### Arquitectura de tres niveles
+La arquitectura de tres niveles **(Three-tier architecture)** es aquella arquitectura en la cual la maquina cliente actúa únicamente como una interfaz y no contiene ninguna llamada directa a la base de datos.
+
+## Usuarios de la base de datos
+Dentro de los usuarios de las bases de datos podemos distinguir 4 tipos de usuarios.
+
+- **Usuarios novel:** Interactúan con la base de datos invocando una aplicación que ha sido programada previamente.
+- **Programadores de aplicaciones:** Informáticos profesionales que desarrollan aplicaciones.
+- **Usuarios sofisticados:** Usuarios que interactúan con el sistema sin desarrollar aplicaciones, bien sea mediante el uso de lenguaje de consultas o usando software de análisis de datos.
+- **Usuarios especializados:** Usuarios que escriben aplicaciones de bases de datos especializadas que no están dentro del marco tradicional de procesamiento de datos.
+
+## Administrador de bases de datos
+Un **administrador de una base de datos** (DBA en sus siglas en inglés) es una persona que tiene un control sobre toda la base de datos y cuya funciones son las siguientes:
+
+1. Definición de los niveles
+2. Definición de la estructura de almacenamiento y del método de acceso
+3. Modificación de los niveles y de la organización física
+4. Otorgar la autorización para acceder a la base de Datos
+5. Mantenimiento periódico de la base de Datos
+6. Realización de copias de seguridad de manera periódica
+7. Asegurar que hay espacio libre en el disco para llevar a cabo las operaciones y aumentar el espacio en caso contrario
+8. Supervisar las acciones que se llevan a cabo en la base de datos y garantizar que el rendimiento no se vea afectado por procesos muy costosos enviados por algunos usuarios

@@ -1,0 +1,1157 @@
+---
+title: "Ejercicios Resueltos Probabilidad y Estadística - Parte IV"
+date: "2026-01-29"
+description: "Resolución de ejercicios propuestos sobre variables aleatorias y funciones de distribución."
+tags: ["Probabilidad y Estadística", "Variables Aleatorias", "Funciones de Distribución"]
+---
+
+
+### Ejercicio 1
+*Sea $(X, Y)$ un vector aleatorio continuo con función de densidad conjunta de $X$ e $Y$ viene dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+6x^2 y & \text{ si } 0 \leq x, \, y \leq 1\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+*Comprobar que es función de densidad*: 
+
+Para que sea función de densidad, se debe cumplir que:
+
+$$
+\begin{align*}
+f(x, y) \colon \mathbb{R}^2 & \longrightarrow \mathbb{R} \text{ tq } \left\{
+\begin{array}{l}
+f(x, y) \geq 0 \quad \forall (x, y)\\[2ex]
+\displaystyle \iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Tenemos que, por como está definida, $f(x, y) \geq 0 \quad \forall (x, y)$. Basta notar que, para que $f(x, y) < 0$ tiene que ocurrir que $6x^2 y < 0$, que ocurre si $y < 0$ y, por defunción de $f$ no es posible. 
+
+Ahora, vamos a ver que cumple la segunda condición. Para ello:
+
+$$
+\begin{align*}
+\iint_{\mathbb{R}^2} f(x, y) \, dx \, dy & = \int_0^1 \left(\int_0^1 6x^2 y \, dx \right) \, dy = \\[2ex]
+& = \int_0^1 6y \left[\dfrac{x^3}{3}\right]_{x = 0}^{x = 1} \, dy = \int_0^1 6y \, \dfrac{1}{3} \, dy = \int_0^1 2y \, dy = \\[2ex]
+& = \left[\dfrac{2y^2}{2}\right]_0^1 = y^2 \Big|_0^1 = 1
+\end{align*}
+$$
+
+Así, vemos que se cumplen ambas condiciones por lo que es función de densidad conjunta. 
+
+*Calcular la función de distribución* 
+
+Notamos que la función de densidad viene dada por la acumulación de probabilidad, es decir, que es una función de la forma:
+
+$$
+\begin{align*}
+F \colon \mathbb{R}^2 & \longrightarrow \mathbb{R}\\
+(x, y) & \longmapsto F(x, y) = P(X \leq x \cap Y \leq y)
+\end{align*}
+$$
+
+Notar que, el dominio que nos interesa es el cuadrado unidad ya que, en caso de que $x< 0$ o $y < 0$ la función tomará valor 0 y en caso de que $x \lor y > 1$ entonces no varía la función de distribución. 
+Así, podemos calcular la función de densidad como:
+
+- Si $x < 0$ o $y < 0$ entonces $F(x, y) = 0$
+- Si $x > 1$ o $y > 1$ entonces $F(x, y) = 1$
+- Si $0 \leq x, y \leq 1$ entonces:
+
+$$
+\begin{align*}
+F(x, y) & = \int_0^y \left(\int_0^x 6u^2v \, du \right) \, dv = \int_0^y 6v \left[\dfrac{u^3}{3}\right]_0^x \, dv =\\[2ex]
+& =  \int_0 ^y 2v x^3 \, dv = 2x^3 \int_0^y v \, dv = 2x^3 \dfrac{v^2}{2} \Big|_0^y = x^3 y^2
+\end{align*}
+$$
+
+Así, podemos ver que la función de distribución viene dada por:
+
+$$
+\begin{align*}
+F(x, y) = \left\{
+\begin{array}{ll}
+0 & \text{ si } x < 0 \lor y < 0\\
+x^3 y^2 & \text{ si } 0 \leq x, y \leq 1\\
+1 & \text{ si } x > 1 \lor y > 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Ahora, vamos a hallar las distribuciones marginales a través de la función de densidad* 
+
+Empezaremos por la marginal de $X$, para ello, integramos para ``eliminar'' la variable $y$:
+
+$$
+\begin{align*}
+f_X(x) = \int_{\mathbb{R}} f(x, y) \, dy = \int_0^1 6x^2 y \, dy = 6x^2 \left[\dfrac{y^2}{2} \right]_0^1 = 3x^2
+\end{align*}
+$$
+
+Para el caso de $Y$, tenemos que ``eliminar'' la variable $x$:
+
+$$
+\begin{align*}
+f_Y(y) = \int_\mathbb{R} f(x, y) \, dx = \int_0^1 6x^2 y \, dx = 6y \left[\dfrac{x^3}{3}\right]_0^1 = 2y
+\end{align*}
+$$
+
+Así, tenemos que las marginales son:
+
+$$
+\begin{align*}
+f_X(x) = \left\{
+\begin{array}{ll}
+3x^2 & \text{ si } 0 \leq x \leq 1\\
+0 & \text{ en el resto }
+\end{array}
+\right. \quad \text{ y } \quad f_Y(y) = \left\{
+\begin{array}{ll}
+2y & \text{ si } 0 \leq y \leq 1\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Ahora, vamos a hallar las distribuciones marginales a través de la función de distribución* 
+
+Para hallar la marginal de $X$ a través de la función de distribución, tenemos que:
+
+$$
+\begin{align*}
+F_X(x) = \lim_{y \to \infty} F(x, y) = \lim_{y \to 1} x^3 y^2 = x^3 
+\end{align*}
+$$
+
+Y, para hallar la marginal de $Y$:
+
+$$
+\begin{align*}
+F_Y(y) = \lim_{x \to \infty} F(x, y) = \lim_{x \to 1} x^3 y^2 = y^2
+\end{align*}
+$$
+
+Notar que, para ver la función de densidad, se puede derivar la función de distribución. 
+
+*Determinar $P(X < Y)$*	
+
+Para hallar $P(X < Y)$, tenemos que:
+
+$$
+\begin{align*}
+P(X < Y) = P\left(\left\{\omega \in \Omega \colon X (\omega) < Y(\omega) \right\}\right) 
+\end{align*}
+$$
+
+Entonces, podemos calcularlo como:
+
+$$
+\begin{align*}
+P(X < Y) & = \iint_{X < Y} f(x, y) \, dx \, dy = \\[2ex]
+& = \int_{ - \infty}^{0} \int_{ - \infty}^{y} 0 \, dx \, dy + \int_0^1 \left(\int_0^y 6x^2y \, dx\right)\, dy\, + \int_1^{\infty} \int_1^y 0 \, dx \, dy = \\[2ex]
+& = \int_0^1 6y \left[\dfrac{x^3}{3}\right]_0^y \, dy = \int_0^1 2y^4 \, dy = \dfrac{2y^5}{5} \Big|_0^1 = \dfrac{2}{5}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercido 2
+*Sea $(X, Y)$ un vector aleatorio continuo con función de densidad conjunta de $X$ e $Y$ viene dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+e^{ - x} & \text{ si } 0 < y < x\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+*Vamos a ver si es función de densidad* 
+
+Para que sea función de densidad tiene que cumplir las siguientes condones:
+
+$$
+\begin{align*}
+f(x, y) \colon \mathbb{R}^2 & \longrightarrow \mathbb{R} \text{ tq } \left\{
+\begin{array}{l}
+f(x, y) \geq 0 \quad \forall (x, y)\\[2ex]
+\displaystyle \iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, vemos que $e^{-x} \geq 0 \quad \forall x \in \mathbb{R}$ y, por tanto, $f(x, y) \geq 0 \quad \forall (x, y)$. 
+
+Ahora, vamos a ver si se cumple la segunda condición:
+
+$$
+\begin{align*}
+\iint_{\mathbb{R}^2} f(x, y) = \int_0^\infty \left(\int_y^\infty e^{ - x} \, dx\right) \, dy = \int_0^\infty \left[e^{ - x}\right]_y^\infty \, dy = \int_0^\infty e^{ - y} \, dy = 1
+\end{align*}
+$$
+
+Así, tenemos que es función de densidad. 
+
+*Vamos a calcular la función de distribución* 
+
+Para ello, sabemos que la función de distribución viene dada por:
+
+$$
+\begin{align*}
+F(x, y) = P(X \leq x \cap Y \leq y)
+\end{align*}
+$$
+
+Aquí, hay que distinguir dos casos, ya que $(x, y)$ puede estar por encima o por debajo de la bisectriz. 
+
+- Si $(x, y)$ están por debajo de la bisectriz, es decir, $(x, y)$ tal que $x > y$:
+
+$$
+\begin{align*}
+F(x, y) & = \int_0^y \left(\int_0^u e^{ - u} \, dv\right) \, du + \int_y^x \left(\int_0^y e^{ - u} \, dv \right) \, du = \\[2ex]
+& = \int_0^y e^{ - u} v \Big|_0^u \, du + \int_y^x e^{ - u} v \Big|_0^y \, du = \\[2ex]
+& = \int_0^y e^{ - u} u \, du + \int_y^x e^{ - u} y \, du = \\[2ex]
+& = \left[u ( - e^{ - u}) - \int_0^y - e^{ - u} \, du \right]_0^y + y \cdot \left[ - e^{ - u}\right]_y^x =\\[2ex]
+& = \left[u ( - e^{ - u}) - e^{ - u} \right]_0^y + y \cdot \left[ - e^{ - u}\right]_y^x =\\[2ex]
+& = \left( - y e^{ - y} - e^{ - y} + 1 \right) + y \cdot \left( - e^{ - x} + e^{ - y}\right) = \\[2ex]
+& = - ye^{ - y} - e^{ - y} + 1 - ye^{ - x} + ye^{ - y} = 1 - e^{ - y} - ye^{ - x}
+\end{align*}
+$$
+
+- Si $(x, y)$ están por encima de la bisectriz, es decir, $(x, y)$ tal que $x < y$:
+
+$$
+\begin{align*}
+F(x, y) & = \int_0^x \left(\int_0^u e^{ - u} \, dv\right) \, du = \int_0^x e^{ - u} \left[v\right]_0^u \, du = \int_0^x e^{ - u} u \, du = \\[2ex]
+& \overset{*}{ = } \left[u \cdot ( - e^{ - u}) \right]_0^x - \int_0^x - e^{ - u} \, du = \left[u \cdot ( - e^{ - u}) - e^{ - u}\right]_0^x = \\[2ex]
+& = - x e^{ - x} - e^{ - x} - ( - 1) = - x e^{ - x} - e^{ - x} + 1
+\end{align*}
+$$
+
+(*) Integramos por partes, así tenemos que:
+
+$$
+\begin{align*}
+a = u \quad & \quad db = e^{ - u} du \\
+da = du \quad & \quad b = \int e^{ - u} \, du = - e^{ - u}
+\end{align*}
+$$
+
+Así, tenemos que la función de distribución es:
+
+$$
+\begin{align*}
+F(x, y) = \left\{
+\begin{array}{ll}
+1 - e^{ - y} - ye^{ - x} & \text{ si } 0 < y < x\\[1ex]
+1 - e^{ - x} - x e^{ - x} & \text{ si } y \geq x > 0\\[1ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Vamos a hallar las distribuciones marginales a través de la función de densidad* 
+
+Empecemos por la marginal de $X$, sabemos que:
+
+$$
+\begin{align*}
+f_X(x) = \int_\mathbb{R} f(x, y) \, dy = \int_0^x e^{ - x} \, dy = - e^{ - x} y \Big|_0^x = e^{ - x} x
+\end{align*}
+$$
+
+Análogamente, para la marginal de $Y$:
+
+$$
+\begin{align*}
+f_Y(y) = \int_\mathbb{R} f(x, y) \, dx = \int_y^\infty e^{ - x} \, dx = - e^{ - x} \Big|_y^\infty = e^{ - y}
+\end{align*}
+$$
+
+*Ahora vamos a hallar las distribuciones marginales a través de la función de distribución* 
+
+Para hallar la marginal de $X$ a través de la función de distribución, tenemos que:
+
+$$
+\begin{align*}
+F_X(x) = \lim_{y \to \infty} F(x, y) = \lim_{y \to \infty} 1 - e^{ - y} - ye^{ - x} = 1 - 
+\end{align*}
+$$
+
+*Ahora vamos a hallar $P(1 < X < 2, 0 < Y < 1)$* 
+
+Para hallar $P(1 < X < 2, 0 < Y < 1)$, tenemos que:
+
+$$
+\begin{align*}
+P(1 < X < 2, 0 < Y < 1) & = \iint_{1 < X < 2, 0 < Y < 1} f(x, y) \, dx \, dy = \int_1^2 \left(\int_0^1 e^{ - x} \, dy\right) \, dx = \\[2ex] 
+& = \int_1^2 e^{ - x} y \Big|_0^1 \, dx = \int_1^2 e^{ - x} \, dx = - e^{ - x} \Big|_1^2 = e^{ - 1} - e^{ - 2}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Sea $(X, Y)$ un vector aleatorio continuo para el que la función de densidad conjunta $X$ e $Y$ viene dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+cx(y - x) & \text{ si } 0 < x < y < 1\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+*Vamos a ver para que valor de $c$ es función de densidad* 
+
+Para que sea función de densidad tiene que cumplir las siguientes condiciones:
+
+$$
+\begin{align*}
+f \colon \mathbb{R}^2 \longrightarrow \mathbb{R} \text{ tq } \left\{
+\begin{array}{ll}
+f(x, y) \geq 0\quad \forall (x, y)\\
+\displaystyle \iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Para ver si se cumple la primera condición, notamos que $x > 0$ e $(y - x) > 0$ ya que $x < y$, por tanto $x(y - x) > 0$. Así, $f(x, y) \geq 0 \iff c > 0$. 
+
+Ahora, vamos a ver cuando se cumple la segunda condición:
+
+$$
+\begin{align*}
+\iint_{\mathbb{R}^2} f(x, y) \, dx \, dy & = \int_0^1 \left(\int_0^y cx(y - x) \, dx \right) \, dy = c \int_0^1 \left[\dfrac{x^2 y}{2} - \dfrac{x^3}{3}\right]_0^y \, dy = \\[2ex]
+& = c \int_0^1 \left( \dfrac{y^3}{2} - \dfrac{y^3}{3}\right) = c \int_0^1 \dfrac{y^3}{6} \, dy = c \left[\dfrac{y^4}{6 \cdot 4}\right]_0^1 = \frac{c}{24}
+\end{align*}
+$$
+
+Así, tenemos que, para que se cumpla la segunda condición, $c = 24$. 
+
+*Vamos a calcular la función de distribución* 
+
+Para hallar la función de distribución, notar que depende de si $(x, y)$ está por debajo o por encima de la bisectriz. 
+
+- Si $(x, y)$ está por debajo de la bisectriz, es decir, $x > y$:
+
+$$
+\begin{align*}
+F(x, y) & = \int_0^y \left(\int_0^u 24u(v - u)\, dv\right) \, du + \int_y^x \left(\int_0^y 24u(v - u) \, dv\right) \, du = \\[2ex]
+& = 24 \int_0^y \left[\dfrac{uv^2}{2} - u^2 v\right]_0^u \, du + 24 \int_y^x \left[\dfrac{uv^2}{2} - u^2 v\right]_0^y \, du = \\[2ex]
+& = 24 \int_0^y \left(\dfrac{u^3}{2} - u^3\right) \, du + 24 \int_y^x \left(\dfrac{uy^2}{2} - u^2 y\right) \, du = \\[2ex]
+& = 24 \int_0^y -\dfrac{u^3}{2} \, du + 24 \int_y^x\left(\dfrac{uy^2}{2} - u^2 y\right) \, du = \\[2ex]
+& = 24 \left[-\dfrac{u^4}{8}\right]_0^y + 24 \int_y^x \left[\dfrac{u^2y^2}{4} - \dfrac{u^3y}{3}\right]_y^x= \\[2ex]
+& = 24 \left( - \dfrac{y^4}{8} + \dfrac{x^2 y^2}{4} - \dfrac{x^3 y}{3} - \dfrac{y^4}{4} + \dfrac{y^4}{3}\right) = \\[2ex]
+& = 24 \left( - \dfrac{y^4}{24} + \dfrac{x^2y^2}{4} - \dfrac{x^3y}{3}\right) = - y^4 + 6x^2y^2 - 8x^3y
+\end{align*}
+$$
+
+- Si $(x, y)$ está por encima de la bisectriz, es decir, $x < y$:
+
+$$
+\begin{align*}
+F(x, y) & = \int_0^x \left(\int_0^u 24u(v - u) \, dv\right) \, du = 24 \int_0^x \left( - u^2 + \left[\dfrac{uv^2}{2}\right]_0^u \right) \, du = \\[2ex]
+& = 24 \int_0^x \left( \dfrac{u^3}{2} - u^2 \right) \, du = 24 \left[\dfrac{u^4}{8} - \dfrac{u^3}{3}\right]_0^x = 24 \left(\dfrac{x^4}{8} - \dfrac{x^3}{3} \right) = 3x^4 - 8x^3  
+\end{align*}
+$$
+
+Así, tenemos que la función de distribución es:
+
+$$
+\begin{align*}
+F(x, y) = \left\{
+\begin{array}{ll}
+- y^4 + 6x^2y^2 - 8x^3y & \text{ si } 0 < x < y < 1\\[2ex]
+3x^4 - 8x^3 & \text{ si } 0 < y < x < 1\\[2ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Ahora vamos a hallar las distribuciones marginales a través de la función de densidad* 
+
+Empezamos por la marginal de $X$, para ello:
+
+$$
+\begin{align*}
+f_X(x) & = \int_\mathbb{R} f(x, y) \, dy = \int_x^1 24x(y - x) \, dy = 24x \int_x^1 (y - x) \, dy = \\[2ex]
+& = 24x \left[\dfrac{y^2}{2} - xy\right]_x^1 = 24x \left(\dfrac{1}{2} - x - \dfrac{x^2}{2} + x^2\right) = 24x \left(\dfrac{1}{2} - x + \dfrac{x^2}{2}\right) = \\[2ex]
+& = 12x - 24x^2 + 12x^3
+\end{align*}
+$$
+
+Y análogamente, para la marginal de $Y$:
+
+$$
+\begin{align*}
+f_Y(y) & = \int_\mathbb{R} f(x, y) \, dx = \int_0^y 24x(y - x) \, dx = 24 \int_0^y (xy - x^2) \, dx =\\[2ex]
+& = 24 \left[\dfrac{x^2y}{2} - \dfrac{x^3}{3}\right]_0^y = 24 \left(\dfrac{y^3}{2} - \dfrac{y^3}{3} \right) = 24 \cdot \dfrac{y^3}{6} = 4y^3
+\end{align*}
+$$
+
+*Ahora vamos a hallar las distribuciones marginales a través de la función de distribución* 
+
+Para hallar la marginal de $X$ a través de la función de distribución, tenemos que:
+
+$$
+\begin{align*}
+F_X(x) = \lim_{y \to \infty} F(x, y) = \lim_{y \to 1} - y^4 + 6x^2y^2 - 8x^3y = -1 + 6x^2 - 8x^3
+\end{align*}
+$$
+
+Y para hallar la marginal de $Y$:
+
+$$
+\begin{align*}
+F_Y(y) = \lim_{x \to \infty} F(x, y) = \lim_{x \to 1} 3x^4 - 8x^3 = 3 - 8 = - 5
+\end{align*}
+$$
+
+Algo hice mal y por eso no cuadraron los valores. 
+
+*Vamos a hallar la probabilidad de $P(X + Y < 1)$* 
+
+Para hallar $P(X + Y < 1)$, tenemos que:
+
+$$
+\begin{align*}
+P(X + Y < 1) & = \iint_{X + Y < 1} f(x, y) \, dx \, dy = \int_0^1 \left(\int_0^{1 - u} 24u(v - u) \, dv\right) \, du = \\[2ex]
+& = 24 \int_0^1 \left( -u^2 + \left[\dfrac{uv^2}{2}\right]_{v = 0}^{v = 1 - u} \right) \, du = 24 \int_0^1 \left( - u^2 + \dfrac{u(1 - u)^2}{den_2} \right) \, du = \\[2ex]
+& = 24 \int_0^1 \left(\right)
+\end{align*}
+$$
+
+Hacer cuentas
+
+</DemBox>
+
+### Ejercicio 4
+*Hallar la función de distribución conjunta del vector aleatorio $(X, Y)$ cuya función de densidad conjunta viene dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+\dfrac{6(x + y^2)}{5} & \text{ si } x, y \in(0, 1)\\[2ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+*Primero vamos a ver que es función de densidad, para ello:* 
+
+Para que sea función de densidad tiene que cumplir las siguientes condiciones:
+
+$$
+\begin{align*}
+f \colon \mathbb{R}^2 \longrightarrow \mathbb{R} \text{ tq } \left\{
+\begin{array}{ll}
+f(x, y)\geq 0 \quad \forall (x, y)\\
+\displaystyle \iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Vemos que la primera condición se cumple trivialmente y para la segunda:
+
+$$
+\begin{align*}
+\iint_{\mathbb{R}^2} f(x, y) & = \int_{0}^1 \left(\int_0^1 \dfrac{6(x + y^2)}{5} \, dx\right) \, dy = \dfrac{6}{5} \int_0^1 y^2 + \left[\dfrac{x^2}{2}\right]_0^1 \, dy = \\[2ex]
+& = \dfrac{6}{5} \int_0^1 y^2 + \dfrac{1}{2} \, dy = \dfrac{6}{5} \left[\dfrac{y^3}{3} + \dfrac{y}{2}\right]_0^1 = \dfrac{6}{5} \left(\dfrac{1}{3} + \dfrac{1}{2}\right) = \dfrac{6}{5} \dfrac{5}{6} = 1 
+\end{align*}
+$$
+
+*Vamos a calcular la función de distribución* 
+
+Para hallar la función de distribución sabemos que:
+
+$$
+\begin{align*}
+F(X, Y) & = P(X \leq x \cap Y \leq y) = \iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = \int_0^x \left(\int_0^y \dfrac{6(u + v^2)}{5} \, dv \right) \, du = \\[2ex]
+& = \dfrac{6}{5} \int_0^x \left(u + \left[\dfrac{v^3}{3}\right]_0^y\right) \, du = \dfrac{6}{5} \left(\dfrac{y^3}{3} + \int_0^x u \, du \right) = \dfrac{6y^3}{15} + \dfrac{6}{5}\dfrac{u^2}{2}\Big|_0^x = \\[2ex]
+& = \dfrac{6y^3}{15} + \dfrac{6x^2}{10} = \dfrac{2y^2}{5} + \dfrac{3x^2}{5}
+\end{align*}
+$$
+
+*Vamos a hallar las distribuciones marginales a través de la función de densidad* 
+
+Para ello, tenemos que:
+
+$$
+\begin{align*}
+f_X(x) & = \int_\mathbb{R} f(x, y) \, dy = \int_0^1 \dfrac{6(x + y^2)}{5} \, dy = \dfrac{6}{5} \left(x + \left[\dfrac{y^3}{3}\right]_0^1 \right) = \dfrac{6}{5} \left(x + \dfrac{1}{3} \right) 
+\end{align*}
+$$
+
+Para hallar la marginal de $Y$:
+
+$$
+\begin{align*}
+f_Y(y) = \int_\mathbb{R} f(x, y) \, dx = \int_0^1 \dfrac{6(x + y^2)}{5} \, dx = \dfrac{6}{5} \left(y^2 + \int_0^1 x \, dx\right) = \dfrac{6}{5} \left(y^2 + \dfrac{1}{2} \right)
+\end{align*}
+$$
+
+También se pueden hallar a través de la función de distribución como:
+
+$$
+\begin{align*}
+F_X(x) = \lim_{y \to \infty} F(x, y) = \lim_{y \to 1} \dfrac{2y^2}{5} + \dfrac{3x^2}{5} = \dfrac{2}{5} + \dfrac{3x^2}{5}
+\end{align*}
+$$
+
+Y para la marginal de $Y$:
+
+$$
+\begin{align*}
+F_Y(y) = \lim_{x \to \infty} F(x, y) = \lim_{x \to 1} \dfrac{2y^2}{5} + \dfrac{3x^2}{5} = \dfrac{2y^2}{5} + \dfrac{3}{5}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*Sea $(X, Y)$ un vector aleatorio continuo con función de densidad conjunta dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+\dfrac{1}{9} \text{ si } (x, y) \in (0, 3) \times (1,4)\\
+0 \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Calcular $P(X < 2, Y < 2)$ y $P(2 < X < 2.5 | Y \leq 3)$* 
+
+<DemBox title="Demostración">
+
+Para hallar $P(X < 2, Y < 2)$, tenemos que:
+
+$$
+\begin{align*}
+P(X < 2, Y < 2) & = \int_0^2 \int_1^2 \dfrac{1}{9} \, dy \, dx = \dfrac{1}{9} \int_0^2 y \Big|_1^2 \, dx = \dfrac{1}{9} \int_0^2 2 - 1 \, dx =\\[2ex]
+& = \dfrac{1}{9} \int_0^2 1 \, dx = \dfrac{1}{9} \cdot x \Big|_0^2 = \dfrac{2}{9}
+\end{align*}
+$$
+
+Para hallar $P(2 < X < 2.5 | Y \leq 3)$, tenemos que:
+
+$$
+\begin{align*}
+P(2 < X < 2.5 | Y \leq 3) & = \dfrac{P(2 < X < 2.5, Y \leq 3)}{P(Y \leq 3)}
+\end{align*}
+$$
+
+Para hallar $P(Y \leq 3)$, tenemos que:
+
+$$
+\begin{align*}
+P(Y \leq 3) = \int_1^3 \int_0^3 \dfrac{1}{9} \, dx \, dy = \dfrac{1}{9} \int_1^3 3 \, dy = \dfrac{1}{9} \cdot 3 \cdot y \Big|_1^3 = \dfrac{1}{9} \cdot 3 \cdot 2 = \dfrac{2}{3}
+\end{align*}
+$$
+
+Y también:
+
+$$
+\begin{align*}
+P(2 < X < 2.5, Y \leq 3) = \int_2^{2.5} \int_1^3 \dfrac{1}{9} \, dy \, dx = \dfrac{1}{9} \int_2^{2.5} 3 \, dx = \dfrac{1}{9} \cdot 3 \cdot x \Big|_2^{2.5} = \dfrac{3}{9} \cdot 0.5 = \dfrac{1}{6}
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(2 < X < 2.5 | Y \leq 3) = \dfrac{P(2 < X < 2.5, Y \leq 3)}{P(Y \leq 3)} = \dfrac{\dfrac{1}{6}}{\dfrac{2}{3}} = \dfrac{1}{4}
+\end{align*}
+$$
+
+</DemBox>
+
+#### Ejercicio 6
+*Sea $(X, Y)$ un vector aleatorio continuo con función de densidad conjunta dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+\dfrac{k}{x^2y} \text{ si } x > 1, \, \dfrac{1}{x} \leq y \leq x\\[2ex]
+0 \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Calcular el valor de $k$ y la función de distribución conjunta* 
+
+<DemBox title="Demostración">
+
+Para calcular el valor de $k$ tenemos que ver que $f(x, y)$ sea función de densidad, para ello:
+
+$$
+\begin{align*}
+f \colon \mathbb{R}^2 \longrightarrow \mathbb{R} \text{ tq } \left\{
+\begin{array}{l}
+f(x, y) \geq 0 \quad \forall (x, y)\\
+\displaystyle \iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Para ver que se cumple la primera propiedad, tenemos que, dado que $x > 1$ e $y^2 >= 0$ entonces, para que el cociente sea positivo, $k > 0$. 
+
+Ahora, vamos a ver que se cumpla la segunda propiedad:
+
+$$
+\begin{align*}
+\int_1^\infty \left(\int_{\frac{1}{u}}^{u} \dfrac{k}{u^2 v} \, dv\right)\, du & = k \int_{1}^\infty \dfrac{1}{u^2} \left[\ln |v| \right]_{\frac{1}{u}}^{u} \, du = k \int_1^\infty \dfrac{1}{u^2} \left(\ln u - \ln \dfrac{1}{u}\right) \, du = \\[2ex]
+& = k \int_1^{\infty} \dfrac{1}{u^2} \left(\ln u - \ln 1 + \ln u\right) \, du = 2k \int_1^{\infty} \dfrac{1}{u^2} \ln u \, du
+\end{align*}
+$$
+
+Podemos hacer el cambio de variable:
+
+$$
+\begin{align*}
+a & = \ln u \implies u = e^a\\
+da & = \dfrac{1}{u}du
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+2k \int_1^\infty \dfrac{\ln u}{u^2} \, du & = 2 k\int_0^\infty \dfrac{a}{(e^a)^2} \cdot e^a \, da = 2k \int_0^\infty a \dfrac{e^a}{e^{2a}} \, da = 2k \int_0^\infty ae^{ - a} \, da = \\[2ex]
+& = 2k \left[\left[ - ae^{ - a} \right]_0^\infty + \int_0^\infty e^{ - a} \, da \right] = 2k \left(0 -\left[ - e^{ - a}\right]_0^\infty\right) = \\[2ex]
+& = 2k \left(0 -( - 1)\right) = 2k
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+2k = 1 \implies k = \dfrac{1}{2}
+\end{align*}
+$$
+
+Es decir, el valor para el que es función de densidad es $k = \dfrac{1}{2}$. 
+
+*Vamos a hallar las marginales*
+Para la marginal de $X$ tenemos que:
+
+$$
+\begin{align*}
+f_X(x) & = \int_\mathbb{R} f(x, y) \, dy = \int_{\frac{1}{x}}^x f(x, y) \, dy = \int_{\frac{1}{x}}^x \frac{1}{2x^2 y} \, dy = \\[2ex]
+& = \dfrac{1}{2x^2} \int_{\frac{1}{x}}^x \dfrac{1}{y} \, dy = \dfrac{1}{2x^2} \left[\ln y\right]_{\frac{1}{x}}^x =\dfrac{\ln x}{x^2}
+\end{align*}
+$$
+
+Y para la marginal de $Y$:
+
+$$
+\begin{align*}
+f_Y(y) & = \int_\mathbb{R} f(x, y) \, dx = \int_1^{\infty} \dfrac{1}{2x^2 y} \, dx = \dfrac{1}{2y} \int_1^{\infty} \dfrac{1}{x^2} \, dx = \dfrac{1}{2y} \left[-\dfrac{1}{x}\right]_1^\infty = \dfrac{1}{2y} + 1
+\end{align*}
+$$
+
+*Vamos a hallar la función condicionada* 
+
+Para hallar la función condicionada por $x$ tenemos que:
+
+$$
+\begin{align*}
+f(y|x) = \dfrac{f(x, y)}{f_X(x)} = \dfrac{\dfrac{1}{2x^2y}}{\dfrac{ln x}{x^2}} = \dfrac{1}{2y \ln x} \quad \text{ si } \dfrac{1}{x} \leq y \leq x
+\end{align*}
+$$
+
+Y ahora, para hallar la función condicionada por $y$ tenemos que:
+
+$$
+\begin{align*}
+f(x|y) = \dfrac{f(x, y)}{f_Y(y)} = \dfrac{\dfrac{1}{2x^2y}}{\dfrac{1}{2y} + 1} = \dfrac{1}{x^2 + 2y} \quad \text{ si } x > 1
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Sea $(X, Y)$ un vector aleatorio continuo con función de densidad conjunta dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+1 - 2k & \text{ si } 0 < x < 1, \, \, 0 < y < 1\\[2ex]
+k & \text{ si } 0 < x < 2, \, \, 1 < y < 2\\[2ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Determinar las distribuciones marginales y condicionadas dado $k \in (0, \frac{1}{2})$*
+<DemBox title="Demostración">
+
+*Vamos a hallar las marginales* 
+
+Para hallar la marginal de $X$ tenemos que:
+
+- Para $0 < x < 1$:
+
+$$
+\begin{align*}
+f_X(x) & = \int_0^1 f(x, y) \, dy = \int_0^1 (1 - 2k) \, dy + \int_0^1 k \, dy =\\[2ex]
+& = (1 - 2k) y\Big|_0^1 + y\Big|_0^1 = 1 - 2k + k = 1 - k
+\end{align*}
+$$
+
+- Para $1 < x < 2$:
+
+$$
+\begin{align*}
+f_X(x) = \int_1^2 f(x, y) \, dy = \int_1^2 k \, dy = k \int_1^2 \, dy = k
+\end{align*}
+$$
+
+Así, la función de densidad marginal de $X$ es:
+
+$$
+\begin{align*}
+f_X(x) = \left\{
+\begin{array}{ll}
+1 - k & \text{ si } 0 < x < 1\\[2ex]
+k & \text{ si } 1 < x < 2\\[2ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora, vamos a calcular la marginal de $Y$:
+
+- Si $0 < y < 1$:
+
+$$
+\begin{align*}
+f_Y(y) = \int_0^1 f(x, y) \, dx = \int_0^1 (1 - 2k) \, dx = (1 - 2k) x\Big|_0^1 = 1 - 2k
+\end{align*}
+$$
+
+- Si $1 < y < 2$:
+
+$$
+\begin{align*}
+f_Y(y) = \int_0^2 f(x, y) \, dx = \int_0^2 k \, dx = k \int_0^2 \, dx = 2k
+\end{align*}
+$$
+
+Así, la función de densidad marginal de $Y$ es:
+
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+1 - 2k & \text{ si } 0 < y < 1\\[2ex]
+2k & \text{ si } 1 < y < 2\\[2ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Vamos a hallar las funciones condicionadas* 
+
+Para hallar la función condicionada de $X$ dado $Y = y$, tenemos que:
+
+$$
+\begin{align*}
+f(x|y) = \dfrac{f(x,y)}{f_Y(y)}
+\end{align*}
+$$
+
+Así, tenemos que distinguir casos:
+
+- Si $0 < y < 1$:
+
+$$
+\begin{align*}
+f(x|y) = \dfrac{1 - 2k}{1 - 2k} = 1 \quad \text{ si } 0 < x < 1
+\end{align*}
+$$
+
+- Si $1 < y < 2$:
+
+$$
+\begin{align*}
+f(x|y) = \dfrac{k}{2k} = \dfrac{1}{2} \quad \text{ si } 0 < x < 2
+\end{align*}
+$$
+
+Así, tenemos que, la función condicionada de $X$ dado $Y = y$ es:
+
+$$
+\begin{align*}
+f(x|y) = \left\{
+\begin{array}{ll}
+1 & \text{ si } 0 < x < 1\\[2ex]
+\dfrac{1}{2} & \text{ si } 1 < x < 2\\[2ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora vamos a hallar la condicionada de $Y$ dado $X = x$:
+
+$$
+\begin{align*}
+f(y|x) = \dfrac{f(x, y)}{f_X(x)}
+\end{align*}
+$$
+
+Así, tenemos que también hay que distinguir casos:
+
+- Si $0 < x < 1$, hay que ver como se comporta $y$:
+
+- Si $1 < x < 2$:
+
+$$
+\begin{align*}
+f(y |x ) = \dfrac{1 - 2k}{k} \quad \text{ si } 1 < y < 2
+\end{align*}
+$$
+
+Así, la función condicionada de $Y$ dado $X = x$ es:
+
+$$
+\begin{align*}
+f(y|x) = \left\{
+\begin{array}{ll}
+\dfrac{1 - 2k}{1 - k} & \text{ si } 0 < y < 1\\[2ex]
+\dfrac{k}{1 - k} & \text{ si } 1 < y < 2\\[2ex]
+\dfrac{1 - 2k}{k} & \text{ si } 1 < x < 2
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 8
+*Sea $(X, Y)$ un vector aleatorio cuya función masa de probabilidad viene dada por:*
+
+$$
+\begin{array}{|c | c | c | c |}
+\hline
+Y \setminus X & -1 & 0 & 1\\ \hline
+-2 & \dfrac{1}{6} & \dfrac{1}{12} & \dfrac{1}{6}\\ \hline
+1 & \dfrac{1}{6} & \dfrac{1}{12} & \dfrac{1}{6}\\ \hline
+2 & \dfrac{1}{12} & 0 & \dfrac{1}{12} \\ \hline
+\end{array}
+$$
+
+*Calcular las distribuciones marginales y condicionadas*
+<DemBox title="Demostración">
+
+*Vamos a hacer un análisis completo del ejercicio. Así, vamos a comprobar que es función de masa de probabilidad* 
+
+Para que sea función de masa de probabilidad tiene que cumplir las siguientes condiciones:
+
+- $P(x, y) \geq 0 \quad \forall x, y$
+- $\sum_{x} \sum_y p(x, y) = 1$
+
+Así, vemos que se cumple la primera propiedad. Ahora, vamos a ver si se cumple la segunda:
+
+$$
+\begin{align*}
+\sum_x \sum_y p(x, y) = \dfrac{1}{6} + \dfrac{1}{12} + \dfrac{1}{6} + \dfrac{1}{6} + \dfrac{1}{12} + \dfrac{1}{6} + \dfrac{1}{12} + \dfrac{1}{12} = 1
+\end{align*}
+$$
+
+Así, vemos que es función de masa de probabilidad. 
+
+*Vamos a hallar ahora la función de distribución conjunta* 
+
+Para hallar la función de distribución conjunta, tenemos que:
+
+$$
+\begin{align*}
+F(x, y) = P(X \leq x, Y \leq y) = \sum_{i = 0}^x \sum_{j = -2}^y p(i, j)
+\end{align*}
+$$
+
+*Vamos a hallar las marginales* 
+
+Para hallar la marginal de $X$ tenemos que:
+
+$$
+\begin{align*}
+P(X = x) = \sum_y p(x, y) = p(x, - 2) + p(x, 1) + p(x, 2) 
+\end{align*}
+$$
+
+Así, tenemos que la función de masa de probabilidad marginal de $X$ es:
+
+$$
+\begin{align*}
+P(X = x) = \left\{
+\begin{array}{ll}
+\dfrac{1}{6} + \dfrac{1}{6} + \dfrac{1}{12} = \dfrac{5}{12} & \text{ si } x = - 1\\[2ex]
+\dfrac{1}{12} + \dfrac{1}{12} = \dfrac{1}{6} & \text{ si } x = 0\\[2ex]
+\dfrac{1}{6} + \dfrac{1}{6} + \dfrac{1}{12} = \dfrac{5}{12} & \text{ si } x = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Y para la marginal de $Y$:
+
+$$
+\begin{align*}
+P(Y = y) = \sum_x p(x, y) = p(0, y) + p(1, y) + p(2, y)
+\end{align*}
+$$
+
+Así, tenemos que la función de masa de probabilidad marginal de $Y$ es:
+
+$$
+\begin{align*}
+P(Y = y) = \left\{
+\begin{array}{ll}
+\dfrac{1}{6} + \dfrac{1}{12} + \dfrac{1}{6} = \dfrac{5}{12} & \text{ si } y = - 2\\[2ex]
+\dfrac{1}{6} + \dfrac{1}{12} + \dfrac{1}{6} = \dfrac{5}{12}& \text{ si } y = 1\\[2ex]
+\dfrac{1}{12} + \dfrac{1}{12} = \dfrac{1}{6} & \text{ si } y = 2
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Vamos a hallar las condicionadas* 
+
+Para hallar la condicionada de $X$ dado $Y = y$ tenemos que:
+
+$$
+\begin{align*}
+P(X = x| Y = y) = \dfrac{P(X = x, Y = y)}{P(Y = y)}
+\end{align*}
+$$
+
+Entonces, tenemos que distinguir casos:
+
+- Si $Y = -2$:
+
+- Si $Y = 1$:
+
+- Si $X = - 1 \implies P(X = - 1 | Y = 1) = \dfrac{\frac{1}{6}}{\frac{5}{12}} = \dfrac{2}{5}$
+- Si $X = 0 \implies P(X = 0 | Y = 1) = \dfrac{\frac{1}{12}}{\frac{5}{12}} = \dfrac{1}{5}$
+- Si $X = 1 \implies P(X = 1 | Y = 1) = \dfrac{\frac{1}{6}}{\frac{5}{12}} = \dfrac{2}{5}$
+- Si $Y = 2$:
+
+- Si $X = - 1 \implies P(X = - 1 | Y = 2) = \dfrac{\frac{1}{12}}{\frac{1}{6}} = \dfrac{1}{2}$
+- Si $X = 1 \implies P(X = 1 | Y = 2) = \dfrac{\frac{1}{12}}{\frac{1}{6}} = \dfrac{1}{2}$
+- Si $X = 0 \implies P(X = 0 | Y = 2) = 0$
+
+Para hallar la condicionada de $Y$ dado $X = x$ se hace análogamente.
+
+</DemBox>
+
+### Ejercicio 9
+*Sea $(X, Y)$ un vector aleatorio continuo con función de distribución conjunta dada por:*
+
+$$
+\begin{align*}
+F(x, y) = \left\{
+\begin{array}{ll}
+(1 - e^{ - x})(1 - e^{ - y}) & \text{ si } x > 0, \, y > 0\\
+0 & \text{ en el resto }	
+\end{array}
+\right.
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+*Hallar $P(X \leq 1, Y \leq 1)$* 
+
+Dado que $F(x, y) P(X \leq 1 \cap Y \leq 1)$ entonces:
+
+$$
+\begin{align*}
+P(X \leq 1, Y \leq 1) = F(1, 1) = (1 - e^{ - 1})(1 - e^{ - 1}) = (1 - e^{ - 1})^2
+\end{align*}
+$$
+
+*Hallar las distribuciones marginales de $X$ e $Y$* 
+
+Para hallar la marginal de $X$ tenemos que:
+
+$$
+\begin{align*}
+F_X(x) = \lim_{y \to \infty} F(x, y) = \lim_{y \to \infty} (1 - e^{ - x})(1 - e^{ - y}) = (1 - e^{ - x}) \cdot 1 = 1 - e^{ - x}
+\end{align*}
+$$
+
+Y para hallar la marginal de $Y$:
+
+$$
+\begin{align*}
+F_Y(y) = \lim_{x \to \infty} F(x, y) = \lim_{x \to \infty} (1 - e^{ - x})(1 - e^{ - y}) = (1 - e^{ - y}) \cdot 1 = 1 - e^{ - y}
+\end{align*}
+$$
+
+*Vamos a ver si son independientes $X$ e $Y$* 
+
+Para ver si son independientes, tenemos que ver si se cumple que:
+
+$$
+\begin{align*}
+F(x, y) = F_X(x) \cdot F_Y(y) \quad \forall x, y
+\end{align*}
+$$
+
+Esto se cumple trivialmente ya que:
+
+$$
+\begin{align*}
+F_X(x) \cdot F_Y(y) = (1 - e^{ - x})(1 - e^{ - y}) = F(x, y)
+\end{align*}
+$$
+
+*Hallar las distribuciones condicionadas de $X$ e $Y$* 
+
+Dado que $X$ e $Y$ son independientes, entonces:
+
+$$
+\begin{align*}
+F(x|y) = F_X(x) \quad \forall x, y
+\end{align*}
+$$
+
+Y también:
+
+$$
+\begin{align*}
+F(y|x) = F_Y(y) \quad \forall x, y
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F(x|y) = 1 - e^{ - x} \quad \forall x, y
+\end{align*}
+$$
+
+Y también:
+
+$$
+\begin{align*}
+F(y|x) = 1 - e^{ - y} \quad \forall x, y
+\end{align*}
+$$
+
+</DemBox>
+
+### Problema 15
+*La incidencia de la hepatitis en una población es una variable aleatoria continua $X$ que sigue una distribución gamma de parámetros $\alpha = 2$ y $\beta = \frac{1}{2}$. Para un grupo específico de personas, el número de personas que presenta hepatitis tiene distribución de Poisson de parámetro la incidencia de hepatitis.*
+
+1. *Obtener la probabilidad de que no más de dos personas desabollen la enfermedad en el citado grupo*
+<DemBox title="Demostración">
+
+Tenemos que $X$ es una variable aleatoria continua $X \rightsquigarrow \gamma(2, \frac{1}{2})$ y que $Y$ es una variable aleatoria que mide el número de personas que presentan hepatitis y que $Y|_{X = x} \rightsquigarrow P(X)$. Así, buscamos:
+
+$$
+\begin{align*}
+P(Y \leq 2) = P(Y = 0) + P(Y = 1) + P(Y = 2)
+\end{align*}
+$$
+
+Y tenemos que, por la probabilidad total:
+
+$$
+\begin{align*}
+P(Y = k) = \int_\mathbb{R} P(Y = k |X = x) \cdot f(x) \, dx
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(Y = k | X = x) = \dfrac{e^{ - x} ( - x)^k}{k!}
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+</DemBox>
+
+<DemBox title="Demostración">
+
+Sabemos que $X$ es una variable continua que mide la incidencia de la hepatitis y que, además, $X \rightsquigarrow \gamma(2, \frac{1}{2})$. Ademas, tenemos que $Y$ es una variable aleatoria que mide el número de personas que presentan hepatitis y que $Y|_{X = x} \rightsquigarrow P(X)$
+
+Ahora podemos aplicar la probabilidad total y tenemos que:
+
+$$
+\begin{align*}
+P(Y = k) = \int_{\mathbb{R}} P(Y = k | X = x) \cdot f(x) \, dx
+\end{align*}
+$$
+
+Y tenemos que $P(Y \leq 2) = P(Y = 0) + P(Y = 1) + P(Y = 2)$
+
+La segunda parte es la distribución $X |_{Y = 5}$ y queremos:
+
+$$
+\begin{align*}
+E(X |_{Y = 5}) = \int_{\mathbb{R}} x \cdot f(x |_{Y = 5}) \, dx
+\end{align*}
+$$
+
+Y también:
+
+$$
+\begin{align*}
+Var(X|_{Y = 5}) = E(X^2 |_{Y = 5}) - E^2(X |_{Y = 5})
+\end{align*}
+$$
+
+</DemBox>
