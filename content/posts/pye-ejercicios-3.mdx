@@ -1,0 +1,1643 @@
+---
+title: "Ejercicios Resueltos Probabilidad y Estadística - Parte III"
+date: "2026-01-29"
+description: "Resolución de ejercicios propuestos sobre variables aleatorias y funciones de distribución."
+tags: ["Probabilidad y Estadística", "Variables Aleatorias", "Funciones de Distribución"]
+---
+
+
+## Tema 2 - Resueltos
+### Ejercicio 1
+*Un fabricante de láminas de silicio dispone de dos plantas de fabricación, en la planta más antigua (que soporta el 70\% de la producción) la probabilidad de que una lámina resulte defectuosa por contaminación es 0.005 y por el manejo de los empleados 0.007. En la otra planta, más moderna, la probabilidad de contaminación ambiental se ha reducido a la mitad manteniéndose la otra igual. Las dos causas de defecto actúan independientemente. En un lote de 100 láminas producidas por la misma planta, ¿cuál es la probabilidad de que haya alguna defectuosa?*
+
+<DemBox title="Demostración">
+
+El experimento consiste en observar si una lámina de silicio es defectuosa o no. Así, tenemos que es un experimento de Bernoulli, donde el éxito es que la lámina sea defectuosa. Así, podemos definir la variable aleatoria $X$ como el número de láminas defectuosas en un lote de 100 láminas. Es decir:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small nº de láminas defectuosas}
+\end{align*}
+$$
+
+De esta forma, tenemos que $X \rightsquigarrow \mathcal{B} (100, p)$ donde $p$ es la probabilidad de que una lámina sea defectuosa. 
+
+Ahora tenemos que calcular $p$, es decir:
+
+$$
+\begin{align*}
+P(\text{\small lámina defectuosa})
+\end{align*}
+$$
+
+Para facilitar la notación, vamos a llamar $A$ a las láminas de la planta antigua, $M$ a las láminas de la planta moderna, $D_C$ a las láminas defectuosas por contaminación y $D_M$ a las láminas defectuosas por el manejo de los empleados. Con esto, tenemos que:
+
+$$
+\begin{align*}
+P(A) = \dfrac{70}{100} = 1 - P(A^c) = 1 - P(M) \implies P(M) = 0.3
+\end{align*}
+$$
+
+Además, podemos sacar que:
+
+$$
+\begin{align*}
+P(D_C|A) = 0.005\quad P(D_M|A) = 0.007 \quad P (D_C|M) = 0.0025 \quad P(D_M|M) = 0.007
+\end{align*}
+$$
+
+Así, la probabilidad de que una lámina sea defectuosa es, por la fórmula de la probabilidad total:
+
+$$
+\begin{align*}
+P(D) & = P(D|A) \cdot P(A) +  P(D |M) \cdot P(M) = \\
+& = (P(D_C|A) + P(D_M|A)) \cdot P(A) + (P(D_C|M) + P(D_M|M)) \cdot P(M) = \\
+& = (0.005 + 0.007) \cdot 0.7 + (0.0025 + 0.007) \cdot 0.3 = 0.01125
+\end{align*}
+$$
+
+Entonces, podemos escribir ya $X$ como:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{B} (100, 0.01125)
+\end{align*}
+$$
+
+Entonces, queremos hallar la probabilidad de que haya, al menos, una defectuosa, es decir, de que $X \geq 1$
+
+$$
+\begin{align*}
+P(X \geq 1) = 1 - P(X = 0) = 1 - \binom{100}{0} 0.01125^0 (1 - 0.01125)^{100} \approx 0.67
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*Para controlar la calidad de un producto envasado se eligen al azar, con devolución, diez envases de un lote de 100. La empresa envasadora afirma que en el lote a lo sumo el 2\% de los envases son defectuosos. Calcular la probabilidad de que entre los 10 no haya ninguno defectuoso*
+
+<DemBox title="Demostración">
+
+El experimento consiste en observar si un envase es o no defectuoso, así tenemos que ver que:
+
+$$
+\begin{align*}
+P(\text{\small no hay envases defectuosos entre 10 cogidos al azar (de 100)})
+\end{align*}
+$$
+
+Así, tenemos que estamos ante un experimento de Bernoulli donde definimos el éxito como que un producto sea defectuoso. Así, tenemos que, si $D$ es que un producto sea defectuoso, entonces:
+
+$$
+\begin{align*}
+P(D) \leq \frac{2}{100} = 0.02
+\end{align*}
+$$
+
+Así, definimos $X$ como una variable aleatoria tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{nº de aparatos defectuosos (de 10)}
+\end{align*}
+$$
+
+Entonces, tenemos que, en función de $P(D) = p$ la variable aleatoria $X$ es de la forma:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{B}(10, p) \quad \text{ con } p \in \{0, 0.01, 0.02\}
+\end{align*}
+$$
+
+Así, por el teorema de la probabilidad total, se tiene que:
+
+$$
+\begin{align*}
+P(X = 0) & = P(X = 0 | p = 0) \cdot P(p = 0) + P(X = 0 | p = 0.01) \cdot P(p = 0.01) + \\ 
+&  + P(X = 0 | p = 0.02) \cdot P(p = 0.02) = \\[3ex]
+& = \binom{10}{0} 0^0 (1 - 0)^{10} \cdot \frac{1}{3} + \binom{10}{0} 0.01^0 (1 - 0.01)^{10} \cdot \frac{1}{3} + \\
+&  + \binom{10}{0} 0.02^0 (1 - 0.02)^{10} \cdot \frac{1}{3} = 0.9071
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Una máquina está programada para llenar recipientes con 10 litros de capacidad. Sin embargo, la variabilidad inherente a cualquier tipo de máquina es la causa de que las cantidades de contenido sean distintas de recipiente a recipiente. Si la distribución del contenido que arroja la máquina en cada recipiente es normal con una desviación típica de 0.02 litros, determinar la cantidad media del contenido para que solo el 5\% de los recipientes reciban menos de 10 litros.*
+
+<DemBox title="Demostración">
+
+Sea $X$ la capacidad del recipiente que se llena en litros, donde sabemos que:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{N} (\mu, \sigma) \quad \text{ con } \sigma = 0.02
+\end{align*}
+$$
+
+Entonces, queremos hallar $\mu$ tal que:
+
+$$
+\begin{align*}
+P(X < 10) = 0.05
+\end{align*}
+$$
+
+Como $X$ es normal, podemos obtener este valor tipificando, así, tenemos que:
+
+$$
+\begin{align*}
+P(X < 10) = P\left(\frac{X - \mu}{0.02} < \frac{10 - \mu}{0.02}\right) = P\left(\mathcal{N}(0,1) < \frac{10 - \mu}{0.02}\right) = 0.05
+\end{align*}
+$$
+
+Como $P(X < 10)$ es menor a 0.5, entonces, lo que buscamos es:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_2.svg)
+
+Para ello, notamos que buscamos el valor tal que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0,1) < - z) = 1 - 0.05 = 0.95 \implies z = 1,65
+\end{align*}
+$$
+
+Entonces, nuestro valor es $z = -1.65$, entonces:
+
+$$
+\begin{align*}
+\frac{10 - \mu}{0.02} = -1.65 \implies \mu = 10 + 0.02 \cdot 1.65 = 10.033
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*El número de emisiones potencialmente contaminantes (ECPs) que se detectan semanalmente en una fábrica sigue una distribución de Poisson. Sabiendo que el porcentaje de semanas en las que se detecta exactamente 1 EPC es la mitad del correspondiente a las semanas en que no se detecta ninguna*
+
+- *Calcular el número esperado de ECPs por semana*
+
+<DemBox title="Demostración">
+
+Podemos definir $X$ como una variable aleatoria tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small número de EPC detectadas semanalmente}
+\end{align*}
+$$
+
+y sabemos que $X \rightsquigarrow \mathcal{P}(\lambda)$, así, nos interesa conocer este valor de $\lambda$, para ello, tenemos que:
+
+$$
+\begin{align*}
+100 \cdot P(X = 1) = 100 \cdot \frac{P(X = 0)}{2} \iff \frac{e^{ - \lambda} \lambda^1}{1!} = \frac{e^{ - \lambda} \lambda^0}{2 \cdot 0!} \iff \lambda = 0.5
+\end{align*}
+$$
+
+Así, tenemos que $X \rightsquigarrow \mathcal{P}(X = 0.5)$ y, por ello, para calcular el número esperado de ECPs por semana, tenemos que:
+
+$$
+\begin{align*}
+E(X) = \lambda = 0.5
+\end{align*}
+$$
+
+Entonces, el valor esperado de ECPs por semana es 0.5
+
+</DemBox>
+- *Si se eligen independientemente tres semanas, determinar la probabilidad de que en la segunda y en la tercera semana se detecten 2 ECPs en cada una*
+
+<DemBox title="Demostración">
+
+Queremos obtener, dadas tres semanas cualesquiera, la probabilidad de que en las dos últimas se emitan 2ECPs (en cada una), es decir, que $P(X = 2)$:
+
+$$
+\begin{align*}
+P((X_2 = 2) \cap (X_3 = 2))
+\end{align*}
+$$
+
+como son sucesos independientes, tenemos que:
+
+$$
+\begin{align*}
+P((X_2 = 2) \cap (X_3 = 2)) & = P(X_2 = 2) \cdot  P(X_3 = 3) =\\
+& = P(X = 2)^2 = \left(\frac{e^{ - 0.5} 0.5^2}{2!}\right)^2 = 0.0057
+\end{align*}
+$$
+
+</DemBox>
+- *Una semana en la que se detecta a lo sumo una EPC se califica como ``semana sin riesgo excesivo''. Si se considera un periodo de cinco semanas, determinar la probabilidad de que, al menos, dos semanas resulten sin riesgo excesivo*
+
+<DemBox title="Demostración">
+
+Una semana sin riegos es aquella que tiene, a lo sumo, una ECP, es decir: $P(X \leq 1)$. 
+
+Notamos que, observar si una semana es o no semana sin riesgos es un experimento de Bernoulli donde definimos el éxito a que sea una semana sin riegos, es decir $X \leq 1$. 
+
+Podemos definir una variable aleatoria $Y$ tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X) \\
+\omega & \longrightarrow Y(\omega) = \text{número de semanas sin riesgos (de 5)}
+\end{align*}
+$$
+
+Así, tenemos que $Y \rightsquigarrow \mathcal{B}(5, P(X \leq 1))$. Podemos calcular $P(X \leq 1)$ como:
+
+$$
+\begin{align*}
+P(X \leq 1) & = P(X = 0) + P(X = 1) = \frac{e^{ - 0.5} \cdot 0.5^0}{0!} + \frac{e^{ - 0.5} \cdot 0.5^1}{1!} = \\
+& = e^{ - 0.5} + 0.5 e^{ - 0.5} = 1.5 e^{ - 0.5} \approx 0.9098
+\end{align*}
+$$
+
+Entonces, tenemos que $Y \rightsquigarrow \mathcal{B}(5, 0.9098)$ entonces, queremos ver que, al menos, 2 semanas sean sin riesgos es decir:
+
+$$
+\begin{align*}
+P(Y \geq 2) & = 1 - P(Y < 2) = 1 - P(Y = 1) - P(Y = 0) = \\
+& = 1 - \binom{5}{1} \cdot 0.9098^1 \cdot (1 - 0.9098)^{4} - \binom{5}{0} \cdot 0.9098^0 \cdot (1 - 0.9098)^{5} \\
+& \approx 0.9997
+\end{align*}
+$$
+
+</DemBox>
+- *Si cada semana en que se detecta más de 1 EPC la fábrica resulta sancionada por la Agencia de Protección de Medio Ambiente con 2500 euros, ¿cuál será la sanción semanal media que se impondría a la empresa?*
+
+<DemBox title="Demostración">
+
+A la empresa se la sancionará cuando $X > 2$, así podemos considerar un experimento de Bernoulli a si la empresa es o no sancionada, donde definimos el éxito como que la empresa es sancionada. Por ello, definimos $Z$ una variable aleatoria tal que:
+
+$$
+\begin{align*}
+Z \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto Z(\omega) = \left\{
+\begin{array}{ll}
+1 & \text{ si es sancionada}\\
+0 & \text{ en caso contrario} 
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, podemos calcular $E(Z) = P(X \geq 2) = 1 - P(X \leq 1) = 1 - 0.9098 = 0.0902$
+Entonces, si solo les sancionan 0.0902 semanas, tenemos que:
+
+$$
+\begin{align*}
+0.0902 \cdot 2500 = 225.5
+\end{align*}
+$$
+
+</DemBox>
+
+
+#### Ejercicio 5
+*Un fabricante compra unidades de cierto producto a dos proveedores $A$ y $B$. El 60\% de la compra la realiza al proveedor $A$ y el resto al $B$. El porcentaje de unidades defectuosas del proveedor $A$ es un 3\% y el de $B$ es del 5 \%*
+
+- *Si el fabricante mezcla las unidades remitidas por ambos proveedores y se eligen 5, ¿cuál es la probabilidad de encontrar alguna defectuosa?*
+
+<DemBox title="Demostración">
+
+El expediento consiste en observar si una unidad del producto es o no defectuosa. Así, denotamos los siguientes sucesos (con el fin de que sea más fácil trabajar con ellos):
+
+- $A =$ del proveedor $A$
+- $B =$ del proveedor $B$
+- $D_A = $ defectuosa del proveedor $A$
+- $D_B = $ defectuosa del proveedor $B$
+
+Así, lo que queremos ver es:
+
+$$
+\begin{align*}
+P(D \, \text{eligiendo 5 al azar de la mezcla})
+\end{align*}
+$$
+
+Podemos hallar las siguientes probabilidades a partir del enunciado:
+
+$$
+\begin{align*}
+P(A) = \frac{60}{100} = 0.6 \quad \text{ y } \quad P(B) = \frac{40}{100} = 0.4
+\end{align*}
+$$
+
+Además, sabemos que:
+
+$$
+\begin{align*}
+P(D_A) = \frac{3}{100} = 0.03 \quad \text{ y } \quad P(D_B) = \frac{5}{100} = 0.05
+\end{align*}
+$$
+
+Así, como ver si un producto es defectuoso o no, estamos ante un experimento de Bernoulli. Podemos definir el éxito como encontrar un producto defectuoso. Así definimos una variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathcal{R}, P_X) \\
+\omega & \longmapsto X(\omega) = \text{número de unidades defectuosas (de 5)}
+\end{align*}
+$$
+
+Así, tenemos que $X \rightsquigarrow \mathcal{B} (5, P(D))$ y, por el teorema de la probabilidad total, podemos hallar $P(D)$ como:
+
+$$
+\begin{align*}
+P(D) & = P(D|A) \cdot P(A) + P(D|B) \cdot P(B) = \\
+& = 0.03 \cdot 0.6 + 0.05 \cdot 0.4 = 0.038
+\end{align*}
+$$
+
+Así, queremos hallar $P(X \geq 1)$, es decir:
+
+$$
+\begin{align*}
+P(X \geq 1) = 1 - P(X = 0) = 1 - \binom{5}{0} 0.038^0 (1 - 0.038)^5 = 1 - 0.82386 \approx 0.176
+\end{align*}
+$$
+
+</DemBox>
+- *Si ambos proveedores empaquetan sus productos en loses de 20 unidades y un lote contenía 2 unidades defectuosas, ¿cuál es la probabilidad de que el lote provenga del proveedor $A$?*
+
+<DemBox title="Demostración">
+
+En este caso, queremos calcular:
+
+$$
+\begin{align*}
+P(A | \text{hay dos defectuosas en el lote})
+\end{align*}
+$$
+
+Así, tenemos que aplicar el teorema de Bayes, es decir:
+
+$$
+\begin{align*}
+P(A | 2D) = \frac{P(2D | A) \cdot P(A)}{P(2D|A) \cdot P(A) + P(2D|B) \cdot P(B)}
+\end{align*}
+$$
+
+Podemos calcular las probabilidades individuales como:
+
+$$
+\begin{align*}
+P(2D|A) &= P(\mathcal{B}(20, 0.03) = 2) = \binom{20}{2} \cdot 0.03^2 \cdot (1 - 0.03)^{18} \approx 0.0985\\
+P(2D|B) & = P(\mathcal{B}(20, 0.05) = 2) = \binom{20}{2} \cdot 0.05^2 \cdot (1 - 0.05)^{18} \approx 0.1914
+\end{align*}
+$$
+
+Así, podemos calcular ya la expresión deseada como:
+
+$$
+\begin{align*}
+P(A |2D) = \frac{0.0985 \cdot 0.6}{0.0985 \cdot 0.6 + 0.1914 \cdot 0.4} = 0.435
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Se realiza un experimento consistente en promover una reacción química, examinar la presión al finalizar la misma (A = alta, M = media, B = baja) y el tiempo que tarda en completarse (C = menos de 10 min, L = más de 10 min). Por experiencias anteriores se sabe que P(B) = 0.15, P(M) = 0.25, P(A) = 0.6, $P(B \cap C) = 0.05$, $P(M\cap C) = 0.15$ y $P(A \cap C) = 0.4$. Se repite la experiencia 3 veces más de forma independiente. Calcular:*
+
+- *La probabilidad de que se presente $B$ en alguno de los resultados*
+<DemBox title="Demostración">
+
+El experimento, en este caso, consiste en ver los resultados de una reacción química y, como queremos ver si aparece o no $B$, entonces podemos considerar que estamos ante un experimento de Bernoulli. Definimos el éxito como la aparición de $B$, entonces podemos definir la variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{número de veces que aparece $B$ (en 3 experimentos)}
+\end{align*}
+$$
+
+Así, tenemos que $X \rightsquigarrow \mathcal{B}(3, P(B))$
+
+Para hallar $P(X \geq 1)$ basta con:
+
+$$
+\begin{align*}
+P(X \geq 1) = 1 - P(X = 0) = 1 - \binom{3}{0} 0.15^0 (1 - 0.15)^3 = 1 - 0.6141 = 0.3859
+\end{align*}
+$$
+
+</DemBox>
+- *La probabilidad de que si en los tres experimentos la presión ha sido baja, en al menos 2 de ellos se haya tardado más de 10 min*
+<DemBox title="Demostración">
+
+El experimento consiste en observar si la duración ha sido $L$ o no, es decir, que estamos ante un experimento de Bernoulli. Definimos como éxito que el experimento haya sido de más de 10 min, es decir, $L$. Así, podemos definir una variable aleatoria tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto Y(\omega) = \text{\small número de experimentos con L (de tres)}
+\end{align*}
+$$
+
+Así, tenemos que $Y \rightsquigarrow \mathcal{B}(3, P(L|B))$. Ahora tenemos que hallar $P(L|B)$ es decir:
+
+$$
+\begin{align*}
+P(L|B) = 1 - P(C | B) = 1 - \frac{P(B \cap C)}{P(B)} = 1 - \frac{0.05}{0.15} = \frac{2}{3} \approx 0.6667
+\end{align*}
+$$
+
+Así, lo que queremos es:
+
+$$
+\begin{align*}
+P(Y \geq 2) & = P(Y = 2) + P(Y = 3) = \\
+& = \binom{3}{2} \left(\frac{2}{3}\right)^2 \left(\frac{1}{3}\right)^1 + \binom{3}{3} \left(\frac{2}{3}\right)^3 \left(\frac{1}{3}\right)^0 =  0.7407
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 7
+*Sea $X$ la variable aleatoria ``mayor número obtenido en $n$ estaciones con reemplazamiento de una caja que contiene $N$ bolas numeradas del 1 al $N$''. Determinar la función de probabilidad de $X$ en general.*
+
+<DemBox title="Demostración">
+
+El experimento consiste en observar el número más grande obtengo en $n$ extracciones de bolas numeradas del 1 al $N$. 
+
+Tenemos que $X$ es variable aleatoria tal que $X = $ ``mayor número obtenido en $n$ extracciones con reemplazamiento''. Por ello, $X$ toma valores en $\{1, \ldots, N\}$. 
+
+Determinar el suceso $X = k$ equivale a que el máximo de las extracciones sea $k$, es decir, que en las $n$ extracciones tiene que salir $k$ al menos una vez y, además, en las $n$ extracciones no puede salir ningún número mayor que $k$. 
+
+Si $X = k$ y $k$ solo ha salido una vez, tendríamos que:
+
+$$
+\begin{align*}
+P(\text{\small una extracción} \leq k) = \frac{k}{N} 
+\end{align*}
+$$
+
+Para $n$ extracciones independientes, la probabilidad de que todas estén en $\{1, \ldots, k\}$ es:
+
+$$
+\begin{align*}
+P(\text{\small todas las extracciones} \leq k) = \left(\frac{k}{N}\right)^n
+\end{align*}
+$$
+
+Equivalentemente podemos calcular la probabilidad de que todas las extracciones estén en $\{1, \dots, k - 1\}$:
+
+$$
+\begin{align*}
+P(\text{\small todas las extracciones} \leq k - 1) = \left(\frac{k - 1}{N}\right)^n
+\end{align*}
+$$
+
+Así, tenemos que la probabilidad de que el mayor valor sea exactamente $k$ es la diferencia de estas dos probabilidades:
+
+$$
+\begin{align*}
+P(X = k) = \left(\frac{k}{N}\right)^n - \left(\frac{k - 1}{N}\right)^n
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 8
+*Sea $X$ una variable aleatoria con distribución exponencial de parámetro $\lambda$. Probar que $X$ ``no tiene memoria'', es decir, que para cualesquiera $s, t > 0$ se tiene que:*
+
+$$
+\begin{align*}
+P(X > s + t | X > s) = P(X > t)
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Dado que $X \rightsquigarrow \mathcal{E}(\lambda)$, tenemos que:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } x \geq 0\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces queremos ver que $P(X > r + s | X > s) = P(X > r)$, es decir:
+
+$$
+\begin{align*}
+P(X > r + s | X > s) & = \frac{P(X > r + s \cap X > s)}{P(X > s)} = \frac{P(X > r + s)}{P(X > s)} = \\[2ex]
+& = \frac{\lambda e^{ - \lambda (r + s)}}{\lambda e^{ - \lambda s}} = \dfrac{\displaystyle \int_{r + s}^{ \infty}\lambda e^{ - \lambda x} \, dx}{\displaystyle \int_{s}^{\infty} \lambda e^{ - \lambda x} \, dx} \overset{*}{ = } \\[2ex]
+&= \dfrac{ - e^{ - \lambda x}\big|_{r + s}^{\infty}}{- e^{ - \lambda x}\big|_{s}^{\infty}} = \dfrac{-  e^{ - \lambda \infty} - ( - e^{ - \lambda (r + s)})}{ -  e^{ - \lambda \infty} - ( -e^{ - \lambda s})} \overset{**}{=} \\[2ex]
+& = \dfrac{e^{ - \lambda (r + s)}}{e^{ - \lambda s}} = e^{ - \lambda r} = P(X > r)
+\end{align*}
+$$
+
+En (*) hemos aplicado:
+
+$$
+\begin{align*}
+\displaystyle \int \lambda e^{ - \lambda x} \, dx = \lambda \int e^{ - \lambda x} \, dx = \lambda \int e^u \, \frac{du}{ - \lambda} = \frac{\lambda}{ - \lambda} e^u = - e^{ - \lambda x} + C
+\end{align*}
+$$
+
+donde $u = - \lambda x \Longrightarrow du = - \lambda dx \implies dx = \dfrac{du}{ - \lambda}$ 
+
+En (**) hemos aplicado que:
+
+$$
+\begin{align*}
+e^{ - \lambda \infty} = e^{ - \infty} = \dfrac{1}{e^{ \infty}} = 0
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 9
+*Sea $X$ una variable aleatoria con distribución exponencial de parámetro $\lambda$. Determinar la distribución de la variable $Y_k$ definida a partir de $X$ del siguiente modo:*
+
+$$
+\begin{align*}
+Y_k = \left\{
+\begin{array}{ll}
+X(\omega) & \text{ si } X(\omega) < k\\
+k & \text{ si } X(\omega) \geq k
+\end{array}
+\right. \quad \text{ con } k > 0
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Sabemos que $X \rightsquigarrow \mathcal{E}(\lambda)$, es decir:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } x \geq 0\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Vamos a probar su comportamiento con algunos valores de $k$.
+
+- Sea $k = 1$ entonces:
+
+$$
+\begin{align*}
+Y_1 = \left\{
+\begin{array}{ll}
+X(\omega) & \text{ si } X(\omega) < 1\\
+1 & \text{ si } X(\omega) \geq 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Vamos a ver donde $X(\omega) < 1$:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } X(\omega) < 1\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+y tenemos que:
+
+$$
+\begin{align*}
+\lambda e^{ - \lambda x} < 1 & \iff e^{ - \lambda x} < \frac{1}{\lambda} \iff - \lambda x < \ln\left(\frac{1}{\lambda}\right) \iff x > - \frac{1}{\lambda} \ln(\lambda)
+\end{align*}
+$$
+
+Así, $Y_1$ es una variable aleatoria tal que:
+
+$$
+\begin{align*}
+f_{Y_1}(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } x > -\frac{1}{\lambda} \ln(\lambda) \\
+1 & \text{ en el resto de casos}
+\end{array}
+\right.
+\end{align*}
+$$
+
+- Sea $k = 2$ entonces:
+
+$$
+\begin{align*}
+Y_2 = \left\{
+\begin{array}{ll}
+X(\omega) & \text{ si } X(\omega) < 2\\
+2 & \text{ si } X(\omega) \geq 2
+\end{array}
+\right.
+\end{align*}
+$$
+
+Vamos a ver donde $X(\omega) < 2$:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } X(\omega) < 2\\
+2 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+y tenemos que:
+
+$$
+\begin{align*}
+\lambda e^{ - \lambda x} < 2 & \iff e^{ - \lambda x} < \frac{2}{\lambda} \iff - \lambda x < \ln\left(\frac{2}{\lambda}\right) \iff x > - \frac{1}{\lambda} \ln\left(\frac{2}{\lambda}\right)
+\end{align*}
+$$
+
+Así, $Y_2$ es una variable aleatoria tal que:
+
+$$
+\begin{align*}
+f_{Y_2}(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } x > - \frac{1}{\lambda} \ln \left(\frac{2}{\lambda}\right)\\
+2 & \text{ en el resto de casos}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, podemos intuir ya el comportamiento de $k$ en general. Vamos a formalizarlo. 
+
+Sea $k > 0$ cualquiera, entonces:
+
+$$
+\begin{align*}
+Y_k = \left\{
+\begin{array}{ll}
+X(\omega) & \text{ si } X(\omega) < k\\
+k & \text{ si } X(\omega) \geq k
+\end{array}
+\right.
+\end{align*}
+$$
+
+Es decir:
+
+$$
+\begin{align*}
+f_{Y_k}(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } X(\omega) < k\\
+k & \text{ en el resto de casos}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Vamos a ver donde $X(\omega) < k$:
+
+$$
+\begin{align*}
+\lambda e^{ - \lambda x} < k & \iff e^{ - \lambda x} < \frac{k}{\lambda} \iff - \lambda x < \ln\left(\frac{k}{\lambda}\right) \iff x > -\frac{1}{\lambda} \ln\left(\frac{k}{\lambda}\right)
+\end{align*}
+$$
+
+Así, $Y_k$ es una variable aleatoria tal que:
+
+$$
+\begin{align*}
+f_{Y_k}(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } x > -\frac{1}{\lambda} \ln\left(\frac{k}{\lambda}\right)\\
+k & \text{ en el resto de casos}
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+
+### Ejercicio 10
+*Sea $X$ una variable aleatoria con distribución $\mathcal{N}(0, 1)$. Determinar la distribución de la variable $Y = |X|$, es decir, definida a partir de $X$ como sigue:*
+
+$$
+\begin{align*}
+Y(\omega) = \left\{
+\begin{array}{ll}
+X(\omega) & \text{ si } X(\omega) \geq 0\\
+- X(\omega) & \text{ si } X(\omega) < 0
+\end{array}
+\right\}
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Tenemos que $F_Y(y) = P(Y \leq y) = 0 \quad \forall y < 0$ y, $\forall y \geq 0$ se cumple que:
+
+$$
+\begin{align*}
+F_Y(y) = P(Y \leq y) = P(|X| \leq y) = P( - y \leq X \leq y) = \Phi(y) - \Phi( - y)
+\end{align*}
+$$
+
+En consecuencia, dado que $g(y) = F_Y'(y)$ que tomará valores distintos de cero donde sea derivable y 0 donde no, denotamos $f_X$ a la función de densidad de $X$ y tenemos que:
+
+$$
+\begin{align*}
+g(y) & = F_Y'(y) = \Phi(y) + \Phi( - y) = f_Y(y) - ( - 1) f( - y) = \\
+& =\frac{1}{\sqrt{2\pi}} e^{ - ( - y^2)/2} + \frac{1}{\sqrt{2\pi}} e^{ - y^2/2} = \frac{2}{\sqrt{2\pi}} e^{ - y^2/2} = \sqrt{\frac{2}{\pi}} e^{ - y^2/2}
+\end{align*}
+$$
+
+Es decir:
+
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+\sqrt{\frac{2}{\pi}} e^{ - y^2/2} & \text{ si } y \geq 0\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 11
+*Se considera que la relación existente entre la presión $P$ y el volumen $V$ de un gas viene determinada por la ecuación $P \cdot V = 3$. Si la presión se distribuye al azar (es decir, uniformemente) entre 3 y 6 atmósferas, determinar:*
+
+1. *El volumen esperado del gas*
+
+<DemBox title="Demostración">
+
+Por los datos, sabemos que $P$ se comporta como una variable aleatoria uniforme de la forma:
+
+$$
+\begin{align*}
+f(p) = \left\{
+\begin{array}{ll}
+\frac{1}{6 - 3} = \frac{1}{3} & \text{ si } 3 \leq p \leq 6\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, queremos ver $E(V)$, es decir:
+
+$$
+\begin{align*}
+E(V) & = E \left(\frac{3}{P}\right) = \int_{\infty}^{\infty} \frac{3}{p} \cdot f(p) \, dp = \int_{3}^{6} \frac{3}{p} \cdot \frac{1}{3} \, dp =\\
+& = \int_{3}^{6} \frac{1}{p} \, dp = \ln(6) - \ln(3) = \ln(2)
+\end{align*}
+$$
+
+</DemBox>
+2. *La función de densidad del volumen del gas*
+<DemBox title="Demostración">
+
+Queremos hallar $f_V(v)$. Para ello, podemos determinar primero su función de distribución. Como $P$ toma valores en $[3, 6]$ y $V = \frac{3}{P}$, entonces $V$ tomará valores en $\left[\frac{1}{2}, 1\right]$. Así, tenemos que:
+
+- Si $v \leq 0.5$ entonces:
+
+$$
+\begin{align*}
+f_V(v) = P(V \leq v) = 0
+\end{align*}
+$$
+
+- Si $1 < v$ entonces:
+
+$$
+\begin{align*}
+f_V(v) = P(V \leq v) = 1
+\end{align*}
+$$
+
+- Si $0.5 < v \leq 1$ entonces:
+
+$$
+\begin{align*}
+f_V(v) & = P(V \leq v) = P\left(\frac{3}{P} \leq v\right) = P\left(P \geq \frac{3}{v}\right) = 1 - P\left(P \leq \frac{3}{v}\right) = \\
+& = 1 - \int_{3}^{\frac{3}{v}} \frac{1}{3} \, dp = 1 - \frac{1}{3} \left(\frac{3}{v} - 3\right) = 1 - \frac{1}{v} + 1 = 2 - \frac{1}{v}
+\end{align*}
+$$
+
+En consecuencia:
+
+$$
+\begin{align*}
+g(v) = F_V'(v) = \left\{
+\begin{array}{ll}
+\frac{1}{v^2} \text{ si } v \in \{0.5, 1\}\\
+0 \text{ en otro caso}
+\end{array}
+\right\}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 12
+*El número de glóbulos rojos (en millones) de determinada gran población sigue distribución normal con media 4.5 y varianza 0.25*
+
+1. *Si se escogen 10 individuos al azar, calcular la probabilidad de que al menos 8 tengan entre 4.5 y 5 millones de glóbulos rojos*
+
+<DemBox title="Demostración">
+
+Definimos $X$ como la variable aleatoria que mide el número de glóbulos rojos de un individuo. Así, tenemos que $X \rightsquigarrow \mathcal{N}(4.5, 0.5)$. Así, queremos ver que al menos 8 individuos tengan entre 4.5 y 5 millones de glóbulos rojos, es decir, estamos ante un experimento de Bernoulli. Definimos $Y$ como la variable aleatoria asociada a este experimento tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Y)\\
+\omega & \longmapsto Y(\omega) = \text{\scriptsize nº individuos con entre 4.5 y 5 millones de glóbulos rojos (de 10)}
+\end{align*}
+$$
+
+Así, tenemos que $Y \rightsquigarrow \mathcal{B}(10, P(4.5 \leq X \leq 5))$. Así, podemos calcular $P(4.5 \leq X \leq 5)$ como:
+
+$$
+\begin{align*}
+P(4.5 \leq X \leq 5) & = P(X \leq 5) - P(X \leq 4.5) =\\
+& = P\left(\frac{X - 4.5}{0.5} \leq \frac{5 - 4.5}{0.5}\right) - P\left(\frac{X - 4.5}{0.5} \leq \frac{4.5 - 4.5}{0.5}\right) =\\
+& = P(\mathcal{N}(0, 1) \leq 1) - P(\mathcal{N}(0, 1) \leq 0) = 0.8413 - 0.5 = 0.3413
+\end{align*}
+$$
+
+Ahora, basta con calcular $P(Y \geq 8)$, es decir:
+
+$$
+\begin{align*}
+P(Y \geq 8) = \sum_{i = 8}^{10} P(Y = i) = \sum_{i = 8}^{10} \binom{10}{i} 0.3413^i (1 - 0.3413)^{10 - i} \approx 0.0044
+\end{align*}
+$$
+
+
+</DemBox>
+2. *Calcular la probabilidad de que escogiendo sucesivamente individuos al azar el primero que presenta más de 3 millones de glóbulos rojos sea el sexto*
+
+<DemBox title="Demostración">
+
+En este caso, queremos ver que el primer individuo con más de 3 millones de glóbulos rojos sea el sexto. Así, vamos a realizar 5 observaciones hasta llegar al individuo deseado. Por ello, podemos definir una variable aleatoria $Z$ tal que $Z \rightsquigarrow \mathcal{G}(P(X \geq 3))$. Así tenemos que calcular $P(X \geq 3)$, para ello:
+
+$$
+\begin{align*}
+P(X \geq 3) & = 1 - P(X \leq 3) = 1 - P(X \geq 4.5 + (4.5 - 3)) =\\
+& = 1 - (1 - P(X \leq 6)) = 1 - \left(1 - P\left(\frac{X - 4.5}{0.5} \leq \frac{6 - 4.5}{0.5}\right)\right) = \\
+& = 1 - \left(1 - P\left(\mathcal{N} (0, 1) \leq 3 \right)\right) = 1 - (1 - 0.9987) =\\
+& =  1 - 1 + 0.9987 = 0.9987
+\end{align*}
+$$
+
+Así, lo que queremos calcular es:
+
+$$
+\begin{align*}
+P(Z = 5) = (1 - 0.9987)^4 \cdot 0.9987 \approx 0
+\end{align*}
+$$
+
+</DemBox>
+3. *Se sabe que un individuo con una cantidad menor o igual de 3 millones de glóbulos rojos tiene una probabilidad de 0.2 de estar padeciendo cierta enfermedad, mientras que ésta es de 0.01 si tiene más de 3 millones. Calcular la probabilidad de que en una selección de 8 individuos. 3 de ellos estén padeciendo dicha enfermedad. Calcular la probabilidad de que un individuo que padezca dicha enfermedad tenga más de 3 millones de glóbulos rojos*
+
+<DemBox title="Demostración">
+
+En este caso, lo que queremos es ver la probabilidad de que en 8 individuos, 3 de ellos padezcan la enfermedad, para ello, definimos $E$ como padecer la enfermedad. Así, por aclarar notación definimos $A$ tener menos de 3 millones de glóbulos rojos. Así, tenemos que:
+
+$$
+\begin{align*}
+P(E | A) = 0.2\quad \text{ y } \quad P(E | A^c) = 0.01
+\end{align*}
+$$
+
+Ahora necesitamos calcular $P(E)$ y para ello, necesitamos conocer $P(A)$ y $P(A^c)$, es decir:
+
+$$
+\begin{align*}
+P(A^c) = P(X \leq 3) = 0.9987 \quad \text{ y } \quad P(A) = 1 - P(A^c) = 0.0013
+\end{align*}
+$$
+
+Así, por el teorema de la probabilidad total, tenemos que:
+
+$$
+\begin{align*}
+P(E) & = P(E|A) \cdot P(A) + P(E|A^c) \cdot P(A^c) = 0.2 \cdot 0.0013 + 0.01 \cdot 0.9987 =\\
+& = 0.00026 + 0.009987 = 0.0103
+\end{align*}
+$$
+
+Como observar si un individuo padece o no la enfermedad es un experimento de Bernoulli, podemos definir la variable aleatoria $W$ tal que $W \rightsquigarrow \mathcal{B}(8, 0.0103)$. Así, lo que queremos calcular es:
+
+$$
+\begin{align*}
+P(W = 3) \binom{8}{3} 0.0103^3 (1 - 0.0103)^{8 - 3} \approx 0.000058
+\end{align*}
+$$
+
+Para calcular la probabilidad de que un individuo que padezca la enfermedad tenga más de 3 millones de glóbulos rojos, tenemos que aplicar el teorema de Bayes, entonces:
+
+$$
+\begin{align*}
+P(A^c | E) & = \frac{P(E | A^c) \cdot P(A^c)}{P(E | A) \cdot P(A) + P(E | A^c) \cdot P(A^c)} = \\
+& = \frac{0.01 \cdot 0.9987}{0.2 \cdot 0.0013 + 0.01 \cdot 0.9987} \approx 0.9727
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 13
+*Si en 10 alzamientos de un dado de parchís equilibrado el número 6 ha aparecido exactamente 3 veces:*
+
+1. *¿Cuál es la probabilidad de que en los tres primeros alzamientos haya aparecido al menos una vez el número 6?*
+<DemBox title="Demostración">
+
+El experimento consiste en observar el resultado de lanzar un dado de parchís. En este caso, no interesa la aparición del número 6 en los tres primeros lanzamientos habiendo aparecido este 3 veces en 10 lanzamientos. Por ello, buscamos:
+
+$$
+\begin{align*}
+P(A | C)
+\end{align*}
+$$
+
+donde $A$ es que salga al menos una vez en los primeros 3 lanzamientos y $C$ es que ha salido 3 veces en 10 lanzamientos. Así, tenemos que:
+
+$$
+\begin{align*}
+P(A | C) = \frac{P(A \cap C)}{P(C)}
+\end{align*}
+$$
+
+Primero vamos a calcular el valor de $P(C)$, para ello, definimos una variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small nº de veces que ha salido el 6 en 10 lanzamientos}
+\end{align*}
+$$
+
+Entonces, tenemos que $X \rightsquigarrow \mathcal{B}(10, P(6))$. Así, podemos calcular $P(C)$ como:
+
+$$
+\begin{align*}
+P(C) = P(X = 3) = \binom{10}{3} {\left(\frac{1}{6}\right)}^3 {\left(\frac{5}{6}\right)}^7 \approx 0.155
+\end{align*}
+$$
+
+Ahora, necesitamos calcular $P(A \cap C)$, para ello, podemos calcular $P(A^c \cap C)$:
+
+$$
+\begin{align*}
+P(A^c \cap C)&  = P(A^c) \cdot P(\mathcal{B}(7, P(6)) = 3) =\\
+& =  P(S^c) \cdot P(S^c) \cdot P(S^c) \cdot P(\mathcal{B}(7, P(6)) = 3) =\\
+& =  \left(\frac{5}{6}\right)^3 \cdot \binom{7}{3} {\left(\frac{1}{6}\right)}^3 {\left(\frac{5}{6}\right)}^4 \approx 0.0452
+\end{align*}
+$$
+
+donde $S$ es que salga un 6 en un lanzamiento. Así, tenemos que:
+
+$$
+\begin{align*}
+P(A | C) = 1 - \frac{P(A^c \cap C)}{P(C)} = 1 - \frac{0.0452}{0.155} = 1 - 0.2916 = 0.7084
+\end{align*}
+$$
+
+</DemBox>
+2. *¿Cuál es la probabilidad de que en los cinco primeros lanzamiento haya aparecido exactamente dos veces el número 6*
+<DemBox title="Demostración">
+
+En este caso, podemos seguir un raimiento similar al anterior. Para ello, tenemos que ver:
+
+$$
+\begin{align*}
+P(B | C) = \frac{P(B \cap C)}{P(C)}
+\end{align*}
+$$
+
+donde $B$ es que haya aparecido exactamente dos veces el número 6 en los cinco primeros lanzamientos. Entonces, tenemos que calcular $P(B \cap C)$ y, en este caso, podemos suponer que, como los lanzamientos son independientes, $B$ aparece dos veces al principio, aunque daría igual ya que, como son productos conmutativos, podríamos reordenarlos como queramos.
+
+$$
+\begin{align*}
+P(B \cap C) & = P(S)^2 P(S^c)^3 P(\mathcal{B}(5, P(6)) = 1) = \\
+& = \left( \frac{1}{6} \right)^2 \left( \frac{5}{6} \right)^3 \binom{5}{2} \left( \frac{1}{6} \right)^1 \left( \frac{5}{6} \right)^4 \approx 0.0646 
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+P(B | C) = \frac{P(B \cap C)}{P(C)} = \frac{0.0646}{0.155} \approx 0.416
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 14
+*Las proporciones de un elemento en dos compuestos $A$ y $B$ son dos variables aleatorias continuas cuyas funciones de densidad son respectivamente:*
+
+$$
+\begin{align*}
+f_A(x) = \left\{
+\begin{array}{ll}
+1 & \text{ si } x \in (0, 1)\\
+0 & \text{ en el resto }
+\end{array}
+\right. \qquad f_B(y) = \left\{
+\begin{array}{ll}
+2y & \text{ si } y \in (0, 1)\\
+0 & \text{ en el resto}
+\end{array}
+\right.
+\end{align*}
+$$
+
+*Se elige al azar uno de los dos compuestos para extraer de él una serie de muestras. Se considera que una muestra es válida si la proporción del elemento en él es al menos igual a 0.6. Determinar*
+
+1. *La probabilidad de que una muestra extraída al azar del compuesto elegido sea válida*
+<DemBox title="Demostración">
+
+El experimento consiste en observar si, dada una muestra elegida al azar, esta es válida o no. Así, definimos la variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small proporción del elemento en la muestra}
+\end{align*}
+$$
+
+Así, tenemos que el éxito es $P(X \geq 0.6)$, es decir:
+
+$$
+\begin{align*}
+P(X \geq 6) &= P(X \geq 0.6 | A) \cdot P(A) + P(X \geq 0.6 | B) \cdot P(B) =\\
+&= \int_{0.6}^{1} 1 \, dx \cdot P(A) + \int_{0.6}^{1} 2y \, dy \cdot P(B) =\\
+& = (1 - 0.6) \cdot 0.5 + \left[ y^2 \right]_{0.6}^{1} \cdot 0.5 =\\
+& = 0.2 + 0.64 \cdot 0.5 = 0.2 + 0.32 = 0.52
+\end{align*}
+$$
+
+</DemBox>
+2. *La probabilidad de que tengan que extraerse tres muestras del compuesto elegido hasta obtener una válida*
+<DemBox title="Demostración">
+
+En este caso, estamos ante un experimento de Bernoulli, como es ver si una muestra es válida o no, donde el éxito es que sea válida. Entonces, podemos tratar cada una de las muestras por separado, así, una vez escogida una de ellas, estas se comportarán como una variable aleatoria con distribución geométrica y, por el Teorema de la Probabilidad Total, tenemos que la probabilidad buscada es:
+
+$$
+\begin{align*}
+& P(\mathcal{G}(P(V|A)) = 3) \cdot P(A) + P(\mathcal{G}(P(V|B)) = 3) \cdot P(B) = \\
+&  = \left( (1 - 0.4)^2 \cdot 0.4 \right) \cdot 0.5 + \left( (1 - 0.64)^2 \cdot 0.64 \right) \cdot 0.5 \\
+&  = \left( 0.6^2 \cdot 0.4 \right) \cdot 0.5 + \left( 0.36^2 \cdot 0.64 \right) \cdot 0.5r = 0.113472
+\end{align*}
+$$
+
+</DemBox>
+3. *La probabilidad de que si se extraen 8 muestras del compuesto elegido, 4 de ellas sean válida*
+<DemBox title="Demostración">
+
+En este caso, como seguimos ante un experimento de Bernoulli (que sea válida o no) y queremos ver el comportamiento de 8 muestras, podemos definir una variable aleatoria $Y$ tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Y)\\
+\omega & \longmapsto Y(\omega) = \text{\small nº de muestras válidas de una muestra (de 8)}
+\end{align*}
+$$
+
+Así, trivialmente tenemos que $Y \rightsquigarrow \mathcal{B} (8, P(X \geq 6))$ para cada muestra entonces, por el Teorema de la probabilidad total, tenemos que la probabilidad buscada es:
+
+$$
+\begin{align*}
+& P(Y_A = 4) \cdot P(A) + P(Y_B = 4) \cdot P(B) =\\
+&  =  \binom{8}{4} (0.4)^4 (0.6)^4 \cdot 0.5 + \binom{8}{4} (0.64)^4 (0.36)^4 \cdot 0.5  \approx 0.2148
+\end{align*}
+$$
+
+</DemBox>
+
+
+### Ejercicio 15
+*La variable aleatoria $X$ sigue una distribución normal $\mathcal{N}(0.27, 0.10)$. Se considera que ocurre el suceso $A$ cuando $X$ es superior o igual a 0.4*
+
+1. *Si se observa de forma independiente 20 veces si ocurre o no el suceso $A$, ¿cuál es el número esperado de veces en que ocurre el suceso $A$?*
+<DemBox title="Demostración">
+
+El experimento consiste en ver si ocurre o no el suceso $A$, es decir, estamos ante un experimento de Bernoulli donde el éxito es que ocurra $A$, es decir: $P(X \geq 0.4)$, entonces, definimos la variable aleatoria $Y$ tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Y)\\
+\omega & \longmapsto Y(\omega) = \text{\small nº de veces que ocurre $A$ (en 20 observaciones)}
+\end{align*}
+$$
+
+Así, tenemos que $Y \rightsquigarrow \mathcal{B}(20, P(X \geq 0.4))$. Calculemos $P(A)$:
+
+$$
+\begin{align*}
+P(A) = P(X \geq 0.4) & = P\left(\frac{X - 0.27}{0.10} \geq \frac{0.4 - 0.27}{0.10}\right) = \\
+& = P\left(\mathcal{N}(0, 1) \geq 1.3 \right) = 1 - P \left(\mathcal{N}(0, 1) \leq 1.3 \right) =\\
+& = 1 - 0.9032 = 0.0968
+\end{align*}
+$$
+
+Así, queremos ver:
+
+$$
+\begin{align*}
+E(Y) = E(\mathcal{B}(20, 0.0968)) = 20 \cdot 0.0968 = 1.936
+\end{align*}
+$$
+
+</DemBox>
+2. *Si se realizan 20 observaciones independientes, ¿cuál es la probabilidad de que ocurra el suceso $A$ al menos 3 veces?*
+<DemBox title="Demostración">
+
+Siguiendo con las variables del apartado anterior:
+
+$$
+\begin{align*}
+P(Y \geq 3) = 1 - P(Y < 3) = 1 - \sum_{i = 0}^{2} \binom{20}{i} (0.0968)^i (1 - 0.0968)^{20 - i} =  0.3037
+\end{align*}
+$$
+
+</DemBox>
+3. *Determinar que en una serie de observaciones independientes, la primera vez en que ocurre el suceso $A$ sea en la sexta observación*
+<DemBox title="Demostración">
+
+En este caso, repetimos el experimento $6$ veces hasta que aparece $A$ por primera vez. Así, podemos definir una variable aleatoria $Z$ tal que:
+
+$$
+\begin{align*}
+Z \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Z)\\
+\omega & \longmapsto Z(\omega) = \text{\small nº de veces a realizar hasta que aparece $A$}
+\end{align*}
+$$
+
+Así, tenemos que $Z \rightsquigarrow \mathcal{G}(P(X \geq 0.4))$. Entonces, tenemos que:
+
+$$
+\begin{align*}
+P(Z = 6) = (1 - P(A))^5 \cdot P(A) = (1 - 0.0968)^5 \cdot 0.0968 = 0.0583
+\end{align*}
+$$
+
+</DemBox>
+4. *Determinar que en una serie de observaciones independientes la tercera vez en que ocurre el suceso $A$ sea en la octava observación*
+<DemBox title="Demostración">
+
+En este caso, podemos definir una variable aleatoria $W \rightsquigarrow \mathcal{B}\mathcal{N}(8, 0.0968)$ tal que:
+
+$$
+\begin{align*}
+P(W = 5) = \binom{3 + 5 - 1}{5} (1 - 0.0968)^5 \cdot 0.0968^3 = 0.0114 
+\end{align*}
+$$
+
+</DemBox>
+
+## Tema 3
+#### Ejercicio 2
+*Sea $(X,Y)$ un vector aleatorio continuo para el que la función de densidad conjunta de $X$ e $Y$ viene dada por:*
+
+$$
+\begin{align*}
+f(x, y) = \left\{
+\begin{array}{ll}
+e^{ - x} & \text{ si } 0 < y < x\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+*comprobar que es función de densidad conjunta y determinar $P(1 < X < 2, 0 < Y < 1)$* 
+
+<DemBox title="Demostración">
+
+Veamos que $f(x,y)$ es función de densidad si:
+
+$$
+\begin{align*}
+f \colon \mathbb{R}^2 \longrightarrow \mathbb{R} \text{ tq } \left\{
+\begin{array}{l}
+f(x, y) \geq 0 \quad \forall (x, y)\\[2ex]
+\displaystyle \iint_{\mathbb{R}^2} f(x, y) \, dx\, dy = 1
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, tenemos que, por como está definida, $f(x, y) \geq 0 \quad \forall (x, y)$. Ahora, vamos a ver que cumple la segunda condición, para ello:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_4.svg)
+
+Entonces, podemos calcular la integral de $f(x, y)$ como:
+
+$$
+\begin{align*}
+\iint_{\mathbb{R}^2} f(x, y) \, dx \, dy = \int_{0}^{\infty} \left(\int_{y}^{\infty} e^{ - x} \, dx\right) dy = 1
+\end{align*}
+$$
+
+Como cumple ambas condiciones, entonces es función de densidad. 
+
+Ahora, vamos a calcular su función de distribución, es decir, la función que viene dada por la acumulación de probabilidad. es decir, que es una función de la forma.
+
+$$
+\begin{align*}
+F \colon \mathbb{R}^2 & \longrightarrow \mathbb{R}\\
+(x, y) & \longmapsto F(x, y) = P(X \leq x \cap Y \leq y)
+\end{align*}
+$$
+
+Aquí, podemos tener distintas formas de la función de distribución en función de donde estén los puntos $(x, y)$ que elijamos:
+
+- Si $(x, y)$ están por debajo de la bisectriz, es decir, $(x, y)$ tal que $0 < y < x$:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_5.svg)
+
+$$
+\begin{align*}
+F(x, y) = \textcolor{blue}{\int_0^y \left(\int_{0}^u e^{ - u}\,  dv\right)du} + \textcolor{green}{\int_y^x \left(\int_0^y e^{ - u} \, dv\right) du}
+\end{align*}
+$$
+
+También, se puede calcular fijando la otra variable y se obtiene:
+
+$$
+\begin{align*}
+F(x, y) = \int_0^y \left(\int_v^x e^{ - u} \, du\right) dv
+\end{align*}
+$$
+
+Y ambas darían los mismo.
+- Si $(x, y)$ están por encima de la bisectriz, es decir, $(x, y)$ tal que $y > x > 0$:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_6.svg)
+
+Así, la función de distribución sería:
+
+$$
+\begin{align*}
+F(x, y) = \int_0^x \left(\int_v^x e^{ - u} \, du \right) dv
+\end{align*}
+$$
+
+Así, tenemos que la función de distribución viene dada por:
+
+$$
+\begin{align*}
+F(x, y) = \left\{
+\begin{array}{ll}
+1 - e^{ - y} - ye^{ - x} & \text{ si } 0 < y < x\\[1ex]
+1 - e^{ - x} - x e^{ - x} & \text{ si } y \geq x > 0\\[1ex]
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Vamos a hallar las distribuciones marginales. Empezamos por la marginal de $X$:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_7.svg)
+
+Entonces, la marginal de $X$ se puede hallar como:
+
+$$
+\begin{align*}
+f_X(x) = \int_\mathbb{R} f(x, y) \, dy = \int_0^x e^{ - x} \, dy
+\end{align*}
+$$
+
+Y ahora vamos con $Y$ como:
+
+$$
+\begin{align*}
+f_Y(y) = \int_y^{\infty} e^{ - x} \, dx
+\end{align*}
+$$
+
+También, podemos hallarlas a través de la función de distribución, es decir:
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_8.svg)
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F_Y(y) = \left\{
+\begin{array}{ll}
+\displaystyle \lim_{x \to \infty} F(x, y) = \lim_{x \to \infty} (1 - e^{ - y} ye^{ - x}) = 1 - e^{y}& \text{ si } y > 0\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Y para $X$ tenemos que:
+
+$$
+\begin{align*}
+F_X(x) = \left\{
+\begin{array}{ll}
+\displaystyle \lim_{y \to \infty} F(x, y) = \lim_{x \to \infty} (1 - e^{ - x} - xe^{ - x}) = 1 - e^{- x} - xe^{- x} & \text{si } x > 0\\
+0 & \text{en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Y por las marginales se obtiene que:
+
+$$
+\begin{align*}
+f_Y(y) = \left\{
+\begin{array}{ll}
+e^{ - y} & \text{si } y > 0\\
+0 & \text{en otro caso}
+\end{array}
+\right. \quad \text{ y } \quad f_X(x) = \left\{
+\begin{array}{ll}
+xe^{ - x} & \text{si } x > 0\\
+0 & \text{en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Creo que lo que vamos a hacer ahora va en este ejercicio 
+
+*Dada $Z = X + Y$, determinar la función de distribución de $Z$*
+
+$$
+\begin{align*}
+F_Z(z) = P_Z(Z \leq z) = P((x, y) \in \mathbb{R}^2 \colon X + Y \leq Z)
+\end{align*}
+$$
+
+Entonces, tenemos que:
+
+$$
+\begin{align*}
+F_Z(z) = \left\{
+\begin{array}{ll}
+0 & \text{ si } z \leq 0\\
+\displaystyle \int_0^{\frac{z}{2}} \left( \int_y^{z - y} e^{ - x} \, dx \right) \, dy & \text{ si } z > 0\\
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 8
+*Sea $(X, Y)$ un vector aleatorio cuya función masa de probabilidad viene dada por:*
+
+$$
+\begin{array}{c|c|c|c}
+Y/X & -1 & 0 & 1\\ \hline
+-2 & \frac{1}{6} & \frac{1}{12} & \frac{1}{6} \\ \hline
+1 & \frac{1}{6} & \frac{1}{12} & \frac{1}{6}\\\hline
+2 & \frac{1}{12} & 0 & \frac{1}{12}
+\end{array}
+$$
+
+<DemBox title="Demostración">
+
+Vamos a ver cual es la distribución de $Z = X + Y$. 
+
+Como $(X, Y)$ son variables aleatorias discretas entonces $Z$ también lo será. Así, podemos calcular la función masa de probabilidad de $Z$, que toma valores en $\{-3, -2, -1, 0, 1, 2, 3\}$, como:
+
+$$
+\begin{align*}
+P(Z = X + Y = - 3) = P((x, y) \text{ tq } Z = X + Y = - 3) = P(( - 1, - 2)) = \frac{1}{6}
+\end{align*}
+$$
+
+Y así para todas las demás, notando que puede darse algún caso como:
+
+$$
+\begin{align*}
+P(Z = 1) & = P((x, y) \in \mathbb{R}^2 \colon g(x, y) = 1) = P(( - 1, 2) \cup (1, 0)) = \\[2ex]
+& = P[( - 1, 2)] + P[(0, 1)] = \frac{1}{12} + \frac{1}{12} = \frac{1}{6}
+\end{align*}
+$$
+
+Ahora, si queremos hallar la función de distribución de $Z$, es decir, la función que acumula la probabilidad, entonces:
+
+$$
+\begin{align*}
+F_Z(z) = P(Z \leq z) = P((x, y) \in \mathbb{R}^2 \colon X + Y \leq z)
+\end{align*}
+$$
+
+Notar que, al ser una discreta, la igualdad si genera diferencia, por ejemplo:
+
+$$
+\begin{align*}
+P(Z < - 3) & = 0\\
+P(Z = - 3) & = \frac{1}{6}\\
+P(Z = - 2) & = \frac{1}{4}
+\end{align*}
+$$
+
+Sea ahora la función $g(X, Y) = (Z, Y)$ donde $\left\{
+\begin{array}{l}
+Z = X + Y\\
+T = X - Y
+\end{array}
+\right.$, entonces, la función de distribución $F_{(Z, T) (z, y)}$ se puede calcular como:
+
+$$
+\begin{align*}
+F_{(Z, T)} \colon \mathbb{R}^2 & \longrightarrow \mathbb{R}\\
+(z, t) & \longmapsto F_{(Z, T)} (z, t) = P(Z \leq Z \cap Y \leq t) =\\
+&  = P((x, y) \colon X + Y \leq Z \cap X - Y \leq t)
+\end{align*}
+$$
+
+![TikZ Graph](/blogs/images/ejercicios-pye_tikz_9.svg)
+
+Notar que así, lo que buscamos es:
+
+$$
+\begin{align*}
+&P((x, y) \colon X + Y \leq Z \cap X - Y \leq t) = \\[2ex]
+&  = \int_0^{\frac{z - t}{2}} \left(\int_y^{y + t} f(x, y) \, dx\right) \, dy + \int_{\frac{z - t}{2}}^\frac{z}{2} \left(\int_y^{\frac{z}{2}} f(x, y) \, dx\right) \, dy
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+F_{(Z, T)}(z, t) = \left\{
+\begin{array}{ll}
+0 & \text{si } z > t > 0\\[2ex]
+\displaystyle \int_0^{\frac{z}{2}} \left(\int_y^{ z - y} f(x, y) \, dx\right) \, dy  & \text{si }  0 < z < t
+\end{array}
+\right.
+\end{align*}
+$$
+
+Ahora vamos a considerar la siguiente transformación:
+
+$$
+\begin{align*}
+(\Omega, \mathcal{A}, P) & \overset{(X, Y)}{\longrightarrow} (\mathbb{R}^2, \mathcal{B}_{\mathbb{R}^2}, P_{(X, Y)}) \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}^2, P_{g(X, Y)})\\
+(\Omega, \mathcal{A}, P) & \xrightarrow[]{Z = X + Y} (\mathbb{R}, \mathcal{B}_{\mathbb{R}^2}, P_{g(X, Y)})
+\end{align*}
+$$
+
+Donde tenemos que:
+
+$$
+\begin{align*}
+g_1 \colon \mathbb{R}^2 & \longrightarrow \mathbb{R}\\
+(x, y) & \longmapsto g_1(x, y) = z = x + y
+\end{align*}
+$$
+
+Y ahora hago la siguiente transformación:
+
+$$
+\begin{align*}
+g \colon \mathbb{R}^2 & \longrightarrow \mathbb{R}^2\\
+(x, y) & \longmapsto g(x, y) = (x + y, y) = (Z, T)
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+Z = X + Y\\
+T = Y	
+\end{array}
+\right\} \implies \left\{
+\begin{array}{l}
+X = Z - Y = Z - T\\
+Y = T
+\end{array}
+\right.
+\end{align*}
+$$
+
+Entonces, podemos hallar la inversa de $g$ como:
+
+$$
+\begin{align*}
+g^{ - 1}(z, t) = (z - t, t)
+\end{align*}
+$$
+
+Y tenemos que:
+
+$$
+\begin{align*}
+\mathbb{R} \overset{g}{\longrightarrow} \mathbb{R}^2 \overset{g^{- 1}}{\longrightarrow} \mathbb{R}^2
+\end{align*}
+$$
+
+Y además,  tenemos que: $\left\{
+\begin{array}{l}
+g_1^{ - 1}(z, t)  = z - t\\
+(g^{ - 1})_2 (z, t) = t
+\end{array}
+\right.$ 
+
+Así, podemos hallar el jacobiano de la inversa como:
+
+$$
+\begin{align*}
+|J| = \left|
+\begin{array}{cc}
+\frac{\partial (z - t)}{\partial z} & \frac{\partial (z - t)}{\partial t}\\
+\frac{\partial t}{\partial z} & \frac{\partial t}{\partial t}
+\end{array}
+\right| = \left|
+\begin{array}{cc}
+1 & - 1\\
+0 & 1
+\end{array}
+\right| = 1
+\end{align*}
+$$
+
+Entonces, llegamos a:
+
+$$
+\begin{align*}
+h(z, t) = f_{(X, Y)} (z - t, t) \cdot 1 
+\end{align*}
+$$
+
+Es decir, que la función de densidad de $Z = X + Y$ es:
+
+$$
+\begin{align*}
+h(z, t) = \left\{
+\begin{array}{ll}
+e^{t - z} & \text{ si } 0 < t < \frac{z}{2}\\
+0 & \text{ en otro caso}
+\end{array}
+\right.
+\end{align*}
+$$
+
+Y podemos hallar las marginales como:
+
+$$
+\begin{align*}
+h_Z(Z) & = \int_{\mathbb{R}} h(z, t) \, dt = \int_0^{\frac{z}{2}} e^{t - z} \, dt \\[2ex]
+h_T(t) & = \int_{\mathbb{R}} h(z, t) \, dt 
+\end{align*}
+$$
+
+y ahora, partiendo de que:
+
+$$
+\begin{align*}
+\left.
+\begin{array}{l}
+Z = X + Y\\
+T = X - Y
+\end{array}
+\right\} \implies \left\{
+\begin{array}{l}
+X = \frac{Z + T}{2}\\
+Y = \frac{Z - T}{2}
+\end{array}
+\right.
+\end{align*}
+$$
+
+</DemBox>

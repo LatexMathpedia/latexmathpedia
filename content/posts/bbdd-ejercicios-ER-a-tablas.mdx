@@ -1,0 +1,545 @@
+---
+title: "Ejercicios Resueltos Bases de Datos: De ER a Tablas"
+date: "2026-01-30"
+description: "Resolución de ejercicios de modelado de bases de datos, transformando diagramas ER en tablas SQL."
+tags: ["Bases de Datos", "Modelado de Datos", "SQL", "ER a Tablas"]
+---
+## Ejercicio 1
+Planteamiento del modelo:
+
+- Un alumno puede estar matriculado en muchas asignaturas. Sobre un alumno es necesario almacenar su dni (dnia), su nombre (noma), su apellido (apella), su domicilio (domicilioa), la fecha de nacimiento (f\_nacimiento) y la fecha de ingreso en la carrera (f\_ingreso). Se supone que el dni permite identificar de forma única al alumno.
+- Una asignatura sólo puede pertenecer a una carrera. Sobre una asignatura es necesario conocer su código (codasig), su descripción (nomasig), el curso al que pertenece (curso), el número de créditos (creditos) y su tipo (tipo). El código de la asignatura identifica de forma única a la misma.
+- Una carrera puede tener muchas asignaturas. Sobre una carrera es necesario conocer su código (codcarr), su descripción (nombrec) y su duración (duracion). El código de la carrera entifica de forma única a la misma.
+- Las asignaturas pueden ser: obligatorias, optativas, o de libre configuración.
+- Una asignatura puede estar impartida por muchos profesores (no a la vez) ya que pueden existir diversos grupos
+- Un profesor puede dar clases de muchas asignaturas. Sobre un profesor es necesario conocer su dni (dnip), su nombre (nomp), su apellido (apellidop) y su domicilio (domiciliop). Se asume que el dni de un profesor lo identifica de forma única.
+- Es necesario tener constancia de las asignaturas en las que está matriculado un alumno, así como de las notas obtenidas, los profesores que le han calificado y la fecha en la que lo han hecho (fecha\_calificacion que por defecto tomará la fecha del sistema).
+- Es necesario tener constancia de las asignaturas que imparten todos los profesores (independientemente de si tienen algún alumno calificado en su grupo).
+- No existen asignaturas con el mismo nombre
+- Un alumno no puede estar calificado en la misma asignatura por dos profesores distintos.
+
+### Modelo 1
+
+![ej1Modelo1](/blogs/images/bases-de-datos-ejercicios-resueltos_ej1Modelo1.png)
+
+```
+CREATE TABLE ALUMNO (
+dnia VARCHAR(9) NOT NULL,
+noma VARCHAR(30),
+apella VARCHAR(30),
+domicilioa VARCHAR(50),
+f_nacimiento DATE,
+f_ingreso DATE,
+CONSTRAINT pk_alumno PRIMARY KEY (dnia)
+);
+
+CREATE TABLE PROFESOR (
+dnip VARCHAR(9) NOT NULL,
+nombrep VARCHAR(30),
+apellidop VARCHAR(30),
+domiciliop VARCHAR(50),
+CONSTRAINT pk_profesor PRIMARY KEY (dnip)
+);
+
+CREATE TABLE ASIGNATURA (
+codasig VARCHAR(6) NOT NULL,
+nomasig VARCHAR(50),
+curso DECIMAL(1, 0),
+creditos DECIMAL(1, 0),
+tipo VARCHAR(6),
+codcarr VARCHAR(6) NOT NULL,
+CONSTRAINT pk_asignatura PRIMARY KEY (codasig),
+CONSTRAINT uq_asignatura UNIQUE (nomasig),
+CONSTRAINT fk_asignatura_carrera FOREIGN KEY (codcarr)
+REFERENCES CARRERA (codcarr),
+CONSTRAINT chk_tipo CHECK (
+tipo IN ('obligatoria', 'optativa', 'libre configuracion'))
+);
+
+CREATE TABLE CARRERA (
+codcarr VARCHAR(6) NOT NULL,
+nombrecarr VARCHAR(50),
+duracion DECIMAL(2, 0),
+CONSTRAINT pk_carrera PRIMARY KEY (codcarr)
+);
+
+CREATE TABLE CALIFICA (
+dnia VARCHAR(9) NOT NULL,
+codasig VARCHAR(6) NOT NULL,
+dnip VARCHAR(9) NOT NULL,
+nota DECIMAL(3, 1),
+fecha_calificacion DATE,
+CONSTRAINT pk_califica PRIMARY KEY (codasig, dnia),
+CONSTRAINT fk_califica_alumno FOREIGN KEY (dnia)
+REFERENCES ALUMNO (dnia),
+CONSTRAINT fk_califica_asignatura FOREIGN KEY (codasig)
+REFERENCES ASIGNATURA (codasig),
+CONSTRAINT fk_califica_profesor FOREIGN KEY (dnip)
+REFERENCES PROFESOR (dnip)
+);
+
+CREATE TABLE IMPARTE (
+dnip VARCHAR(9) NOT NULL,
+codasig VARCHAR(6) NOT NULL,
+CONSTRAINT pk_imparte PRIMARY KEY (dnip, codasig),
+CONSTRAINT fk_imparte_profesor FOREIGN KEY (dnip)
+REFERENCES PROFESOR (dnip),
+CONSTRAINT fk_imparte_asignatura FOREIGN KEY (codasig)
+REFERENCES ASIGNATURA (codasig)
+);
+```
+
+### Modelo 2
+
+![ej1Modelo2](/blogs/images/bases-de-datos-ejercicios-resueltos_ej1Modelo2.png)
+
+En este caso, las tablas serían igual excepto por la tabla `CALIFICA`, es decir: 
+
+```
+CREATE TABLE ALUMNO (
+dnia VARCHAR(9) NOT NULL,
+noma VARCHAR(30),
+apella VARCHAR(30),
+domicilioa VARCHAR(50),
+f_nacimiento DATE,
+f_ingreso DATE,
+CONSTRAINT pk_alumno PRIMARY KEY (dnia)
+);
+
+CREATE TABLE PROFESOR (
+dnip VARCHAR(9) NOT NULL,
+nombrep VARCHAR(30),
+apellidop VARCHAR(30),
+domiciliop VARCHAR(50),
+CONSTRAINT pk_profesor PRIMARY KEY (dnip)
+);
+
+CREATE TABLE ASIGNATURA (
+codasig VARCHAR(6) NOT NULL,
+nomasig VARCHAR(50),
+curso DECIMAL(1, 0),
+creditos DECIMAL(1, 0),
+tipo VARCHAR(6),
+codcarr VARCHAR(6) NOT NULL,
+CONSTRAINT pk_asignatura PRIMARY KEY (codasig),
+CONSTRAINT uq_asignatura UNIQUE (nomasig),
+CONSTRAINT fk_asignatura_carrera FOREIGN KEY (codcarr)
+REFERENCES CARRERA (codcarr),
+CONSTRAINT chk_tipo CHECK (
+tipo IN ('obligatoria', 'optativa', 'libre configuracion'))
+);
+
+CREATE TABLE CARRERA (
+codcarr VARCHAR(6) NOT NULL,
+nombrecarr VARCHAR(50),
+duracion DECIMAL(2, 0),
+CONSTRAINT pk_carrera PRIMARY KEY (codcarr)
+);
+
+CREATE TABLE IMPARTE (
+dnip VARCHAR(9) NOT NULL,
+codasig VARCHAR(6) NOT NULL,
+CONSTRAINT pk_imparte PRIMARY KEY (dnip, codasig),
+CONSTRAINT fk_imparte_profesor FOREIGN KEY (dnip)
+REFERENCES PROFESOR (dnip),
+CONSTRAINT fk_imparte_asignatura FOREIGN KEY (codasig)
+REFERENCES ASIGNATURA (codasig)
+);
+
+CREATE TABLE CALIFICA (
+dnia VARCHAR(9) NOT NULL,
+codasig VARCHAR(6) NOT NULL,
+dnip VARCHAR(9) NOT NULL,
+nota DECIMAL(3, 1),
+fecha_calificacion DATE,
+CONSTRAINT pk_califica PRIMARY KEY (codasig, dnia, dnip),
+CONSTRAINT uq_califica UNIQUE (codasig, dnia),
+CONSTRAINT fk_califica_alumno FOREIGN KEY (dnia)
+REFERENCES ALUMNO (dnia),
+CONSTRAINT fk_califica_imparte FOREIGN KEY (codasig, dnip)
+REFERENCES IMPARTE (codasig, dnip),
+);
+```
+
+## Ejercicio 2
+Restricciones para el modelo:
+
+- El tipo de las películas podrá ser: ``ficción'', ``aventuras'' o ``terror''.
+- El título del las películas no puede tomar valores repetidos.
+- La sesión será alguno de los siguinetes valores: 5, 7, 10.
+
+![ej2Modelo1](/blogs/images/bases-de-datos-ejercicios-resueltos_ej2Modelo1.png)
+
+```
+CREATE TABLE ENTRADA (
+codentrada VARCHAR(6) NOT NULL,
+precio DECIMAL(4, 2),
+codsala VARCHAR(6) NOT NULL,
+codpelicula VARCHAR(6) NOT NULL,
+fecha DATE NOT NULL,
+sesion DECIMAL(2, 0) NOT NULL,
+CONSTRAINT pk_entrada PRIMARY KEY (codentrada), 
+CONSTRAINT fk_entr_sala FOREIGN KEY (codsala,codpelicula,sesion,fecha)
+REFERENCES PROYECTA (codsala, codpelicula, sesion, fecha)
+);
+
+CREATE TABLE SALA (
+codsala VARCHAR(6) NOT NULL,
+aforo DECIMAL(3, 0),
+codcine VARCHAR(6) NOT NULL,
+CONSTRAINT pk_sala PRIMARY KEY (codsala),
+CONSTRAINT fk_sala_cine FOREIGN KEY (codcine)
+REFERENCES CINE (codcine)
+);
+
+CREATE TABLE PELICULA (
+codpeliculo VARCHAR(6) NOT NULL,
+titulo VARCHAR(50),
+duracion DECIMAL(3, 0),
+tipo VARCHAR(10),
+codpelicula_original VARCHAR(6),
+CONSTRAINT pk_pelicula PRIMARY KEY (codpelicula),
+CONSTRAINT fk_pelicula_original FOREIGN KEY (codpelicula_original)
+REFERENCES PELICULA (codpelicula),
+CONSTRAINT uq_pelicula UNIQUE (titulo),
+CONSTRAINT chk_tipo CHECK (tipo IN ('ficción', 'aventuras', 'terror'))
+);
+
+CREATE TABLE CINE (
+codcine VARCHAR(6) NOT NULL,
+localidad VARCHAR(50),
+CONSTRAINT pk_cine PRIMARY KEY (codcine)
+);
+
+CREATE TABLE CINE3D (
+codcine VARCHAR(6) NOT NULL,
+numsalas DECIMAL(2, 0),
+CONSTRAINT pk_cine3d PRIMARY KEY (codcine),
+CONSTRAINT fk_cine3d_cine FOREIGN KEY (codcine)
+REFERENCES CINE (codcine)
+);
+
+CREATE TABLE PROYECTA (
+codsala VARCHAR(6) NOT NULL,
+codpelicula VARCHAR(6) NOT NULL,
+sesion DECIMAL(2, 0) NOT NULL,
+fecha DATE NOT NULL,
+entradas_vendidas DECIMAL(3, 0),
+CONSTRAINT pk_proyecta PRIMARY KEY (codsala,codpelicula,sesion,fecha),
+CONSTRAINT fk_proyecta_sala FOREIGN KEY (codsala)
+REFERENCES SALA (codsala),
+CONSTRAINT fk_proyecta_pelicula FOREIGN KEY (codpelicula) 
+REFERENCES PELICULA (codpelicula),
+CONSTRAINT chk_proyecta_sesion CHECK (sesion IN (5, 7, 10))
+);
+```
+
+## Ejercicio 3
+Enunciado del problema:
+
+Se pretende llevar a cabo un control sobre la energía eléctrica que se produce y consume en un determinado país. Se parte de las siguientes hipótesis. 
+
+Existen productores básicos de electricidad que se identifican por un nombre, de los cuales interesa su producción media, producción máxima y fecha de entrada en funcionamiento. Estos productores básicos lo son de una de las siguientes categorías: hidroeléctrica, solar, nuclear, térmica. 
+
+- De una central hidroeléctrica o presa nos interesa saber su ocupación, capacidad máxima y número de turbinas.
+- De una central solar nos interesa saber la superficie total de paneles solares, la media anual de horas de sol y tipo (fotovoltaica o termodinámica).
+- De una central nuclear, nos interesa saber el número de reactores que posee, el volumen de plutonio consumido y el de residuos nucleares que produce.
+- De una central térmica, nos interesa saber el número de hornos que posee, el volumen de carbón consumido y el volumen de su emisión de bases.
+
+Por motivos de seguridad nacional interesa controlar el plutonio de que se provee una central nuclear. Este control se refiere a la cantidad de plutonio que compra a cada uno de sus posibles suministradores (nombre y país) de los que se guarda su stock de plutonio, y que porta un determinado transportista (nombre y matrícula) del que se guarda el número de horas que lleva conduciendo el vehículo en cuestión. Ha de tenerse en cuenta que el mismo suministrador pueden vender plutonio a distintas centrales nucleares y que cada porte (un único
+porte por compra), puede realizarlo un transportista diferente. 
+
+Cada día, los productores entregan la energía producida a una o varias estaciones primarias, las cuales pueden recibir diariamente una cantidad distinta de energía de cada uno de estos productores. Las estaciones primarias se identifican por su nombre y tienen un número de transformadores de baja a alta tensión y son cabecera de una o varias redes de  distribución. 
+
+Una red de distribución se identifica por un número de red, tiene una longitud máxima y sólo puede tener una estación primaria como cabecera. La propiedad de una red puede ser compartida por varias compañías eléctricas. Se guarda el número de acciones que cada compañía tiene en cada red. Cada compañía eléctrica se identifica por su nombre y se guarda de cada una su capital social.
+
+La energía sobrante en una de las redes puede enviarse a otra red. Se registra el volumen total de energía intercambiada entre dos redes.
+
+Una red está compuesta por una serie de líneas, cada línea se identifica por un número secuencial dentro del número de red y tiene una determinada longitud. Las líneas abastecerán a subestaciones. De las subestaciones se guarda su nombre y su capacidad.
+
+Una subestación es abastecida sólo por una línea y distribuye cierta cantidad de energía en cierta fecha a una o varias zonas de servicio, a tales efectos, las provincias (código y nombre), se encuentran divididas en tales zonas de servicio, aunque no puede haber zonas de servicio que pertenezcan a más de una provincia. Cada zona de servicio puede ser atendida por más de una subestación. 
+
+En cada zona de servicio se desea registrar el consumo medio y el número de consumidores finales de cada una de las siguientes categorías: particulares, empresas e instituciones. 
+
+![ej3Modelo1](/blogs/images/bases-de-datos-ejercicios-resueltos_ej3Modelo1.png)
+
+```
+CREATE TABLE PRODUCTOR (
+pnombre VARCHAR(50) NOT NULL,
+prodmedia DECIMAL(5, 2),
+prodmaxima DECIMAL(5, 2),
+fecha DATE,
+CONSTRAINT pk_productor PRIMARY KEY (pnombre),
+CONSTRAINT ck_prodmedia CHECK (prodmedia >= 0),
+CONSTRAINT ck_prodmaxima CHECK (prodmaxima >= 0)
+);
+CREATE TABLE HIDROELECTRICA (
+pnombre VARCHAR(50) NOT NULL,
+ocupacion DECIMAL(5, 2),
+capmaxima DECIMAL(5, 2),
+numturbinas DECIMAL(3, 0),
+CONSTRAINT pk_hidroelectrica PRIMARY KEY (pnombre),
+CONSTRAINT fk_hidroelectrica_productor FOREIGN KEY (pnombre)
+REFERENCES PRODUCTOR (pnombre),
+CONSTRAINT ck_ocupacion CHECK (ocupacion >= 0),
+CONSTRAINT ck_capmaxima CHECK (capmaxima >= 0),
+CONSTRAINT ck_numturbinas CHECK (numturbinas >= 0)
+);
+
+CREATE TABLE NUCLEAR (
+pnombre VARCHAR(50) NOT NULL,
+numreactores decimal(3, 0),
+plutonio decimal(5, 2),
+residuos decimal(5, 2),
+CONSTRAINT pk_nuclear PRIMARY KEY (pnombre),
+CONSTRAINT fk_nuclear_productor FOREIGN KEY (pnombre)
+REFERENCES PRODUCTOR (pnombre),
+CONSTRAINT ck_numreactores CHECK (numreactores >= 0),
+CONSTRAINT ck_plutonio CHECK (plutonio >= 0),
+CONSTRAINT ck_residuos CHECK (residuos >= 0)
+);
+
+CREATE TABLE SOLAR (
+pnombre VARCHAR(50) NOT NULL,
+paneles DECIMAL(5, 2),
+horassol DECIMAL(5, 2),
+tipo VARCHAR(15),
+CONSTRAINT pk_solar PRIMARY KEY (pnombre),
+CONSTRAINT fk_solar_productor FOREIGN KEY (pnombre)
+REFERENCES PRODUCTOR (pnombre),
+CONSTRAINT chk_panel CHECK (paneles >= 0),
+CONSTRAINT chk_horassol CHECK (horassol >= 0)
+);
+
+CREATE TABLE TERMICA (
+pnombre VARCHAR(50) NOT NULL,
+hornos DECIMAL(3, 0),
+carbon DECIMAL(5, 2),
+gases DECIMAL(5, 2),
+CONSTRAINT pk_termica PRIMARY KEY (pnombre),
+CONSTRAINT fk_termica_productor FOREIGN KEY (pnombre)
+REFERENCES PRODUCTOR (pnombre),
+CONSTRAINT ck_hornos CHECK (hornos >= 0),
+CONSTRAINT ck_carbon CHECK (carbon >= 0),
+CONSTRAINT ck_gases CHECK (gases >= 0)
+);
+
+CREATE TABLE SUMINISTRADOR (
+snombre VARCHAR(50) NOT NULL,
+pais VARCHAR(50) NOT NULL,
+stock DECIMAL(5, 2),
+CONSTRAINT pk_suministrador PRIMARY KEY (snombre, pais),
+CONSTRAINT ck_stock_poss CHECK (stock >= 0)
+);
+
+CREATE TABLE TRANSPORTISTA (
+tnombre VARCHAR(50) NOT NULL,
+matricula VARCHAR(10) NOT NULL,
+horasconducidas DECIMAL(5, 2),
+CONSTRAINT pk_transportista PRIMARY KEY (tnombre, matricula),
+CONSTRAINT ck_horasconducidas CHECK (horasconducidas >= 0)
+);
+
+CREATE TABLE COMPRA (
+pnombre VARCHAR(50) NOT NULL,
+snombre VARCHAR(50) NOT NULL,
+pais VARCHAR(50) NOT NULL,
+tnombre VARCHAR(50) NOT NULL,
+matricula VARCHAR(10) NOT NULL,
+cantidad DECIMAL(5, 2),
+CONSTRAINT pk_compra PRIMARY KEY (pnombre, snombre, pais, tnombre, matricula),
+CONSTRAINT fk_compra_suministrador FOREIGN KEY (snombre, pais)
+REFERENCES SUMINISTRADOR (snombre, pais),
+CONSTRAINT fk_compra_transportista FOREIGN KEY (tnombre, matricula)
+REFERENCES TRANSPORTISTA (tnombre, matricula),
+CONSTRAINT fk_compra_nuclear FOREIGN KEY (pnombre)
+REFERENCES NUCLEAR (pnombre),
+CONSTRAINT ck_cantidad_poss CHECK (cantidad >= 0)
+);
+
+CREATE TABLE ESTACION (
+enombre VARCHAR(50) NOT NULL,
+transformadores DECIMAL(3, 0),
+CONSTRAINT pk_estacion PRIMARY KEY (enombre),
+CONSTRAINT ck_transformadores CHECK (transformadores >= 0)
+);
+
+CREATE TABLE RED_DISTRIBUCION (
+numred DECIMAL(3, 0) NOT NULL,
+enombre VARCHAR(50) NOT NULL,
+longitudmaxima DECIMAL(5, 2),
+CONSTRAINT pk_red_distribucion PRIMARY KEY (numred),
+CONSTRAINT fk_red_distribucion_estacion FOREIGN KEY (enombre)
+REFERENCES ESTACION (enombre),
+CONSTRAINT ck_longitudmaxima CHECK (longitudmaxima >= 0)
+);
+
+CREATE TABLE COMPAÑIA (
+cnombre VARCHAR(50) NOT NULL,
+capitalsocial DECIMAL(5, 2),
+CONSTRAINT pk_compañia PRIMARY KEY (cnombre),
+CONSTRAINT ck_capitalsocial CHECK (capitalsocial >= 0)
+);
+
+CREATE TABLE PERTENECE (
+cnombre VARCHAR(50) NOT NULL,
+numred DECIMAL(3, 0) NOT NULL,
+numacciones DECIMAL(3, 0),
+CONSTRAINT pk_pertenece PRIMARY KEY (cnombre, numred),
+CONSTRAINT fk_pertenece_compañia FOREIGN KEY (cnombre)
+REFERENCES COMPAÑIA (cnombre),
+CONSTRAINT fk_pertenece_red FOREIGN KEY (numred)
+REFERENCES RED_DISTRIBUCION (numred),
+CONSTRAINT ck_numacciones CHECK (numacciones >= 0)
+);
+
+CREATE TABLE ENVIA_ENERGIA (
+numred_envia DECIMAL(3, 0) NOT NULL,
+numred_recibe DECIMAL(3, 0) NOT NULL,
+volumen DECIMAL(5, 2),
+CONSTRAINT pk_envia_energia PRIMARY KEY (numred_envia, numred_recibe),
+CONSTRAINT fk_envia_energia_rd_envia FOREIGN KEY (numred_envia)
+REFERENCES RED_DISTRIBUCION (numred),
+CONSTRAINT fk_envia_energia_rd_recibe FOREIGN KEY (numred_recibe)
+REFERENCES RED_DISTRIBUCION (numred),
+CONSTRAINT ck_volumen CHECK (volumen >= 0)
+);
+
+CREATE TABLE LINEA (
+numred DECIMAL(3, 0) NOT NULL,
+nlinea DECIMAL(3, 0) NOT NULL,
+longitud DECIMAL(5, 2),
+CONSTRAINT pk_linea PRIMARY KEY (numred, nlinea),
+CONSTRAINT fk_linea_red FOREIGN KEY (numred)
+REFERENCES RED_DISTRIBUCION (numred),
+CONSTRAINT ck_longitud CHECK (longitud >= 0)
+);
+
+CREATE TABLE SUBESTACION (
+nsubestacion VARCHAR(50) NOT NULL,
+numred DECIMAL(3, 0) NOT NULL,
+nlinea DECIMAL(3, 0) NOT NULL,
+capacidad DECIMAL(5, 2),
+CONSTRAINT pk_subestacion PRIMARY KEY (nsubestacion),
+CONSTRAINT fk_subestacion_linea FOREIGN KEY (numred, nlinea)
+REFERENCES LINEA (numred, nlinea),
+CONSTRAINT ck_capacidad CHECK (capacidad >= 0)
+);
+
+CREATE TABLE ZONA (
+zcodigo VARCHAR(50) NOT NULL,
+consumomedio DECIMAL(5, 2),
+consInstituciones DECIMAL(5, 2),
+consParticulares DECIMAL(5, 2),
+consEmpresas DECIMAL(5, 2),
+pcodigo VARCHAR(50) NOT NULL,
+CONSTRAINT pk_zona PRIMARY KEY (zcodigo),
+CONSTRAINT fk_zona_provincia FOREIGN KEY (pcodigo)
+REFERENCES PROVINCIA (pcodigo),
+CONSTRAINT ck_consumomedio CHECK (consumomedio >= 0),
+CONSTRAINT ck_consInstituciones CHECK (consInstituciones >= 0),
+CONSTRAINT ck_consParticulares CHECK (consParticulares >= 0),
+CONSTRAINT ck_consEmpresas CHECK (consEmpresas >= 0)
+);
+
+CREATE TABLE DISTRIBUYE (
+nsubestacion VARCHAR(50) NOT NULL,
+zcodigo VARCHAR(50) NOT NULL,
+cantidad DECIMAL(5, 2),
+fecha DATE,
+CONSTRAINT pk_distribuye PRIMARY KEY (nsubestacion, zcodigo),
+CONSTRAINT fk_distribuye_subestacion FOREIGN KEY (nsubestacion)
+REFERENCES SUBESTACION (nsubestacion),
+CONSTRAINT fk_distribuye_zona FOREIGN KEY (zcodigo)
+REFERENCES ZONA (zcodigo),
+CONSTRAINT ck_cantidad CHECK (cantidad >= 0)
+);
+
+CREATE TABLE PROVINCIA (
+pcodigo VARCHAR(50) NOT NULL,
+nombre VARCHAR(50) NOT NULL,
+CONSTRAINT pk_provincia PRIMARY KEY (pcodigo)
+);
+
+CREATE TABLE ENTREGA (
+enombre VARCHAR(50) NOT NULL,
+pnombre VARCHAR(50) NOT NULL,
+cantidad DECIMAL(5, 2),
+fecha DATE,
+CONSTRAINT pk_entrega PRIMARY KEY (enombre, pnombre),
+CONSTRAINT fk_entrega_estacion FOREIGN KEY (enombre)
+REFERENCES ESTACION (enombre),
+CONSTRAINT fk_entrega_productor FOREIGN KEY (pnombre)
+REFERENCES PRODUCTOR (pnombre),
+CONSTRAINT ck_cantidad CHECK (cantidad >= 0)
+);
+```
+
+## Examen 1
+Se considerará el diagrama *ER* que se muestra a continuación para el modelado de un sistema de gestión de álbumes musicales. Se debe de tener en cuenta esta información adicional:
+
+- Los álbumes no pueden compartir título
+- El género de las canciones (*s\_genre*) solo puede ser ``pop'', ``rock'' o ``jazz''
+- El título de las canciones (*s\_title*) es obligatorio
+- La pista (*track*) debe tner un valor entre 1 y 12 (ambos incluidos)
+
+![examen1](/blogs/images/bases-de-datos-ejercicios-resueltos_examen1.png)
+
+```
+CREATE TABLE ALBUM (
+album_id VARCHAR(6) NOT NULL,
+a_title VARCHAR(30),
+CONSTRAINT pk_album PRIMARY KEY (album_id),
+CONSTRAINT uq_title UNIQUE (title)
+);
+
+CREATE TABLE SONG (
+song_id VARCHAR(6) NOT NULL,
+s_title VARCHAR(30) NOT NULL,
+s_genre VARCHAR(4),
+remixed_song_id VARCHAR(6),
+CONSTRAINT pk_song PRIMARY KEY (song_id),
+CONSTRAINT fk_remixed_song_id FOREIGN KEY (remixed_song_id)
+REFERENCES SONG (song_id),
+CONSTRAINT genres_types CHECK (s_genre IN ('rock', 'jazz', 'pop'))
+);
+
+CREATE TABLE SINGER (
+singer_id VARCHAR(6) NOT NULL,
+s_name VARCHAR(30),
+CONSTRAINT pk_singer PRIMARY KEY (singer_id)
+);
+
+CREATE TABLE PERFORMS (
+singer_id VARCHAR(6) NOT NULL,
+song_id VARCHAR(6) NOT NULL,
+duration decimal(2, 0),
+CONSTRAINT pk_performs PRIMARY KEY (singer_id, song_id),
+CONSTRAINT fk_performs_song FOREIGN KEY (song_id)
+REFERENCES SONG (song_id),
+CONSTRAINT fk_performs_singer FOREIGN KEY (singer_id)
+REFERENCES SINGER (singer_id)
+);
+
+CREATE TABLE IS_INCLUDED (
+album_id VARCHAR(6) NOT NULL,
+singer_id VARCHAR(6) NOT NULL,
+song_id VARCHAR(6) NOT NULL,
+track decimal(2, 0),
+CONSTRAINT pk_is_included PRIMARY KEY (album_id, singer_id, song_id),
+CONSTRAINT fk_is_included_performs FOREIGN KEY (singer_id, song_id)
+REFERENCES PERFORMS (singer_id, song_id),
+CONSTRAINT fk_is_included_album FOREIGN KEY (album_id)
+REFERENCES ALBUM (album_id),
+CONSTRAINT ck_track_length CHECK (track >= 0 AND track <=12)
+);
+
+CREATE TABLE CONTRACT (
+contract_id VARCHAR(6) NOT NULL,
+singer_id VARCHAR(6) NOT NULL,
+c_type VARCHAR(6),
+CONSTRAINT pk_contract PRIMARY KEY (contract_id, singer_id),
+CONSTRAINT fk_contract_singer FOREIGN KEY (singer_id)
+REFERENCES SINGER (singer_id)
+);
+```

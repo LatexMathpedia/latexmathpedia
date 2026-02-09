@@ -1,0 +1,1258 @@
+---
+title: "Ejercicios Resueltos Probabilidad y Estadística - Parte II"
+date: "2026-01-29"
+description: "Resolución de ejercicios propuestos sobre variables aleatorias y funciones de distribución."
+tags: ["Probabilidad y Estadística", "Variables Aleatorias", "Funciones de Distribución"]
+---
+
+
+## Tema 2
+### Ejercicio 1
+*Suponiendo que la probabilidad de que el sexo de un recién nacido sea masculino, es igual a 0.51, calcular para cuatro partos ocurridos en un hospital, la probabilidad de que:*
+
+1. *Haya igual número de niños que de niñas*
+<DemBox title="Demostración">
+
+El experimento consiste en observar el sexo de un recién nacido, así, lo que se nos pide es:
+
+$$
+\begin{align*}
+P(\text{\small número de niños = número de niñas (en 4 partos)})
+\end{align*}
+$$
+
+Tenemos que el experimento es un experimento de Bernoulli, donde la probabilidad podemos definir el éxito como que sea niño y tenemos que $p=0.51$. 
+
+Definimos una variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small número de niños en 4 partos}
+\end{align*}
+$$
+
+Así, tenemos que $X \rightsquigarrow \mathcal{B}(4, 0.51)$, entonces, lo que queremos calcular es:
+
+$$
+\begin{align*}
+P(X = 2) = \binom{4}{2} \cdot 0.51^2 \cdot (1 - 0.51)^2 = 6 \cdot 0.51^2 \cdot 0.49^2 = 0.2415
+\end{align*}
+$$
+
+</DemBox>
+2. *El número de niños sea menor que el de niñas*
+<DemBox title="Demostración">
+
+En este caso, lo que queremos es que haya más niñas que niños, es decir, que de los 4 partos haya 0 o 1 niño, es decir:
+
+$$
+\begin{align*}
+P(X \leq 1)
+\end{align*}
+$$
+
+Podemos calcular esto como:
+
+$$
+\begin{align*}
+P(X \leq 1) & = P(X = 0) + P(X = 1) = \binom{4}{0} 0.51^0 \cdot\, 0.49^4 + \binom{4}{1} 0.51^1 \cdot 0.49^3 =\\
+&=  0.2051 + 0.4118 = 0.6169
+\end{align*}
+$$
+
+</DemBox>
+3. *Haya al menos un niño*
+<DemBox title="Demostración">
+
+En esto caso, lo que queremos es:
+
+$$
+\begin{align*}
+P(X \geq 1)
+\end{align*}
+$$
+
+es decir:
+
+$$
+\begin{align*}
+P(X \geq 1) = 1 - P(X = 0) = 1 - \binom{4}{0} 0.51^2 \cdot 0.49^2 = 1 - 0.2051 = 0.7949
+\end{align*}
+$$
+
+</DemBox>
+4. *No haya más de tres niñas*
+<DemBox title="Demostración">
+
+En este caso, lo que queremos es que haya 3 o menos niñas, es decir, que haya al menos un niños, es decir:
+
+$$
+\begin{align*}
+P(X \geq 1)
+\end{align*}
+$$
+
+Que es lo que calculamos antes
+
+</DemBox>
+
+*Si se sabe que, al menos, uno de los cuatro bebés fue varón, calcular la probabilidad de que*
+5. *Haya igual número de niños que de niñas*
+<DemBox title="Demostración">
+
+Lo que se nos pide ahora es:
+
+$$
+\begin{align*}
+P(X = 2 \mid X \geq 1) = \frac{P(X = 2 \cap X \geq 1)}{P(X \geq 1)} = \frac{P(X = 2)}{P(X \geq 1)} = \frac{0.2415}{0.7949} = 0.3037
+\end{align*}
+$$
+
+</DemBox>
+6. *Haya al menos dos niños más que niñas*
+<DemBox title="Demostración">
+
+En este caso, que haya al menos dos niños más que niñas es equivalente a que haya, al menos, 3 niños, es decir:
+
+$$
+\begin{align*}
+P(X \geq 3 \mid X \geq 1) = \frac{P(X \geq 3 \cap X \geq 1)}{P(X \geq 1)} = \frac{P(X \geq 3)}{P(X \geq 1)} = \frac{0.2051}{0.7949} = 0.2580
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 2
+*En una población, se sabe que la probabilidad de encontrar al menos una persona con ojos azules de entre 10 personas escogidas al azar es 0.1 Calcular la probabilidad de que tras haber examinado aleatoriamente a 26 personas al azar de dicha población, ninguna de ellas tenga color de ojos azules*
+<DemBox title="Demostración">
+
+El experimento consiste en observar el color de los ojos de una personas, así, lo que se nos pide es:
+
+$$
+\begin{align*}
+P(\text{\small ninguna persona tenga los ojos azules (entre 26 personas)})
+\end{align*}
+$$
+
+Sabemos, por el enunciado, que la probabilidad de que haya al menos una persona con ojos azules entre 10 personas es de 0.1, es decir, podemos definir una variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small probabilidad de encontrar al menos una persona con ojos azules (entre 10)}
+\end{align*}
+$$
+
+Así, tenemos que $X \rightsquigarrow \mathcal{B}(10, 0.1)$, entonces, lo que queremos calcular es:
+
+$$
+\begin{align*}
+P(X = 0) = \binom{26}{0} \cdot 0.1^0 \cdot 0.9^{26} = 0.9^{26} = 0.0720
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 3
+*Dos personas juegan lanzando una moneda hasta que tanto la cara como la cruz se presenten tres veces. Hallar la probabilidad de que el juego no se haya terminado tras 10 lanzamientos*
+<DemBox title="Demostración">
+
+El experimento consiste en observar el resultado de lanzar una moneda hasta que salta cara y cruz 3 veces. Lo que se pide es calcular la probabilidad de que el juego no haya terminado tras 10 lanzamientos. 
+
+Vemos que el experimento de lanzar una única moneda y observar su resultado es un experimento de Bernoulli, donde podemos considerar el éxito como que salga cara, es decir $p = 0.5$. Así, podemos definir una variable aleatoria $Y$ tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Y)\\
+\omega & \longmapsto Y(\omega) = \text{\small número de lanzamientos}
+\end{align*}
+$$
+
+Así, tenemos que $Y \rightsquigarrow \mathcal{B} (10, P(c))$ por lo que buscamos
+
+$$
+\begin{align*}
+P(\text{\small juego no termina en 10 lanzamientos}) & = P((X \leq 2) \cup (X \geq 8)) = \\
+& = P(X \leq 2) + P(X \geq 8) = \\
+& = \sum_{i = 0}^{2} \binom{10}{i} 0.5^i 0.5^{10 - i} + \sum_{i = 8}^{10} \binom{10}{i} 0.5^i 0.5^{10 - i} = \\
+& = 0.0547 + 0.0547 = 0.1094
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 4
+*Sea $X$ una variable aleatoria con distribución de Poisson que satisface 
+
+$$
+P(X = 2) = \dfrac{P(X = 1)}{5}
+$$
+Determinar su distribución*
+
+<DemBox title="Demostración">
+
+Tenemos que $X \rightsquigarrow \mathcal{P}(\lambda)$, es decir, que:
+
+$$
+\begin{align*}
+P(X = k) = \frac{e^{ - \lambda} \lambda^k}{k!}
+\end{align*}
+$$
+
+Sabemos que $P(X = 2) = \dfrac{P(X = 1)}{5}$, es decir:
+
+$$
+\begin{align*}
+\frac{e^{ - \lambda} \lambda^2}{2!} = \dfrac{\dfrac{e^{ - \lambda} \lambda^1}{1!}}{5} \iff \frac{\lambda}{2} = \frac{1}{5} \iff \lambda = \frac{2}{5}
+\end{align*}
+$$
+
+Así, la distribución de $X$ será:
+
+$$
+\begin{align*}
+P(X = k) = \frac{e^{ - \frac{2}{5}} \left(\frac{2}{5}\right)^k}{k!}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 5
+*El número de organismos de tipo A en una célula tiene distribución de Poisson con parámetro $\lambda$ mientras que el número de organismos de tipo B, depende del número de organismos de tipo A y sigue distribución de Poisson de media $\ln 2(1 + x)$, si $x$ es el número de organismos de tipo $A$:*
+
+1. *Si se considera sana una célula cuando contiene algún organismo de tipo $A$, pero ninguno de tipo B, ¿cuál es la probabilidad de que al tomar $n$ células al zar, haya exactamente $k$ células sanas?*
+
+<DemBox title="Demostración">
+
+El experimento consiste en observar el número de organismos de cada tipo en una célula y, determinar si es sana o no. Así, lo que se nos pide es:
+
+$$
+\begin{align*}
+P(\text{\small número de células sanas = k (en $n$ células)})
+\end{align*}
+$$
+
+Sabemos que el número de organismos de tipo $A$ presentes en una célula sigue una distribución de Poisson de parámetro $\lambda$. Así definimos una variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small número de organismos de tipo A en una célula}
+\end{align*}
+$$
+
+y sabemos que $X \rightsquigarrow \mathcal{P}(\lambda)$.
+
+Por otra parte, sabemos que $Y = \mathcal{P}(\ln 2(1 + x))$ es decir:
+
+$$
+\begin{align*}
+Y|_{X = x} \rightsquigarrow \mathcal{P}(\ln 2(1 + x))
+\end{align*}
+$$
+
+Notar que, una célula es sana si y solo si:
+
+$$
+\begin{align*}
+(X > 0) \cap (Y = 0)
+\end{align*}
+$$
+
+y además, ver si una célula es o no sana es un experimento de Bernoulli, donde el éxito es que la célula sea sana, es decir:
+
+$$
+\begin{align*}
+Z = \text{\small  número de células sanas (de $n$ observaciones)}
+\end{align*}
+$$
+
+Entonces, lo que tenemos es que $Z \rightsquigarrow \mathcal{B}(n, P(\text{\small célula sana}))$ donde:
+
+$$
+\begin{align*}
+P(\text{\small al tomar $n$ células haya $k$ sanas}) = P(Z = k)
+\end{align*}
+$$
+
+Y sabemos que una célula sana cumple que:
+
+$$
+\begin{align*}
+P(\text{\small célula sana}) & = P(X > 0 \cap Y = 0) = \\
+& = P[(X = 1 \cup X = 2 \cup \ldots) \cap Y = 0] = \\
+& = P[(X = 1 \cap Y = 0) \cup (X = 2 \cap Y = 0) \cup \ldots] = \\
+& = \displaystyle \sum_{i = 1}^{\infty} P(X = i \cap Y = 0) = \displaystyle \sum_{i = 1}^{\infty} P(Y = 0|_{X = i}) \cdot P(X = i) = \\
+& = \displaystyle \sum_{i = 1}^{\infty} e^{ - \ln 2 (1 + i)} \frac{[\ln 2(1 + i)]^0}{0!} \cdot \frac{e^{ - \lambda} \lambda^i}{i!} = \\
+& = \displaystyle \sum_{i = 1}^{\infty} \frac{e^{ - \lambda}}{2(1 + i) } \frac{\lambda^i}{i!} = \frac{e^{ - \lambda}}{2 \lambda} \displaystyle \sum_{i = 1}^{\infty} \dfrac{\lambda^{i + 1}}{(i + 1)!} = \frac{e^{ - \lambda}}{2\lambda} \displaystyle \sum_{j = 2}^{\infty} \frac{e^{ j}}{j!} =\\
+& = \frac{e^{ - \lambda}}{2 \lambda} \left( e^\lambda - 1 - \lambda \right)
+\end{align*}
+$$
+
+Podemos decir que $Z \rightsquigarrow \mathcal{B}\left(n, \dfrac{e^{-\lambda} (e^\lambda - 1 - \lambda)}{2 \lambda} \right)$ y por lo tanto:
+
+$$
+\begin{align*}
+P(X = k) = \binom{n}{k} \left(\frac{e^{-\lambda} (e^\lambda - 1 - \lambda)}{2 \lambda}\right)^k \left(1 - \frac{e^{-\lambda} (e^\lambda - 1 - \lambda)}{2 \lambda}\right)^{n - k}
+\end{align*}
+$$
+
+</DemBox>
+2. *Calcular la probabilidad de que el número total de organismos de tipo A y B en una célula escogida al azar, no se mayor que uno*
+
+<DemBox title="Demostración">
+
+Esperamos que el número total de organismos de tipo A y B en una célula sea menor o igual a uno, es decir:
+
+$$
+\begin{align*}
+P(X + Y \leq 1) = P(X = 0 \cap Y = 0) + P(X = 1 \cap Y = 0) + P(X = 0 \cap Y = 1)
+\end{align*}
+$$
+
+Podemos calcular cada una de ellas como:
+
+$$
+\begin{align*}
+P(X = 0 \cap Y = 0) & = P(Y = 0|_{X = 0}) \cdot P(X = 0) = e^{ - \ln 2} \cdot \frac{1}{1!} \cdot \frac{e^{ - \lambda}}{0!} = e^{ - \ln 2 - \lambda}\\[3ex]
+P(X = 1 \cap Y = 0) & = P(Y = 0|_{X = 1})\cdot P(X = 1) = e^{ - \ln 4} \frac{(\ln 4)^1}{1!} \cdot \frac{e^{ - \lambda} \lambda}{1!} = \\[1ex]
+&  = e^{ - \ln 4 - \lambda} \lambda \ln 4\\[3ex]
+P(X = 0 \cap Y = 1) & = P(Y = 1|_{X = 0}) \cdot P(X = 0) = e^{ - \ln 2} \frac{1}{1!}\cdot \frac{e^{ - \lambda}}{0!} = e^{ - \ln 2 - \lambda}
+\end{align*}
+$$
+
+Así, la probabilidad de que el número total de organismos de tipo A y B en una célula escogida al azar, no sea mayor que uno es:
+
+$$
+\begin{align*}
+P(X + Y \leq 1) & = e^{ - \ln 2 - \lambda} + e^{ - \ln 4 - \lambda} \lambda \ln 4 + e^{ - \ln 2 - \lambda} = e^{ - \ln 2 - \lambda} (1 + \lambda \ln 4) =\\
+& = e^{ - \lambda} (1 + \lambda \ln 4) = e^{ - \lambda} + e^{ - \lambda} \lambda \ln 4 
+\end{align*}
+$$
+
+</DemBox>
+3. *Calcular la probabilidad anterior si se sabe que la cédula no es sana*
+
+<DemBox title="Demostración">
+
+Así, lo que tenemos que calcular es:
+
+$$
+\begin{align*}
+P(X + Y \leq 1 |_{\text{célula no sana}}) = \dfrac{P(X + Y \leq 1 \cap \text{\small célula no sana})}{P(\text{\small célula no sana})}
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(X + Y \leq 1 \cap \text{\small célula no sana}) & = P(X + Y \leq 1 \cap X > 0 \cap Y > 0) = \\
+& = P(X = 1 \cap Y = 0) + P(X = 0 \cap Y = 1) = \\
+& = e^{ - \ln 4 - \lambda} \lambda \ln 4 + e^{ - \ln 2 - \lambda} = e^{ - \lambda} \lambda \ln 4 + e^{ - \lambda} = \\
+& = e^{ - \lambda} (1 + \lambda \ln 4) = e^{ - \lambda} + e^{ - \lambda} \lambda \ln 4 
+\end{align*}
+$$
+
+Así, la probabilidad de que el número total de organismos de tipo A y B en una célula escogida al azar, no sea mayor que uno si se sabe que la célula no es sana es:
+
+$$
+\begin{align*}
+P(X + Y \leq 1 |_{\text{célula no sana}}) = \dfrac{e^{ - \lambda} + e^{ - \lambda} \lambda \ln 4}{1 - \frac{e^{ - \lambda}}{2 \lambda} \left( e^\lambda - 1 - \lambda \right)} = \dfrac{e^{ - \lambda} + e^{ - \lambda} \lambda \ln 4}{1 - \frac{e^{ - \lambda}}{2 \lambda} \left( e^\lambda - 1 - \lambda \right)} 
+\end{align*}
+$$
+
+</DemBox>
+4. *Si una célula no contiene organismos de tipo B, calcular la probabilidad de que no contenga organismos de tipo $A$*
+
+<DemBox title="Demostración">
+
+La probabilidad que buscamos se puede expresar como:
+
+$$
+\begin{align*}
+P(X = 0 |_{Y = 0}) = \dfrac{P(X = 0 \cap Y = 0)}{P(Y = 0)} = \dfrac{e^{ - \ln 2 - \lambda}}{e^{ - \ln 2}} = e^{ - \lambda}
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 6
+*Sea $X$ una variable aleatoria con función masa de probabilidad*
+
+$$
+\begin{align*}
+P(X = k) = \frac{e^{ - 1}}{(k + 1)!}
+\end{align*}
+$$
+
+*donde $k \in \{-1, 0, 1, \ldots\}$*
+
+1. *¿Está relacionada esta distribución con alguna conocida?*
+<DemBox title="Resolución">
+
+Podemos definir una función $Y = X + 1$. Así tendríamos que:
+
+$$
+\begin{align*}
+P (X= k) = P(Y - 1 = k)
+\end{align*}
+$$
+
+entonces, definimos $j = k - 1$, y tendríamos que $j \in \{0, 1, \ldots\}$. Así:
+
+$$
+\begin{align*}
+P(Y - 1 = k) = P(Y = j) = \frac{e^{ - 1}}{j!}
+\end{align*}
+$$
+
+Es decir, que $Y \sim \mathcal{P}(1)$, entonces, $X$ sigue una distribución de Poisson de parámetro $\lambda = 1$ pero desplazada.
+
+</DemBox>
+2. *Hallar la media y la varianza de la variable anterior*
+<DemBox title="Resolución">
+
+Como $Y \sim \mathcal{P}(1)$ por teoría sabemos que:
+
+$$
+\begin{align*}
+E(Y) = Var(Y) = 1
+\end{align*}
+$$
+
+Así, haciendo la conversión con $X = Y - 1$ tenemos que:
+
+- $E(X) = E(Y - 1) = \lambda - 1 = 1 - 1 = 0$
+- $Var(X) = Var(Y - 1) = Var(Y) = 1$
+
+</DemBox>
+3. *Encontrar la función generatriz de momentos*
+<DemBox title="Resolución">
+
+Por teoría, sabemos que la función generatriz de momentos es de la forma
+
+$$
+\begin{align*}
+g_Y(t) = E[e^{tY}]
+\end{align*}
+$$
+
+Como $Y \sim \mathcal{P}(1)$ tenemos que:
+
+$$
+\begin{align*}
+P(Y = j) = \frac{\lambda^j e^{ - \lambda}}{j!} \text{ con } j = 0, 1, \ldots
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+g_Y(t) = \displaystyle \sum_{j = 0}^{\infty} e^{tj} \cdot P(Y = j) = \displaystyle \sum_{j = 0}^{\infty} e^{tj} \frac{e^{ - \lambda} \lambda^j}{j!} = e^{ - \lambda} \displaystyle \sum_{j = 0}^{\infty} \frac{(\lambda e^t)^j}{j!}
+\end{align*}
+$$
+
+</DemBox>
+
+### Tema 2 - Ejercicio 7
+*Sea $X$ una variable aleatoria con distribución de Poisson de parámetro $\lambda$. Hallar la moda de dicha distribución*
+
+<DemBox title="Resolución">
+
+Sea $X \sim \mathcal{P}(\lambda)$ entonces tenemos que:
+
+$$
+\begin{align*}
+P(X = k) = \frac{\lambda^k - e^{ -\lambda}}{k!}\qquad \text{ con } k \in \{1, 2, \ldots\}
+\end{align*}
+$$
+
+La moda de una distribución de Poisson será el valor $k$ que maximiza la probabilidad, es decir, que $P(X = k)$ sea máximo:
+
+$$
+\begin{align*}
+Mo(\mathcal{P}(\lambda)) = \max_{k = 1, 2, \ldots} P(X = k)
+\end{align*}
+$$
+
+Así, tenemos que ver cual es el entero que satisface esta condición de máximo. Para ello, calcularemos la razón entre dos términos de probabilidades consecutivas con el fin de poder determinar en que punto empieza a disminuir la probabilidad:
+
+$$
+\begin{align*}
+\frac{P(X = k + 1)}{P(X = k)} = \frac{\dfrac{e^{ - \lambda} \lambda^{k + 1}}{(k + 1)!}}{\dfrac{e^{ - \lambda} \lambda^k}{k!}} = \frac{e^{ - \lambda} \cdot \lambda^{k} \cdot \lambda \cdot k!}{e^{ - \lambda} \cdot \lambda^k \cdot (k + 1) \cdot k!} = \frac{\lambda}{k + 1}
+\end{align*}
+$$
+
+Así, que $P(X = k)$ sea máximo implica que $P(X = k+1) \leq P(X = k)$, es decir:
+
+$$
+\begin{align*}
+P(X = k + 1) \leq P(X = k) \Longleftrightarrow \frac{P(X = k + 1)}{P(X = k)} \leq 1 \Longleftrightarrow \frac{\lambda}{k + 1} \leq 1
+\end{align*}
+$$
+
+Despejando en la ecuación anterior llegamos a que:
+
+$$
+\begin{align*}
+\lambda & \leq k + 1\\
+k & \leq \lambda - 1
+\end{align*}
+$$
+
+Así, tenemos que la moda de la distribución de Poisson es el mayor entero que es menor o igual a $\lambda$, es decir:
+
+$$
+\begin{align*}
+k = \lfloor \lambda \rfloor \qquad \text{ con } \lambda \notin \mathbb{N}
+\end{align*}
+$$
+
+Sin embargo, el caso de que $\lambda \in \mathbb{N}$ tendríamos que sería unimodal, entonces:
+
+$$
+\begin{align*}
+\lambda \text{ y } \lambda - 1 
+\end{align*}
+$$
+
+</DemBox>
+
+#### Ejercicio 8
+*Sea $X$ el número de llamadas telefónicas que llegan a una centralita por hora. Se sabe que la probabilidad de atender a una llamada es $p$. Sea $Y$ la variable aleatoria número de llamadas atendidas en una hora. Si la distribución de $X$ es de Poisson de parámetro $\lambda$, obtener la distribución de $Y$*
+
+<DemBox title="Demostración">
+
+Tenemos que el experimento consiste en observar el número de llamadas que se atienden en una hora en una centralita. Sabemos que $X$ mide el número de llamadas que llegan a la centralita por hora y además:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{P} (\lambda)
+\end{align*}
+$$
+
+Sabemos además que la probabilidad de que una llamada sea atendida es $p$. Así, queremos hallar la distribución de $Y$ que mide el número de llamadas atendidas en una hora.
+
+Podemos notar que que una llamada sea atendida o no no deja de ser un experimento de Bernoulli, donde podemos definir el éxito como que la llamada sea atendida. Así, $Y$ es una variable aleatoria con distribución binomial tal que:
+
+$$
+\begin{align*}
+Y \rightsquigarrow \left(\mathcal{P}(\lambda), p\right)
+\end{align*}
+$$
+
+De hecho, sabemos que para un valor fijo de llamadas $k$ tenemos que:
+
+$$
+\begin{align*}
+Y \rightsquigarrow \mathcal{B}(k, p) = \binom{k}{i} p^i (1 - p)^{k - i}
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(Y = y |_{X = k}) = \binom{k}{y} p^y (1 - p)^{k - y}\quad \text{ con } y = 0, 1, \ldots, k
+\end{align*}
+$$
+
+Entonces, la probabilidad de $Y = y$ se obtiene como:
+
+$$
+\begin{align*}
+P(Y = y) & = \displaystyle \sum_{k = y}^{\infty} P(Y = y \cap X = k) \cdot P(X = k) = \\
+& = \displaystyle \sum_{k = y}^{\infty} \binom{k}{y} p^y (1 - p)^{k - y} \cdot \frac{e^{ - \lambda} \lambda^k}{k!} = \\
+& = \displaystyle \sum_{k = y}^{\infty} \frac{e^{ - \lambda} \lambda^k}{y! (k - y)!} p^y (1 - p)^{k - y}
+\end{align*}
+$$
+
+Haciendo un cambio de variable podemos llegar a $Y \rightsquigarrow \mathcal{P}(\lambda p)$
+
+</DemBox>
+
+### Ejercicio 9
+*La probabilidad de que una máquina fabrique una pieza defectuosa es 0.0001. Tal máquina fabrica en un año 20000 piezas. Calcular la probabilidad de que fabrique al menos 2 piezas defectuosas*
+
+<DemBox title="Resolución">
+
+El experimento consiste en observar el estado de las piezas que fabrica una máquina anualmente. Queremos ver:
+
+$$
+\begin{align*}
+P(\text{\small al menos 2 piezas sean defectuosas (en 20000)})
+\end{align*}
+$$
+
+Podemos definir $X$ como una variable aleatoria discreta tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small nº de piezas defectuosas (en 20000)}
+\end{align*}
+$$
+
+Notar que $X \sim \mathcal{B}(20000, P(\text{\small pieza defectuosa}))$.\\
+Así, queremos ver cual es la probabilidad de que al menos dos piezas sean defectuosas, es decir:
+
+$$
+\begin{align*}
+P(X \geq 2)
+\end{align*}
+$$
+
+Para ello, podemos construir la siguiente tabla:
+
+$$
+\begin{array}{c|c}
+X & P(X = k)\\\hline
+0 & \binom{20000}{0} [P(\text{\small defectuosa})]^0 [P(\text{\small no defectuosa})]^{20000}\\ \hline
+1 & \binom{20000}{1} [P(\text{\small defectuosa})]^1 [P(\text{\small no defectuosa})]^{19999}\\ \hline
+\vdots &  \vdots\\ \hline
+20000 & \binom{20000}{20000} [P(\text{\small defectuosa})]^{20000} [P(\text{\small no defectuosa})]^{0}
+\end{array}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(X \geq 2) & = 1 - P(X < 2) = 1 - P(X = 0 \cup X = 1) =\\[1.5ex]
+&= 1 - (P(X = 0) + P(X = 1)) = \\[1.5ex]
+&= 1 - \left(\binom{20000}{0} p^0 (1 - p)^{20000} + \binom{20000}{1} p^1 (1 - p)^{19999}\right) = \\[1.5ex]
+&= 1 - \left(\frac{20000!}{20000!} 0.0001^0 \cdot 0.9999^{20000} + \frac{20000!}{19999!} 0.0001^1 \cdot 0.9999^{19999}\right) = \\[1.5ex]
+& = 1 - (0.9999^{20000} + 20000 \cdot 0.0001^1 \cdot 0.9999^{19999}) \approx 0.5940
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 10
+*Sea $X$ una variable aleatoria discreta con soporte $\{0, 1,\ldots\}$. Demostrar qu $X$ tiene una distribución geométrica si y solo si para cualesquiera $k_1, k_2 \in \{0, 1, \ldots\}$ se cumple que:*
+
+$$
+\begin{align*}
+P(X > k_1 + k_2 | X > k_1) = P(X \geq k_2)
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Tenemos que demostrar que:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{G}(p) \Longleftrightarrow P(X > k_1 + k_2 | X > k_1) = P(X \geq k_2) \quad \forall k_1, k_2 \in \{0, 1, \ldots\}
+\end{align*}
+$$
+
+Procederemos a demostrar la doble implicación:
+
+- **$\Rightarrow$)** Tenemos que $X \rightsquigarrow \mathcal{G}(p)$, es decir, que:
+
+$$
+\begin{align*}
+P(X = k) = (1 - p)^k p \quad \forall k \in \{0, 1, \ldots\}
+\end{align*}
+$$
+
+Entonces, tenemos que ver si se cumple que:
+
+$$
+\begin{align*}
+P(X > k_1 + k_2 | X > k_1) = P(X \geq k_2)
+\end{align*}
+$$
+
+Así, tenemos que demostrar la igualdad:
+
+$$
+\begin{align*}
+P(X > k_1 + k_2 |X > k_1) & = \frac{P(X > k_1 + k_2 \cap X > k_1)}{P(X > k_1)} \overset{*_1}{ = }\\
+& = \frac{P(X > k_1 + k_2)}{P(X > k_1)} = \frac{\displaystyle \sum_{i = k_1 + k_2 + 1}^{\infty} (1 - p)^{i} p}{ \displaystyle \sum_{j = k_1 + 1}^{\infty}(1 - p)^{j} p} =\\
+& = \frac{\displaystyle \sum_{i = k_1 + k_2 + 1}^{\infty} (1 - p)^i}{\displaystyle \sum_{j = k_1 + 1}^{\infty} (1 - p)^j} =\\[2ex]
+& = \frac{(1 - p)^{k_1 + k_2 + 1} + ( 1 - p)^{k_1 + k_2 + 2} + \ldots}{(1 - p)^{k_1 + 1} + (1 - p)^{k_1 + 2} + \ldots} = \\[2ex]
+& = \frac{(1 - p)^{k_1 + 1}\left((1 - p)^{k_2} + (1 - p)^{k_2 + 1} \ldots\right)}{(1 - p)^{k_1 + 1} (1 + (1 - p)^1 + \ldots)} = \\[2ex]
+& = \frac{(1 - p)^{k_2} + (1 - p)^{k_2 + 1} + \ldots}{(1 - p)^0 + (1 - p)^{1} + \ldots} =\\
+& = \frac{\displaystyle \sum_{i = k_2}^{\infty} (1 - p)^i}{\displaystyle \sum_{j = 0}^{\infty}(1 - p)^j} = \frac{\displaystyle \sum_{i = k_2}^{\infty} (1 - p)^i p}{\displaystyle \sum_{j = 0}^{\infty}(1 - p)^j p} = \\[2ex]
+& = \frac{P(X \geq k_2)}{P(X \geq 0)} = \frac{P(X \geq k_2 \cap X \geq 0)}{P(X \geq 0)} =\\[2ex]
+& = P(X \geq 2 | X\geq 0) = P(X \geq k_2)
+\end{align*}
+$$
+
+($*_1$) Como el soporte es $\{0, 1, \ldots\} \implies k_1 + k_2 \geq k_1$ 
+Así, queda demostrada esta implicación
+- **$\Leftarrow$)** Tenemos que $\forall k_1, k_2 \in \{0, 1, \ldots\}$ se cumple que:
+
+$$
+\begin{align*}
+P(X > k_1 + k_2 | X > k_1) = P(X \geq k_2)
+\end{align*}
+$$
+
+Entonces, tenemos que demostrar que $X \rightsquigarrow \mathcal{G}(p)$. Si $X$ cumple la propiedad dada, entonces:
+
+$$
+\begin{align*}
+& P(X > k_1 + k_2 | X > k_1) = P(X \geq k_2) \iff\\
+&  \iff \frac{P(X > k_1 + k_2 \cap X > k_1)}{P(X > k_1)} = P(X \geq k_2) \iff\\
+&  \iff \frac{P(X > k_1 + k_2)}{P(X > k_1)} = P(X \geq k_2)
+\end{align*}
+$$
+
+Denotamos $P(X > k) = f(k)$ entonces:
+
+$$
+\begin{align*}
+\frac{P(X > k_1 + k_2)}{P(X > k_1)} = P(X \geq 2) \longrightarrow \frac{f(k_1 + k_2)}{f(k_1)} = f(k_2 - 1)
+\end{align*}
+$$
+
+Así, sea $f(1) = c$ entonces, denotamos $k = k_1 + k_2 -1$
+
+$$
+\begin{align*}
+f(k) = f(k_1) \cdot f(k_2 - 1)
+\end{align*}
+$$
+
+Así, suponemos que $k > 0$ y tenemos que:
+
+$$
+\begin{align*}
+f(k) = f(k - 1) \cdot c = f(k - 2) \cdot c^2 = \ldots = f(1) \cdot c^{k - 1} = c^k
+\end{align*}
+$$
+
+Notar que en el caso de que $k = 0 \implies k_1 = k_2 = 0$ entonces:
+
+$$
+\begin{align*}
+f(0) = c^0 = 1
+\end{align*}
+$$
+
+lo cual sería correcto. 
+
+Ahora, podemos calcular $P(X = k)$ como:
+
+$$
+\begin{align*}
+P(X = k) = P(X \geq k) - P(X \geq k + 1) = c^{k - 1} - c^{k} = c^{k - 1} (1 - c)
+\end{align*}
+$$
+
+Así, haciendo el cambio de variable de $c = 1 - p$ obtenemos que:
+
+$$
+\begin{align*}
+P(X = k) = (1 - p)^{k - 1} p
+\end{align*}
+$$
+
+Es decir, que $X$ es una variable aleatoria con distribución geométrica de parámetro $p$.
+
+</DemBox>
+
+### Ejercicio 11
+*Sea $X$ una variable aleatoria con distribución geométrica de parámetro $p$. Demostrar que $X$ ``no tiene memoria'', esto es:*
+
+$$
+\begin{align*}
+P(X = k + r | X \geq r) = P(X = k) \quad \forall k, r \in \{0, 1, \ldots\}
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Tenemos que demostrar que:
+
+$$
+\begin{align*}
+X \rightsquigarrow \mathcal{G}(p) \implies P(X = k + r | X \geq r) = P(X = k) \quad \forall k, r \in \{0, 1, \ldots\}
+\end{align*}
+$$
+
+Procederemos a demostrar la implicación. Para ello, tenemos que:
+
+$$
+\begin{align*}
+P(X = k + r | X \geq r) & =  \frac{P(X = k + r \cap X \geq r)}{P(X \geq r)} \overset{*_1}{ =} \\[2ex]
+& = \frac{P(X = k + r)}{P(X \geq r)} \overset{*_2}{ =}  \\[2ex]
+& = \frac{(1 - p)^{k + r}p}{\displaystyle \sum_{i = r}^{\infty} (1 - p)^{i} p} =\\
+& = \frac{(1 - p)^{k + r}}{(1 - p)^r + (1 - p)^{r + 1} + \ldots} = \\[2ex]
+& = \frac{(1 - p)^{k + r}}{(1 - p)^r (1 + (1 - p) + \ldots)} = \\[2ex]
+& = \frac{(1 - p)^k}{1 + (1 - p) + \ldots} = \\[2ex]
+& = \frac{(1 - p)^k p}{p \displaystyle \sum_{i = 0}^{\infty} (1 - p)^i} \overset{*_3}{ = }\\[2ex]
+& = \frac{(1 - p)^k p}{\dfrac{p}{1 - (1 - p)}} = \\[2ex]
+& = (1 - p)^k = P(X = k)
+\end{align*}
+$$
+
+($*_1$) Como $k, r \in \{0, 1, \ldots\} \implies k + r \geq r$ 
+
+($*_2$) $X \rightsquigarrow \mathcal{G}(p) \implies P(X = k) = (1 - p)^k p$ 
+
+($*_3$) Notar que $\displaystyle \sum_{i = 0}^{\infty} r^i = \dfrac{1}{1 - r}$ con $|r| < 1$
+
+</DemBox>
+
+### Ejercicio 12
+*Sea $X$ la variable aleatoria número de repeticiones de un experimento (en condiciones de independencia) hasta que se producer $r$ éxitos, donde el éxito tiene probabilidad $p$. Sea $Y \rightsquigarrow \mathcal{B}(n, p)$. Demostrar que:*
+
+$$
+\begin{align*}
+P(X = n) = \frac{r}{n} P(Y = r) \quad \text{ con } n \in \{r, r + 1, \ldots\}
+\end{align*}
+$$
+
+<DemBox title="Demostración">
+
+Bajo las condiciones del enunciado, tenemos que $X \rightsquigarrow \mathcal{B} \mathcal{N} (n, p)$. Así, tenemos que:
+
+$$
+\begin{align*}
+P(X = n) = \binom{r + n - 1}{n} (1 - p)^n p^r
+\end{align*}
+$$
+
+Por otro lado, sabemos que $Y \rightsquigarrow \mathcal{B}(n, p)$, es decir:
+
+$$
+\begin{align*}
+P(Y = r) = \binom{n}{r} p^r (1 - p)^{n - r}
+\end{align*}
+$$
+
+Entonces:
+
+$$
+\begin{align*}
+P(X = n) & = \binom{r + n - 1}{n} (1 - p)^n p^r = \frac{(r + n - 1)!}{n! ( r + n - 1 - n)!} (1 - p)^n p^r = \\[2ex]
+& = \frac{(r + n - 1)!}{n! (r - 1)!} (1 - p)^n p^r =\\
+\end{align*}
+$$
+
+No sé por donde tirar
+
+</DemBox>
+
+### Ejercicio 13
+*Un lepidopterista desea capturar una clase de mariposa que se encuentra en la naturaleza en una proporción del 15$\%$. Calcular la probabilidad de que tenga que cazar 10 mariposas de la clase no deseada antes de encontrar un ejemplar de la clase deseada. Calcular la probabilidad de que tenga que cazar 10 mariposas de la clase no deseada antes de encontrar 3 ejemplares de la clase deseada*
+
+<DemBox title="Resolución">
+
+El experimento consiste en capturar mariposas y ver si son o no de la clase deseada. Así, tenemos que estamos ante un experimento de Bernoulli, donde el éxito es si la mariposa es de la clase deseada y a esto lo denotaremos como $E$. Así, tenemos que:
+
+$$
+\begin{align*}
+P(E) = \frac{15}{100} = 0.15
+\end{align*}
+$$
+
+Lo que queremos ver es la probabilidad de que tenga que cazar 10 mariposas de la clase no deseada antes de encontrar un ejemplar de la clase deseada. Así, podemos definir una variable aleatoria $X$ que mide el número de veces que ocurre $E^c$ antes de que ocurra $E$ por primera vez. Así, tenemos que $X \rightsquigarrow \mathcal{G}(P(E)) = \mathcal{G}(0.15)$. Como el éxito ocurre en la undécima captura, queremos ver:
+
+$$
+\begin{align*}
+P(X = 10) = (1 - P(E))^{10} P(E) = (1 - 0.15)^{10} \cdot 0.15 = 0.0295
+\end{align*}
+$$
+
+Ahora, queremos ver la probabilidad de que tenga que cazar 10 mariposas de la clase no deseada antes de encontrar 3 ejemplares de la clase deseada, es decir, que habrá cazado 10 mariposas no deseadas y 2 deseadas antes de la tercera deseada. Así, podemos definir una variable aleatoria $Y$ tal que $Y \rightsquigarrow \mathcal{B}\mathcal{N} (3, 0.15)$. Así, lo que queremos ver es:
+
+$$
+\begin{align*}
+P(Y = 10) = \binom{10 + 3 - 1}{10} (0.15)^3 (0.85)^{10} = \binom{12}{10} (0.15)^3 (0.85)^{10} \approx 0.0439
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 14
+*En una lotería de 400 billetes, exactamente hay 4 premios. El primer cliente compra 10 billetes. Hallar la probabilidad de que por lo menos tenga un premio.*
+<DemBox title="Demostración">
+
+El experimento consiste en ver si los billetes de lotería tienen premio o no. Así, estamos ante un experimento de Bernoulli donde podemos definir el éxito $E$ como que tenga premio. Así, podemos definir una variable aleatoria $X$ tal que:
+
+$$
+\begin{align*}
+X \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_X)\\
+\omega & \longmapsto X(\omega) = \text{\small número de premios (entre 10 billetes)}
+\end{align*}
+$$
+
+Notar que $X$ es una variable aleatoria con distribución hipergeométrica ya que estamos ante un muestreo sin reemplazo. Así, tenemos que:
+
+$$
+\begin{align*}
+P(X = k) = \frac{\binom{4}{k} \binom{396}{10 - k}}{\binom{400}{10}}
+\end{align*}
+$$
+
+Lo que queremos ver es la probabilidad de que por lo menos tenga un premio, es decir:
+
+$$
+\begin{align*}
+P(X \geq 1) = 1 - P(X = 0) = 1 - \frac{\binom{4}{0} \binom{396}{10}}{\binom{400}{10}} = 1 - \frac{\binom{396}{10}}{\binom{400}{10}} \approx 0.095
+\end{align*}
+$$
+
+</DemBox>
+
+### Ejercicio 15
+*Sea $X$ una variable aleatoria con función de distribución continua. Demostrar que la variable aleatoria $F_X(X)$ tiene distribución uniforme en el intervalo $(0, 1)$. ¿Es necesaria la condición de continuidad de $F_X$ para garantizar lo anterior?*
+
+<DemBox title="Demostración">
+
+jfklñas
+
+</DemBox>
+
+### Ejercicio 22
+*El peso de los cochinillos tiene una distribución normal, de la que se sabe que la probabilidad de pesar menos de 2780 gramos es de 0.33, y la de pesar más de 3720 gramos es 0.075. El cocinero de un restaurante desechará todo cochinillo que pese menos de 2600 gramos. Si en un mes recibe 1000 cochinillos, ¿cuántos cabe esperar que devuelva?*
+<DemBox title="Demostración">
+
+Lo primero que haremos será encontrar los parámetros de la distribución normal, que denotaremos como $X \rightsquigarrow \mathcal{N}(\mu, \sigma)$. Sabemos que:
+
+$$
+\begin{align*}
+P(X < 2780) = 0.33 \quad \text{ y } \quad P(X > 3720) = 0.075
+\end{align*}
+$$
+
+Empezamos con $P(X < 2780)$, que es:
+
+$$
+\begin{align*}
+P(X < 2780) = P\left(\frac{X - \mu}{\sigma} < \frac{2780 - \mu}{\sigma}\right) = P \left(\mathcal{N}(0, 1) < \frac{2780 - \mu}{\sigma}\right) = 0.33
+\end{align*}
+$$
+
+Entonces, a partir de la tabla de la normal, obtenemos que, como $0.33 < 0.5$ entonces:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0, 1) < \alpha) = P(\mathcal{N}(0, 1) > - \alpha) = 1 - P(\mathcal{N}(0, 1) < -\alpha) = 0.33
+\end{align*}
+$$
+
+Entonces, buscamos el $\alpha$ tal que:
+
+$$
+\begin{align*}
+P(\mathcal{N}(0,1) < -\alpha) = 1 - 0.33 = 0.67 \implies -\alpha = 0.44 \implies \alpha = -0.44
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+\frac{2780 - \mu}{\sigma} = -0.44  \implies 2780 = -0.44 \sigma + \mu
+\end{align*}
+$$
+
+Ahora hacemos lo mismo para $P(X > 3720)$, que es:
+
+$$
+\begin{align*}
+P(X > 3720) = P \left(\frac{X - \mu}{\sigma} > \frac{3720 - \mu}{\sigma}\right) = P \left(\mathcal{N}(0, 1) > \frac{3720 - \mu}{\sigma}\right) = 0.075
+\end{align*}
+$$
+
+Entonces, a partir de la tabla obtenemos que:
+
+$$
+\begin{align*}
+P(\mathcal{N} > \alpha) = 0.075 \implies P(\mathcal{N} \leq \alpha) = 1 - 0.075 = 0.925
+\end{align*}
+$$
+
+Entonces, buscamos el $\alpha$ tal que:
+
+$$
+\begin{align*}
+P(\mathcal{N} \leq \alpha) = 0.925 \implies \alpha = 1.44
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+\frac{3720 - \mu}{\sigma} = 1.44 \implies 3720 = 1.44 \sigma + \mu
+\end{align*}
+$$
+
+Y ahora, resolvemos el sistema de ecuaciones:
+
+$$
+\begin{align*}
+\left\{
+\begin{array}{ll}
+2780 = -0.44 \sigma + \mu\\
+3720 = 1.44 \sigma + \mu
+\end{array}
+\right. \iff 3720 - 2780 = (1.44 + 0.44) \sigma \iff \sigma = \frac{940}{1.88} = 500
+\end{align*}
+$$
+
+Ahora, podemos calcular $\mu$ como:
+
+$$
+\begin{align*}
+2780 = -0.44 \cdot 500 + \mu \implies \mu = 2780 + 220 = 3000
+\end{align*}
+$$
+
+Entonces, tenemos que la distribución de los pesos de los cochinillos es $X \rightsquigarrow \mathcal{N}(3000, 500)$. 
+
+Ahora, vamos a ver cuántos cochinillos devolverá el cocinero si recibe 1000. Para ello, vemos que un cochinillo se devolverá si pesa menos de 2600 gramos, esto es, estamos en un experimento de Bernoulli, donde podemos definir el éxito como que devuelva el cochinillo, es decir:
+
+$$
+\begin{align*}
+P(E) & = P(X < 2600) = P \left(\frac{X - 3000}{500} < \frac{2600 - 3000}{500}\right) = P\left(\mathcal{N}(0, 1) < - 0.8 \right) = \\[2ex]
+& = P(\mathcal{N}(0, 1) > 0.8) = 1 - P(\mathcal{N}(0, 1) \leq  0.8) = 1 - 0.7881 = 0.2119
+\end{align*}
+$$
+
+Así, tenemos que $P(E) = 0.2119$. Como queremos ver cuantos cochinillos devuelve, podemos definir la variable aleatoria $Y$ tal que:
+
+$$
+\begin{align*}
+Y \colon (\Omega, \mathcal{A}, P) & \longrightarrow (\mathbb{R}, \mathcal{B}_\mathbb{R}, P_Y)\\
+\omega & \longmapsto Y(\omega) = \text{\small número de cochinillos devueltos (de 1000)}
+\end{align*}
+$$
+
+Así, tenemos que $Y \rightsquigarrow \mathcal{B}(1000, 0.2119)$, por lo que el número esperado de cochinillos devueltos es:
+
+$$
+\begin{align*}
+E(Y) = n \cdot p = 1000 \cdot 0.2119 = 211.9 = 212
+\end{align*}
+$$
+
+</DemBox>
+
+## Ejercicio Hoja suelta
+*El tiempo que un sistema electrónico funciona sin necesidad de realizarle ninguna reparación es una variable aleatoria exponencial con una media de 50 días*:
+
+1. *Probabilidad de que el sistema no tenga que ser reparado en 60 días, por lo menos*
+
+<DemBox title="Resolución">
+
+Tenemos que el experimento consiste en observar el tiempo que un sistema electrónico funciona sin necesidad de realizarle ninguna reparación.
+
+Buscamos la probabilidad de que esté, al menos, 60 días sin ser reparado, es decir:
+
+$$
+\begin{align*}
+P(\text{\small más de 60 días sin ser reparado})
+\end{align*}
+$$
+
+Así, si definimos la variable aleatoria $X$ = ``días sin ser reparado'' que, por el enunciado sabemos que es una variable aleatoria exponencial con $Me(X) = 50$, podemos traducir lo que buscamos como:
+
+$$
+\begin{align*}
+P(X \geq 60)
+\end{align*}
+$$
+
+Así, al ser una variable aleatoria exponencial, tenemos que su función de distribución es de la forma:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\lambda e^{ - \lambda x} & \text{ si } x > 0\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Y sabemos por teoría que $E(X) = \dfrac{1}{\lambda}$ entonces, como $E(X) = 50$ tenemos que:
+
+$$
+\begin{align*}
+E(X) = 50 \Longleftrightarrow \dfrac{1}{\lambda} = 50 \Longleftrightarrow \lambda = \frac{1}{50}
+\end{align*}
+$$
+
+Es decir, que la función de distribución de esta variable aleatoria $X$ es:
+
+$$
+\begin{align*}
+f(x) = \left\{
+\begin{array}{ll}
+\dfrac{e^{ - \frac{x}{50}}}{50} & \text{ si } x > 0\\
+0 & \text{ en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Así, podemos calcular $P(X \geq 60)$ como:
+
+$$
+\begin{align*}
+P(X \geq 60) = 1 - P(X < 60) = 1 - F_X(60)
+\end{align*}
+$$
+
+Tenemos así que, para $x > 0$:
+
+$$
+\begin{align*}
+F_X(X) & = \int_{0}^x \lambda e ^{-\lambda x} dx = \frac{1}{50} \int_0^x e^{ - \frac{x}{50}} dx = \\[1ex]
+& = \frac{1}{50} ( - 50 e^{ - \frac{x}{50}} + 50) = - e^{ - \frac{x}{50}} + 1 = \\[1ex]
+& = 1 - e^{ - \frac{x}{50}}
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+F_X(X) = \left\{
+\begin{array}{ll}
+1 - e^{ - \frac{x}{50}} & \text{si } x \geq 0\\
+0 & \text{en el resto }
+\end{array}
+\right.
+\end{align*}
+$$
+
+Y podemos resolver lo anterior como:
+
+$$
+\begin{align*}
+P(X \geq 60) = 1 - P(X < 60) = 1 - (1 - e^{ - \frac{60}{50}}) \approx 0.3012
+\end{align*}
+$$
+
+</DemBox>
+2. *Si en 10 días no tuvo que ser reparado ¿qué probabilidad hay de que en los siguientes días tampoco tenga que serlo?*
+
+<DemBox title="Resolución">
+
+Ahora, lo que queremos ver es:
+
+$$
+\begin{align*}
+P(X > 30 \big|_{X > 10})
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(X > 30\big|_{X > 10}) = \frac{P(X > 30)}{P(X > 10)} = \frac{e^{ - \frac{30}{50}}}{e^{ - \frac{10}{50}}} = e^{ - \frac{20}{50}} = 0.67032
+\end{align*}
+$$
+
+</DemBox>
+3. *Se quiere firmar un contrato de mantenimiento con una determinada empresa. El contrato señala la obligación de que se realice una revisión cada $n$ días. ¿Cuál debe ser el valor de $n$ para que el 94\% de las veces que se realice el mantenimiento del sistema, éste todavía no se haya reparado?*
+
+<DemBox title="Resolución">
+
+Queremos ver que valor de $n$ satisface que:
+
+$$
+\begin{align*}
+P(X > n) = 0.94
+\end{align*}
+$$
+
+Así, tenemos que:
+
+$$
+\begin{align*}
+P(X > n) = e^{-\lambda n} = e^{-\frac{\lambda}{50}} = 0.94
+\end{align*}
+$$
+
+Aplicando logaritmos llegamos a:
+
+$$
+\begin{align*}
+n = - 50 \cdot log( 0.94) = 3.09 \text{ días}
+\end{align*}
+$$
+
+Entonces, el valor que buscamos sería 3
+
+</DemBox>
+4. *¿Cuál es la distribución de la variable aleatoria ``número de reparaciones que hay que realizar al sistema electrónico en un trimestre (90 días)''?*
+
+<DemBox title="Resolución">
+
+Queremos estudiar el número de veces que hay que repara un sistema electrónico en 90 días, es decir, queremos saber el número de veces que se estropea el sistema en 90 días. 
+
+Para ello, definimos una variable aleatoria $Y =$ número de reparaciones que hay que realizar al sistema electrónico en un trimestre.
+
+Podemos ver que $Y$ cumple los postulados de Poisson ya que:
+
+- Los eventos (reparaciones) son independientes, es decir, la ocurrencia de una reparación no afecta a la probabilidad de que otra reparación ocurra.
+- La probabilidad de que ocurra más de una reparación en un tiempo infinitesimal es despreciable
+- La tasa de ocurrencia de eventos es constante, no depende del inicio del intervalo
+
+Entonces, tenemos que $Y$ sigue una distribución de parámetro $\lambda'$ donde:
+
+$$
+\begin{align*}
+\lambda' = \lambda \cdot t = \frac{1}{50} \cdot 90 = 1.8
+\end{align*}
+$$
+
+Es decir, que $Y \sim \mathcal{P}(1.8)$
+
+</DemBox>
+5. *¿Probabilidad de que haya que realizar más de dos reparaciones en un mes (30 días)?* 
+<DemBox title="Resolución">
+
+Queremos ver $P(Z \geq 2)$ donde $Z$ es una variable aleatoria que sigue una distribución de Poisson de parámetro $\lambda'' = \frac{1}{50} 30 = 0.6$ (razonamiento análogo al apartado anterior). Así, tenemos que:
+
+$$
+\begin{align*}
+P(Z \geq 2) & = 1 - P(Z < 2) = 1 - (P(Z = 0) + P(Z = 1)) = \\[2ex]
+& = 1 - \left(\frac{e^{0.6} 0.6^0}{0!} + \frac{e^{0.6}\lambda^1}{1!} \right) = 1 - (e^{0.6} + 0.6 e^{0.6}) \approx 0.3293
+\end{align*}
+$$
+
+</DemBox>
+6. *¿En qué momento se espera que se produzca la cuarta reparación del sistema?*
+
+<DemBox title="Resolución">
+
+Queremos ver el tiempo esperado para que se produzca la cuarta reparación del sistema, es decir, queremos ver:
+
+$$
+\begin{align*}
+E(T = 4) 
+\end{align*}
+$$
+
+Como $X$ sigue una distribución exponencial con $\lambda = \frac{1}{50}$, entonces:
+
+$$
+\begin{align*}
+E(T = 4) = \frac{4}{\lambda} = 4 \cdot 50 = 200 \text{ días}
+\end{align*}
+$$
+
+</DemBox>
+7. *¿Cuál es la probabilidad de que pasen menos de 135 días entre la segunda y la cuarta reparación de sistema?*
+
+<DemBox title="Demostración">
+
+Va por una distribución gamma
+
+</DemBox>
