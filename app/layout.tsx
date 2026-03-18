@@ -149,7 +149,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PowerUserProvider />
         <Analytics />
         <ThemeProvider
           attribute="class"
@@ -157,7 +156,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <PowerUserProvider />
+            {children}
+          </AuthProvider>
         </ThemeProvider>
         <Toaster
           position="bottom-right"
