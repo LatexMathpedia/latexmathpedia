@@ -5,7 +5,7 @@ export type UserProfile = {
   features: string[];
 };
 
-const POWER_USER_EMAILS = ["diegodiazmenda", "pablogarciapernas"];
+const POWER_USER_EMAILS = ["uo299855", "pablogarciapernas", "uo300028"];
 
 // Comprobar si el email del usuario está en la lista de usuarios power y devolver su perfil
 // Emplear el auth context para obtener el email del usuario autenticado
@@ -18,10 +18,6 @@ export function useUserProfile(): UserProfile | null {
 
   const username = email.split("@")[0];
   const isPowerUser = POWER_USER_EMAILS.includes(username);
-
-  console.log(
-    `User ${email} is ${isPowerUser ? "a power user" : "a regular user"}`,
-  );
 
   return {
     role: isPowerUser ? "power" : "regular",
