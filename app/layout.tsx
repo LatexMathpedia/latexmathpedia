@@ -142,6 +142,9 @@ export default function RootLayout({
           name="twitter:image"
           content="https://mathtexpedia.es/icon-meta.png"
         />
+        <meta name="twitter:image" content="https://mathtexpedia.es/icon-meta.png" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6477110291995241"
+     crossOrigin="anonymous"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -192,4 +195,3 @@ export default function RootLayout({
     </html>
   );
 }
-
