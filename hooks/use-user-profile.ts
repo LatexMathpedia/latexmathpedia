@@ -5,7 +5,7 @@ export type UserProfile = {
   features: string[];
 };
 
-const POWER_USER_EMAILS = ["uo299855", "pablogarciapernas", "uo300028"];
+const POWER_USER_EMAILS = ["uo299855", "pablogarciapernas", "uo300028", "uo300417"];
 
 // Comprobar si el email del usuario está en la lista de usuarios power y devolver su perfil
 // Emplear el auth context para obtener el email del usuario autenticado
