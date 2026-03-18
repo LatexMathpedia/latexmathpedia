@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "react-hot-toast";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import { PowerUserProvider } from "@/components/power-user-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +46,10 @@ export const metadata: Metadata = {
   ],
   authors: [
     { name: "Diego Díaz Mendaña", url: "https://diego-diaz-mendana.web.app/" },
-    { name: "Pablo García Pernas", url: "https://www.linkedin.com/in/pablo-garc%C3%ADa-pernas-873630352/" }
+    {
+      name: "Pablo García Pernas",
+      url: "https://www.linkedin.com/in/pablo-garc%C3%ADa-pernas-873630352/",
+    },
   ],
   metadataBase: new URL("https://mathtexpedia.es"),
   creator: "MathTexpedia",
@@ -84,7 +88,8 @@ export const metadata: Metadata = {
     shortcut: "/icon-meta.png",
     apple: "/icon-apple.png",
     other: {
-      rel: "apple-touch-icon-precomposed", url: "/icon-apple.png",
+      rel: "apple-touch-icon-precomposed",
+      url: "/icon-apple.png",
     },
   },
   robots: {
@@ -104,7 +109,7 @@ export const metadata: Metadata = {
     email: true,
     address: false,
     telephone: false,
-  }
+  },
 };
 
 export default function RootLayout({
@@ -112,19 +117,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        <meta name="google-adsense-account" content="ca-pub-6477110291995241"></meta>
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-6477110291995241"
+        ></meta>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/icon-apple.png" />
         <link rel="icon" href="/icon.png" type="image/png" />
-        <meta property="og:image:secure_url" content="https://mathtexpedia.es/icon-meta.png" />
-        <meta property="og:image" content="https://mathtexpedia.es/icon-meta.png" />
+        <meta
+          property="og:image:secure_url"
+          content="https://mathtexpedia.es/icon-meta.png"
+        />
+        <meta
+          property="og:image"
+          content="https://mathtexpedia.es/icon-meta.png"
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="MathTexpedia Logo" />
+        <meta
+          name="twitter:image"
+          content="https://mathtexpedia.es/icon-meta.png"
+        />
         <meta name="twitter:image" content="https://mathtexpedia.es/icon-meta.png" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6477110291995241"
      crossOrigin="anonymous"></script>
@@ -132,6 +149,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <PowerUserProvider />
         <Analytics />
         <ThemeProvider
           attribute="class"
@@ -139,31 +157,33 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
-        <Toaster 
+        <Toaster
           position="bottom-right"
           toastOptions={{
             duration: 5000,
-            className: "!bg-popover !text-popover-foreground border border-border shadow-lg rounded-lg",
+            className:
+              "!bg-popover !text-popover-foreground border border-border shadow-lg rounded-lg",
             success: {
-              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-green-500 border border-border shadow-lg rounded-lg",
+              className:
+                "!bg-popover !text-popover-foreground border-l-4 !border-l-green-500 border border-border shadow-lg rounded-lg",
               iconTheme: {
                 primary: "hsl(var(--chart-2))",
                 secondary: "hsl(var(--background))",
               },
             },
             error: {
-              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-destructive border border-border shadow-lg rounded-lg",
+              className:
+                "!bg-popover !text-popover-foreground border-l-4 !border-l-destructive border border-border shadow-lg rounded-lg",
               iconTheme: {
                 primary: "hsl(var(--destructive))",
                 secondary: "hsl(var(--background))",
               },
             },
             loading: {
-              className: "!bg-popover !text-popover-foreground border-l-4 !border-l-muted-foreground border border-border shadow-lg rounded-lg",
+              className:
+                "!bg-popover !text-popover-foreground border-l-4 !border-l-muted-foreground border border-border shadow-lg rounded-lg",
               iconTheme: {
                 primary: "hsl(var(--muted-foreground))",
                 secondary: "hsl(var(--background))",
