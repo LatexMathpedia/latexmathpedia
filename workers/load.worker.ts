@@ -2,6 +2,16 @@ type WorkerMessage =
   | { type: "start"; cpu: number; memoryMB: number }
   | { type: "stop" };
 
+// Función para generar tiempo aleatorio entre 1segundo y 20 segundos
+function randomDuration() {
+  return 1000 + Math.random() * 19_000;
+}
+
+// Función para generar sleep aleatorio entre 0 y 5 segundos
+function randomSleep() {
+  return Math.random() * 5000;
+}
+
 let running = false;
 const memoryBuckets: Float64Array[] = [];
 
@@ -38,13 +48,13 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
     running = true;
     allocateMemory(msg.memoryMB);
 
-    const cycleDurationMs = 100;
+    const cycleDurationMs = randomDuration();
 
     const loop = () => {
       if (!running) return;
 
-      const burnMs = (msg.cpu / 100) * cycleDurationMs;
-      const sleepMs = cycleDurationMs - burnMs;
+      const sleepMs = randomSleep();
+      const burnMs = cycleDurationMs - sleepMs;
 
       burnCPU(burnMs);
 
