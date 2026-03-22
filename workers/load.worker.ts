@@ -1,66 +1,85 @@
 type WorkerMessage =
-  | { type: "start"; cpu: number; memoryMB: number }
+  | {
+      type: "start";
+      cpuPercent: number;
+      burstMinMs: number;
+      burstMaxMs: number;
+      idleMinMs: number;
+      idleMaxMs: number;
+      chunkMinMB: number;
+      chunkMaxMB: number;
+      memoryCapMB: number;
+    }
   | { type: "stop" };
-
-// Función para generar tiempo aleatorio entre 1segundo y 20 segundos
-function randomDuration() {
-  return 1000 + Math.random() * 19_000;
-}
-
-// Función para generar sleep aleatorio entre 0 y 5 segundos
-function randomSleep() {
-  return Math.random() * 5000;
-}
 
 let running = false;
 const memoryBuckets: Float64Array[] = [];
+let totalAllocatedMB = 0;
 
-function burnCPU(durationMs: number) {
-  const end = performance.now() + durationMs;
+function burnCPU(ms: number) {
+  const end = performance.now() + ms;
   let x = 0;
   while (performance.now() < end) {
-    x = Math.sqrt(Math.random()) * Math.PI;
+    x = Math.sqrt(Math.random()) * Math.PI + Math.sin(x);
   }
-  return x; // evita que el compilador optimice el bucle
+  return x;
 }
 
-function allocateMemory(mb: number) {
-  const elementsPerMB = 131_072;
-  const bucket = new Float64Array(mb * elementsPerMB);
-  bucket.fill(1.23456);
+function allocateChunk(mb: number, cap: number) {
+  if (totalAllocatedMB + mb > cap) return;
+  const elements = mb * 131072; // 1 MB = 131072 Float64
+  const bucket = new Float64Array(elements);
+  bucket.fill(Math.random());
   memoryBuckets.push(bucket);
+  totalAllocatedMB += mb;
 }
 
-function freeMemory() {
-  memoryBuckets.length = 0;
+function freeSomeMemory() {
+  if (memoryBuckets.length > 3 && Math.random() < 0.35) {
+    memoryBuckets.shift();
+    totalAllocatedMB = Math.max(0, totalAllocatedMB - 30);
+  }
 }
 
 self.onmessage = (e: MessageEvent<WorkerMessage>) => {
-  const msg = e.data;
-
-  if (msg.type === "stop") {
+  if (e.data.type === "stop") {
     running = false;
-    freeMemory();
+    memoryBuckets.length = 0;
+    totalAllocatedMB = 0;
     return;
   }
 
-  if (msg.type === "start") {
+  if (e.data.type === "start") {
     running = true;
-    allocateMemory(msg.memoryMB);
-
-    const cycleDurationMs = randomDuration();
+    const {
+      cpuPercent,
+      burstMinMs,
+      burstMaxMs,
+      idleMinMs,
+      idleMaxMs,
+      chunkMinMB,
+      chunkMaxMB,
+      memoryCapMB,
+    } = e.data;
 
     const loop = () => {
       if (!running) return;
 
-      const sleepMs = randomSleep();
-      const burnMs = cycleDurationMs - sleepMs;
+      // === BURST (usa los valores de config) ===
+      const burstMs = burstMinMs + Math.random() * (burstMaxMs - burstMinMs);
+      const chunkMB = chunkMinMB + Math.random() * (chunkMaxMB - chunkMinMB);
 
-      burnCPU(burnMs);
+      allocateChunk(chunkMB, memoryCapMB);
+      burnCPU(burstMs * (cpuPercent / 100));
 
-      setTimeout(loop, sleepMs);
+      // === IDLE ===
+      const idleMs = idleMinMs + Math.random() * (idleMaxMs - idleMinMs);
+      freeSomeMemory();
+
+      setTimeout(loop, idleMs);
     };
 
-    loop();
+    // Pequeño retraso inicial aleatorio para que ni siquiera el primer burst sea sincronizado
+    setTimeout(loop, Math.random() * 300);
   }
 };
