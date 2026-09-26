@@ -321,8 +321,10 @@ types/               # solo tipos NO derivables del OpenAPI
 > (`GET /public/pdf/no-link`) funciona end-to-end. **`GET /subject` y derivados devuelven 401**
 > pese a estar documentados como públicos — la sidebar de asignaturas (T-07) se queda vacía en
 > anónimo por esto, no por un bug del frontend. Detalle y petición al backend en
-> `API-REQUESTS.md` §10. `/public/auth/login` y `/public/auth/create` reales devuelven 401/500
-> hoy (§11 de `API-REQUESTS.md`) — confirma que mockear el auth (T-13) era lo correcto.
+> [mathtexpedia-backend#93](https://github.com/PabloGarPe/mathtexpedia-backend/issues/93).
+> `/public/auth/login` y `/public/auth/create` reales devuelven 401/500 hoy
+> ([mathtexpedia-backend#100](https://github.com/PabloGarPe/mathtexpedia-backend/issues/100))
+> — confirma que mockear el auth (T-13) era lo correcto.
 
 - **T-14 · ✅ RESUELTO EN MODO KEYCLOAK (PR #195 + integración) — Protección de rutas por
   middleware.** `proxy.ts` ahora se ramifica por `AUTH_MODE`:
@@ -430,7 +432,9 @@ types/               # solo tipos NO derivables del OpenAPI
     `unansweredQuestions` (el backend ya lo tolera, confirmado en `api-docs.json`).
   - Histórico en el perfil (pestaña "Mis cuestionarios", `useMyAttempts()` + nuevo
     `Pagination` de shadcn). **Limitación conocida:** `QuizAttemptDto` solo trae `quizId`,
-    no el nombre del cuestionario (gap ya anotado en `API-REQUESTS.md` §3/§9); se resuelve
+    no el nombre del cuestionario (gap ya anotado en
+    [mathtexpedia-backend#96](https://github.com/PabloGarPe/mathtexpedia-backend/issues/96)/
+    [#99](https://github.com/PabloGarPe/mathtexpedia-backend/issues/99)); se resuelve
     cruzando con la caché de `usePublicQuizzes()` y, si no se encuentra, se muestra
     "Cuestionario #id" en vez de fallar.
   - Añadida entrada "Cuestionarios" en `components/app-sidebar.tsx` (grupo propio, junto a
@@ -585,16 +589,27 @@ types/               # solo tipos NO derivables del OpenAPI
    bloqueada hasta que backend defina el mecanismo — no se toca.
 
 ## 6. Decisiones abiertas (para backend/producto)
+
+> **2026-09-26 — Migración completa.** Todas las tareas T-01…T-19, T-21, T-22 están
+> ✅ HECHO. Solo queda **T-20**, bloqueada por backend. Los puntos que dependían de backend
+> (antes en `API-REQUESTS.md`, ahora retirado de este repo) se movieron a issues en
+> `PabloGarPe/mathtexpedia-backend` — es el sitio donde vive el seguimiento a partir de
+> ahora, no un documento local.
+
 - ~~**T-10:** modelo Keycloak~~ **Resuelto** (PR #195): directo (Auth.js + provider Keycloak),
   cliente público + PKCE, ver T-10 arriba.
-- ~~**T-19:** ¿cómo se cambian roles ahora?~~ **Resuelto** (T-19): el frontend ya no cambia
-  roles (se quitó el combobox que llamaba a `/auth/change-role`, inexistente); se muestra
-  como `Badge` de solo lectura con nota de que se gestiona desde Keycloak. Sigue abierto si
-  hace falta un endpoint puente en el futuro, pero no bloquea nada hoy.
+- ~~**T-19:** ¿cómo se cambian roles ahora?~~ **Resuelto en frontend** (T-19: `Badge` de solo
+  lectura). Si hace falta un endpoint puente en el backend, seguimiento en
+  [mathtexpedia-backend#94](https://github.com/PabloGarPe/mathtexpedia-backend/issues/94).
 - **T-20:** mecanismo exacto de servido de PDFs desde S3 (presigned vs proxy; embebido). **No
   se toca todavía** — los PDFs se siguen sirviendo como `link` directo, tal cual lo modela
-  `PDFDto` en `api-docs.json` hoy.
-- `/public/auth/login`/`/public/auth/create` (los del backend, no Keycloak) quedan sin uso
-  ahora que el login real pasa por Keycloak directamente — confirmar con backend si se
-  retiran del OpenAPI o si tienen otro propósito (¿sincronizar el `UserAccountDto` local del
-  backend con el usuario de Keycloak en el primer login, vía `GET /me`?).
+  `PDFDto` en `api-docs.json` hoy. Seguimiento en
+  [mathtexpedia-backend#5](https://github.com/PabloGarPe/mathtexpedia-backend/issues/5)
+  (detalle de subida/visualización embebida en los comentarios).
+- `/public/auth/login`/`/public/auth/create` quedan sin uso ahora que el login real pasa por
+  Keycloak directamente. Seguimiento en
+  [mathtexpedia-backend#100](https://github.com/PabloGarPe/mathtexpedia-backend/issues/100).
+- El resto de peticiones de mejora al backend (401 en `/subject`, contadores en DTOs,
+  semántica de intentos/quizzes públicos, búsqueda y paginación server-side) están
+  trackeadas como issues en `mathtexpedia-backend`
+  (#93, #95, #96, #97, #98, #99) — ninguna bloquea nada en el frontend hoy.

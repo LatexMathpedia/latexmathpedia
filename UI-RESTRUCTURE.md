@@ -215,7 +215,8 @@ finos wrappers sobre `useSearchParams` si se prefiere no tocar toda la superfici
 El buscador de `site-header.tsx` sigue funcionando igual a nivel de interacción, pero debe
 buscar sobre **los tres tipos de `ContentItem`** por nombre/título, no solo sobre PDFs. Con
 pocos cientos de elementos, filtrar en cliente (como hoy) sigue siendo razonable; si el
-catálogo crece mucho, ver la propuesta de endpoint de búsqueda en `API-REQUESTS.md`.
+catálogo crece mucho, ver la propuesta de endpoint de búsqueda en
+[mathtexpedia-backend#98](https://github.com/PabloGarPe/mathtexpedia-backend/issues/98).
 
 ---
 
@@ -224,7 +225,9 @@ catálogo crece mucho, ver la propuesta de endpoint de búsqueda en `API-REQUEST
 ### 6.1 Catálogo y ficha de asignatura
 
 - **`/dashboard/subjects`**: grid de tarjetas simples (nombre, descripción,
-  recuento de temas si se añade el campo — ver `API-REQUESTS.md`). Es la puerta de entrada
+  recuento de temas si se añade el campo — ver
+  [mathtexpedia-backend#95](https://github.com/PabloGarPe/mathtexpedia-backend/issues/95)).
+  Es la puerta de entrada
   para quien no quiere usar la sidebar (por ejemplo en móvil, donde la sidebar colapsa).
 - **`/dashboard/subjects/[subjectId]`**: cabecera con nombre + descripción de la asignatura;
   debajo, **acordeón de Temas** (componente shadcn `Accordion` — ver §8). Cada tema, al
@@ -240,7 +243,8 @@ catálogo crece mucho, ver la propuesta de endpoint de búsqueda en `API-REQUEST
 - **`/dashboard/quizzes`**: mismo patrón que `/dashboard/blog` hoy — grid de tarjetas,
   filtro por asignatura/dificultad (Select o chips arriba).
 - **`/dashboard/quizzes/[quizId]`**: ficha informativa — nombre, descripción, dificultad,
-  asignatura/tema, número de preguntas (si se expone, ver `API-REQUESTS.md`), y **si el
+  asignatura/tema, número de preguntas (si se expone, ver
+  [mathtexpedia-backend#95](https://github.com/PabloGarPe/mathtexpedia-backend/issues/95)), y **si el
   usuario ya tiene intentos**, un resumen ("Tu mejor puntuación: 8/10") con enlace a
   `/dashboard/profile` (histórico) y botón **"Empezar"/"Volver a intentar"**.
 - **`/dashboard/quizzes/[quizId]/attempt`**: layout distinto, "modo examen" — sin sidebar de
@@ -447,8 +451,8 @@ admin"): ✅ HECHO.**
 
 - **¿El Blog se vincula a Asignatura/Tema o se queda como sección independiente?** Hoy los
   posts MDX solo tienen `tags` libres en el frontmatter, sin relación con el modelo
-  `Subject`/`SubjectUnit` del backend (el blog no tiene backend propio, ver
-  `API-REQUESTS.md`). Si se quiere que la ficha de asignatura también muestre posts de
+  `Subject`/`SubjectUnit` del backend (el blog no tiene backend propio). Si se quiere que la
+  ficha de asignatura también muestre posts de
   blog relacionados, hay que añadir un campo `subject`/`subjectId` al frontmatter de cada
   `.mdx` y mapearlo a mano (no hay forma automática de saberlo).
 - **Intento de cuestionario: ¿pregunta a pregunta o todas en una página?** Recomendado
