@@ -16,3 +16,11 @@ export async function updateMe(body: UpdateUserAccountDto) {
   if (error) throw new ApiError(response.status, "No se pudo actualizar el perfil");
   return data;
 }
+
+// api-docs.json solo documenta la respuesta 200 de este endpoint (sin 4xx/5xx), así que
+// openapi-fetch tipa su "error" como `never` -- se comprueba `response.ok` en su lugar,
+// igual que hacía el fetch crudo que este código sustituye.
+export async function deleteAccount() {
+  const { response } = await apiClient.DELETE("/auth/delete-account", {});
+  if (!response.ok) throw new ApiError(response.status, "No se pudo eliminar la cuenta");
+}

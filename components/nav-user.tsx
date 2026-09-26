@@ -7,6 +7,7 @@ import {
   CreditCard,
   LogOut,
 } from "lucide-react"
+import { useQueryClient } from "@tanstack/react-query"
 
 import {
   DropdownMenu,
@@ -44,6 +45,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const { isAuthenticated, login, logout, identity, setIdentity } = useAuth();
+  const queryClient = useQueryClient()
   // El selector "Modo de prueba" solo tiene sentido en modo mock (setIdentity no existe
   // en modo keycloak). En modo keycloak, sin sesión mostramos el botón de login real.
   const isMockMode = AUTH_MODE !== "keycloak" && Boolean(setIdentity)
@@ -73,6 +75,11 @@ export function NavUser({
       await logout();
     } catch (error) {
       console.error('Error al cerrar sesión', error);
+    } finally {
+      // Sin esto, la caché de TanStack Query (datos de admin, perfil, etc.) sobrevive al
+      // logout y puede llegar a mostrarse a la siguiente persona que use el mismo navegador.
+      queryClient.clear();
+      window.location.href = '/';
     }
   };
 

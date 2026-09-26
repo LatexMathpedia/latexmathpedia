@@ -50,7 +50,9 @@ import { QuizDifficultyBadge, DIFFICULTY_LABEL, QUIZ_DIFFICULTIES } from "@/comp
 import { useToast } from "@/hooks/use-toast"
 import { useAdminRoute } from "@/hooks/use-protected-route"
 import { useCreateQuiz, useDeleteQuiz, useImportQuiz, usePublicQuizzes } from "@/hooks/api/use-quizzes"
-import { exportQuiz, ApiError, type QuizDto, type QuizExportableDto } from "@/lib/api/quizzes"
+import { exportQuiz, type QuizDto, type QuizExportableDto } from "@/lib/api/quizzes"
+import { conflictMessage } from "@/lib/api/errors"
+import { formatDate } from "@/lib/utils"
 
 const createQuizSchema = z
   .object({
@@ -86,20 +88,6 @@ const importQuizSchema = z
   })
 
 type ImportQuizFormValues = z.infer<typeof importQuizSchema>
-
-function formatDate(iso?: string) {
-  if (!iso) return "-"
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return iso
-  return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" })
-}
-
-function conflictMessage(error: unknown, fallback: string) {
-  if (error instanceof ApiError && error.status === 409) {
-    return error.message
-  }
-  return fallback
-}
 
 function CreateQuizDialog() {
   const toast = useToast()

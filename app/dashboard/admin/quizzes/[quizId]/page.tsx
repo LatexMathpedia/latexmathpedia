@@ -42,14 +42,8 @@ import { useToast } from "@/hooks/use-toast"
 import { useAdminRoute } from "@/hooks/use-protected-route"
 import { useDeleteQuiz, useQuiz, useQuizQuestions, useUpdateQuiz } from "@/hooks/api/use-quizzes"
 import { useCreateQuestion, useUpdateQuestion } from "@/hooks/api/use-questions"
-import { ApiError, type QuestionDto } from "@/lib/api/questions"
-
-function conflictMessage(error: unknown, fallback: string) {
-  if (error instanceof ApiError && error.status === 409) {
-    return error.message
-  }
-  return fallback
-}
+import type { QuestionDto } from "@/lib/api/questions"
+import { conflictMessage } from "@/lib/api/errors"
 
 const updateQuizSchema = z
   .object({
@@ -231,24 +225,27 @@ export default function QuizEditorPage() {
     }
   }
 
+  // Igual que en QuizQuestionAccordion.tsx: las dos escrituras van en secuencia (no en
+  // paralelo) y la segunda se deshace si falla, para no dejar dos preguntas con la misma
+  // posición si una de las dos peticiones falla.
   const handleMoveQuestion = async (question: QuestionDto, direction: -1 | 1) => {
     const index = sortedQuestions.findIndex((q) => q.id === question.id)
     const neighbor = sortedQuestions[index + direction]
     if (!neighbor || question.id == null || neighbor.id == null) return
     try {
-      await Promise.all([
-        reorderQuestion.mutateAsync({
-          id: question.id,
+      await reorderQuestion.mutateAsync({
+        id: question.id,
+        quizId,
+        body: {
+          text: question.text ?? "",
+          type: question.type as "MULTIPLE_CHOICE" | "TRUE_FALSE",
+          explanation: question.explanation ?? undefined,
+          position: neighbor.position,
           quizId,
-          body: {
-            text: question.text ?? "",
-            type: question.type as "MULTIPLE_CHOICE" | "TRUE_FALSE",
-            explanation: question.explanation ?? undefined,
-            position: neighbor.position,
-            quizId,
-          },
-        }),
-        reorderQuestion.mutateAsync({
+        },
+      })
+      try {
+        await reorderQuestion.mutateAsync({
           id: neighbor.id,
           quizId,
           body: {
@@ -258,8 +255,21 @@ export default function QuizEditorPage() {
             position: question.position,
             quizId,
           },
-        }),
-      ])
+        })
+      } catch (innerError) {
+        await reorderQuestion.mutateAsync({
+          id: question.id,
+          quizId,
+          body: {
+            text: question.text ?? "",
+            type: question.type as "MULTIPLE_CHOICE" | "TRUE_FALSE",
+            explanation: question.explanation ?? undefined,
+            position: question.position,
+            quizId,
+          },
+        })
+        throw innerError
+      }
     } catch (error) {
       toast.error("No se pudo reordenar la pregunta.")
     }

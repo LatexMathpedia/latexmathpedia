@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/contexts/auth-context"
 import {
   Card,
@@ -47,9 +48,9 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { Mail, KeyRound, LogOut, UserX, Shield, UserRound, Sparkles } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import { API_URL } from "@/lib/env";
-import { useMe, useUpdateMe } from "@/hooks/api/use-profile"
+import { useDeleteAccount, useMe, useUpdateMe } from "@/hooks/api/use-profile"
 import { useMyAttempts, usePublicQuizzes } from "@/hooks/api/use-quizzes"
+import { formatDate } from "@/lib/utils"
 
 const updateNameSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
@@ -61,13 +62,6 @@ const STATUS_LABEL: Record<string, string> = {
   ACTIVE: "Activo",
   INACTIVE: "Inactivo",
   SUSPENDED: "Suspendido",
-}
-
-function formatDate(iso?: string) {
-  if (!iso) return "-"
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return iso
-  return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
 function AttemptsHistoryTab() {
@@ -194,15 +188,17 @@ function AttemptsHistoryTab() {
 }
 
 export default function ProfilePage() {
-  const { email, logout, changePassword, authFetch, isAuthenticated } = useAuth()
+  const { email, logout, changePassword, isAuthenticated } = useAuth()
   const router = useRouter()
   const toast = useToast()
+  const queryClient = useQueryClient()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isChangingPwd, setIsChangingPwd] = useState(false)
 
   const { data: me, isLoading: meLoading } = useMe(isAuthenticated)
   const updateMe = useUpdateMe()
+  const deleteAccount = useDeleteAccount()
 
   const {
     register,
@@ -227,6 +223,8 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     try {
       await logout()
+      // Evita que datos de esta sesión (perfil, intentos) sobrevivan en caché tras el logout.
+      queryClient.clear()
       router.push('/auth/login')
       toast.success("Sesión cerrada exitosamente")
     } catch (error) {
@@ -249,18 +247,10 @@ export default function ProfilePage() {
     setIsDeleting(true)
 
     try {
-      const res = await authFetch(`${API_URL}/auth/delete-account`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!res.ok) {
-        throw new Error('Failed to delete account')
-      }
+      await deleteAccount.mutateAsync()
       toast.success("Cuenta eliminada exitosamente")
       await logout()
+      queryClient.clear()
       router.push('/')
     } catch (error) {
       toast.error("Error al eliminar la cuenta")

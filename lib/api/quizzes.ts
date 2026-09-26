@@ -51,11 +51,20 @@ export async function submitQuizAttempt(id: number, body: SubmitQuizAttemptDto) 
   return data;
 }
 
-// El parámetro de la operación se llama "pageable" en el OpenAPI, pero se serializa plano
-// (page=&size=), como espera Spring: ver la nota en hooks/api/use-quizzes.ts.
+// El parámetro de la operación se llama "pageable" en el OpenAPI, pero Spring
+// (PageableHandlerMethodArgumentResolver) espera page=&size= planos, no pageable[page]=
+// como serializa por defecto openapi-fetch (style: "deepObject") para objetos anidados. Se
+// fuerza aquí un querySerializer propio para esta llamada; sin él, la paginación es un no-op
+// silencioso (confirmado leyendo node_modules/openapi-fetch/src/index.js).
 export async function getMyAttempts(page: number, size: number) {
   const { data, error } = await apiClient.GET("/attempts", {
     params: { query: { pageable: { page, size } } },
+    querySerializer: (query: { pageable?: { page?: number; size?: number } }) => {
+      const search = new URLSearchParams();
+      if (query.pageable?.page != null) search.set("page", String(query.pageable.page));
+      if (query.pageable?.size != null) search.set("size", String(query.pageable.size));
+      return search.toString();
+    },
   });
   if (error) throw error;
   return data;

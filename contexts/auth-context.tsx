@@ -13,7 +13,7 @@
 //   auth.ts). El access token se sincroniza automáticamente con `lib/api/client.ts` para
 //   que todas las llamadas hechas con `apiClient` (TanStack Query) lleven el Bearer.
 
-import { createContext, useContext, useCallback, useEffect, useState, PropsWithChildren } from 'react';
+import { createContext, useContext, useCallback, useEffect, useMemo, useState, PropsWithChildren } from 'react';
 import { useRouter } from 'next/navigation';
 import { SessionProvider, signIn, signOut, useSession } from 'next-auth/react';
 import { AUTH_MODE } from '@/lib/env';
@@ -81,14 +81,14 @@ function MockAuthProvider({ children }: PropsWithChildren) {
     }
   }, []);
 
-  const setIdentity = (next: MockIdentity) => {
+  const setIdentity = useCallback((next: MockIdentity) => {
     setIdentityState(next);
     try {
       localStorage.setItem(MOCK_IDENTITY_STORAGE_KEY, next);
     } catch (error) {
       console.error('No se pudo persistir la identidad mockeada en localStorage:', error);
     }
-  };
+  }, []);
 
   const isAuthenticated = identity !== 'anonymous';
   const isAdmin = identity === 'admin';
@@ -98,55 +98,74 @@ function MockAuthProvider({ children }: PropsWithChildren) {
   // No hay backend/Keycloak real detrás: entrar/registrarse simplemente adopta la
   // identidad de prueba "usuario" (usa el selector "Modo de prueba" del menú de usuario
   // para pasar a admin) y navega como lo haría un login real.
-  const login = async ({ redirectTo = '/dashboard' }: LoginOptions = {}) => {
-    setIdentity('user');
-    router.push(redirectTo);
-  };
+  const login = useCallback(
+    async ({ redirectTo = '/dashboard' }: LoginOptions = {}) => {
+      setIdentity('user');
+      router.push(redirectTo);
+    },
+    [setIdentity, router]
+  );
 
-  const register = async ({ redirectTo = '/dashboard' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
-    setIdentity('user');
-    router.push(redirectTo);
-  };
+  const register = useCallback(
+    async ({ redirectTo = '/dashboard' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
+      setIdentity('user');
+      router.push(redirectTo);
+    },
+    [setIdentity, router]
+  );
 
-  const changePassword = async () => {
+  const changePassword = useCallback(async () => {
     // No-op: en mock no hay contraseña real que cambiar.
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setIdentity('anonymous');
     router.push('/dashboard');
-  };
+  }, [setIdentity, router]);
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     // No-op: el mock no tiene sesión de servidor que revalidar.
-  };
+  }, []);
 
   const authFetch = useCallback(
     (input: RequestInfo | URL, init?: RequestInit) => fetch(input, init),
     []
   );
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        loading,
-        isAdmin,
-        email,
-        displayName,
-        identity,
-        setIdentity,
-        login,
-        register,
-        changePassword,
-        logout,
-        checkAuth,
-        authFetch,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      isAuthenticated,
+      loading,
+      isAdmin,
+      email,
+      displayName,
+      identity,
+      setIdentity,
+      login,
+      register,
+      changePassword,
+      logout,
+      checkAuth,
+      authFetch,
+    }),
+    [
+      isAuthenticated,
+      loading,
+      isAdmin,
+      email,
+      displayName,
+      identity,
+      setIdentity,
+      login,
+      register,
+      changePassword,
+      logout,
+      checkAuth,
+      authFetch,
+    ]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // ---------------------------------------------------------------------------
@@ -160,34 +179,46 @@ function KeycloakAuthState({ children }: PropsWithChildren) {
   const isAuthenticated = status === 'authenticated' && !session?.error;
   const accessToken = isAuthenticated ? session?.accessToken : undefined;
 
-  // Mantiene sincronizado el cliente API (TanStack Query) con el access token vigente.
-  useEffect(() => {
-    setApiAccessToken(accessToken);
-  }, [accessToken]);
+  // Sincroniza el cliente API (TanStack Query) con el access token vigente aquí, en el
+  // cuerpo del render, en vez de en un useEffect: los efectos de un hijo (p. ej. la query de
+  // TanStack Query que dispara un fetch nada más montar) pueden ejecutarse antes que el
+  // efecto de este componente padre dentro del mismo commit, dejando una ventana en la que
+  // esa petición sale sin Authorization. El render, en cambio, siempre ocurre de padres a
+  // hijos, así que esto llega antes que cualquier efecto (propio o de los hijos).
+  setApiAccessToken(accessToken);
 
-  const login = async ({ redirectTo = '/dashboard', idpHint }: LoginOptions = {}) => {
-    await signIn('keycloak', { redirectTo }, idpHint ? { kc_idp_hint: idpHint } : undefined);
-  };
+  const login = useCallback(
+    async ({ redirectTo = '/dashboard', idpHint }: LoginOptions = {}) => {
+      await signIn('keycloak', { redirectTo }, idpHint ? { kc_idp_hint: idpHint } : undefined);
+    },
+    []
+  );
 
   // Provider que abre directamente el formulario de registro de Keycloak (ver auth.ts)
-  const register = async ({ redirectTo = '/dashboard' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
-    await signIn('keycloak-register', { redirectTo });
-  };
+  const register = useCallback(
+    async ({ redirectTo = '/dashboard' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
+      await signIn('keycloak-register', { redirectTo });
+    },
+    []
+  );
 
   // Application Initiated Action: Keycloak muestra el formulario de cambio de
   // contraseña y vuelve a la app al terminar
-  const changePassword = async ({ redirectTo = '/dashboard/profile' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
-    await signIn('keycloak', { redirectTo }, { kc_action: 'UPDATE_PASSWORD' });
-  };
+  const changePassword = useCallback(
+    async ({ redirectTo = '/dashboard/profile' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
+      await signIn('keycloak', { redirectTo }, { kc_action: 'UPDATE_PASSWORD' });
+    },
+    []
+  );
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setApiAccessToken(undefined);
     await signOut({ redirect: false });
-  };
+  }, []);
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     await update();
-  };
+  }, [update]);
 
   // fetch que envía el JWT de Keycloak como 'Authorization: Bearer' al backend. Se
   // mantiene para los componentes que aún no se han migrado a `lib/api/*` (TanStack
@@ -218,26 +249,43 @@ function KeycloakAuthState({ children }: PropsWithChildren) {
     [accessToken, update]
   );
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        loading: status === 'loading',
-        isAdmin: isAuthenticated && (session?.isAdmin ?? false),
-        email: isAuthenticated ? session?.user?.email ?? '' : '',
-        displayName: isAuthenticated ? session?.user?.name ?? '' : '',
-        accessToken,
-        login,
-        register,
-        changePassword,
-        logout,
-        checkAuth,
-        authFetch,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const isAdmin = isAuthenticated && (session?.isAdmin ?? false);
+  const email = isAuthenticated ? session?.user?.email ?? '' : '';
+  const displayName = isAuthenticated ? session?.user?.name ?? '' : '';
+  const loading = status === 'loading';
+
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      isAuthenticated,
+      loading,
+      isAdmin,
+      email,
+      displayName,
+      accessToken,
+      login,
+      register,
+      changePassword,
+      logout,
+      checkAuth,
+      authFetch,
+    }),
+    [
+      isAuthenticated,
+      loading,
+      isAdmin,
+      email,
+      displayName,
+      accessToken,
+      login,
+      register,
+      changePassword,
+      logout,
+      checkAuth,
+      authFetch,
+    ]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 function KeycloakAuthProvider({ children }: PropsWithChildren) {

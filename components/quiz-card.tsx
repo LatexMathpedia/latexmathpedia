@@ -4,17 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { QuizDifficultyBadge } from "@/components/ui/quiz-difficulty-badge";
 import type { QuizDto } from "@/lib/api/quizzes";
-
-function formatDate(iso?: string): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-}
+import { formatDate } from "@/lib/utils";
 
 export function QuizCard({ quiz }: { quiz: QuizDto }) {
   return (

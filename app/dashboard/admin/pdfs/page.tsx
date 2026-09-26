@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AlertCircleIcon, Search } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -46,8 +46,15 @@ export default function AdminPdfsPage() {
   // Proteger esta ruta de administración
   const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
 
-  const { data: pdfs, isLoading: pdfsLoading } = usePdfs(isAuthenticated && isAdmin)
+  const { data: pdfs, isLoading: pdfsLoading, isError: pdfsError } = usePdfs(isAuthenticated && isAdmin)
   const createPdf = useCreatePdf()
+
+  useEffect(() => {
+    if (pdfsError) {
+      toast.error("Error al cargar los PDFs.")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pdfsError])
 
   const {
     register,
@@ -206,6 +213,8 @@ export default function AdminPdfsPage() {
             <div className="text-sm text-muted-foreground">
               {pdfsLoading ? (
                 <p>Cargando PDFs...</p>
+              ) : pdfsError ? (
+                <p className="text-destructive">No se pudieron cargar los PDFs. Inténtalo de nuevo.</p>
               ) : filteredPdfs.length > 0 ? (
                 filteredPdfs.map((pdf) => <PDFAccordionCard key={pdf.id} pdf={pdf} />)
               ) : searchTerm ? (

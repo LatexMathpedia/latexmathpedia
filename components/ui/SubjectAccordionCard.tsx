@@ -34,7 +34,8 @@ import {
   useUpdateSubject,
   useUpdateSubjectUnit,
 } from "@/hooks/api/use-subjects"
-import { ApiError, type SubjectDto, type SubjectUnitDto } from "@/lib/api/subjects"
+import type { SubjectDto, SubjectUnitDto } from "@/lib/api/subjects"
+import { conflictMessage } from "@/lib/api/errors"
 
 const updateSubjectSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
@@ -57,13 +58,6 @@ function parsePosition(position?: string): number | undefined {
   if (!position || position.trim() === "") return undefined
   const parsed = Number(position)
   return Number.isNaN(parsed) ? undefined : parsed
-}
-
-function conflictMessage(error: unknown, fallback: string) {
-  if (error instanceof ApiError && error.status === 409) {
-    return error.message
-  }
-  return fallback
 }
 
 function SubjectUnitRow({ subjectId, unit }: { subjectId: number; unit: SubjectUnitDto }) {

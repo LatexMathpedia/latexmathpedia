@@ -83,15 +83,11 @@ export function DashboardFeed({ posts }: { posts: BlogPostMeta[] }) {
     if (activePdfsQuery.error) {
       toast.error("Error al cargar los PDFs.");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activePdfsQuery.error]);
-
-  useEffect(() => {
     if (quizzesQuery.error) {
       toast.error("Error al cargar los cuestionarios.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quizzesQuery.error]);
+  }, [activePdfsQuery.error, quizzesQuery.error]);
 
   const allPdfs: DisplayPdf[] = useMemo(() => {
     const raw = activePdfsQuery.data ?? [];

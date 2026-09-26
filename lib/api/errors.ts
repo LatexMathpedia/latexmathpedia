@@ -10,3 +10,13 @@ export class ApiError extends Error {
     this.status = status;
   }
 }
+
+// Antes duplicada en admin/quizzes, admin/quizzes/[quizId] y SubjectAccordionCard: los 409
+// de conflicto (nombre duplicado, etc.) traen un mensaje del backend que vale la pena
+// mostrar tal cual; cualquier otro error usa el mensaje genérico del propio caller.
+export function conflictMessage(error: unknown, fallback: string): string {
+  if (error instanceof ApiError && error.status === 409) {
+    return error.message;
+  }
+  return fallback;
+}

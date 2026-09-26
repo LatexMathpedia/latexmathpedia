@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { BookOpen, ChevronRight } from "lucide-react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import {
@@ -25,13 +26,18 @@ function SubjectNavItem({ subject }: { subject: SubjectDto }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { data: units } = useSubjectUnits(subject.id)
 
   // Ahora que el clic navega a la ficha de asignatura (en vez de aplicar FilterContext), el
   // resaltado "activo" se deriva de la ruta actual, no de un filtro en memoria.
   const isActiveSubject =
     subject.id != null && pathname === `/dashboard/subjects/${subject.id}`
   const activeUnitId = isActiveSubject ? searchParams.get("unit") : null
+
+  // Los temas solo se piden al expandir el desplegable de la asignatura (o si ya llegamos a
+  // su ficha con la URL abierta), igual que en el admin -- pedirlos siempre por cada
+  // asignatura del catálogo dispara 1+N peticiones en paralelo solo para pintar la sidebar.
+  const [isOpen, setIsOpen] = useState(isActiveSubject)
+  const { data: units } = useSubjectUnits(isOpen ? subject.id : null)
 
   // Clic en la asignatura: navega a su ficha (§4/§6.1 de UI-RESTRUCTURE.md) en vez de
   // filtrar el feed -- evita mantener dos formas de ver lo mismo.
@@ -50,7 +56,7 @@ function SubjectNavItem({ subject }: { subject: SubjectDto }) {
   }
 
   return (
-    <Collapsible asChild defaultOpen={isActiveSubject}>
+    <Collapsible asChild open={isOpen} onOpenChange={setIsOpen}>
       <SidebarMenuItem>
         <SidebarMenuButton
           tooltip={subject.name}
@@ -61,34 +67,36 @@ function SubjectNavItem({ subject }: { subject: SubjectDto }) {
           <span>{subject.name}</span>
         </SidebarMenuButton>
 
-        {units && units.length > 0 && (
-          <>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuAction className="data-[state=open]:rotate-90">
-                <ChevronRight />
-                <span className="sr-only">Toggle</span>
-              </SidebarMenuAction>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarMenuSub>
-                {units.map((unit) => (
-                  <SidebarMenuSubItem key={unit.id}>
-                    <SidebarMenuSubButton
-                      onClick={() => handleClickUnit(unit.id)}
-                      className={`cursor-pointer ${
-                        unit.id != null && activeUnitId === String(unit.id)
-                          ? "text-primary"
-                          : ""
-                      }`}
-                    >
-                      <span>{unit.name}</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                ))}
-              </SidebarMenuSub>
-            </CollapsibleContent>
-          </>
-        )}
+        <CollapsibleTrigger asChild>
+          <SidebarMenuAction className="data-[state=open]:rotate-90">
+            <ChevronRight />
+            <span className="sr-only">Toggle</span>
+          </SidebarMenuAction>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          {units && units.length > 0 ? (
+            <SidebarMenuSub>
+              {units.map((unit) => (
+                <SidebarMenuSubItem key={unit.id}>
+                  <SidebarMenuSubButton
+                    onClick={() => handleClickUnit(unit.id)}
+                    className={`cursor-pointer ${
+                      unit.id != null && activeUnitId === String(unit.id)
+                        ? "text-primary"
+                        : ""
+                    }`}
+                  >
+                    <span>{unit.name}</span>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              ))}
+            </SidebarMenuSub>
+          ) : (
+            <p className="px-2 py-1 text-xs text-muted-foreground">
+              {units ? "Sin temas todavía." : "Cargando temas..."}
+            </p>
+          )}
+        </CollapsibleContent>
       </SidebarMenuItem>
     </Collapsible>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,21 +19,24 @@ import {
 } from "@/components/ui/tooltip"
 import { useAdminRoute } from "@/hooks/use-protected-route"
 import { useAllUsers } from "@/hooks/api/use-users"
-
-function formatCreatedAt(iso?: string) {
-  if (!iso) return "-"
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return iso
-  return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" })
-}
+import { useToast } from "@/hooks/use-toast"
+import { formatDate as formatCreatedAt } from "@/lib/utils"
 
 export default function UsersPage() {
+  const toast = useToast()
   const [searchTerm, setSearchTerm] = useState("")
 
   // Proteger esta ruta de administración
   const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
 
-  const { data: users, isLoading: usersLoading } = useAllUsers(isAuthenticated && isAdmin)
+  const { data: users, isLoading: usersLoading, isError: usersError } = useAllUsers(isAuthenticated && isAdmin)
+
+  useEffect(() => {
+    if (usersError) {
+      toast.error("Error al cargar los usuarios.")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [usersError])
 
   // Mostrar loading mientras se verifica la autenticación
   if (authLoading) {
@@ -91,7 +94,13 @@ export default function UsersPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredUsers.length > 0 ? (
+                  {usersError ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center text-destructive">
+                        No se pudieron cargar los usuarios. Inténtalo de nuevo.
+                      </TableCell>
+                    </TableRow>
+                  ) : filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => (
                       <TableRow key={user.id}>
                         <TableCell className="font-medium">{user.username}</TableCell>

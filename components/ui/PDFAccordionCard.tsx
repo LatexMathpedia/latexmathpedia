@@ -18,6 +18,7 @@ import { SubjectUnitPicker } from "@/components/ui/subject-unit-picker"
 import { useToast } from "@/hooks/use-toast"
 import { useDeletePdf, useUpdatePdf } from "@/hooks/api/use-pdfs"
 import type { PDFDto } from "@/lib/api/pdfs"
+import { formatDate as formatLastEdited } from "@/lib/utils"
 
 const updatePdfSchema = z
   .object({
@@ -33,13 +34,6 @@ const updatePdfSchema = z
   })
 
 type UpdatePdfFormValues = z.infer<typeof updatePdfSchema>
-
-function formatLastEdited(iso?: string) {
-  if (!iso) return "-"
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" })
-}
 
 function PDFAccordionCard({ pdf }: { pdf: PDFDto }) {
   const [isOpen, setIsOpen] = useState(false)

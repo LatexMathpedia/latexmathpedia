@@ -71,23 +71,32 @@ export function useCreateSubject() {
   });
 }
 
-export function useUpdateSubject() {
+// Los PDFs y cuestionarios denormalizan subject.name/subjectUnit.name en su propia
+// respuesta (ver PDFDto/QuizDto), así que un rename/delete de asignatura o tema debe
+// invalidar también esas cachés o se quedan mostrando el nombre antiguo hasta el próximo
+// refetch natural.
+function useInvalidateSubjectQueries() {
   const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.subjects.all() });
+    queryClient.invalidateQueries({ queryKey: queryKeys.pdfs.all() });
+    queryClient.invalidateQueries({ queryKey: queryKeys.quizzes.all() });
+  };
+}
+
+export function useUpdateSubject() {
+  const invalidate = useInvalidateSubjectQueries();
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: UpdateSubjectDto }) => updateSubject(id, body),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.all() });
-    },
+    onSuccess: invalidate,
   });
 }
 
 export function useDeleteSubject() {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateSubjectQueries();
   return useMutation({
     mutationFn: (id: number) => deleteSubject(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.all() });
-    },
+    onSuccess: invalidate,
   });
 }
 
@@ -109,6 +118,8 @@ export function useUpdateSubjectUnit() {
       updateSubjectUnit(id, body),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.subjects.units(variables.subjectId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.pdfs.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.quizzes.all() });
     },
   });
 }
@@ -119,6 +130,8 @@ export function useDeleteSubjectUnit() {
     mutationFn: ({ id }: { id: number; subjectId: number }) => deleteSubjectUnit(id),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.subjects.units(variables.subjectId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.pdfs.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.quizzes.all() });
     },
   });
 }

@@ -3,17 +3,7 @@ import BlogCard from "@/components/blog-card";
 import { QuizCard } from "@/components/quiz-card";
 import { CONTENT_TYPES } from "@/lib/content/registry";
 import type { ContentItem } from "@/lib/content/types";
-
-function formatDate(iso: string): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-}
+import { formatDate } from "@/lib/utils";
 
 // Insignia de tipo (icono + texto corto) compartida por los 3 tipos de tarjeta, para que
 // el grid "Todo" se pueda escanear aunque mezcle PDFs/Cuestionarios/Blog. Se superpone en

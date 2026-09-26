@@ -13,7 +13,7 @@ import { SubjectAccordionCard } from "@/components/ui/SubjectAccordionCard"
 import { useToast } from "@/hooks/use-toast"
 import { useAdminRoute } from "@/hooks/use-protected-route"
 import { useCreateSubject, useSubjects } from "@/hooks/api/use-subjects"
-import { ApiError } from "@/lib/api/subjects"
+import { conflictMessage } from "@/lib/api/errors"
 
 const createSubjectSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
@@ -79,11 +79,7 @@ export default function AdminSubjectsPage() {
       toast.success("Asignatura creada exitosamente.")
       reset(emptyFormValues)
     } catch (error) {
-      const message =
-        error instanceof ApiError && error.status === 409
-          ? "Ya existe una asignatura con ese nombre."
-          : "Error al crear la asignatura."
-      toast.error(message)
+      toast.error(conflictMessage(error, "Error al crear la asignatura."))
     }
   }
 

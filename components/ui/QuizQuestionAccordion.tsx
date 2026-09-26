@@ -185,30 +185,43 @@ function OptionsEditor({ questionId, options }: { questionId: number; options: O
   const sorted = [...options].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
   const correctOption = sorted.find((o) => o.correct)
 
+  // Las dos escrituras no son atómicas en el backend: se ejecutan en secuencia (nunca en
+  // paralelo) para que en ningún instante intermedio existan dos opciones "correct: true" a
+  // la vez, y si la segunda falla se deshace la primera para no perder la opción correcta.
   const handleSetCorrect = async (option: OptionDto) => {
     if (option.id == null || option.correct) return
+    const previous = correctOption
     try {
-      const updates: Promise<unknown>[] = []
-      if (correctOption && correctOption.id != null && correctOption.id !== option.id) {
-        updates.push(
-          updateOption.mutateAsync({
-            id: correctOption.id,
-            body: {
-              text: correctOption.text ?? "",
-              position: correctOption.position,
-              questionId,
-              correct: false,
-            },
-          })
-        )
+      if (previous && previous.id != null && previous.id !== option.id) {
+        await updateOption.mutateAsync({
+          id: previous.id,
+          body: {
+            text: previous.text ?? "",
+            position: previous.position,
+            questionId,
+            correct: false,
+          },
+        })
       }
-      updates.push(
-        updateOption.mutateAsync({
+      try {
+        await updateOption.mutateAsync({
           id: option.id,
           body: { text: option.text ?? "", position: option.position, questionId, correct: true },
         })
-      )
-      await Promise.all(updates)
+      } catch (innerError) {
+        if (previous && previous.id != null) {
+          await updateOption.mutateAsync({
+            id: previous.id,
+            body: {
+              text: previous.text ?? "",
+              position: previous.position,
+              questionId,
+              correct: true,
+            },
+          })
+        }
+        throw innerError
+      }
     } catch (error) {
       toast.error("No se pudo marcar la opción correcta.")
     }
@@ -219,16 +232,22 @@ function OptionsEditor({ questionId, options }: { questionId: number; options: O
     const neighbor = sorted[index + direction]
     if (!neighbor || option.id == null || neighbor.id == null) return
     try {
-      await Promise.all([
-        updateOption.mutateAsync({
-          id: option.id,
-          body: { text: option.text ?? "", position: neighbor.position, questionId, correct: option.correct },
-        }),
-        updateOption.mutateAsync({
+      await updateOption.mutateAsync({
+        id: option.id,
+        body: { text: option.text ?? "", position: neighbor.position, questionId, correct: option.correct },
+      })
+      try {
+        await updateOption.mutateAsync({
           id: neighbor.id,
           body: { text: neighbor.text ?? "", position: option.position, questionId, correct: neighbor.correct },
-        }),
-      ])
+        })
+      } catch (innerError) {
+        await updateOption.mutateAsync({
+          id: option.id,
+          body: { text: option.text ?? "", position: option.position, questionId, correct: option.correct },
+        })
+        throw innerError
+      }
     } catch (error) {
       toast.error("No se pudo reordenar la opción.")
     }
