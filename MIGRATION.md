@@ -355,12 +355,37 @@ types/               # solo tipos NO derivables del OpenAPI
 
 ### Fase 3 — Contenido y funcionalidad nueva
 
-- **T-15 · Sacar el contenido estático de los componentes.** Mover `sampleDataBlog`
-  (~470 líneas en `dashboard/page.tsx`) y los textos legales (`legal/privacy-policy` 303 líneas,
-  `terms-of-service` 355, `cookies-policy` 388, `faq` 264, `about-us`, `contact-us`) a
-  `content/` (MDX o JSON) y renderizarlos. El blog ya usa MDX en `content/posts`; unificar la
-  fuente para que `dashboard/page.tsx`, `nav-projects.tsx` y `blog/page.tsx` lean del mismo sitio
-  (leer frontmatter en vez de duplicar títulos/fechas).
+- **T-15 · ✅ HECHO (parte de contenido; textos legales fuera de alcance) — Deduplicar el
+  blog del feed.** Se eliminó el `sampleDataBlog` (~440 líneas escritas a mano en
+  `dashboard/page.tsx`) que duplicaba título/descripción/fecha/tags de los mismos posts que
+  ya existen como `.mdx` en `content/posts/` con su propio frontmatter.
+  - Extraída la lógica de lectura (antes inline en `app/dashboard/blog/page.tsx`, con
+    `fs`/`gray-matter`) a `lib/content/posts.ts` (`getAllBlogPosts(): BlogPostMeta[]`,
+    server-only, sin `"use client"`). `blog/page.tsx` ahora solo llama a esa función.
+    **Decisión:** de paso se ordenan los posts por `date` descendente dentro de
+    `getAllBlogPosts()` (antes ni `sampleDataBlog` en `dashboard/page.tsx` ni
+    `blog/page.tsx` garantizaban un orden fiable — `blog/page.tsx` dependía del orden de
+    `fs.readdirSync`, alfabético por nombre de fichero); es una mejora de bajo riesgo, no
+    solo una extracción literal.
+  - `app/dashboard/page.tsx` pasa a ser un **Server Component** (sin `"use client"`, sin
+    hooks) que llama a `getAllBlogPosts()` y se lo pasa como prop a un nuevo
+    `components/dashboard-feed.tsx` (`"use client"`), que contiene todo lo interactivo que
+    antes vivía en `WelcomePage` (fetch de PDFs, filtros, búsqueda, grid) — mismo patrón que
+    ya usaba `blog/[slug]/page.tsx` (Server Component + componentes cliente para lo
+    interactivo). El bloque "Blog" del feed ahora renderiza `BlogCard` a partir de esos
+    posts reales.
+  - **`components/nav-projects.tsx` también duplica datos del blog** (un array
+    `data.projects` hardcodeado en `components/app-sidebar.tsx`: 4 posts "destacados" con
+    `name`+`url`+`icon` a mano, no leído del frontmatter). Hoy los 4 slugs siguen
+    existiendo en `content/posts/` (verificado), así que no está roto, pero es la misma
+    duplicación de fondo: renombrar o borrar uno de esos posts lo desincronizaría en
+    silencio. No se ha tocado en esta ronda tal y como permitía el enunciado ("no hace
+    falta que lo arregles si no es trivial") — arreglarlo requeriría decidir qué criterio
+    define "destacado" (¿los N más recientes? ¿un flag en el frontmatter?), que es una
+    decisión de producto, no solo una refactorización.
+  - Fuera de alcance en esta ronda (tal y como pedía el enunciado): las páginas legales
+    (`legal/privacy-policy`, `terms-of-service`, `cookies-policy`) y `contact/about-us`/
+    `contact/faq` siguen con su texto inline; moverlas a MDX no se ha hecho.
 
 - **T-16 · ✅ HECHO — Perfil de usuario.** Nuevo `lib/api/profile.ts` (`getMe` → `GET /me`,
   `updateMe` → `PUT /me`, con `ApiError` de `lib/api/errors.ts` para distinguir el 400/401
@@ -512,13 +537,28 @@ types/               # solo tipos NO derivables del OpenAPI
   probablemente pedir la URL/recurso bajo demanda y mostrarlo en un visor embebido en vez de
   enlazar. Confirmar el mecanismo exacto con backend antes de implementar.
 
-- **T-21 · Chatbot.** Verificar que `components/chat-widget.tsx` cumple `ChatRequest`/`ChatResponse`
-  del OpenAPI (campo `message` + `conversationHistory`, respuesta con `relevantResources`).
-  Renderizar `relevantResources` (PDF/BLOG_POST/PAGE) como enlaces. El rate-limit por
-  `localStorage` puede mantenerse.
+- **T-21 · ✅ HECHO — Chatbot.** `components/chat-widget.tsx` ya enviaba el `ChatRequest`
+  correcto; ahora también lee `relevantResources` y `status` de la respuesta:
+  - Nuevo `lib/api/chatbot.ts` (`sendChatMessage(body: ChatRequest): Promise<ChatResponse>`)
+    + hook `useSendChatMessage()` en `hooks/api/use-chatbot.ts`, sustituyendo el `authFetch`
+    directo (el token, si hay sesión, lo inyecta `apiClient` solo). No hacía falta manejar
+    streaming, así que la modernización no complicó el estado de carga existente.
+  - Si `status === "ERROR"`, se trata como fallo (mismo `toast.error` + mensaje de error que
+    ya usaba el `catch`) aunque el HTTP sea 200.
+  - Si `relevantResources` no viene vacío, se muestran debajo del mensaje del asistente como
+    una lista de enlaces pequeños (icono según `type`: `FileText` para PDF, `BookOpen` para
+    BLOG_POST, `Link2` para PAGE). **Decisión:** se usa `next/link` cuando la URL empieza
+    por `/` (interna) y `<a target="_blank">` en cualquier otro caso, ya que `api-docs.json`
+    no especifica el formato exacto de `ChatResource.url`.
+  - El rate-limit por `localStorage` se mantiene sin cambios, tal y como permitía el
+    enunciado.
 
-- **T-22 · Contacto/Mail.** `contact-us` usa `POST /mail/send`; alinear con el shape `Mail`
-  (`subject`, `body`, `from?`).
+- **T-22 · ✅ HECHO — Contacto/Mail.** El shape que ya enviaba `contact-us` contra
+  `POST /mail/send` era correcto (`{from?, subject, body}`); solo se modernizó el cliente:
+  nuevo `lib/api/mail.ts` (`sendMail(body: Mail)`) + hook `useSendMail()` en
+  `hooks/api/use-mail.ts`, sustituyendo el `authFetch` directo en
+  `app/dashboard/contact/contact-us/page.tsx` por la misma mutación de TanStack Query que
+  usa el resto de la app.
 
 ---
 
@@ -531,13 +571,12 @@ types/               # solo tipos NO derivables del OpenAPI
 4. ~~**Fase 2 real (T-10, T-11, T-12, T-14)**~~ ✅ Resuelta vía PR #195 (Keycloak real) +
    integración del selector `NEXT_PUBLIC_AUTH_MODE` (fusionado en `feat-192`). Mock (T-13) y
    Keycloak real conviven detrás de la misma interfaz — ver el resumen del merge más arriba.
-5. **Fase 3** (perfil, contenido, quizzes, admin de asignaturas/usuarios) sobre la base ya
-   migrada. La taxonomía de Subjects/Units se construye con los endpoints que ya existen en
-   `api-docs.json`; los campos extra de `API-REQUESTS.md` (contadores, etc.) son mejoras
-   futuras, no bloquean nada de esto. ~~T-18 (admin de asignaturas) y T-19 (admin de
-   usuarios)~~ ✅ Hechos. ~~T-16 (perfil)~~ ✅ Hecho. ~~T-17 (cuestionarios, partes 1 y 2)~~
-   ✅ Hecho — solo queda T-15 (contenido estático) en Fase 3.
-6. **Fase 4** (S3, chatbot, mail) al final o cuando el backend exponga esas piezas.
+5. ~~**Fase 3**~~ (perfil, contenido, quizzes, admin de asignaturas/usuarios) ✅ Completa:
+   ~~T-18 (admin de asignaturas) y T-19 (admin de usuarios)~~, ~~T-16 (perfil)~~, ~~T-17
+   (cuestionarios, partes 1 y 2)~~ y ~~T-15 (deduplicar blog del feed)~~ — todas hechas.
+6. ~~**Fase 4**~~ (chatbot, mail) — ~~T-21 (chatbot)~~ y ~~T-22 (mail)~~ ✅ Hechas, sin
+   esperar al resto de la fase ya que no dependían de S3. Queda **T-20** (PDFs vía S3),
+   bloqueada hasta que backend defina el mecanismo — no se toca.
 
 ## 6. Decisiones abiertas (para backend/producto)
 - ~~**T-10:** modelo Keycloak~~ **Resuelto** (PR #195): directo (Auth.js + provider Keycloak),
