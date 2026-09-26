@@ -29,7 +29,7 @@ export function ContentCard({ item }: { item: ContentItem }) {
       {item.kind === "pdf" && (
         <PDFCard
           title={item.data.title}
-          url={item.data.url}
+          href={CONTENT_TYPES.pdf.href(item)}
           date={formatDate(item.data.lastTimeEdited)}
           subjectName={item.data.subjectName}
           subjectUnitName={item.data.subjectUnitName}

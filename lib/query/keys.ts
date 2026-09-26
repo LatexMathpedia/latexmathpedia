@@ -11,7 +11,7 @@ export const queryKeys = {
   },
   pdfs: {
     all: () => ["pdfs"] as const,
-    publicNoLink: () => ["pdfs", "public-no-link"] as const,
+    content: (pdfId: number) => ["pdfs", pdfId, "content"] as const,
   },
   quizzes: {
     all: () => ["quizzes"] as const,

@@ -2,13 +2,12 @@ import type { QuizDto } from "@/lib/api/quizzes";
 import type { components } from "@/lib/api/schema";
 import type { BlogPostMeta } from "@/lib/content/posts";
 
-// Shape normalizado que usa el feed, independientemente de si el PDF viene con o sin
-// `link` (según el usuario esté autenticado o no). Vive aquí (no en dashboard-feed.tsx)
+// Shape normalizado de un PDF para la UI. El contenido nunca viene en el DTO: se abre en el
+// visor (/dashboard/pdfs/[id]), que lo pide autenticado. Vive aquí (no en dashboard-feed.tsx)
 // para que registry.ts y content-card.tsx también puedan importarlo.
 export type DisplayPdf = {
   id: number;
   title: string;
-  url?: string;
   lastTimeEdited: string;
   subjectId?: number;
   subjectUnitId?: number;
@@ -24,15 +23,12 @@ export type ContentItem =
   | { kind: "quiz"; data: QuizDto }
   | { kind: "blog"; data: BlogPostMeta };
 
-// Normaliza un PDFDto crudo (endpoint con link, p. ej. GET /pdf o GET /subject/{id}/pdfs) al
-// shape que usa la UI. dashboard-feed.tsx tiene su propia variante inline para el caso
-// PDFDto | PDFNoLinkDto (según auth); este helper es para los sitios que solo consumen el
-// endpoint "con link" (como la ficha de asignatura).
+// Normaliza un PDFDto crudo (GET /public/pdf/no-link o GET /subject/{id}/pdfs) al shape que
+// usa la UI.
 export function toDisplayPdf(pdf: components["schemas"]["PDFDto"], fallbackId: number): DisplayPdf {
   return {
     id: pdf.id ?? fallbackId,
     title: pdf.name ?? "",
-    url: pdf.link,
     lastTimeEdited: pdf.lastTimeEdited ?? "",
     subjectId: pdf.subject?.id,
     subjectUnitId: pdf.subjectUnit?.id,

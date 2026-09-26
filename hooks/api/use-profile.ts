@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteAccount, getMe, updateMe, type UpdateUserAccountDto } from "@/lib/api/profile";
+import { getMe, updateMe, type UpdateUserAccountDto } from "@/lib/api/profile";
 import { queryKeys } from "@/lib/query/keys";
 
 export function useMe(enabled = true) {
@@ -22,8 +22,3 @@ export function useUpdateMe() {
   });
 }
 
-export function useDeleteAccount() {
-  return useMutation({
-    mutationFn: deleteAccount,
-  });
-}

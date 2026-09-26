@@ -34,7 +34,14 @@ import { formatDate as formatLastEdited } from "@/lib/utils"
 const updatePdfSchema = z
   .object({
     name: z.string().min(1, "El título es obligatorio"),
-    link: z.string().min(1, "El enlace es obligatorio").url("Debe ser una URL válida"),
+    // Opcional: sin fichero, el back conserva el contenido actual.
+    file: z
+      .custom<FileList>()
+      .optional()
+      .refine(
+        (files) => !files?.length || files[0].type === "application/pdf",
+        "El fichero debe ser un PDF",
+      ),
     description: z.string().optional(),
     subjectId: z.number().nullable(),
     subjectUnitId: z.number().nullable(),
@@ -63,7 +70,6 @@ function PDFAccordionCard({ pdf }: { pdf: PDFDto }) {
     resolver: zodResolver(updatePdfSchema),
     defaultValues: {
       name: pdf.name ?? "",
-      link: pdf.link ?? "",
       description: pdf.description ?? "",
       subjectId: pdf.subject?.id ?? null,
       subjectUnitId: pdf.subjectUnit?.id ?? null,
@@ -79,13 +85,13 @@ function PDFAccordionCard({ pdf }: { pdf: PDFDto }) {
     try {
       await updatePdf.mutateAsync({
         pdfId: pdf.id,
-        body: {
+        data: {
           name: values.name,
-          link: values.link,
           description: values.description || undefined,
           subjectId: values.subjectId as number,
           subjectUnitId: values.subjectUnitId,
         },
+        file: values.file?.[0],
       })
       toast.success("PDF actualizado correctamente.")
       setIsOpen(false)
@@ -95,11 +101,11 @@ function PDFAccordionCard({ pdf }: { pdf: PDFDto }) {
   }
 
   const handleDelete = async () => {
-    if (!pdf.name) return
+    if (pdf.id == null) return
 
     toast.info("Eliminando PDF...")
     try {
-      await deletePdf.mutateAsync(pdf.name)
+      await deletePdf.mutateAsync(pdf.id)
       toast.success("PDF eliminado correctamente.")
     } catch (error) {
       toast.error("Error al eliminar el PDF.")
@@ -184,9 +190,15 @@ function PDFAccordionCard({ pdf }: { pdf: PDFDto }) {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor={`pdfUrl-${pdf.id}`}>Enlace al PDF</Label>
-            <Input id={`pdfUrl-${pdf.id}`} className="w-full" {...register("link")} />
-            {errors.link && <p className="text-sm text-destructive">{errors.link.message}</p>}
+            <Label htmlFor={`pdfFile-${pdf.id}`}>Reemplazar fichero (opcional)</Label>
+            <Input
+              id={`pdfFile-${pdf.id}`}
+              type="file"
+              accept="application/pdf"
+              className="w-full cursor-pointer"
+              {...register("file")}
+            />
+            {errors.file && <p className="text-sm text-destructive">{errors.file.message}</p>}
           </div>
 
           <div className="grid gap-2">

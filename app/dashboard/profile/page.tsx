@@ -19,14 +19,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -46,9 +38,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { useToast } from "@/hooks/use-toast"
-import { Mail, KeyRound, LogOut, UserX, Shield, UserRound, Sparkles } from "lucide-react"
+import { Mail, KeyRound, LogOut, Shield, UserRound, Sparkles } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import { useDeleteAccount, useMe, useUpdateMe } from "@/hooks/api/use-profile"
+import { useMe, useUpdateMe } from "@/hooks/api/use-profile"
 import { useMyAttempts, usePublicQuizzes } from "@/hooks/api/use-quizzes"
 import { formatDate } from "@/lib/utils"
 
@@ -192,13 +184,10 @@ export default function ProfilePage() {
   const router = useRouter()
   const toast = useToast()
   const queryClient = useQueryClient()
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isChangingPwd, setIsChangingPwd] = useState(false)
 
   const { data: me, isLoading: meLoading } = useMe(isAuthenticated)
   const updateMe = useUpdateMe()
-  const deleteAccount = useDeleteAccount()
 
   const {
     register,
@@ -240,23 +229,6 @@ export default function ProfilePage() {
     } catch (error) {
       toast.error("Error al abrir el cambio de contraseña. Inténtalo de nuevo.")
       setIsChangingPwd(false)
-    }
-  }
-
-  const handleDeleteAccount = async () => {
-    setIsDeleting(true)
-
-    try {
-      await deleteAccount.mutateAsync()
-      toast.success("Cuenta eliminada exitosamente")
-      await logout()
-      queryClient.clear()
-      router.push('/')
-    } catch (error) {
-      toast.error("Error al eliminar la cuenta")
-    } finally {
-      setIsDeleting(false)
-      setShowDeleteDialog(false)
     }
   }
 
@@ -426,32 +398,6 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <Separator />
-
-              {/* Danger Zone */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-destructive flex items-center gap-2">
-                  <UserX className="h-5 w-5" />
-                  Zona de peligro
-                </h3>
-                <div className="p-4 rounded-lg border border-destructive/50 bg-destructive/5">
-                  <Button
-                    variant="destructive"
-                    className="w-full justify-start h-auto py-3"
-                    onClick={() => setShowDeleteDialog(true)}
-                  >
-                    <div className="flex items-center gap-3 w-full">
-                      <UserX className="h-5 w-5" />
-                      <div className="text-left flex-1">
-                        <p className="font-medium">Eliminar cuenta</p>
-                        <p className="text-xs opacity-90">
-                          Esta acción es permanente y no se puede deshacer
-                        </p>
-                      </div>
-                    </div>
-                  </Button>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -461,38 +407,6 @@ export default function ProfilePage() {
         </TabsContent>
       </Tabs>
 
-      {/* Delete Account Confirmation Dialog */}
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>¿Estás seguro?</DialogTitle>
-            <DialogDescription className="space-y-2 pt-2">
-              <p>
-                Esta acción eliminará permanentemente tu cuenta y todos los datos asociados.
-              </p>
-              <p className="font-medium text-foreground">
-                Esta acción no se puede deshacer.
-              </p>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button
-              variant="outline"
-              onClick={() => setShowDeleteDialog(false)}
-              disabled={isDeleting}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeleteAccount}
-              disabled={isDeleting}
-            >
-              {isDeleting ? "Eliminando..." : "Sí, eliminar mi cuenta"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }
