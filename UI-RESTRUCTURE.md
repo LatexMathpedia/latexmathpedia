@@ -356,6 +356,32 @@ Todos son compatibles con el `components.json` ya configurado (`style: new-york`
    contenido (§2), componentes shadcn nuevos (§8), mover filtros a URL (§5.1).
 2. **Sidebar dinámica + catálogo de asignaturas** (`/dashboard/subjects*`) — depende de
    `useSubjects`/`useSubjectUnits` (`MIGRATION.md` T-06/T-07). Sustituye el filtro por tags.
+   **✅ HECHO** (catálogo de asignaturas — la sidebar dinámica ya estaba hecha de antes):
+   - `/dashboard/subjects`: grid simple de `SubjectDto` (nombre + descripción), enlaza a la
+     ficha. Pública, sin auth.
+   - `/dashboard/subjects/[subjectId]`: cabecera (nueva `getSubject`/`useSubject`, `GET
+     /subject/{id}`) + `Accordion` de Temas (`useSubjectUnits`). Cada tema lista sus PDFs
+     (`useSubjectPdfs`, pública) y cuestionarios (nueva `getSubjectQuizzes`/
+     `useSubjectQuizzes`, `GET /subject/{id}/quizzes` — **requiere sesión**, 401 documentado
+     en `api-docs.json`) agrupados en cliente por `subjectUnit?.id`; sin tema van a una
+     sección "General" antes del acordeón. Reutiliza `ContentCard` en modo lista (`flex
+     flex-col`, no grid). Si el usuario no está autenticado, la subsección de cuestionarios
+     de cada tema simplemente no se pide (`enabled: isAuthenticated`) ni se muestra, sin
+     error visible. Un tema sin contenido visible se muestra igual, con "No hay contenido
+     disponible" (puede tener cuestionarios que el anónimo no ve).
+   - **Decisión sobre el clic en la sidebar** (`nav-subjects.tsx`): tanto el clic en
+     asignatura como en tema dejan de aplicar `FilterContext` + navegar a `/dashboard`;
+     ambos navegan a la ficha de asignatura (`/dashboard/subjects/[id]`, el tema además con
+     `?unit=[unitId]` para abrir ese panel del acordeón ya expandido). Se eligió esta opción
+     (frente a mantener el filtro sobre el feed) porque es la que recomienda este mismo
+     documento en §4: una sola forma de "navegar por asignatura", no dos. Como consecuencia,
+     el resaltado "activo" de la sidebar se recalculó a partir de la ruta actual
+     (`usePathname`/`useSearchParams`) en vez de `FilterContext`, que ya no lo alimenta nadie
+     desde la sidebar — `FilterContext` sigue existiendo y lo sigue leyendo
+     `dashboard-feed.tsx` (§5), simplemente ya no tiene un emisor en la sidebar tras este
+     cambio; sigue sin moverse a la URL (§5.1), fuera de alcance de esta ronda.
+   - Enlace raíz "Asignaturas" añadido en la sidebar (`app-sidebar.tsx`, grupo "Catálogo",
+     junto a "Cuestionarios") apuntando a `/dashboard/subjects`.
 3. **Feed mixto** (`ContentCard`, Tabs por tipo) — depende de 1 y 2, y de que PDFs ya hablen
    el contrato nuevo (T-08).
 4. **Admin de Asignaturas** (`/dashboard/admin/subjects`) y **PDFs adaptado** (T-09).

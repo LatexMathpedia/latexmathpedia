@@ -34,6 +34,17 @@ import { useSearch } from "@/contexts/search-context"
 import Link from "next/link"
 import logo from '@/public/icon.png'
 
+const dataSubjectsCatalog = {
+  subjectsCatalog: [
+    {
+      title: "Asignaturas",
+      url: "/dashboard/subjects",
+      icon: BookOpen,
+      isActive: false,
+    },
+  ],
+}
+
 const dataQuizzes = {
   quizzes: [
     {
@@ -151,6 +162,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <NavMain items={dataSubjectsCatalog.subjectsCatalog} title="Catálogo" />
         <NavSubjects title="Apuntes" />
         <NavMain items={dataQuizzes.quizzes} title="Cuestionarios" />
         <NavProjects projects={data.projects} />

@@ -20,6 +20,14 @@ export async function getSubjects() {
   return data;
 }
 
+export async function getSubject(id: number) {
+  const { data, error } = await apiClient.GET("/subject/{id}", {
+    params: { path: { id } },
+  });
+  if (error) throw error;
+  return data;
+}
+
 export async function getSubjectUnits(subjectId: number) {
   const { data, error } = await apiClient.GET("/subject/{id}/units", {
     params: { path: { id: subjectId } },
@@ -30,6 +38,16 @@ export async function getSubjectUnits(subjectId: number) {
 
 export async function getSubjectPdfs(subjectId: number) {
   const { data, error } = await apiClient.GET("/subject/{id}/pdfs", {
+    params: { path: { id: subjectId } },
+  });
+  if (error) throw error;
+  return data;
+}
+
+// A diferencia de getSubjectPdfs, este endpoint sí exige sesión (401 documentado en
+// api-docs.json) -- el hook correspondiente en use-subjects.ts lo gatea con isAuthenticated.
+export async function getSubjectQuizzes(subjectId: number) {
+  const { data, error } = await apiClient.GET("/subject/{id}/quizzes", {
     params: { path: { id: subjectId } },
   });
   if (error) throw error;

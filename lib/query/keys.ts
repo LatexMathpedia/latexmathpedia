@@ -7,6 +7,7 @@ export const queryKeys = {
     detail: (subjectId: number) => ["subjects", subjectId] as const,
     units: (subjectId: number) => ["subjects", subjectId, "units"] as const,
     pdfs: (subjectId: number) => ["subjects", subjectId, "pdfs"] as const,
+    quizzes: (subjectId: number) => ["subjects", subjectId, "quizzes"] as const,
   },
   pdfs: {
     all: () => ["pdfs"] as const,

@@ -6,7 +6,9 @@ import {
   createSubjectUnit,
   deleteSubject,
   deleteSubjectUnit,
+  getSubject,
   getSubjectPdfs,
+  getSubjectQuizzes,
   getSubjects,
   getSubjectUnits,
   updateSubject,
@@ -25,6 +27,14 @@ export function useSubjects() {
   });
 }
 
+export function useSubject(subjectId: number | null | undefined) {
+  return useQuery({
+    queryKey: queryKeys.subjects.detail(subjectId ?? -1),
+    queryFn: () => getSubject(subjectId as number),
+    enabled: subjectId != null,
+  });
+}
+
 export function useSubjectUnits(subjectId: number | null | undefined) {
   return useQuery({
     queryKey: queryKeys.subjects.units(subjectId ?? -1),
@@ -38,6 +48,16 @@ export function useSubjectPdfs(subjectId: number | null | undefined) {
     queryKey: queryKeys.subjects.pdfs(subjectId ?? -1),
     queryFn: () => getSubjectPdfs(subjectId as number),
     enabled: subjectId != null,
+  });
+}
+
+// Requiere sesión (ver comentario en getSubjectQuizzes): pásale isAuthenticated como
+// `enabled` desde el componente para que el anónimo simplemente no vea esta subsección.
+export function useSubjectQuizzes(subjectId: number | null | undefined, enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.subjects.quizzes(subjectId ?? -1),
+    queryFn: () => getSubjectQuizzes(subjectId as number),
+    enabled: subjectId != null && enabled,
   });
 }
 
