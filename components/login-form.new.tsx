@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert"
 import {  signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { API_URL } from "@/lib/env";
 
 export function LoginForm({
   className,
@@ -33,7 +34,7 @@ export function LoginForm({
   const toast = useToast();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const apiUrl = API_URL;
 
 
   // Limpia el timeout si el componente se desmonta

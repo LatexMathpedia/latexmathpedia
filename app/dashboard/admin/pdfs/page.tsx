@@ -25,6 +25,7 @@ import {
 import { renameCategory } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast";
 import { useAdminRoute } from "@/hooks/use-protected-route"
+import { API_URL } from "@/lib/env"
 
 const categories = {
   "Matemáticas": [
@@ -46,7 +47,7 @@ const categories = {
   ]
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+const apiUrl = API_URL;
 
 type PDFFetchResponse = {
   pdf_id: string;

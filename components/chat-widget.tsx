@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast";
 import { MessageContent } from "./message-content";
 import { Button } from "./ui/button";
+import { API_URL } from "@/lib/env";
 
 
 interface Message {
@@ -25,7 +26,7 @@ interface RateLimitData {
     minuteResetTime: number,
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+const apiUrl = API_URL;
 
 const getCurrentDate = (): string => {
     const now = new Date();

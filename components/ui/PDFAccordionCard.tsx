@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/popover"
 import { useToast } from "@/hooks/use-toast"
 import { renameCategory, renameCategoryInverted } from "@/lib/utils";
+import { API_URL } from "@/lib/env";
 
 const categories = {
   "Matemáticas": [
@@ -57,7 +58,7 @@ type PDFProps = {
   pdfTag?: string; // Código de categoría que viene de la base de datos
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+const apiUrl = API_URL;
 
 // Función para identificar la categoría principal a partir de la subcategoría
 const getCategoryFromSubcategory = (subcategory: string): string => {

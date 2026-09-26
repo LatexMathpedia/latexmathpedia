@@ -22,6 +22,7 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { Mail, KeyRound, LogOut, UserX, Shield } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import { API_URL } from "@/lib/env"
 
 export default function ProfilePage() {
   const { email, logout } = useAuth()
@@ -31,7 +32,7 @@ export default function ProfilePage() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isSendingEmail, setIsSendingEmail] = useState(false)
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
+  const apiUrl = API_URL
 
   const handleLogout = async () => {
     try {

@@ -133,27 +133,40 @@ types/               # solo tipos NO derivables del OpenAPI
 
 ### Fase 0 — Limpieza y cimientos (sin dependencias, hacer primero)
 
-- **T-01 · Eliminar los hooks "power-user".** Borra `hooks/use-load-simulator.ts`,
+- **T-01 · ✅ HECHO — Eliminar los hooks "power-user".** Borrados `hooks/use-load-simulator.ts`,
   `workers/load.worker.ts`, `config/loadSimulator.config.ts`, `hooks/use-indexeddb-load.ts`,
   `hooks/use-auto-refresh.ts`, `hooks/use-random-scroll.ts`, `hooks/use-random-mouse-movements.ts`,
   `hooks/use-power-user-features.ts`, `components/power-user-provider.tsx`,
-  `hooks/use-user-profile.ts` (lista de emails). Quita `<PowerUserProvider />` de
-  `app/layout.tsx`. Justificación: degradan a propósito el navegador de usuarios concretos;
-  son un riesgo sin valor de producto.
+  `hooks/use-user-profile.ts` (lista de emails), y las carpetas `workers/`/`config/` que quedaron
+  vacías. Quitado `<PowerUserProvider />` (import y uso) de `app/layout.tsx`. Verificado con
+  grep que no queda ninguna referencia.
 
-- **T-02 · Centralizar configuración de entorno.** Crear `lib/env.ts` (valida y exporta
-  `API_URL` desde `NEXT_PUBLIC_API_URL`). Sustituir las ~10 apariciones de
-  `process.env.NEXT_PUBLIC_API_URL || ''`. Corregir el fallback `:4000` de `register-form.tsx`.
-  Documentar variables en un `.env.example`.
+- **T-02 · ✅ HECHO — Centralizar configuración de entorno.** Creado `lib/env.ts` (exporta
+  `API_URL`; usa `http://localhost:8081` como default solo fuera de producción, y lanza si falta
+  en producción). Sustituidas las 10 apariciones de `process.env.NEXT_PUBLIC_API_URL || '...'`
+  por `import { API_URL } from '@/lib/env'` en `contexts/auth-context.tsx`, `app/dashboard/page.tsx`,
+  `app/dashboard/admin/pdfs/page.tsx`, `app/dashboard/admin/users/page.tsx`,
+  `app/dashboard/contact/contact-us/page.tsx`, `app/dashboard/profile/page.tsx`,
+  `components/chat-widget.tsx`, `components/login-form.new.tsx`, `components/register-form.tsx`
+  (corregido el fallback erróneo a `:4000`), `components/ui/PDFAccordionCard.tsx`. Añadido
+  `.env.example` (con excepción en `.gitignore` para que no quede ignorado por `.env*`).
 
-- **T-03 · Generar tipos y cliente desde OpenAPI.** Añadir `openapi-typescript` (dev) y
-  `openapi-fetch`. Script `npm run api:types` que genere `lib/api/schema.d.ts` desde
-  `api-docs.json` (o desde `http://localhost:8081/v3/api-docs`). Crear `lib/api/client.ts`
-  con `createClient({ baseUrl })`. Todavía sin auth (se añade en T-11).
+- **T-03 · ✅ HECHO — Generar tipos y cliente desde OpenAPI.** Añadidas `openapi-typescript`
+  (dev) y `openapi-fetch` (dep). Script `npm run api:types` (`openapi-typescript api-docs.json -o
+  lib/api/schema.d.ts`), ejecutado y comiteado `lib/api/schema.d.ts`. Creado `lib/api/client.ts`
+  con `createClient<paths>({ baseUrl: API_URL })`, sin autenticación todavía. Ningún componente
+  existente conectado aún a este cliente (eso es Fase 1).
 
-- **T-04 · Instalar TanStack Query.** Añadir `@tanstack/react-query`, crear
-  `components/providers/query-provider.tsx` con `QueryClient` y montarlo en `app/layout.tsx`
-  (encima de los demás providers). Añadir `lib/query/keys.ts`. (Opcional: devtools en dev.)
+- **T-04 · ✅ HECHO — Instalar TanStack Query.** Añadidas `@tanstack/react-query` (dep) y
+  `@tanstack/react-query-devtools` (dev). Creado `components/providers/query-provider.tsx`
+  (`QueryClient` con `staleTime: 60_000`) montado en `app/layout.tsx` por encima de `AuthProvider`.
+  Devtools montados condicionalmente en `NODE_ENV === 'development'`. Añadido `lib/query/keys.ts`
+  con la estructura base (vacío, a poblar en Fase 1).
+
+  **Nota:** `npm run lint` falla actualmente por un conflicto de peer-deps preexistente entre
+  `eslint@10` y `eslint-config-next@16.2.6` (no introducido por T-01..T-04; reproducible en
+  `HEAD` antes de estos cambios). `npm run build` sí pasa. Conviene abrir una tarea aparte para
+  resolver la versión de eslint antes de exigir lint limpio en CI.
 
 - **T-05 · Revisar `next.config.ts` y `proxy.ts`.** Los headers `Access-Control-Allow-*`
   del `next.config.ts` son de respuesta y corresponden al **backend**, no a Next; probablemente

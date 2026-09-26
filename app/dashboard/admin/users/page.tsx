@@ -28,8 +28,9 @@ import {
 } from "@/components/ui/popover"
 import { useToast } from "@/hooks/use-toast"
 import { useAdminRoute } from "@/hooks/use-protected-route"
+import { API_URL } from "@/lib/env"
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+const apiUrl = API_URL;
 
 // Tipos para los usuarios
 type User = {

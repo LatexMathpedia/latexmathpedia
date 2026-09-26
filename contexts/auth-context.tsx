@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, PropsWithChildren } from 'react';
+import { API_URL } from '@/lib/env';
 
 type CredentialsDTO = {
     email: string;
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [email, setEmail] = useState('');
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const apiUrl = API_URL;
 
   // Función helper para crear opciones de fetch optimizadas para Safari
   const createFetchOptions = (method: string, body?: any): RequestInit => {

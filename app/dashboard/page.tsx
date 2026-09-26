@@ -7,6 +7,7 @@ import { useFilter } from "@/contexts/filter-context";
 import { useSearch } from "@/contexts/search-context"; // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import { API_URL } from "@/lib/env";
 
 type PDFDocument = {
   title: string;
@@ -475,7 +476,7 @@ const sampleDataBlog = [
   },
 ];
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+const apiUrl = API_URL;
 
 function selectBests(pdfs: ExtendedPDFDocument[]): ExtendedPDFDocument[] {
   return pdfs

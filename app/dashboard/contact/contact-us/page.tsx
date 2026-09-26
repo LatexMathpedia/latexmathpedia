@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label"
 import { Mail, MessageSquare, Github, Instagram, Twitter } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
+import { API_URL } from "@/lib/env"
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+const apiUrl = API_URL;
 
 export default function ContactUsPage() {
     const [formData, setFormData] = useState({

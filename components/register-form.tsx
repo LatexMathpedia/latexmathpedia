@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast";
+import { API_URL } from "@/lib/env";
 
 export function RegisterForm({
   className,
@@ -29,7 +30,7 @@ export function RegisterForm({
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const apiUrl = API_URL;
       const response = await fetch(`${apiUrl}/auth/create`, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
