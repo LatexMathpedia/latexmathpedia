@@ -375,9 +375,9 @@ types/               # solo tipos NO derivables del OpenAPI
   cuestionarios" (histórico de intentos, ver T-17 parte 1 más abajo, que vive en esta misma
   página tal y como pide `UI-RESTRUCTURE.md` §6.3).
 
-- **T-17 (parte 1 de 2) · ✅ HECHO — Cuestionarios: cara de usuario.** Falta la parte 2
-  (administración: crear/editar preguntas y opciones, import/export JSON) — se deja para
-  otra ronda tal y como pedía el enunciado de esta.
+- **T-17 · ✅ HECHO (parte 1 y parte 2) — Cuestionarios completos.**
+
+  **Parte 1 — cara de usuario:**
   - Nuevo `lib/api/quizzes.ts` + `hooks/api/use-quizzes.ts` + `queryKeys.quizzes.*` /
     `queryKeys.attempts.*` en `lib/query/keys.ts`: `getPublicQuizzes` (`GET /public/quiz`,
     anónimo), `getQuiz` (`GET /quiz/{id}`, autenticado no-admin), `getQuizForAttempt`
@@ -411,10 +411,55 @@ types/               # solo tipos NO derivables del OpenAPI
     (`alert-dialog.tsx`, `tabs.tsx`, `radio-group.tsx`, `progress.tsx`, `pagination.tsx`,
     `select.tsx`) y se desinstaló la dependencia `cn` (quedaba sin uso). `select.tsx` existía
     pero estaba vacío (0 bytes, ya roto antes de esta ronda) — se regeneró con `--overwrite`.
-  - Pendiente para la parte 2 (otra ronda): admin de cuestionarios
-    (`/dashboard/admin/quizzes`, `/dashboard/admin/quizzes/[quizId]`) — CRUD de
-    `Quiz`/`Question`/`Option` e import/export JSON, tal y como describe `UI-RESTRUCTURE.md`
-    §7.3.
+
+  **Parte 2 — administración (`/dashboard/admin/quizzes`):**
+  - `lib/api/quizzes.ts` ampliado con `createQuiz`/`updateQuiz`/`deleteQuiz` (con `ApiError`),
+    `getQuizQuestions` (`QuestionDto[]`, distinto del `QuestionForAttemptDto` de la parte 1),
+    `exportQuiz` y `importQuiz`. Nuevos `lib/api/questions.ts`
+    (`createQuestion`/`updateQuestion`/`deleteQuestion`) y `lib/api/options.ts`
+    (`createOption`/`updateOption`/`deleteOption`), mismo patrón `ApiError` que el resto.
+    **Añadido no pedido explícitamente pero necesario:** `getQuestionOptions` en
+    `lib/api/questions.ts` (`GET /question/{id}/options`, tag "Question" en `api-docs.json`,
+    no "Option") — es el único endpoint que trae las opciones de una pregunta, y el editor
+    las necesita.
+  - Hooks nuevos: mutaciones de quiz en `hooks/api/use-quizzes.ts`
+    (`useCreateQuiz`/`useUpdateQuiz`/`useDeleteQuiz`/`useImportQuiz`, invalidando
+    `queryKeys.quizzes.all()`) + `useQuizQuestions`; `hooks/api/use-questions.ts`
+    (`useQuestionOptions`, `useCreateQuestion`/`useUpdateQuestion`/`useDeleteQuestion`,
+    reciben `quizId` en las variables de la mutación para invalidar
+    `queryKeys.quizzes.questions(quizId)`, mismo patrón que `subjects.units(subjectId)` de
+    T-18); `hooks/api/use-options.ts` (invalidan `queryKeys.questions.options(questionId)`
+    leyendo `questionId` del propio DTO, ya que `Create/UpdateOptionDto` ya lo llevan).
+    Claves nuevas en `lib/query/keys.ts`: `quizzes.questions(quizId)` y
+    `questions.options(questionId)`.
+  - `/dashboard/admin/quizzes`: listado (`usePublicQuizzes()` — no existe un endpoint de
+    "listar todos como admin" distinto del público, tal y como anticipaba el enunciado)
+    con buscador, y por fila: exportar (descarga el JSON de `exportQuiz()` vía Blob),
+    editar (enlace al editor) y borrar (`AlertDialog`). Dos diálogos: **Crear** (formulario
+    mínimo — nombre, dificultad, asignatura/tema — que llama a `createQuiz()` y navega al
+    editor con el id ya real) e **Importar** (`<input type="file">` que parsea el JSON en el
+    cliente + `SubjectUnitPicker` para asignatura/tema, ya que el JSON exportado no los
+    incluye).
+  - `/dashboard/admin/quizzes/[quizId]`: editor completo — formulario de metadatos
+    (react-hook-form + zod, reutiliza `useQuiz()` de la parte 1 para los valores iniciales),
+    y preguntas como `Accordion` (nuevo `components/ui/QuizQuestionAccordion.tsx`, mismo
+    patrón de estado "en edición" local que `PDFAccordionCard`/`SubjectAccordionCard`): cada
+    pregunta editable inline (texto, tipo, explicación) con sus opciones anidadas
+    (texto editable, borrar, reordenar). Formulario "Añadir pregunta" al final de la lista y
+    "Añadir opción" dentro de cada pregunta. Todos los borrados (quiz, pregunta, opción) con
+    `AlertDialog`.
+  - **Decisión — opción correcta:** se marca con un `RadioGroup` que envuelve todas las
+    opciones de una pregunta (una sola correcta, coherente con el modelo de datos); al
+    seleccionar una nueva, se lanzan en paralelo dos `PUT /option/update/{id}` (desmarcar la
+    anterior, marcar la nueva) en vez de introducir un endpoint o campo nuevo.
+  - **Decisión — reordenar por posición:** sin drag-and-drop (como sugería
+    `UI-RESTRUCTURE.md` §7.3); botones ↑/↓ que intercambian el campo `position` entre la
+    pregunta/opción movida y su vecina inmediata, vía dos `PUT` en paralelo.
+  - Añadida entrada "Cuestionarios" a `dataAdminPanel.adminPanel` en
+    `components/app-sidebar.tsx` y cuarta tarjeta en `app/dashboard/admin/page.tsx`.
+  - Se instaló `accordion` con `npx shadcn@latest add accordion` — mismo problema de
+    `import { cn } from "cn"` que en rondas anteriores; corregido en `accordion.tsx` y
+    dependencia `cn` desinstalada de nuevo.
 
 - **T-18 · ✅ HECHO — Admin de asignaturas/temas.** CRUD completo de `Subject`/`SubjectUnit`
   sobre `lib/api/subjects.ts` (ampliado con `createSubject`/`updateSubject`/`deleteSubject`/
@@ -490,9 +535,8 @@ types/               # solo tipos NO derivables del OpenAPI
    migrada. La taxonomía de Subjects/Units se construye con los endpoints que ya existen en
    `api-docs.json`; los campos extra de `API-REQUESTS.md` (contadores, etc.) son mejoras
    futuras, no bloquean nada de esto. ~~T-18 (admin de asignaturas) y T-19 (admin de
-   usuarios)~~ ✅ Hechos. ~~T-16 (perfil)~~ ✅ Hecho. ~~T-17 parte 1 (cuestionarios: cara de
-   usuario)~~ ✅ Hecho — queda T-15 (contenido estático) y T-17 parte 2 (admin de
-   cuestionarios) como siguientes candidatas de Fase 3.
+   usuarios)~~ ✅ Hechos. ~~T-16 (perfil)~~ ✅ Hecho. ~~T-17 (cuestionarios, partes 1 y 2)~~
+   ✅ Hecho — solo queda T-15 (contenido estático) en Fase 3.
 6. **Fase 4** (S3, chatbot, mail) al final o cuando el backend exponga esas piezas.
 
 ## 6. Decisiones abiertas (para backend/producto)

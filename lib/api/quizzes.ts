@@ -2,6 +2,8 @@ import { apiClient } from "@/lib/api/client";
 import type { components } from "@/lib/api/schema";
 import { ApiError } from "@/lib/api/errors";
 
+export { ApiError };
+
 export type QuizDto = components["schemas"]["QuizDto"];
 export type QuizForAttemptDto = components["schemas"]["QuizForAttemptDto"];
 export type QuestionForAttemptDto = components["schemas"]["QuestionForAttemptDto"];
@@ -12,6 +14,11 @@ export type QuizAttemptResultDto = components["schemas"]["QuizAttemptResultDto"]
 export type AttemptAnswerResultDto = components["schemas"]["AttemptAnswerResultDto"];
 export type QuizAttemptDto = components["schemas"]["QuizAttemptDto"];
 export type PageQuizAttemptDto = components["schemas"]["PageQuizAttemptDto"];
+export type CreateQuizDto = components["schemas"]["CreateQuizDto"];
+export type UpdateQuizDto = components["schemas"]["UpdateQuizDto"];
+export type QuizExportableDto = components["schemas"]["QuizExportableDto"];
+export type QuestionExportableDto = components["schemas"]["QuestionExportableDto"];
+export type OptionExportableDto = components["schemas"]["OptionExportableDto"];
 
 export async function getPublicQuizzes() {
   const { data, error } = await apiClient.GET("/public/quiz");
@@ -51,5 +58,60 @@ export async function getMyAttempts(page: number, size: number) {
     params: { query: { pageable: { page, size } } },
   });
   if (error) throw error;
+  return data;
+}
+
+// --- Administración (T-17 parte 2) ---
+
+export async function createQuiz(body: CreateQuizDto) {
+  const { data, error, response } = await apiClient.POST("/quiz/create", { body });
+  if (error) throw new ApiError(response.status, "No se pudo crear el cuestionario");
+  return data;
+}
+
+export async function updateQuiz(id: number, body: UpdateQuizDto) {
+  const { data, error, response } = await apiClient.PUT("/quiz/update/{id}", {
+    params: { path: { id } },
+    body,
+  });
+  if (error) throw new ApiError(response.status, "No se pudo actualizar el cuestionario");
+  return data;
+}
+
+export async function deleteQuiz(id: number) {
+  const { error, response } = await apiClient.DELETE("/quiz/delete/{id}", {
+    params: { path: { id } },
+  });
+  if (error) throw new ApiError(response.status, "No se pudo eliminar el cuestionario");
+}
+
+// QuestionDto (con explanation, sin ocultar la respuesta correcta) es distinto del
+// QuestionForAttemptDto que ya usa la parte 1 para resolver el cuestionario.
+export async function getQuizQuestions(id: number) {
+  const { data, error } = await apiClient.GET("/quiz/{id}/questions", {
+    params: { path: { id } },
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function exportQuiz(id: number) {
+  const { data, error } = await apiClient.GET("/quiz/{id}/export", {
+    params: { path: { id } },
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function importQuiz(
+  subjectId: number,
+  subjectUnitId: number | null,
+  body: QuizExportableDto
+) {
+  const { data, error, response } = await apiClient.POST("/quiz/import", {
+    params: { query: { subjectId, subjectUnitId: subjectUnitId ?? undefined } },
+    body,
+  });
+  if (error) throw new ApiError(response.status, "No se pudo importar el cuestionario");
   return data;
 }

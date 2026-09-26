@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge"
 
-const DIFFICULTY_LABEL: Record<string, string> = {
+export const QUIZ_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"] as const
+
+export const DIFFICULTY_LABEL: Record<string, string> = {
   EASY: "Fácil",
   MEDIUM: "Media",
   HARD: "Difícil",

@@ -19,6 +19,10 @@ export const queryKeys = {
     all: () => ["quizzes"] as const,
     detail: (quizId: number) => ["quizzes", quizId] as const,
     attempt: (quizId: number) => ["quizzes", quizId, "attempt"] as const,
+    questions: (quizId: number) => ["quizzes", quizId, "questions"] as const,
+  },
+  questions: {
+    options: (questionId: number) => ["questions", questionId, "options"] as const,
   },
   attempts: {
     all: () => ["attempts"] as const,

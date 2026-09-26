@@ -4,6 +4,7 @@ import * as React from "react"
 import {
   BookOpen,
   Bot,
+  ClipboardList,
   Command,
   Frame,
   LifeBuoy,
@@ -93,6 +94,12 @@ const dataAdminPanel = {
       title: "Asignaturas",
       url: "/dashboard/admin/subjects",
       icon: BookOpen,
+      isActive: false,
+    },
+    {
+      title: "Cuestionarios",
+      url: "/dashboard/admin/quizzes",
+      icon: ClipboardList,
       isActive: false,
     },
     {
