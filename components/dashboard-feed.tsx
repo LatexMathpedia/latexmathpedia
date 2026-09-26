@@ -3,13 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import ContentCard from "@/components/content-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useFilter } from "@/contexts/filter-context";
 import { useSearch } from "@/contexts/search-context"; // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { usePdfs, usePublicPdfsNoLink } from "@/hooks/api/use-pdfs";
 import { usePublicQuizzes } from "@/hooks/api/use-quizzes";
-import { useSubjects, useSubjectUnits } from "@/hooks/api/use-subjects";
 import type { BlogPostMeta } from "@/lib/content/posts";
 import type { ContentItem, DisplayPdf } from "@/lib/content/types";
 import type { QuizDto } from "@/lib/api/quizzes";
@@ -69,7 +67,6 @@ function ContentGrid({
 
 export function DashboardFeed({ posts }: { posts: BlogPostMeta[] }) {
   const toast = useToast();
-  const { subjectId, subjectUnitId } = useFilter();
   const { searchQuery } = useSearch();
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<TabKey>("all");
@@ -81,9 +78,6 @@ export function DashboardFeed({ posts }: { posts: BlogPostMeta[] }) {
 
   // Mismo endpoint público que usa el catálogo de /dashboard/quizzes, sin depender de auth.
   const quizzesQuery = usePublicQuizzes();
-
-  const { data: subjects } = useSubjects();
-  const { data: subjectUnits } = useSubjectUnits(subjectId);
 
   useEffect(() => {
     if (activePdfsQuery.error) {
@@ -116,64 +110,38 @@ export function DashboardFeed({ posts }: { posts: BlogPostMeta[] }) {
 
   const allQuizzes: QuizDto[] = quizzesQuery.data ?? [];
 
-  const activeSubjectName = subjects?.find((s) => s.id === subjectId)?.name;
-  const activeSubjectUnitName = subjectUnits?.find((u) => u.id === subjectUnitId)?.name;
-
-  function matchesSubjectFilter(itemSubjectId?: number, itemSubjectUnitId?: number): boolean {
-    if (subjectId == null) return true;
-    if (itemSubjectId !== subjectId) return false;
-    if (subjectUnitId != null) return itemSubjectUnitId === subjectUnitId;
-    return true;
-  }
-
   const normalizedSearch = normalizeText(searchQuery.trim());
   const isSearching = normalizedSearch !== "";
 
-  // Igual que hacía el buscador original sobre PDFs: buscar y filtrar por asignatura son
-  // mutuamente excluyentes (buscar es una intención distinta de navegar por asignatura),
-  // así que al escribir en el buscador se consulta sobre el universo completo del tipo.
+  // El filtro por asignatura/tema del feed general se retiró: la sidebar (nav-subjects.tsx)
+  // ahora navega directamente a la ficha de asignatura (/dashboard/subjects/[id]), que ya
+  // agrupa PDFs y cuestionarios por tema — no hace falta mantener dos formas de ver lo
+  // mismo. Aquí solo queda la búsqueda como filtro.
   const pdfsToShow = useMemo(() => {
-    if (isSearching) {
-      return allPdfs.filter((pdf) => normalizeText(pdf.title).includes(normalizedSearch));
-    }
-    return allPdfs.filter((pdf) => matchesSubjectFilter(pdf.subjectId, pdf.subjectUnitId));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allPdfs, isSearching, normalizedSearch, subjectId, subjectUnitId]);
+    if (!isSearching) return allPdfs;
+    return allPdfs.filter((pdf) => normalizeText(pdf.title).includes(normalizedSearch));
+  }, [allPdfs, isSearching, normalizedSearch]);
 
   const quizzesToShow = useMemo(() => {
-    if (isSearching) {
-      return allQuizzes.filter((quiz) => normalizeText(quiz.name ?? "").includes(normalizedSearch));
-    }
-    return allQuizzes.filter((quiz) => matchesSubjectFilter(quiz.subject?.id, quiz.subjectUnit?.id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allQuizzes, isSearching, normalizedSearch, subjectId, subjectUnitId]);
+    if (!isSearching) return allQuizzes;
+    return allQuizzes.filter((quiz) => normalizeText(quiz.name ?? "").includes(normalizedSearch));
+  }, [allQuizzes, isSearching, normalizedSearch]);
 
-  // La pestaña "Blog" propia siempre muestra todos los posts (solo la búsqueda los filtra):
-  // los posts de content/posts no tienen relación con Subject/SubjectUnit hoy (decisión de
-  // producto pendiente, ver UI-RESTRUCTURE.md §10), así que el filtro de asignatura de la
-  // sidebar no les aplica.
   const blogTabToShow = useMemo(() => {
-    if (isSearching) {
-      return posts.filter((post) => normalizeText(post.title).includes(normalizedSearch));
-    }
-    return posts;
+    if (!isSearching) return posts;
+    return posts.filter((post) => normalizeText(post.title).includes(normalizedSearch));
   }, [posts, isSearching, normalizedSearch]);
-
-  // Dentro de "Todo", si hay un filtro de asignatura/tema activo (y no se está buscando),
-  // el blog simplemente no se intercala -- no hay forma de saber si un post pertenece a esa
-  // asignatura. Al buscar, el blog sí participa igual que los otros dos tipos.
-  const blogForAll = isSearching ? blogTabToShow : subjectId == null ? posts : [];
 
   const allItems: ContentItem[] = useMemo(() => {
     const items: ContentItem[] = [
       ...pdfsToShow.map((data) => ({ kind: "pdf" as const, data })),
       ...quizzesToShow.map((data) => ({ kind: "quiz" as const, data })),
-      ...blogForAll.map((data) => ({ kind: "blog" as const, data })),
+      ...blogTabToShow.map((data) => ({ kind: "blog" as const, data })),
     ];
     return items.sort(
       (a, b) => new Date(itemDate(b)).getTime() - new Date(itemDate(a)).getTime(),
     );
-  }, [pdfsToShow, quizzesToShow, blogForAll]);
+  }, [pdfsToShow, quizzesToShow, blogTabToShow]);
 
   const pdfItems: ContentItem[] = useMemo(
     () => pdfsToShow.map((data) => ({ kind: "pdf" as const, data })),
@@ -199,17 +167,8 @@ export function DashboardFeed({ posts }: { posts: BlogPostMeta[] }) {
     if (isSearching) {
       return `Resultados para: "${searchQuery}" (${countByTab[activeTab]} encontrados)`;
     }
-
-    const base = TAB_LABEL[activeTab];
-    if (subjectId != null && activeTab !== "blog") {
-      const subjectPart = activeSubjectName ?? "Asignatura";
-      return activeSubjectUnitName
-        ? `${base} · ${subjectPart}: ${activeSubjectUnitName}`
-        : `${base} · ${subjectPart}`;
-    }
-    return base;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSearching, searchQuery, activeTab, countByTab, subjectId, activeSubjectName, activeSubjectUnitName]);
+    return TAB_LABEL[activeTab];
+  }, [isSearching, searchQuery, activeTab, countByTab]);
 
   const loadingByTab: Record<TabKey, boolean> = {
     all: pdfsLoading || quizzesQuery.isLoading,

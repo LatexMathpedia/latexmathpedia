@@ -29,7 +29,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/contexts/auth-context"
-import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context"
 import Link from "next/link"
 import logo from '@/public/icon.png'
@@ -124,7 +123,6 @@ const dataAdminPanel = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isAdmin, email, displayName, isAuthenticated } = useAuth();
-  const { clearFilter } = useFilter();
   const { setSearchQuery } = useSearch();
 
   const dataUser = {
@@ -133,8 +131,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const handleLogoClick = () => {
-    // Limpiar los filtros y la búsqueda
-    clearFilter();
+    // Limpiar la búsqueda al volver al inicio
     setSearchQuery("");
   }
 
