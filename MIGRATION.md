@@ -168,10 +168,16 @@ types/               # solo tipos NO derivables del OpenAPI
   `HEAD` antes de estos cambios). `npm run build` sí pasa. Conviene abrir una tarea aparte para
   resolver la versión de eslint antes de exigir lint limpio en CI.
 
-- **T-05 · Revisar `next.config.ts` y `proxy.ts`.** Los headers `Access-Control-Allow-*`
-  del `next.config.ts` son de respuesta y corresponden al **backend**, no a Next; probablemente
-  sobran o estorban con Keycloak. `proxy.ts` (middleware) hoy no hace nada útil. Decidir con
-  backend qué headers/cookies aplican tras Keycloak y limpiar. (Coordinar con T-10.)
+- **T-05 · ✅ HECHO — Revisar `next.config.ts` y `proxy.ts`.** Eliminado el bloque
+  `headers()` de `next.config.ts`: los headers `Access-Control-Allow-*`/`Vary`/
+  `Permissions-Policy`/`Cross-Origin-Opener-Policy` que añadía eran de respuesta y solo
+  tendrían sentido puestos por el **backend** (localhost:8081), no por las páginas que sirve
+  este propio Next.js; no protegían nada al aplicarse aquí. Queda solo `poweredByHeader:
+  false`, `serverExternalPackages` e `images`. Verificado que login/logout y las llamadas de
+  `apiClient` siguen funcionando igual en `AUTH_MODE=mock` y en `NEXT_PUBLIC_AUTH_MODE=keycloak`
+  tras quitarlos (Keycloak usa Bearer token, no depende de cookies cross-origin ni de estos
+  headers). La parte de `proxy.ts` ya estaba resuelta desde el merge de Keycloak (rama por
+  `AUTH_MODE`) y no se ha tocado en esta tarea.
 
 ### Fase 1 — Capa de datos de PDFs y taxonomía (depende de T-03, T-04)
 

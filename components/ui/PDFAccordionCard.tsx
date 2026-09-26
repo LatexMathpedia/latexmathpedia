@@ -10,6 +10,17 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -125,15 +136,32 @@ function PDFAccordionCard({ pdf }: { pdf: PDFDto }) {
           )}
         </div>
         <div className="flex space-x-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDelete}
-            className="cursor-pointer"
-            disabled={deletePdf.isPending}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="cursor-pointer"
+                disabled={deletePdf.isPending}
+              >
+                <Trash className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Eliminar este PDF?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción no se puede deshacer.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="cursor-pointer">Cancelar</AlertDialogCancel>
+                <AlertDialogAction className="cursor-pointer" onClick={handleDelete}>
+                  Eliminar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="sm" className="cursor-pointer">
               {isOpen ? (

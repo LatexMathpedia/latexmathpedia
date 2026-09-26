@@ -155,6 +155,10 @@ Cambios concretos:
   "Blog" al índice (`/dashboard/blog`), que ya lista todo dinámicamente. Si se quiere lo
   fijo como acceso rápido, mejor un widget "Contenido reciente" en el propio feed que en la
   sidebar (menos ruido de navegación permanente).
+  **✅ HECHO** — borrado `components/nav-projects.tsx` (sin otro consumidor, verificado con
+  grep) y el objeto `data.projects` de `app-sidebar.tsx`; añadida la entrada "Blog" →
+  `/dashboard/blog` (icono `Newspaper`, mismo patrón visual/componente `NavMain` que
+  "Asignaturas"/"Cuestionarios") justo debajo de "Cuestionarios".
 - **Admin panel** gana dos entradas (Asignaturas, Cuestionarios) y se reordena.
 
 ---
@@ -417,6 +421,25 @@ Todos son compatibles con el `components.json` ya configurado (`style: new-york`
   (`pageTitle` fijo "Últimos apuntes"): con pestañas dedicadas, cada una lista todo lo que
   matchea el filtro/búsqueda activos, ordenado por fecha descendente; no se ha añadido
   paginación (fuera de alcance de esta ronda).
+
+**Cierre de cabos sueltos (T-05, §4 "Blogs" → enlace único, punto 7 "AlertDialog en todo el
+admin"): ✅ HECHO.**
+- `next.config.ts`: eliminado el bloque `headers()` (CORS `Access-Control-Allow-*`,
+  `Permissions-Policy`, `Cross-Origin-Opener-Policy`) — eran headers de respuesta que solo
+  tendrían sentido puestos por el backend, no por este propio Next.js sirviendo sus propias
+  páginas. Queda solo `poweredByHeader: false`, `serverExternalPackages` e `images`. Ver
+  T-05 en `MIGRATION.md` (marcada ✅ HECHO) para el detalle de la verificación en
+  `AUTH_MODE=mock`/`keycloak`. `proxy.ts` no se ha tocado (ya resuelto en el merge de
+  Keycloak).
+- `components/nav-projects.tsx` borrado (sin otro consumidor) junto con `data.projects` de
+  `app-sidebar.tsx`; sustituido por una entrada "Blog" → `/dashboard/blog` con `NavMain`,
+  mismo patrón visual que "Asignaturas"/"Cuestionarios".
+- `components/ui/PDFAccordionCard.tsx`: el botón de borrar ahora abre un `AlertDialog`
+  ("¿Eliminar este PDF?" / "Esta acción no se puede deshacer.") antes de invocar
+  `handleDelete`, con el mismo patrón (trigger ghost+`Trash`, `AlertDialogAction` disparando
+  la mutación) que ya usan `SubjectAccordionCard.tsx`/`QuizQuestionAccordion.tsx`. Con esto,
+  el punto 7 de la lista de fases de arriba queda completo: todas las entidades del admin
+  (asignaturas, temas, preguntas, opciones, cuestionarios, PDFs) confirman el borrado.
 
 ---
 

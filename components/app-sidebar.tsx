@@ -6,18 +6,14 @@ import {
   Bot,
   ClipboardList,
   Command,
-  Frame,
   LifeBuoy,
   ListChecks,
-  Map,
-  PieChart,
+  Newspaper,
   Send,
-  SquareTerminal,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSubjects } from "@/components/nav-subjects"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -55,6 +51,17 @@ const dataQuizzes = {
   ],
 }
 
+const dataBlog = {
+  blog: [
+    {
+      title: "Blog",
+      url: "/dashboard/blog",
+      icon: Newspaper,
+      isActive: false,
+    },
+  ],
+}
+
 const data = {
   navSecondary: [
     {
@@ -66,28 +73,6 @@ const data = {
       title: "Feedback",
       url: "#",
       icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Ejercicios Resueltos Análisis III - Parte 1",
-      url: "/dashboard/blog/analisis3-ejercicios-1",
-      icon: Frame,
-    },
-    {
-      name: "Apuntes MOR - Tema 4",
-      url: "/dashboard/blog/mor-tema-4",
-      icon: Map,
-    },
-    {
-      name: "Apuntes TPP - Tema 1",
-      url: "/dashboard/blog/tpp-tema-1",
-      icon: SquareTerminal,
-    },
-    {
-      name: "Solución del Exámen de CDI",
-      url: "/dashboard/blog/resolucion-examen-analisis-2025",
-      icon: PieChart,
     },
   ],
 }
@@ -162,7 +147,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={dataSubjectsCatalog.subjectsCatalog} title="Catálogo" />
         <NavSubjects title="Apuntes" />
         <NavMain items={dataQuizzes.quizzes} title="Cuestionarios" />
-        <NavProjects projects={data.projects} />
+        <NavMain items={dataBlog.blog} title="Blog" />
         {/* Solo mostrar admin panel si está autenticado y es admin */}
         {isAuthenticated && isAdmin && (
           <NavMain items={dataAdminPanel.adminPanel} title="Admin Panel" />
