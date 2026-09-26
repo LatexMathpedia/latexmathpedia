@@ -7,13 +7,17 @@ function resolveApiUrl(): string {
     return value;
   }
 
-  if (process.env.NODE_ENV !== "production") {
-    return DEV_DEFAULT_API_URL;
+  // No lanzar nunca en build/prerender (SSR/SSG) ni en servidor: reventaría `next build`
+  // o cualquier página server-rendered en cuanto faltase la variable, incluida en CI.
+  // Solo avisamos en el navegador y en producción, sin romper nada.
+  if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
+    console.warn(
+      "NEXT_PUBLIC_API_URL no está definida; usando el valor por defecto de desarrollo " +
+        `(${DEV_DEFAULT_API_URL}). Configúrala en el entorno (ver .env.example).`
+    );
   }
 
-  throw new Error(
-    "NEXT_PUBLIC_API_URL no está definida. Configúrala en el entorno (ver .env.example)."
-  );
+  return DEV_DEFAULT_API_URL;
 }
 
 export const API_URL = resolveApiUrl();

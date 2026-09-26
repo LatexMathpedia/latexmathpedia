@@ -116,12 +116,53 @@ para no tener que migrarlo dos veces.
 
 ---
 
+## 10. `GET /subject` y derivados devuelven 401 pese a estar documentados como públicos
+
+**Confirmado en vivo** (2026-09-26, backend en `localhost:8081`): la sección "Subjects" del
+OpenAPI dice explícitamente *"consulta no requiere autenticación"*, y `GET /subject/{id}`,
+`/subject/{id}/units` y `/subject/{id}/pdfs` llevan además la descripción por operación
+"Consulta pública, no requiere autenticación". En la práctica, **todos** devuelven `401` sin
+token (probado con `curl`, también con un `Authorization: Bearer` inválido — mismo 401):
+
+```
+GET /subject            → 401
+GET /subject/1          → 401
+GET /subject/1/units    → 401
+GET /subject/1/pdfs     → 401
+GET /subject/unit/1     → 401
+```
+
+Frente a esto, `GET /public/pdf/no-link` y `GET /public/quiz` sí funcionan sin token (`200 []`).
+
+**Impacto en frontend:** la sidebar de asignaturas (`components/nav-subjects.tsx`, construida
+en la Fase 1 de `MIGRATION.md`) depende de `GET /subject` y hoy se queda vacía para
+cualquier usuario no autenticado — que, con el auth mockeado de T-13, es el estado por
+defecto. No es un bug del frontend: la query falla con 401 y el componente simplemente no
+renderiza asignaturas (no crashea, pero tampoco avisa al usuario).
+
+**Petición:** o bien el filtro de seguridad del backend aplica `permitAll()` a estas rutas tal
+y como dice la documentación (lo más probable, dado que el resto de "Consulta pública" del
+mismo controlador sí debería estar exento), o bien se corrige el OpenAPI para reflejar que
+en realidad requieren autenticación (en cuyo caso el catálogo de asignaturas dejaría de ser
+navegable en anónimo, lo cual habría que decidir si es intencional).
+
+## 11. `POST /public/auth/login` y `/public/auth/create` no funcionan hoy
+
+**Confirmado en vivo:** `POST /public/auth/login` sin body devuelve `401`; con body válido
+devuelve `500` (sin detalle en el body de error). `POST /public/auth/create` con un
+email/password válidos también devuelve `500`. No es una petición de mejora, es un aviso: si
+en algún momento se retoma T-10/T-11/T-12 (auth real, no mock) antes de que esto se arregle,
+el login real seguirá sin funcionar. Confirma que mockear el auth mientras tanto (T-13) fue
+la decisión correcta.
+
 ## Resumen de prioridad
 
 | # | Tema | Urgencia |
 |---|---|---|
+| 10 | `/subject*` devuelve 401 pese a documentarse como público | **Alta** — sidebar de asignaturas vacía en anónimo, confirmado en vivo |
 | 5, 6 | Subida y visualización de PDFs vía S3 | **Alta** — bloquea T-09/T-20 de `MIGRATION.md` |
 | 7 | Cambio de rol tras quitar `/auth/change-role` | **Alta** — bloquea T-19 |
+| 11 | Login/registro reales rotos (500) | Informativo — ya asumido, confirma que T-13 (mock) es correcto |
 | 8 | Semántica de "público" en quizzes | Media — antes de construir `/dashboard/quizzes` |
 | 3 | Mejor intento por usuario/quiz | Media — mejora la ficha de quiz, no la bloquea |
 | 1, 2 | Contadores en Subject/Quiz DTOs | Baja — evita N+1, no bloquea nada |

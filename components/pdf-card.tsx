@@ -7,12 +7,13 @@ import { useRouter } from "next/navigation";
 
 type PDFCardProps = {
     title: string;
-    url: string;
+    url?: string;
     date: string;
-    tag?: string;
+    subjectName?: string;
+    subjectUnitName?: string;
 }
 
-function PDFCard({ title, url, date, tag }: PDFCardProps) {
+function PDFCard({ title, url, date, subjectName, subjectUnitName }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
     const toast = useToast();
     const router = useRouter();
@@ -64,8 +65,8 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
             'bg-pink-100 dark:bg-pink-900',
         ];
 
-        // Usar el tag si está disponible, de lo contrario usar el título
-        const textToUse = tag || title;
+        // Usar la asignatura si está disponible, de lo contrario usar el título
+        const textToUse = subjectName || title;
         const index = textToUse.charCodeAt(0) % colors.length;
         return colors[index];
     };
@@ -98,6 +99,21 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
             <div className="flex flex-1 flex-col p-4">
                 <h3 className="mb-2 line-clamp-2 text-base font-medium">{title}</h3>
 
+                {(subjectName || subjectUnitName) && (
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                        {subjectName && (
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                                {subjectName}
+                            </span>
+                        )}
+                        {subjectUnitName && (
+                            <span className="text-xs bg-secondary/10 text-primary px-2 py-0.5 rounded-full">
+                                {subjectUnitName}
+                            </span>
+                        )}
+                    </div>
+                )}
+
                 <div className="mb-4 flex items-center text-sm text-muted-foreground">
                     <div className="flex items-center gap-1.5 mr-4">
                         <CalendarIcon className="h-3.5 w-3.5" />
@@ -106,7 +122,7 @@ function PDFCard({ title, url, date, tag }: PDFCardProps) {
                 </div>
 
                 <div className="mt-auto">
-                    {isAuthenticated ? (
+                    {isAuthenticated && url ? (
                         <Button
                             variant="default"
                             size="sm"

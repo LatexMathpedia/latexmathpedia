@@ -1,40 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import PDFCard from "@/components/pdf-card";
 import BlogCard from "@/components/blog-card";
 import { useFilter } from "@/contexts/filter-context";
 import { useSearch } from "@/contexts/search-context"; // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
-import { API_URL } from "@/lib/env";
+import { usePdfs, usePublicPdfsNoLink } from "@/hooks/api/use-pdfs";
+import { useSubjects, useSubjectUnits } from "@/hooks/api/use-subjects";
 
-type PDFDocument = {
+// Shape normalizado que usa esta página, independientemente de si el PDF viene con o
+// sin `link` (según el usuario esté autenticado o no).
+type DisplayPdf = {
+  id: number;
   title: string;
-  url: string;
-  date: string;
+  url?: string;
+  lastTimeEdited: string;
+  subjectId?: number;
+  subjectUnitId?: number;
+  subjectName?: string;
+  subjectUnitName?: string;
 };
 
-// Tipo para los PDFs que vienen de la API
-type APIPDFDocument = {
-  pdf_id: number;
-  pdf_link?: string;
-  pdf_last_time_edit: string;
-  pdf_description: string | null;
-  pdf_name: string;
-  pdf_tag: string | null;
-};
+function formatDate(iso: string): string {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
 
-// Extendemos el tipo PDFDocument para incluir la etiqueta original
-type ExtendedPDFDocument = PDFDocument & { originalTag?: string };
-
-type SubCategories = {
-  [key: string]: PDFDocument[];
-};
-
-type Categories = {
-  [key: string]: SubCategories | PDFDocument[];
-};
+// Función para normalizar texto (eliminar tildes y acentos)
+function normalizeText(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
 
 const sampleDataBlog = [
   {
@@ -476,175 +482,82 @@ const sampleDataBlog = [
   },
 ];
 
-const apiUrl = API_URL;
-
-function selectBests(pdfs: ExtendedPDFDocument[]): ExtendedPDFDocument[] {
-  return pdfs
-    .sort((a, b) => {
-      const [dayA, monthA, yearA] = a.date.split("/").map(Number);
-      const [dayB, monthB, yearB] = b.date.split("/").map(Number);
-      const dateA = new Date(yearA, monthA - 1, dayA);
-      const dateB = new Date(yearB, monthB - 1, dayB);
-      return dateB.getTime() - dateA.getTime();
-    })
-    .slice(0, 8);
-}
-
 function WelcomePage() {
   const toast = useToast();
-  const { categoryFilter, subCategoryFilter } = useFilter();
+  const { subjectId, subjectUnitId } = useFilter();
   const { searchQuery } = useSearch();
-  const [displayedPDFs, setDisplayedPDFs] = useState<ExtendedPDFDocument[]>([]);
-  const [allPDFs, setAllPDFs] = useState<ExtendedPDFDocument[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [pageTitle, setPageTitle] = useState("Últimos apuntes");
   const { isAuthenticated, loading: authLoading } = useAuth();
 
-  function convertApiPdfToDocument(
-    apiPdf: APIPDFDocument,
-  ): ExtendedPDFDocument {
-    const date = new Date(apiPdf.pdf_last_time_edit);
-    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  const authedPdfsQuery = usePdfs(!authLoading && isAuthenticated);
+  const publicPdfsQuery = usePublicPdfsNoLink(!authLoading && !isAuthenticated);
 
-    return {
-      title: apiPdf.pdf_name,
-      url: apiPdf.pdf_link || "#",
-      date: formattedDate,
-      originalTag: apiPdf.pdf_tag || undefined, // Preservamos la etiqueta original
-    };
-  }
+  const { data: subjects } = useSubjects();
+  const { data: subjectUnits } = useSubjectUnits(subjectId);
 
-  async function fetchPDFs(): Promise<APIPDFDocument[]> {
-    try {
-      let response;
-      if (isAuthenticated) {
-        response = await fetch(`${apiUrl}/pdfs`, {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      } else {
-        response = await fetch(`${apiUrl}/pdfs/no-link`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
-      if (!response.ok) {
-        throw new Error(`Error fetching PDFs: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      toast.error("Error loading the pdfs data");
-      return [];
-    }
-  }
-
-  async function getAllPDFs(): Promise<ExtendedPDFDocument[]> {
-    const apiPdfs = await fetchPDFs();
-    return apiPdfs.map((apiPdf) => convertApiPdfToDocument(apiPdf));
-  }
-
-  // Función para normalizar texto (eliminar tildes y acentos)
-  const normalizeText = (text: string): string => {
-    return text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-  };
+  const activePdfsQuery = isAuthenticated ? authedPdfsQuery : publicPdfsQuery;
+  const isLoading = authLoading || activePdfsQuery.isLoading;
 
   useEffect(() => {
-    async function loadPDFs() {
-      setIsLoading(true);
-      const pdfs = await getAllPDFs();
-      setAllPDFs(pdfs);
-      setIsLoading(false);
+    if (activePdfsQuery.error) {
+      toast.error("Error al cargar los PDFs.");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePdfsQuery.error]);
 
-    // Solo cargar PDFs cuando el estado de autenticación esté establecido
-    if (!authLoading) {
-      loadPDFs();
-    }
-  }, [authLoading, isAuthenticated]);
+  const allPDFs: DisplayPdf[] = useMemo(() => {
+    const raw = activePdfsQuery.data ?? [];
+    return raw.map((pdf, index) => ({
+      id: pdf.id ?? index,
+      title: pdf.name ?? "",
+      url: (pdf as { link?: string }).link,
+      lastTimeEdited: pdf.lastTimeEdited ?? "",
+      subjectId: pdf.subject?.id,
+      subjectUnitId: pdf.subjectUnit?.id,
+      subjectName: pdf.subject?.name,
+      subjectUnitName: pdf.subjectUnit?.name,
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePdfsQuery.data]);
 
-  const tagToCategory: {
-    [key: string]: { category: string; subcategory?: string };
-  } = {
-    // Matemáticas
-    AC: { category: "Matemáticas", subcategory: "Análisis y Cálculo" },
-    AG: { category: "Matemáticas", subcategory: "Álgebra y Geometría" },
-    TE: { category: "Matemáticas", subcategory: "Topología" },
-    PE: { category: "Matemáticas", subcategory: "Probabilidad y Estadística" },
-    EM: {
-      category: "Matemáticas",
-      subcategory: "Ecuaciones Diferenciales y Métodos Numéricos",
-    },
-    OP: {
-      category: "Matemáticas",
-      subcategory: "Optimización y Programación Matemática",
-    },
+  const activeSubjectName = subjects?.find((s) => s.id === subjectId)?.name;
+  const activeSubjectUnitName = subjectUnits?.find((u) => u.id === subjectUnitId)?.name;
 
-    // Software
-    FA: { category: "Software", subcategory: "Fundamentos y Algoritmos" },
-    EL: {
-      category: "Software",
-      subcategory: "Estructuras, Computación y Lenguajes",
-    },
-    AS: { category: "Software", subcategory: "Arquitectura y Sistemas" },
-    IP: { category: "Software", subcategory: "Ingeniería de Software" },
-    BD: { category: "Software", subcategory: "Bases de Datos" },
-    RS: { category: "Software", subcategory: "Redes y Seguridad" },
-    WI: { category: "Software", subcategory: "Web e Interfaces" },
-  };
-
-  useEffect(() => {
-    if (isLoading) return;
-
+  const { displayedPDFs, pageTitle } = useMemo(() => {
     if (searchQuery.trim() !== "") {
       const normalizedSearch = normalizeText(searchQuery);
       const filteredPDFs = allPDFs.filter((pdf) =>
         normalizeText(pdf.title).includes(normalizedSearch),
       );
-      setDisplayedPDFs(filteredPDFs);
-      setPageTitle(
-        `Resultados para: "${searchQuery}" (${filteredPDFs.length} encontrados)`,
-      );
-      return;
+      return {
+        displayedPDFs: filteredPDFs,
+        pageTitle: `Resultados para: "${searchQuery}" (${filteredPDFs.length} encontrados)`,
+      };
     }
 
-    if (categoryFilter) {
+    if (subjectId != null) {
       const filteredPDFs = allPDFs.filter((pdf) => {
-        const pdfTag = (pdf as ExtendedPDFDocument).originalTag;
-
-        if (!pdfTag) return false;
-
-        const tagInfo = tagToCategory[pdfTag];
-
-        if (!tagInfo) return false;
-
-        if (subCategoryFilter) {
-          return (
-            tagInfo.category === categoryFilter &&
-            tagInfo.subcategory === subCategoryFilter
-          );
-        }
-
-        return tagInfo.category === categoryFilter;
+        if (pdf.subjectId !== subjectId) return false;
+        if (subjectUnitId != null) return pdf.subjectUnitId === subjectUnitId;
+        return true;
       });
 
-      setDisplayedPDFs(filteredPDFs);
-      setPageTitle(
-        subCategoryFilter
-          ? `${categoryFilter}: ${subCategoryFilter}`
-          : categoryFilter,
-      );
-    } else {
-      setDisplayedPDFs(selectBests(allPDFs));
-      setPageTitle("Últimos apuntes");
+      return {
+        displayedPDFs: filteredPDFs,
+        pageTitle: activeSubjectUnitName
+          ? `${activeSubjectName ?? "Asignatura"}: ${activeSubjectUnitName}`
+          : (activeSubjectName ?? "Asignatura"),
+      };
     }
-  }, [categoryFilter, subCategoryFilter, searchQuery, allPDFs, isLoading]);
+
+    const bestPDFs = [...allPDFs]
+      .sort(
+        (a, b) =>
+          new Date(b.lastTimeEdited).getTime() - new Date(a.lastTimeEdited).getTime(),
+      )
+      .slice(0, 8);
+
+    return { displayedPDFs: bestPDFs, pageTitle: "Últimos apuntes" };
+  }, [allPDFs, searchQuery, subjectId, subjectUnitId, activeSubjectName, activeSubjectUnitName]);
 
   return (
     <>
@@ -665,13 +578,14 @@ function WelcomePage() {
                   ></div>
                 ))
               : // Muestra los PDFs una vez cargados
-                displayedPDFs.map((pdf, index) => (
+                displayedPDFs.map((pdf) => (
                   <PDFCard
-                    key={index}
+                    key={pdf.id}
                     title={pdf.title}
                     url={pdf.url}
-                    date={pdf.date}
-                    tag={pdf.originalTag}
+                    date={formatDate(pdf.lastTimeEdited)}
+                    subjectName={pdf.subjectName}
+                    subjectUnitName={pdf.subjectUnitName}
                   />
                 ))}
           </div>

@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
+import { NavSubjects } from "@/components/nav-subjects"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -31,75 +32,6 @@ import Link from "next/link"
 import logo from '@/public/icon.png'
 
 const data = {
-  navMain: [
-    {
-      title: "Matemáticas",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: false,
-      items: [
-        {
-          title: "Análisis y Cálculo",
-          url: "#",
-        },
-        {
-          title: "Álgebra y Geometría",
-          url: "#",
-        },
-        {
-          title: "Topología",
-          url: "#",
-        },
-        {
-          title: "Probabilidad y Estadística",
-          url: "#",
-        },
-        {
-          title: "Ecuaciones Diferenciales y Métodos Numéricos",
-          url: "#",
-        },
-        {
-          title: "Optimización y Programación Matemática",
-          url: "#",
-        }
-      ],
-    },
-    {
-      title: "Software",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Fundamentos y Algoritmos",
-          url: "#",
-        },
-        {
-          title: "Estructuras, Computación y Lenguajes",
-          url: "#",
-        },
-        {
-          title: "Arquitectura y Sistemas",
-          url: "#",
-        },
-        {
-          title: "Ingeniería del Software",
-          url: "#",
-        },
-        {
-          title: "Bases de Datos",
-          url: "#",
-        },
-        {
-          title: "Web e Interfaces",
-          url: "#",
-        },
-        {
-          title: "Seguridad e IA",
-          url: "#",
-        }
-      ],
-    },
-  ],
   navSecondary: [
     {
       title: "Support",
@@ -154,12 +86,12 @@ const dataAdminPanel = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin, email, isAuthenticated } = useAuth();
+  const { isAdmin, email, displayName, isAuthenticated } = useAuth();
   const { clearFilter } = useFilter();
   const { setSearchQuery } = useSearch();
 
   const dataUser = {
-    name: email ? email.split('@')[0] : 'Usuario',
+    name: displayName || (email ? email.split('@')[0] : 'Usuario'),
     email: email || ''
   }
 
@@ -193,7 +125,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} title="Apuntes" />
+        <NavSubjects title="Apuntes" />
         <NavProjects projects={data.projects} />
         {/* Solo mostrar admin panel si está autenticado y es admin */}
         {isAuthenticated && isAdmin && (

@@ -175,58 +175,131 @@ types/               # solo tipos NO derivables del OpenAPI
 
 ### Fase 1 — Capa de datos de PDFs y taxonomía (depende de T-03, T-04)
 
-- **T-06 · Capa API de Subjects/Units.** `lib/api/subjects.ts` + hooks `useSubjects`,
-  `useSubjectUnits(id)`, `useSubjectPdfs(id)`. Endpoints `GET /subject`, `/subject/{id}/units`,
-  `/subject/{id}/pdfs`.
+- **T-06 · ✅ HECHO — Capa API de Subjects/Units.** Creado `lib/api/subjects.ts`
+  (`getSubjects`, `getSubjectUnits`, `getSubjectPdfs` sobre `apiClient`/`openapi-fetch`,
+  endpoints `GET /subject`, `/subject/{id}/units`, `/subject/{id}/pdfs`, públicos) y
+  `hooks/api/use-subjects.ts` (`useSubjects`, `useSubjectUnits(id)`, `useSubjectPdfs(id)`,
+  con `enabled` atado a que el id no sea `null`). Query keys centralizadas y jerárquicas en
+  `lib/query/keys.ts` (`queryKeys.subjects.*`, `queryKeys.pdfs.*`): invalidar el prefijo
+  `["subjects"]` invalida también `units`/`pdfs` por asignatura.
 
-- **T-07 · Sustituir la taxonomía hardcodeada por Subjects.** Eliminar
-  `renameCategory`/`renameCategoryInverted` de `lib/utils.ts`, `tagToCategory` de
-  `dashboard/page.tsx` y los objetos `categories` duplicados. La navegación lateral
-  (`app-sidebar.tsx` / `nav-main.tsx`) y los filtros (`filter-context.tsx`) deben poblarse
-  desde `useSubjects()`. Depende de T-06.
+- **T-07 · ✅ HECHO — Sustituir la taxonomía hardcodeada por Subjects.** Eliminadas
+  `renameCategory`/`renameCategoryInverted` de `lib/utils.ts`, el `tagToCategory` de
+  `dashboard/page.tsx` y los objetos `categories` duplicados de `admin/pdfs/page.tsx` y
+  `PDFAccordionCard.tsx` (estos dos últimos terminados de migrar en T-09). `FilterContext`
+  ahora guarda `subjectId`/`subjectUnitId` (`number | null`) en vez de strings de
+  categoría/subcategoría. La sidebar (`app-sidebar.tsx`) ya no usa el `NavMain` con
+  `data.navMain` hardcodeado para "Apuntes": se creó `components/nav-subjects.tsx`
+  (`NavSubjects`), que consume `useSubjects()` a nivel 1 y `useSubjectUnits(subjectId)` por
+  cada asignatura (precargado, no perezoso — catálogo pequeño) a nivel 2; el click en
+  asignatura/tema llama a `setFilter(subjectId, subjectUnitId)` con ids numéricos y navega a
+  `/dashboard`. `NavMain` se simplificó a una lista de enlaces planos (solo la usa ya el panel
+  de Admin). El grupo "Blogs" (`nav-projects.tsx`) no se tocó, como pedía la tarea.
 
-- **T-08 · Migrar catálogo de PDFs (home).** Reescribir `app/dashboard/page.tsx` para usar
-  `PDFDto`/`PDFNoLinkDto` y los endpoints nuevos (`GET /pdf` autenticado, `GET /public/pdf/no-link`
-  anónimo) vía hooks de Query. Extraer `PDFCard`/tipos a shape nuevo. Quitar el parseo de fechas
-  `dd/mm/yyyy` casero (usar `lastTimeEdited` ISO). Sacar `sampleDataBlog` del componente (T-15).
+- **T-08 · ✅ HECHO — Migrar catálogo de PDFs (home).** Creados `lib/api/pdfs.ts`
+  (`getPdfs` → `GET /pdf`, `getPublicPdfsNoLink` → `GET /public/pdf/no-link`) y
+  `hooks/api/use-pdfs.ts` (`usePdfs`, `usePublicPdfsNoLink`, con parámetro `enabled` para
+  elegir uno u otro según `isAuthenticated`). Reescrito `app/dashboard/page.tsx`: sin `fetch`
+  manual ni tipos `APIPDFDocument`/`ExtendedPDFDocument` a mano; filtra por
+  `subjectId`/`subjectUnitId` de `FilterContext`; usa `lastTimeEdited` (ISO) directamente con
+  un formateador simple (`toLocaleDateString`) en vez del parseo `dd/mm/yyyy` casero.
+  `components/pdf-card.tsx` recibe `subjectName`/`subjectUnitName` (con badges) en vez de un
+  `tag` de 2 letras, y el botón de descarga ahora depende también de que exista `url` (los
+  PDFs anónimos vía `PDFNoLinkDto` no traen `link`). `sampleDataBlog` no se tocó (queda para
+  T-15).
 
-- **T-09 · Migrar admin de PDFs.** `app/dashboard/admin/pdfs/page.tsx` y
-  `components/ui/PDFAccordionCard.tsx`: usar `POST /pdf/create`, `PUT /pdf/update/{pdfId}`,
-  `DELETE /pdf/delete/{pdfName}` con `CreatePDFDto`/`UpdatePDFDto` (incluyen `subjectId`/`subjectUnitId`,
-  no tags). Selección de asignatura/tema desde la API. Mutaciones con invalidación de queries.
-  Migrar los formularios a react-hook-form + zod.
+- **T-09 · ✅ HECHO — Migrar admin de PDFs.** `app/dashboard/admin/pdfs/page.tsx` y
+  `components/ui/PDFAccordionCard.tsx` ya no hacen `fetch` manual: usan
+  `useCreatePdf`/`useUpdatePdf`/`useDeletePdf` (`hooks/api/use-pdfs.ts`, mutaciones de
+  TanStack Query sobre `POST /pdf/create`, `PUT /pdf/update/{pdfId}`,
+  `DELETE /pdf/delete/{pdfName}` con `CreatePDFDto`/`UpdatePDFDto` reales —
+  `subjectId`/`subjectUnitId`, no `pdfTag`) e invalidan `["pdfs"]`/`["subjects"]` al terminar
+  (por la jerarquía de `queryKeys` esto también refresca los PDFs por asignatura). El
+  combobox hardcodeado de categoría/subcategoría se sustituyó por
+  `components/ui/subject-unit-picker.tsx` (`SubjectUnitPicker`), un componente compartido
+  entre el formulario de creación y el de edición inline que usa `useSubjects()`/
+  `useSubjectUnits()` — misma fuente de verdad que la sidebar. Ambos formularios (creación y
+  edición) se migraron a `react-hook-form` + `zod` (`@hookform/resolvers/zod`), con
+  validación de `name`/`link` (URL) y de que se haya elegido una asignatura. El botón manual
+  "Ver PDFS" se eliminó: la lista se carga sola vía `usePdfs()` y se refresca sola tras cada
+  mutación (ya no hace falta refetch manual).
 
 ### Fase 2 — Autenticación con Keycloak (transversal; empezar pronto por su impacto)
 
-- **T-10 · [DECISIÓN] Definir el modelo de auth con Keycloak.** Antes de codificar, acordar
-  con backend: ¿el frontend obtiene el token directamente de Keycloak (`keycloak-js` / Auth.js
-  con provider Keycloak) o el backend actúa como **BFF** y gestiona la sesión por cookie
-  httpOnly? ¿Dónde viven access/refresh token? El OpenAPI mantiene `/public/auth/login` con
-  `bearerAuth` (JWT) y una cookie `refreshToken` → sugiere que el backend intermedia. **Bloquea
-  T-11/T-12.** Documentar la decisión aquí.
+> **⏸ 2025-XX-XX — Decisión de producto:** Keycloak se implementará **cuando su responsable
+> lo aborde en el backend**; hasta entonces el frontend usa **T-13 (mock local)** como auth
+> "de verdad" para poder construir y probar todo lo demás (admin, PDFs, asignaturas,
+> cuestionarios), no como un puente menor de un día. T-10/T-11/T-12 quedan **en pausa** — no
+> las ejecutes salvo que se te pida explícitamente tras esa decisión de backend.
 
-- **T-11 · Cliente API con token.** Según T-10, añadir a `lib/api/client.ts` la inyección del
-  `Authorization: Bearer` (o `credentials: 'include'` si es cookie) y el manejo de 401 →
-  refresh/redirect a login. Un único punto, no por componente.
+- **T-10 · ⏸ EN PAUSA — [DECISIÓN] Definir el modelo de auth con Keycloak.** Antes de
+  codificar, acordar con backend: ¿el frontend obtiene el token directamente de Keycloak
+  (`keycloak-js` / Auth.js con provider Keycloak) o el backend actúa como **BFF** y gestiona
+  la sesión por cookie httpOnly? ¿Dónde viven access/refresh token? El OpenAPI mantiene
+  `/public/auth/login` con `bearerAuth` (JWT) y una cookie `refreshToken` → sugiere que el
+  backend intermedia. **Bloquea T-11/T-12.** Documentar aquí la decisión cuando se tome.
 
-- **T-12 · Reescribir `auth-context`.** Sustituir el actual (cookies + status 480-490 + Firebase +
-  `setTimeout(300)` "para Safari") por el flujo Keycloak. Rol admin desde `GET /profile`
-  (`UserProfile.role === 'ADMIN'`) o desde el claim del token, no desde `/auth/is-admin`.
-  Reescribir `login`, `logout`, `register` (`/public/auth/create`), reset (`/public/auth/reset-password`),
-  cambio de contraseña (`/auth/change-password`). Actualizar `login-form.new.tsx`,
-  `register-form.tsx`, `nav-user.tsx`.
+- **T-11 · ⏸ EN PAUSA — Cliente API con token.** Según T-10, añadir a `lib/api/client.ts` la
+  inyección del `Authorization: Bearer` (o `credentials: 'include'` si es cookie) y el manejo
+  de 401 → refresh/redirect a login. Un único punto, no por componente.
 
-- **T-13 · Mock de auth local (puente hasta que Keycloak esté listo).** Implementar un
-  `AuthProvider` alternativo activable por env (p. ej. `NEXT_PUBLIC_AUTH_MODE=mock`) que exponga
-  la misma interfaz que el real y permita alternar entre un **usuario admin local** y uno
-  **normal local** (sin llamar a Keycloak). Así el resto de fases (admin, perfil, quizzes) avanzan
-  en paralelo. Debe compartir interfaz con T-12 para que el cambio sea transparente. Puede hacerse
-  **antes** que T-10/T-11 para desbloquear.
+- **T-12 · ⏸ EN PAUSA — Reescribir `auth-context` con Keycloak real.** Sustituir el actual
+  (cookies + status 480-490 + Firebase + `setTimeout(300)` "para Safari") por el flujo
+  Keycloak. Rol admin desde `GET /profile` (`UserProfile.role === 'ADMIN'`) o desde el claim
+  del token, no desde `/auth/is-admin`. Reescribir `login`, `logout`, `register`
+  (`/public/auth/create`), reset (`/public/auth/reset-password`), cambio de contraseña
+  (`/auth/change-password`). Actualizar `login-form.new.tsx`, `register-form.tsx`,
+  `nav-user.tsx`. **Cuando se retome, sustituye la implementación de T-13 detrás de la misma
+  interfaz — el resto de la app no debería enterarse del cambio.**
 
-- **T-14 · Protección de rutas.** `useProtectedRoute`/`useAdminRoute` hoy solo protegen en cliente
-  y `proxy.ts` no hace nada. Con Keycloak, mover la protección a **middleware** (`middleware.ts`)
-  para `/dashboard/admin/*` y rutas autenticadas, además del guard de cliente. Eliminar Firebase
-  (`lib/firebase.ts`, dependencia `firebase`) si Google login pasa por Keycloak.
+- **T-13 · ✅ HECHO — Mock de auth local (auth vigente hasta que exista Keycloak).**
+  Reescrito `contexts/auth-context.tsx`: ya **no llama a ningún endpoint de auth del
+  backend** (se quitaron `/auth/validate`, `/auth/login`, `/auth/google-login`,
+  `/auth/logout`, `/auth/is-admin`). Tres identidades locales: `admin`
+  (`admin@local.test`, "Admin (local)"), `user` (`user@local.test`, "Usuario (local)") y
+  `anonymous` (por defecto si no hay nada guardado). La identidad se persiste en
+  `localStorage` (`mathtexpedia-mock-identity`) y se lee en el primer render. La interfaz
+  pública se mantiene igual (`isAuthenticated`, `loading`, `isAdmin`, `email`, `login`,
+  `loginWithGoogle`, `logout`, `checkAuth`) más dos campos nuevos, aditivos y no
+  disruptivos: `identity` (`"admin" | "user" | "anonymous"`) y `setIdentity`. `login()`
+  conserva su validación de email/password y, en vez de llamar al backend, cambia a la
+  identidad `admin` si el email coincide con `admin@local.test` o a `user` en cualquier
+  otro caso; `loginWithGoogle()` cambia siempre a `user`; `logout()` cambia a `anonymous`.
+  El selector de identidad vive en `components/nav-user.tsx`: se rediseñó para que el
+  `DropdownMenu` esté siempre visible (antes solo aparecía autenticado y en su lugar se
+  mostraba un botón "Login" en anónimo, lo que impedía cambiar de modo desde ahí) y se le
+  añadió un `DropdownMenuGroup` "Modo de prueba" con las 3 opciones y un check en la
+  activa, reutilizando el mismo dropdown que ya tenía Profile/Donate/Log out.
+  `app-sidebar.tsx` usa el nuevo campo `displayName` del contexto para mostrar "Admin
+  (local)"/"Usuario (local)" en vez de derivar el nombre del email.
+  **Importante:** el mock no produce un JWT real, así que las llamadas a endpoints
+  protegidos del backend (`GET /pdf`, `POST /pdf/create`, …) devuelven 401 de verdad contra
+  `localhost:8081` aunque `isAuthenticated`/`isAdmin` sean `true` en el mock. Es un límite
+  conocido y aceptado por ahora (se resuelve en T-11/T-12): el código ya está listo para
+  ese momento, no se ha intentado "arreglar" generando tokens falsos.
+
+> **✅ Verificación T-13/T-06..T-09 (2026-09-26):** `npm run build` y `npx tsc --noEmit` pasan
+> limpios en un shell sin ninguna variable de entorno configurada. Se corrigieron dos bugs
+> encontrados en esa verificación (no introducidos por T-06..T-09, preexistentes de T-01/T-02
+> y del código original):
+> - `lib/env.ts` (T-02) lanzaba en `next build` si faltaba `NEXT_PUBLIC_API_URL`, tumbando el
+>   build entero (incluido en cualquier CI sin esa variable). Ahora solo avisa por consola en
+>   cliente+producción y siempre cae al default de dev.
+> - `lib/firebase.ts` (preexistente) llamaba a `getAuth()` de forma eager y reventaba en
+>   `next build` (prerender de `/auth/login`) si faltaban las credenciales de Firebase. Ahora
+>   `auth` es `Auth | undefined`; `login-form.new.tsx` comprueba antes de usarlo.
+>
+> Comprobado también contra el backend real en `localhost:8081`: el feed anónimo de PDFs
+> (`GET /public/pdf/no-link`) funciona end-to-end. **`GET /subject` y derivados devuelven 401**
+> pese a estar documentados como públicos — la sidebar de asignaturas (T-07) se queda vacía en
+> anónimo por esto, no por un bug del frontend. Detalle y petición al backend en
+> `API-REQUESTS.md` §10. `/public/auth/login` y `/public/auth/create` reales devuelven 401/500
+> hoy (§11 de `API-REQUESTS.md`) — confirma que mockear el auth (T-13) era lo correcto.
+
+- **T-14 · ⏸ EN PAUSA — Protección de rutas por middleware.** `useProtectedRoute`/`useAdminRoute`
+  hoy solo protegen en cliente y `proxy.ts` no hace nada; con el mock de T-13 esto es
+  suficiente por ahora. Mover la protección a **middleware** (`middleware.ts`) y eliminar
+  Firebase (`lib/firebase.ts`) se retoma junto con T-12, cuando Keycloak sea real.
 
 ### Fase 3 — Contenido y funcionalidad nueva
 
@@ -276,17 +349,27 @@ types/               # solo tipos NO derivables del OpenAPI
 ---
 
 ## 5. Orden sugerido de ejecución
-1. **Fase 0 completa** (T-01…T-05) — cimientos.
-2. **T-13** (mock auth) en paralelo, para desbloquear todo lo autenticado.
-3. **Fase 1** (PDFs + Subjects) — es el core actual y valida la nueva capa de datos end-to-end.
-4. **T-10** (decisión Keycloak) cuanto antes; luego **T-11, T-12, T-14**.
-5. **Fase 3** (perfil, contenido, quizzes, admin) sobre la base ya migrada.
+1. ~~**Fase 0** (T-01…T-04) — cimientos.~~ ✅ Hecho.
+2. ~~**T-13** (mock auth completo, admin/usuario/anónimo).~~ ✅ Hecho — desbloquea todo lo
+   autenticado sin esperar a Keycloak.
+3. ~~**Fase 1** (T-06…T-09: Subjects/Units + PDFs)~~ ✅ Hecho — sobre el API tal cual está hoy
+   en `api-docs.json` (sin S3, eso es T-20/Fase 4 y sigue sin tocarse).
+4. **Fase 2 real (T-10, T-11, T-12, T-14)** — **en pausa**, se retoma cuando el responsable de
+   Keycloak lo aborde en el backend. No es parte del trabajo activo actual.
+5. **Fase 3** (perfil, contenido, quizzes, admin de asignaturas/usuarios) sobre la base ya
+   migrada. La taxonomía de Subjects/Units se construye con los endpoints que ya existen en
+   `api-docs.json`; los campos extra de `API-REQUESTS.md` (contadores, etc.) son mejoras
+   futuras, no bloquean nada de esto.
 6. **Fase 4** (S3, chatbot, mail) al final o cuando el backend exponga esas piezas.
 
 ## 6. Decisiones abiertas (para backend/producto)
-- **T-10:** modelo Keycloak (directo vs BFF; ubicación de tokens; refresh).
+- **T-10:** modelo Keycloak (directo vs BFF; ubicación de tokens; refresh). **Diferido**:
+  lo resolverá quien implemente Keycloak; hasta entonces el frontend usa el mock de T-13.
 - **T-19:** ¿cómo se cambian roles ahora? (`/auth/change-role` ya no existe).
-- **T-20:** mecanismo exacto de servido de PDFs desde S3 (presigned vs proxy; embebido).
-- Google login: ¿se mantiene? Si va por Keycloak, retirar Firebase.
+- **T-20:** mecanismo exacto de servido de PDFs desde S3 (presigned vs proxy; embebido). **No
+  se toca todavía** — los PDFs se siguen sirviendo como `link` directo, tal cual lo modela
+  `PDFDto` en `api-docs.json` hoy.
+- Google login: ¿se mantiene? Si va por Keycloak, retirar Firebase. Mientras tanto, con el
+  mock de T-13 el botón de Google puede quedar deshabilitado/oculto.
 - `/public/auth/login` devuelve `200` sin body tipado en el OpenAPI: confirmar qué devuelve
-  (token en body vs cookie) — afecta a T-11/T-12.
+  (token en body vs cookie) — afecta a T-11/T-12 cuando se retomen.

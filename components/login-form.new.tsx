@@ -90,7 +90,12 @@ export function LoginForm({
 
   const googleSingIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    
+
+    if (!auth) {
+      toast.error("El login con Google no está disponible ahora mismo.");
+      return;
+    }
+
     const provider = new GoogleAuthProvider();
     setIsLoading(true);
 

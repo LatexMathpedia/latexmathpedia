@@ -1,91 +1,96 @@
 "use client"
 
+// AUTH MOCKEADA (T-13, MIGRATION.md): decisión de producto vigente mientras no exista
+// Keycloak real en el backend (ver MIGRATION.md T-10/T-12, hoy en pausa). Este contexto
+// NO llama a ningún endpoint de auth del backend: expone tres identidades locales fijas
+// (admin / usuario / anónimo) que se alternan desde `nav-user.tsx` y se persisten en
+// localStorage. Cuando Keycloak esté listo, sustituye la implementación de este fichero
+// detrás de la misma interfaz pública — el resto de la app no debería enterarse del cambio.
+//
+// Importante: como no hay JWT real, las llamadas a endpoints protegidos del backend
+// (GET /pdf, POST /pdf/create, ...) devolverán 401 de verdad contra el backend aunque
+// `isAuthenticated`/`isAdmin` sean `true` aquí. Es un límite conocido y aceptado por ahora.
+
 import { createContext, useContext, useState, useEffect, PropsWithChildren } from 'react';
-import { API_URL } from '@/lib/env';
 
 type CredentialsDTO = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
-const AuthContext = createContext({
-    isAuthenticated: false,
-    loading: true,
-    isAdmin: false,
-    email: '',
-    login: async (_credentials: CredentialsDTO) => false,
-    loginWithGoogle: async (_idToken: any) => false,
-    logout: async () => {},
-    checkAuth: async () => {},
+export type MockIdentity = "admin" | "user" | "anonymous";
+
+const MOCK_ACCOUNTS: Record<Exclude<MockIdentity, "anonymous">, { email: string; displayName: string }> = {
+  admin: { email: "admin@local.test", displayName: "Admin (local)" },
+  user: { email: "user@local.test", displayName: "Usuario (local)" },
+};
+
+const MOCK_IDENTITY_STORAGE_KEY = "mathtexpedia-mock-identity";
+
+function isMockIdentity(value: unknown): value is MockIdentity {
+  return value === "admin" || value === "user" || value === "anonymous";
+}
+
+type AuthContextType = {
+  isAuthenticated: boolean;
+  loading: boolean;
+  isAdmin: boolean;
+  email: string;
+  displayName: string;
+  identity: MockIdentity;
+  setIdentity: (identity: MockIdentity) => void;
+  login: (credentials: CredentialsDTO) => Promise<boolean>;
+  loginWithGoogle: (idToken: any) => Promise<boolean>;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  loading: true,
+  isAdmin: false,
+  email: '',
+  displayName: '',
+  identity: 'anonymous',
+  setIdentity: () => {},
+  login: async (_credentials: CredentialsDTO) => false,
+  loginWithGoogle: async (_idToken: any) => false,
+  logout: async () => {},
+  checkAuth: async () => {},
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [identity, setIdentityState] = useState<MockIdentity>('anonymous');
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [email, setEmail] = useState('');
 
-  const apiUrl = API_URL;
-
-  // Función helper para crear opciones de fetch optimizadas para Safari
-  const createFetchOptions = (method: string, body?: any): RequestInit => {
-    const options: RequestInit = {
-      method,
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-      cache: 'no-store',
-    };
-
-    if (body) {
-      options.body = JSON.stringify(body);
-    }
-
-    return options;
-  };
-
-  const checkAuth = async () => {
+  useEffect(() => {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-      const res = await fetch(`${apiUrl}/auth/validate`, { 
-        ...createFetchOptions('GET'),
-        signal: controller.signal,
-      });
-      
-      clearTimeout(timeoutId);
-      
-      if (res.ok) {
-        const data = await res.json();
-        setIsAuthenticated(true);
-        setEmail(data.email);
-        await isAdminUser();
-      } else {
-        setIsAuthenticated(false);
-        setEmail('');
-        setIsAdmin(false);
+      const stored = localStorage.getItem(MOCK_IDENTITY_STORAGE_KEY);
+      if (isMockIdentity(stored)) {
+        setIdentityState(stored);
       }
     } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.warn('Auth check timed out - server may be slow');
-      } else {
-        console.error("Auth check error:", error);
-      }
-      setIsAuthenticated(false);
-      setEmail('');
-      setIsAdmin(false);
+      console.error('No se pudo leer la identidad mockeada de localStorage:', error);
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  const setIdentity = (next: MockIdentity) => {
+    setIdentityState(next);
+    try {
+      localStorage.setItem(MOCK_IDENTITY_STORAGE_KEY, next);
+    } catch (error) {
+      console.error('No se pudo persistir la identidad mockeada en localStorage:', error);
+    }
   };
 
-  const login = async (credentials:CredentialsDTO) => {
+  const isAuthenticated = identity !== 'anonymous';
+  const isAdmin = identity === 'admin';
+  const email = identity === 'anonymous' ? '' : MOCK_ACCOUNTS[identity].email;
+  const displayName = identity === 'anonymous' ? '' : MOCK_ACCOUNTS[identity].displayName;
+
+  const login = async (credentials: CredentialsDTO) => {
     if (
       !credentials.email ||
       !credentials.password ||
@@ -95,112 +100,41 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       throw new Error('Email and password are required');
     }
 
-    try {
-      const response = await fetch(`${apiUrl}/auth/login`, createFetchOptions('POST', credentials));
-
-      if (!response.ok) {
-        checkError(response.status);
-      }
-
-      // Importante: Esperar un poco para que Safari procese la cookie
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      setIsAuthenticated(true);
-      await isAdminUser();
-      await checkAuth();
-      return true;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
+    // Mock: cualquier credencial válida entra como usuario normal, salvo que el email
+    // coincida con la cuenta admin de mentira.
+    const normalizedEmail = credentials.email.trim().toLowerCase();
+    setIdentity(normalizedEmail === MOCK_ACCOUNTS.admin.email ? 'admin' : 'user');
+    return true;
   };
 
-  const loginWithGoogle = async (idToken: any) => {
-    try {
-      const response = await fetch(`${apiUrl}/auth/google-login`, createFetchOptions('POST', { idToken }));
-      if (!response.ok) {
-        checkError(response.status);
-      }
-      // Importante: Esperar un poco para que Safari procese la cookie
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setIsAuthenticated(true);
-      await isAdminUser();
-      await checkAuth();
-      return true;
-    } catch (error) {
-      console.error('Google Login error:', error);
-      throw error;
-    }
-  }
-
-  const checkError = (error: any) => {
-    switch (error) {
-          case 480:
-            throw new Error('Email inválido. Por favor, introduce un email correcto.');
-          case 481:
-            throw new Error('Usuario no encontrado. Revisa tus credenciales.');
-          case 483:
-            throw new Error('Contraseña incorrecta. Inténtalo de nuevo.');
-          case 484:
-            throw new Error('El email ya está en uso. Prueba con otro.');
-          case 485:
-            throw new Error('Error en la verificación del email. Prueba de nuevo.');
-          case 486:
-            throw new Error('La contraseña es demasiado débil. Usa al menos 6 caracteres.');
-          case 490:
-            throw new Error('Error en la autenticación. Pruebe de nuevo.');
-          case 500:
-            throw new Error('Error del servidor. Por favor, inténtalo más tarde.');
-          default:
-            throw new Error('Error desconocido. Por favor, inténtalo de nuevo.');
-        }
-  }
+  const loginWithGoogle = async (_idToken: any) => {
+    setIdentity('user');
+    return true;
+  };
 
   const logout = async () => {
-    try {
-      await fetch(`${apiUrl}/auth/logout`, createFetchOptions('POST'));
-      
-      // Esperar un poco para que Safari procese el logout
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setIsAuthenticated(false);
-      setEmail('');
-      setIsAdmin(false);
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Aún así limpiar el estado local
-      setIsAuthenticated(false);
-      setEmail('');
-      setIsAdmin(false);
-    }
+    setIdentity('anonymous');
   };
 
-  const isAdminUser = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/auth/is-admin`, createFetchOptions('GET'));
-      
-      if (response.ok) {
-        const data = await response.json();
-        setIsAdmin(data);
-        return data;
-      } else {
-        setIsAdmin(false);
-        return false;
-      }
-    } catch (error) {
-      console.error("isAdmin check error:", error);
-      setIsAdmin(false);
-      return false;
-    }
+  const checkAuth = async () => {
+    // No-op: el mock no tiene sesión de servidor que revalidar.
   };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, isAdmin, email, login, loginWithGoogle, logout, checkAuth }}
+      value={{
+        isAuthenticated,
+        loading,
+        isAdmin,
+        email,
+        displayName,
+        identity,
+        setIdentity,
+        login,
+        loginWithGoogle,
+        logout,
+        checkAuth,
+      }}
     >
       {children}
     </AuthContext.Provider>
