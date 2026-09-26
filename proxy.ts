@@ -1,34 +1,21 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { AUTH_MODE } from '@/lib/env'
 
-// Rutas que requieren sesión iniciada
-const protectedPaths = ['/dashboard/profile', '/dashboard/admin']
-// Rutas que además requieren el rol de admin de Keycloak
-const adminPaths = ['/dashboard/admin']
-// Rutas de login/registro: si ya hay sesión se redirige al dashboard
-const authPaths = ['/auth/login', '/auth/register']
-
-const matches = (pathname: string, paths: string[]) =>
-  paths.some(path => pathname === path || pathname.startsWith(`${path}/`))
-
-const protectRoutes = auth((request) => {
-  const { pathname, search } = request.nextUrl
-  const session = request.auth
-  const isAuthenticated = !!session && !session.error
-
-  if (matches(pathname, protectedPaths) && !isAuthenticated) {
-    const loginUrl = new URL('/auth/login', request.nextUrl.origin)
-    loginUrl.searchParams.set('redirect', `${pathname}${search}`)
-    return NextResponse.redirect(loginUrl)
-  }
-
-  if (matches(pathname, adminPaths) && !session?.isAdmin) {
-    return NextResponse.redirect(new URL('/dashboard', request.nextUrl.origin))
-  }
-
-  if (matches(pathname, authPaths) && isAuthenticated) {
-    return NextResponse.redirect(new URL('/dashboard', request.nextUrl.origin))
+// En modo "keycloak" la protección real de rutas vive en `lib/auth/keycloak-middleware.ts`
+// (sesión de Auth.js + rol de Keycloak). Se importa de forma dinámica y solo en ese modo:
+// así, en modo "mock" (por defecto) este fichero nunca evalúa
+// `auth.ts`/Keycloak, y no hace falta tener AUTH_SECRET/KEYCLOAK_* configuradas para
+// desarrollar sin un servidor Keycloak levantado.
+//
+// En modo mock, la identidad de prueba vive en localStorage (solo accesible en cliente,
+// no aquí), así que la protección de /dashboard/admin y compañía la siguen haciendo los
+// hooks de cliente `useProtectedRoute`/`useAdminRoute` mientras tanto.
+export default async function proxy(request: NextRequest) {
+  if (AUTH_MODE === 'keycloak') {
+    const { protectRoutes } = await import('@/lib/auth/keycloak-middleware')
+    const handler = await protectRoutes
+    return handler(request, { params: Promise.resolve({}) })
   }
 
   const response = NextResponse.next()
@@ -37,13 +24,6 @@ const protectRoutes = auth((request) => {
   response.headers.set('Access-Control-Allow-Credentials', 'true')
 
   return response
-})
-
-// Con la config lazy de auth.ts, auth(handler) devuelve una promesa del handler,
-// así que hay que resolverla aquí: Next exige que el export sea una función.
-export default async function proxy(request: NextRequest) {
-  const handler = await protectRoutes
-  return handler(request, { params: Promise.resolve({}) })
 }
 
 export const config = {

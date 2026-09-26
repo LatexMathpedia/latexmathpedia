@@ -1,11 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
 import {
   Table,
   TableBody,
@@ -15,79 +13,30 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { useToast } from "@/hooks/use-toast"
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { useAdminRoute } from "@/hooks/use-protected-route"
-import { useAuth } from "@/contexts/auth-context";
-import { API_URL } from "@/lib/env";
-
-// Tipos para los usuarios
-type User = {
-  email: string;
-  role: "admin" | "user" | "moderator";
-}
-
-// Posibles roles
-const roles = ["admin", "user", "moderator"];
-
-let numUsers = 0;
+import { useAllUsers } from "@/hooks/api/use-users"
+import { useToast } from "@/hooks/use-toast"
+import { formatDate as formatCreatedAt } from "@/lib/utils"
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
-  const toast = useToast();
+  const toast = useToast()
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Proteger esta ruta de administración
   const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
-  const { authFetch } = useAuth();
 
-  async function fetchUsers() {
-    try {
-      const response = await authFetch(`${API_URL}/auth/all-users`, {
-        method: 'GET',
-      });
-      if (!response.ok) {
-        throw new Error('Error al obtener los usuarios');
-      }
-      const data = await response.json();
-      numUsers = data.length;
-      return data;
-    } catch (error) {
-      toast.error('No se pudieron cargar los usuarios.');
-      return [];
-    }
-  }
-
-  // Cargar usuarios
-  const loadUsers = async () => {
-    setLoading(true);
-    try {
-      const fetchedUsers = await fetchUsers();
-      setUsers(fetchedUsers);
-    } catch (error) {
-      toast.error('No se pudieron cargar los usuarios.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: users, isLoading: usersLoading, isError: usersError } = useAllUsers(isAuthenticated && isAdmin)
 
   useEffect(() => {
-    // Solo cargar usuarios si está autenticado y es admin
-    if (isAuthenticated && isAdmin && !authLoading) {
-      loadUsers();
+    if (usersError) {
+      toast.error("Error al cargar los usuarios.")
     }
-  }, [isAuthenticated, isAdmin, authLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [usersError])
 
   // Mostrar loading mientras se verifica la autenticación
   if (authLoading) {
@@ -103,37 +52,16 @@ export default function UsersPage() {
     return null;
   }
 
-  const updateUserRole = async (userEmail: string, newRole: string) => {
-    try {
-      const response = await authFetch(`${API_URL}/auth/change-role`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: userEmail,
-          role: newRole
-        })
-      });
-
-      if (response.ok) {
-        setUsers(prevUsers =>
-          prevUsers.map(user =>
-            user.email === userEmail ? { ...user, role: newRole as "admin" | "user" | "moderator" } : user
-          )
-        );
-        toast.success(`Rol del usuario ${userEmail} actualizado a ${newRole}.`);
-      } else {
-        toast.error(`No se pudo actualizar el rol del usuario ${userEmail}.`);
-      }
-    } catch (error) {
-      toast.error(`No se pudo actualizar el rol del usuario ${userEmail}.`);
-    }
-  };
-
-  const filteredUsers = users.filter(user =>
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = (users ?? []).filter((user) => {
+    if (!searchTerm.trim()) return true
+    const term = searchTerm.toLowerCase()
+    return (
+      user.email?.toLowerCase().includes(term) ||
+      user.username?.toLowerCase().includes(term) ||
+      user.firstName?.toLowerCase().includes(term) ||
+      user.lastName?.toLowerCase().includes(term)
+    )
+  })
 
   return (
     <div className="p-8 w-full mx-auto">
@@ -142,76 +70,68 @@ export default function UsersPage() {
       <Card>
         <CardHeader>
           <CardTitle>Gestión de Usuarios</CardTitle>
-          <CardDescription>Busca y modifica roles de usuarios registrados en la plataforma.</CardDescription>
+          <CardDescription>Consulta los usuarios registrados en la plataforma.</CardDescription>
         </CardHeader>
 
         <CardContent>
           <div className="space-y-4">
             <Input
-              placeholder="Buscar usuarios por correo electrónico..."
+              placeholder="Buscar usuarios por correo, usuario o nombre..."
               className="w-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-            />            <div className="rounded-md border">
+            />
+            <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>Usuario</TableHead>
                     <TableHead>Correo Electrónico</TableHead>
+                    <TableHead>Nombre completo</TableHead>
                     <TableHead>Rol</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Alta</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredUsers.length > 0 ? (
+                  {usersError ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center text-destructive">
+                        No se pudieron cargar los usuarios. Inténtalo de nuevo.
+                      </TableCell>
+                    </TableRow>
+                  ) : filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => (
-                      <TableRow key={user.email}>
-                        <TableCell className="font-medium">{user.email}</TableCell>
+                      <TableRow key={user.id}>
+                        <TableCell className="font-medium">{user.username}</TableCell>
+                        <TableCell>{user.email}</TableCell>
                         <TableCell>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className="w-[120px] justify-between cursor-pointer"
-                              >
-                                {user.role}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[120px] p-0">
-                              <Command>
-                                <CommandInput placeholder="Buscar rol..." />
-                                <CommandEmpty>No se encontraron roles.</CommandEmpty>
-                                <CommandGroup>
-                                  {roles.map((role) => (
-                                    <CommandItem
-                                      key={role}
-                                      value={role}
-                                      onSelect={() => {
-                                        if (role !== user.role) {
-                                          updateUserRole(user.email, role);
-                                        }
-                                      }}
-                                    >
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          user.role === role ? "opacity-100" : "opacity-0"
-                                        )}
-                                      />
-                                      {role}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
+                          {[user.firstName, user.lastName].filter(Boolean).join(" ") || "-"}
                         </TableCell>
+                        <TableCell>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Badge variant={user.role === "ADMIN" ? "default" : "secondary"}>
+                                {user.role}
+                              </Badge>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              La gestión de roles se hace desde Keycloak.
+                            </TooltipContent>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={user.enabled ? "default" : "destructive"}>
+                            {user.enabled ? "Activo" : "Inactivo"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{formatCreatedAt(user.createdAt)}</TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={2} className="text-center">
-                        {loading ? "Cargando usuarios..." : "No se encontraron usuarios con ese criterio de búsqueda."}
+                      <TableCell colSpan={6} className="text-center">
+                        {usersLoading ? "Cargando usuarios..." : "No se encontraron usuarios con ese criterio de búsqueda."}
                       </TableCell>
                     </TableRow>
                   )}
@@ -221,13 +141,10 @@ export default function UsersPage() {
           </div>
         </CardContent>
 
-        <CardFooter className="flex justify-end gap-2">
-          <p className="text-sm text-muted-foreground mr-auto">
-            Total de usuarios: {numUsers || 0}
+        <CardFooter>
+          <p className="text-sm text-muted-foreground">
+            Total de usuarios: {users?.length ?? 0}
           </p>
-          <Button onClick={loadUsers} disabled={loading} className="cursor-pointer">
-            {loading ? "Cargando..." : "Refrescar Lista"}
-          </Button>
         </CardFooter>
       </Card>
     </div>
