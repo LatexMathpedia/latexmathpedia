@@ -19,7 +19,11 @@ import { useCreatePdf, usePdfs } from "@/hooks/api/use-pdfs"
 const createPdfSchema = z
   .object({
     name: z.string().min(1, "El título es obligatorio"),
-    link: z.string().min(1, "El enlace es obligatorio").url("Debe ser una URL válida"),
+    // FileList del <input type="file">; z.custom para no referenciar FileList en SSR.
+    file: z
+      .custom<FileList>()
+      .refine((files) => files?.length === 1, "Selecciona un fichero PDF")
+      .refine((files) => files?.[0]?.type === "application/pdf", "El fichero debe ser un PDF"),
     description: z.string().optional(),
     subjectId: z.number().nullable(),
     subjectUnitId: z.number().nullable(),
@@ -33,7 +37,7 @@ type CreatePdfFormValues = z.infer<typeof createPdfSchema>
 
 const emptyFormValues: CreatePdfFormValues = {
   name: "",
-  link: "",
+  file: undefined as unknown as FileList,
   description: "",
   subjectId: null,
   subjectUnitId: null,
@@ -99,11 +103,13 @@ export default function AdminPdfsPage() {
   const onSubmit = async (values: CreatePdfFormValues) => {
     try {
       await createPdf.mutateAsync({
-        name: values.name,
-        link: values.link,
-        description: values.description || undefined,
-        subjectId: values.subjectId as number,
-        subjectUnitId: values.subjectUnitId,
+        data: {
+          name: values.name,
+          description: values.description || undefined,
+          subjectId: values.subjectId as number,
+          subjectUnitId: values.subjectUnitId,
+        },
+        file: values.file[0],
       })
       toast.success("PDF creado exitosamente.");
       reset(emptyFormValues)
@@ -136,14 +142,15 @@ export default function AdminPdfsPage() {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="pdfUrl">Enlace al PDF</Label>
+                <Label htmlFor="pdfFile">Fichero PDF</Label>
                 <Input
-                  id="pdfUrl"
-                  placeholder="https://ejemplo.com/archivo.pdf"
-                  className="w-full"
-                  {...register("link")}
+                  id="pdfFile"
+                  type="file"
+                  accept="application/pdf"
+                  className="w-full cursor-pointer"
+                  {...register("file")}
                 />
-                {errors.link && <p className="text-sm text-destructive">{errors.link.message}</p>}
+                {errors.file && <p className="text-sm text-destructive">{errors.file.message}</p>}
               </div>
 
               <div className="grid gap-2">

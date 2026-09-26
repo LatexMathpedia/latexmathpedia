@@ -4,12 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import ContentCard from "@/components/content-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSearch } from "@/contexts/search-context"; // Importar el contexto de búsqueda
-import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
-import { usePdfs, usePublicPdfsNoLink } from "@/hooks/api/use-pdfs";
+import { usePdfs } from "@/hooks/api/use-pdfs";
 import { usePublicQuizzes } from "@/hooks/api/use-quizzes";
 import type { BlogPostMeta } from "@/lib/content/posts";
-import type { ContentItem, DisplayPdf } from "@/lib/content/types";
+import { toDisplayPdf, type ContentItem, type DisplayPdf } from "@/lib/content/types";
 import type { QuizDto } from "@/lib/api/quizzes";
 
 // Función para normalizar texto (eliminar tildes y acentos)
@@ -68,41 +67,29 @@ function ContentGrid({
 export function DashboardFeed({ posts }: { posts: BlogPostMeta[] }) {
   const toast = useToast();
   const { searchQuery } = useSearch();
-  const { isAuthenticated, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<TabKey>("all");
 
-  const authedPdfsQuery = usePdfs(!authLoading && isAuthenticated);
-  const publicPdfsQuery = usePublicPdfsNoLink(!authLoading && !isAuthenticated);
-  const activePdfsQuery = isAuthenticated ? authedPdfsQuery : publicPdfsQuery;
-  const pdfsLoading = authLoading || activePdfsQuery.isLoading;
+  // El catálogo es público y solo trae metadatos; el contenido lo pide el visor con sesión.
+  const pdfsQuery = usePdfs();
+  const pdfsLoading = pdfsQuery.isLoading;
 
   // Mismo endpoint público que usa el catálogo de /dashboard/quizzes, sin depender de auth.
   const quizzesQuery = usePublicQuizzes();
 
   useEffect(() => {
-    if (activePdfsQuery.error) {
+    if (pdfsQuery.error) {
       toast.error("Error al cargar los PDFs.");
     }
     if (quizzesQuery.error) {
       toast.error("Error al cargar los cuestionarios.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activePdfsQuery.error, quizzesQuery.error]);
+  }, [pdfsQuery.error, quizzesQuery.error]);
 
-  const allPdfs: DisplayPdf[] = useMemo(() => {
-    const raw = activePdfsQuery.data ?? [];
-    return raw.map((pdf, index) => ({
-      id: pdf.id ?? index,
-      title: pdf.name ?? "",
-      url: (pdf as { link?: string }).link,
-      lastTimeEdited: pdf.lastTimeEdited ?? "",
-      subjectId: pdf.subject?.id,
-      subjectUnitId: pdf.subjectUnit?.id,
-      subjectName: pdf.subject?.name,
-      subjectUnitName: pdf.subjectUnit?.name,
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activePdfsQuery.data]);
+  const allPdfs: DisplayPdf[] = useMemo(
+    () => (pdfsQuery.data ?? []).map((pdf, index) => toDisplayPdf(pdf, index)),
+    [pdfsQuery.data],
+  );
 
   const allQuizzes: QuizDto[] = quizzesQuery.data ?? [];
 

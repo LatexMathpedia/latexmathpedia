@@ -18,10 +18,10 @@ Frontend de Mathtexpedia (repositorio de apuntes universitarios de la UniOvi: PD
 
 ## Estado de la migración
 La migración al backend nuevo (Subjects/Units, PDFs, Quizzes, perfil, Keycloak) está
-**completa**. Único punto pendiente: **PDFs servidos embebidos desde S3**, a implementar
-cuando backend lo tenga listo — ver [mathtexpedia-backend#5](https://github.com/PabloGarPe/mathtexpedia-backend/issues/5).
-Mientras tanto los PDFs se siguen sirviendo por `link` directo, tal cual lo modela `PDFDto`
-en `api-docs.json`.
+**completa**, incluidos los PDFs servidos desde S3: el catálogo (`GET /public/pdf/no-link`)
+solo trae metadatos y el binario se pide autenticado a `GET /pdf/{pdfId}`, que se pinta en
+`<canvas>` con pdf.js en `/dashboard/pdfs/[pdfId]` (`components/pdf-viewer.tsx`). El visor
+no ofrece descarga ni impresión; es disuasorio, no DRM (los bytes llegan al navegador).
 
 Puntos clave a tener presente:
 - Contrato del backend documentado en `api-docs.json` (OpenAPI 3.1, servidor `http://localhost:8081`); es la fuente de verdad, y `lib/api/schema.d.ts` se genera de ahí (`npm run api:types`, no editar a mano).

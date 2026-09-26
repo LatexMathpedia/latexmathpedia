@@ -3,17 +3,18 @@ import { useAuth } from '@/contexts/auth-context';
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type PDFCardProps = {
     title: string;
-    url?: string;
+    href: string;
     date: string;
     subjectName?: string;
     subjectUnitName?: string;
 }
 
-function PDFCard({ title, url, date, subjectName, subjectUnitName }: PDFCardProps) {
+function PDFCard({ title, href, date, subjectName, subjectUnitName }: PDFCardProps) {
     const { isAuthenticated } = useAuth();
     const toast = useToast();
     const router = useRouter();
@@ -75,7 +76,7 @@ function PDFCard({ title, url, date, subjectName, subjectUnitName }: PDFCardProp
         if (!isAuthenticated) {
             e.preventDefault();
             toast.error("Debes iniciar sesión para acceder a los archivos PDF. Los blogs son de acceso libre.");
-            router.push('/auth/login');
+            router.push(`/auth/login?redirect=${encodeURIComponent(href)}`);
         }
     }
 
@@ -122,16 +123,14 @@ function PDFCard({ title, url, date, subjectName, subjectUnitName }: PDFCardProp
                 </div>
 
                 <div className="mt-auto">
-                    {isAuthenticated && url ? (
+                    {isAuthenticated ? (
                         <Button
                             variant="default"
                             size="sm"
                             className="w-full cursor-pointer"
                             asChild
                         >
-                            <a href={url} target="_blank" rel="noopener noreferrer">
-                                Ver PDF
-                            </a>
+                            <Link href={href}>Ver PDF</Link>
                         </Button>
                     ) : (
                         <Button

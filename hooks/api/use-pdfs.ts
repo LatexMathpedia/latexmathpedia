@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createPdf,
   deletePdf,
+  getPdfContent,
   getPdfs,
-  getPublicPdfsNoLink,
   updatePdf,
   type CreatePDFDto,
   type UpdatePDFDto,
@@ -20,11 +20,15 @@ export function usePdfs(enabled = true) {
   });
 }
 
-export function usePublicPdfsNoLink(enabled = true) {
+// El binario no se cachea más allá de la vista: gcTime 0 lo suelta en cuanto se desmonta
+// el visor, para no dejar copias del PDF en memoria del QueryClient.
+export function usePdfContent(pdfId: number, enabled = true) {
   return useQuery({
-    queryKey: queryKeys.pdfs.publicNoLink(),
-    queryFn: getPublicPdfsNoLink,
-    enabled,
+    queryKey: queryKeys.pdfs.content(pdfId),
+    queryFn: () => getPdfContent(pdfId),
+    enabled: enabled && Number.isFinite(pdfId),
+    gcTime: 0,
+    staleTime: Infinity,
   });
 }
 
@@ -40,7 +44,7 @@ function useInvalidatePdfQueries() {
 export function useCreatePdf() {
   const invalidate = useInvalidatePdfQueries();
   return useMutation({
-    mutationFn: (body: CreatePDFDto) => createPdf(body),
+    mutationFn: ({ data, file }: { data: CreatePDFDto; file: File }) => createPdf(data, file),
     onSuccess: invalidate,
   });
 }
@@ -48,8 +52,8 @@ export function useCreatePdf() {
 export function useUpdatePdf() {
   const invalidate = useInvalidatePdfQueries();
   return useMutation({
-    mutationFn: ({ pdfId, body }: { pdfId: number; body: UpdatePDFDto }) =>
-      updatePdf(pdfId, body),
+    mutationFn: ({ pdfId, data, file }: { pdfId: number; data: UpdatePDFDto; file?: File }) =>
+      updatePdf(pdfId, data, file),
     onSuccess: invalidate,
   });
 }
@@ -57,7 +61,7 @@ export function useUpdatePdf() {
 export function useDeletePdf() {
   const invalidate = useInvalidatePdfQueries();
   return useMutation({
-    mutationFn: (pdfName: string) => deletePdf(pdfName),
+    mutationFn: (pdfId: number) => deletePdf(pdfId),
     onSuccess: invalidate,
   });
 }

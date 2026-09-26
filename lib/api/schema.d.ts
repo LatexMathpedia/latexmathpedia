@@ -94,7 +94,7 @@ export interface paths {
         get?: never;
         /**
          * Actualiza un PDF existente
-         * @description El body reemplaza los datos del PDF identificado por pdfId. Requiere rol ADMIN
+         * @description multipart/form-data con la parte 'data' (JSON) y, opcionalmente, la parte 'file' si se quiere reemplazar el contenido. Requiere rol ADMIN
          */
         put: operations["updatePDF"];
         post?: never;
@@ -268,54 +268,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/auth/reset-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["resetPassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["signIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/auth/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["createUser"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/pdf/create": {
         parameters: {
             query?: never;
@@ -327,7 +279,7 @@ export interface paths {
         put?: never;
         /**
          * Crea un nuevo PDF en el catálogo
-         * @description Requiere rol ADMIN
+         * @description multipart/form-data con la parte 'data' (JSON) y la parte 'file' (PDF). Requiere rol ADMIN
          */
         post: operations["createPDF"];
         delete?: never;
@@ -390,22 +342,6 @@ export interface paths {
          * @description Acepta tanto peticiones anónimas como autenticadas; si se envía un JWT válido, la respuesta puede tener en cuenta el contexto del usuario
          */
         post: operations["chat"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/auth/change-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["changePassword"];
         delete?: never;
         options?: never;
         head?: never;
@@ -714,10 +650,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lista los PDFs sin enlace de descarga
-         * @description Pensado para mostrar el catálogo público sin exponer el link real del archivo
+         * Lista el catálogo de PDFs
+         * @description Solo metadatos; el contenido se obtiene autenticado en GET /pdf/{pdfId}/content
          */
-        get: operations["getPDFsWithoutLink"];
+        get: operations["getPDFs"];
         put?: never;
         post?: never;
         delete?: never;
@@ -746,31 +682,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/pdf": {
+    "/pdf/{pdfId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Lista todos los PDFs */
-        get: operations["getPDFs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/pdf/pdf/{pdfName}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Obtiene un PDF por su nombre */
+        /**
+         * Obtiene el contenido del PDF para visualizarlo
+         * @description Devuelve el binario (application/pdf) servido desde el back, pensado para renderizarlo con pdf.js. Nunca se expone la URL de S3.
+         */
         get: operations["getPDF"];
         put?: never;
         post?: never;
@@ -792,22 +714,6 @@ export interface paths {
          * @description Requiere autenticación
          */
         get: operations["getOption"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/auth/all-users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getAllUsers"];
         put?: never;
         post?: never;
         delete?: never;
@@ -916,7 +822,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/pdf/delete/{pdfName}": {
+    "/pdf/delete/{pdfId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -927,7 +833,7 @@ export interface paths {
         put?: never;
         post?: never;
         /**
-         * Borra un PDF por su nombre
+         * Borra un PDF (metadatos y fichero en S3)
          * @description Requiere rol ADMIN
          */
         delete: operations["deletePDF"];
@@ -951,22 +857,6 @@ export interface paths {
          * @description Requiere rol ADMIN
          */
         delete: operations["deleteOption"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/auth/delete-account": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["deleteAccount"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1146,11 +1036,6 @@ export interface components {
              */
             name: string;
             /**
-             * @description Enlace de descarga del PDF
-             * @example https://drive.google.com/file/d/1a2b3c4d5e6f7g8h9i0j/view?usp=sharing
-             */
-            link?: string;
-            /**
              * @description Descripción del contenido del PDF
              * @example Este PDF contiene ejercicios resueltos de integrales para el tema 3 del curso de CDI.
              */
@@ -1170,7 +1055,6 @@ export interface components {
             /** Format: int64 */
             id?: number;
             name?: string;
-            link?: string;
             /** Format: date-time */
             lastTimeEdited?: string;
             description?: string;
@@ -1458,29 +1342,13 @@ export interface components {
              */
             quizId: number;
         };
-        ResetPasswordRequest: {
-            /** Format: email */
-            email: string;
-            password?: string;
-        };
-        LoginDTO: {
-            email?: string;
-            password?: string;
-        };
-        CreateUserRequest: {
-            /** Format: email */
-            email: string;
-            password?: string;
-        };
         /** @description Datos del PDF a crear */
         CreatePDFDto: {
             /**
              * @description Nombre único del PDF dentro del catálogo
-             * @example algebra-lineal-tema-1.pdf
+             * @example CDI: Tema 3 - Integrales
              */
             name: string;
-            /** @description Enlace de descarga del PDF */
-            link: string;
             /**
              * Format: int64
              * @description Identificador de la asignatura a la que pertenece el PDF
@@ -1558,10 +1426,6 @@ export interface components {
              */
             status?: "SUCCESS" | "ERROR";
         };
-        ChangePasswordRequest: {
-            oldPassword?: string;
-            newPassword?: string;
-        };
         QuizAttemptDto: {
             /**
              * Format: int64
@@ -1623,16 +1487,6 @@ export interface components {
             difficulty?: "EASY" | "MEDIUM" | "HARD";
             questions?: components["schemas"]["QuestionForAttemptDto"][];
         };
-        PDFNoLinkDto: {
-            /** Format: int64 */
-            id?: number;
-            name?: string;
-            /** Format: date-time */
-            lastTimeEdited?: string;
-            description?: string;
-            subject?: components["schemas"]["SubjectDto"];
-            subjectUnit?: components["schemas"]["SubjectUnitDto"];
-        };
         UserProfile: {
             /** @description Email del usuario, extraído del JWT */
             email?: string;
@@ -1642,18 +1496,6 @@ export interface components {
              */
             role?: "USER" | "ADMIN";
             id?: string;
-        };
-        UserDTO: {
-            id?: string;
-            email?: string;
-            username?: string;
-            firstName?: string;
-            lastName?: string;
-            /** @enum {string} */
-            role?: "USER" | "ADMIN";
-            enabled?: boolean;
-            /** Format: date-time */
-            createdAt?: string;
         };
         Pageable: {
             /** Format: int32 */
@@ -1681,7 +1523,6 @@ export interface components {
             empty?: boolean;
         };
         PageableObject: {
-            unpaged?: boolean;
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
@@ -1690,11 +1531,12 @@ export interface components {
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            unpaged?: boolean;
         };
         SortObject: {
-            unsorted?: boolean;
             empty?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
     };
     responses: never;
@@ -1949,9 +1791,16 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
-                "application/json": components["schemas"]["UpdatePDFDto"];
+                "multipart/form-data": {
+                    data: components["schemas"]["UpdatePDFDto"];
+                    /**
+                     * Format: binary
+                     * @description Nuevo fichero PDF (opcional)
+                     */
+                    file?: string;
+                };
             };
         };
         responses: {
@@ -1964,7 +1813,7 @@ export interface operations {
                     "*/*": components["schemas"]["PDFDto"];
                 };
             };
-            /** @description Datos inválidos */
+            /** @description Datos inválidos o fichero no válido */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1982,7 +1831,7 @@ export interface operations {
                     "*/*": components["schemas"]["PDFDto"];
                 };
             };
-            /** @description No existe ningún PDF con ese id */
+            /** @description No existe el PDF, la asignatura o el tema indicados */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -2462,74 +2311,6 @@ export interface operations {
             };
         };
     };
-    resetPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResetPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    signIn: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: {
-                refreshToken?: string;
-            };
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginDTO"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    createUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateUserRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     createPDF: {
         parameters: {
             query?: never;
@@ -2537,9 +2318,16 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
-                "application/json": components["schemas"]["CreatePDFDto"];
+                "multipart/form-data": {
+                    data: components["schemas"]["CreatePDFDto"];
+                    /**
+                     * Format: binary
+                     * @description Fichero PDF
+                     */
+                    file: string;
+                };
             };
         };
         responses: {
@@ -2552,7 +2340,7 @@ export interface operations {
                     "*/*": components["schemas"]["PDFDto"];
                 };
             };
-            /** @description Datos inválidos */
+            /** @description Datos inválidos o fichero no válido */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -2570,7 +2358,7 @@ export interface operations {
                     "*/*": components["schemas"]["PDFDto"];
                 };
             };
-            /** @description No existe ninguna tema con ese id */
+            /** @description No existe la asignatura o el tema indicados */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -2700,28 +2488,6 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["ChatResponse"];
                 };
-            };
-        };
-    };
-    changePassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangePasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
@@ -3217,7 +2983,7 @@ export interface operations {
             };
         };
     };
-    getPDFsWithoutLink: {
+    getPDFs: {
         parameters: {
             query?: never;
             header?: never;
@@ -3232,7 +2998,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["PDFNoLinkDto"][];
+                    "*/*": components["schemas"]["PDFDto"][];
                 };
             };
         };
@@ -3257,54 +3023,34 @@ export interface operations {
             };
         };
     };
-    getPDFs: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PDFDto"][];
-                };
-            };
-        };
-    };
     getPDF: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description Nombre del PDF a obtener */
-                pdfName: string;
+                /** @description Id del PDF */
+                pdfId: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description PDF encontrado */
+            /** @description Contenido del PDF */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["PDFDto"];
+                    "*/*": string;
                 };
             };
-            /** @description No existe ningún PDF con ese nombre */
-            400: {
+            /** @description No existe ningún PDF con ese id */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["PDFDto"];
+                    "*/*": string;
                 };
             };
         };
@@ -3346,26 +3092,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["OptionDto"];
-                };
-            };
-        };
-    };
-    getAllUsers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["UserDTO"][];
                 };
             };
         };
@@ -3560,8 +3286,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description Nombre exacto del PDF a borrar */
-                pdfName: string;
+                /** @description Id del PDF a borrar */
+                pdfId: number;
             };
             cookie?: never;
         };
@@ -3572,36 +3298,21 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["PDFDto"];
-                };
-            };
-            /** @description Datos inválidos */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PDFDto"];
-                };
+                content?: never;
             };
             /** @description El usuario autenticado no tiene rol ADMIN */
             401: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["PDFDto"];
-                };
+                content?: never;
             };
-            /** @description No existe ningún PDF con ese nombre */
+            /** @description No existe ningún PDF con ese id */
             404: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["PDFDto"];
-                };
+                content?: never;
             };
         };
     };
@@ -3633,24 +3344,6 @@ export interface operations {
             };
             /** @description No existe ninguna opción con el ID proporcionado */
             404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    deleteAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
                 headers: {
                     [name: string]: unknown;
                 };

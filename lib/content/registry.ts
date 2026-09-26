@@ -7,8 +7,7 @@ type ContentTypeMeta = {
   // Clases de acento para la insignia de tipo en la esquina de la tarjeta, mismo patrón
   // bg-*-100 dark:bg-*-900 que ya usa pdf-card.tsx.
   accentClass: string;
-  // Ruta de detalle del recurso. El PDF no tiene ficha propia (es el enlace/descarga
-  // directo), así que su href apunta al propio archivo si existe.
+  // Ruta de detalle del recurso.
   href: (item: ContentItem) => string;
 };
 
@@ -17,7 +16,7 @@ export const CONTENT_TYPES: Record<ContentItem["kind"], ContentTypeMeta> = {
     label: "PDF",
     icon: FileIcon,
     accentClass: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100",
-    href: (item) => (item.kind === "pdf" ? (item.data.url ?? "") : ""),
+    href: (item) => (item.kind === "pdf" ? `/dashboard/pdfs/${item.data.id}` : ""),
   },
   quiz: {
     label: "Cuestionario",
