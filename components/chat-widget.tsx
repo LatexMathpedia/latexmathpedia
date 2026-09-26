@@ -11,8 +11,8 @@ import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast";
 import { MessageContent } from "./message-content";
 import { Button } from "./ui/button";
+import { useAuth } from "@/contexts/auth-context";
 import { API_URL } from "@/lib/env";
-
 
 interface Message {
     role: 'user' | 'assistant';
@@ -26,7 +26,6 @@ interface RateLimitData {
     minuteResetTime: number,
 }
 
-const apiUrl = API_URL;
 
 const getCurrentDate = (): string => {
     const now = new Date();
@@ -34,6 +33,7 @@ const getCurrentDate = (): string => {
 }
 
 export function ChatWidget() {
+    const { authFetch } = useAuth();
     const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -182,14 +182,13 @@ export function ChatWidget() {
         setInput("");
         setIsLoading(true);
 
-        // Call API with cookie for session management
+        // Call API (con token de Keycloak si hay sesión)
         try {
-            const response = await fetch(`${apiUrl}/chatbot/chat`, {
+            const response = await authFetch(`${API_URL}/chatbot/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include',
                 body: JSON.stringify({
                     message: input,
                     conversationHistory: messages.slice(-6), // Last 6 messages

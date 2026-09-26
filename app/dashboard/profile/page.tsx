@@ -22,17 +22,15 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { Mail, KeyRound, LogOut, UserX, Shield } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import { API_URL } from "@/lib/env"
+import { API_URL } from "@/lib/env";
 
 export default function ProfilePage() {
-  const { email, logout } = useAuth()
+  const { email, logout, changePassword, authFetch } = useAuth()
   const router = useRouter()
   const toast = useToast()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [isSendingEmail, setIsSendingEmail] = useState(false)
-
-  const apiUrl = API_URL
+  const [isChangingPwd, setIsChangingPwd] = useState(false)
 
   const handleLogout = async () => {
     try {
@@ -45,27 +43,13 @@ export default function ProfilePage() {
   }
 
   const handlePwdChange = async () => {
-    setIsSendingEmail(true)
+    setIsChangingPwd(true)
     try {
-      const res = await fetch(`${apiUrl}/auth/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      })
-
-      if (!res.ok) {
-        throw new Error('Failed to send password reset email')
-      }
-      
-      toast.info("Correo de restablecimiento de contraseña enviado")
-      
-      await logout()
+      // Redirige a Keycloak; al terminar vuelve a esta página
+      await changePassword()
     } catch (error) {
-      toast.error("Error al enviar el correo de restablecimiento de contraseña")
-    } finally {
-      setIsSendingEmail(false)
+      toast.error("Error al abrir el cambio de contraseña. Inténtalo de nuevo.")
+      setIsChangingPwd(false)
     }
   }
 
@@ -73,12 +57,11 @@ export default function ProfilePage() {
     setIsDeleting(true)
 
     try {
-      const res = await fetch(`${apiUrl}/auth/delete-account`, {
+      const res = await authFetch(`${API_URL}/auth/delete-account`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
       })
 
       if (!res.ok) {
@@ -162,14 +145,14 @@ export default function ProfilePage() {
                 variant="outline" 
                 className="justify-start h-auto py-3"
                 onClick={handlePwdChange}
-                disabled={isSendingEmail}
+                disabled={isChangingPwd}
               >
                 <div className="flex items-center gap-3 w-full">
                   <KeyRound className="h-5 w-5" />
                   <div className="text-left flex-1">
                     <p className="font-medium">Cambiar contraseña</p>
                     <p className="text-xs text-muted-foreground">
-                      Te enviaremos un correo para restablecer tu contraseña
+                      Serás redirigido a la página segura para cambiarla
                     </p>
                   </div>
                 </div>

@@ -226,31 +226,53 @@ types/               # solo tipos NO derivables del OpenAPI
 
 ### Fase 2 — Autenticación con Keycloak (transversal; empezar pronto por su impacto)
 
-> **⏸ 2025-XX-XX — Decisión de producto:** Keycloak se implementará **cuando su responsable
-> lo aborde en el backend**; hasta entonces el frontend usa **T-13 (mock local)** como auth
-> "de verdad" para poder construir y probar todo lo demás (admin, PDFs, asignaturas,
-> cuestionarios), no como un puente menor de un día. T-10/T-11/T-12 quedan **en pausa** — no
-> las ejecutes salvo que se te pida explícitamente tras esa decisión de backend.
+> **✅ 2026-09-26 — Actualización importante: Keycloak real ya existe, fusionado.** Un
+> compañero implementó Keycloak directamente en `dev-restore` mientras esta rama seguía el
+> plan de mockear T-13 (PR #195 "Añade integración directa con Keycloak", con Auth.js/NextAuth
+> v5 + provider Keycloak). Se ha hecho **merge de `origin/dev-restore` en `feat-192`**
+> reconciliando ambos trabajos: **T-10, T-11 y T-12 quedan resueltos** por esa implementación;
+> T-13 (mock) **no se descarta**, sino que convive con ella detrás de un selector de modo —
+> ver el resumen debajo de T-14.
 
-- **T-10 · ⏸ EN PAUSA — [DECISIÓN] Definir el modelo de auth con Keycloak.** Antes de
-  codificar, acordar con backend: ¿el frontend obtiene el token directamente de Keycloak
-  (`keycloak-js` / Auth.js con provider Keycloak) o el backend actúa como **BFF** y gestiona
-  la sesión por cookie httpOnly? ¿Dónde viven access/refresh token? El OpenAPI mantiene
-  `/public/auth/login` con `bearerAuth` (JWT) y una cookie `refreshToken` → sugiere que el
-  backend intermedia. **Bloquea T-11/T-12.** Documentar aquí la decisión cuando se tome.
+- **T-10 · ✅ RESUELTO (PR #195) — Modelo de auth con Keycloak.** Decisión tomada e
+  implementada: el frontend habla **directamente** con Keycloak vía Auth.js
+  (`next-auth@5.0.0-beta.32`, provider `Keycloak`), no vía BFF. Cliente **público** (sin
+  `client_secret`), protegido con **PKCE**; si se configura `KEYCLOAK_CLIENT_SECRET` pasa a
+  cliente confidencial. Sesión con estrategia JWT (cookie de Auth.js, no la cookie
+  `refreshToken` del backend que sugería el OpenAPI). Rol admin derivado del claim
+  `realm_access`/`resource_access` del access token (rol configurable por
+  `KEYCLOAK_ADMIN_ROLE`, default `ADMIN`), no de `GET /profile`. Ver `auth.ts` (raíz) y
+  `lib/env.server.ts`.
 
-- **T-11 · ⏸ EN PAUSA — Cliente API con token.** Según T-10, añadir a `lib/api/client.ts` la
-  inyección del `Authorization: Bearer` (o `credentials: 'include'` si es cookie) y el manejo
-  de 401 → refresh/redirect a login. Un único punto, no por componente.
+- **T-11 · ✅ RESUELTO (PR #195 + integración) — Cliente API con token.** `contexts/auth-context.tsx`
+  sincroniza el `accessToken` de la sesión de Keycloak con `lib/api/client.ts` (función
+  `setApiAccessToken`, middleware `apiClient.use({ onRequest })` que añade
+  `Authorization: Bearer`) — así todos los hooks de TanStack Query (`hooks/api/*`) llevan el
+  token automáticamente sin tocarlos uno a uno. Para los componentes aún no migrados a
+  `lib/api/*` (admin de usuarios, contacto, perfil, chat, ver T-19/T-15/T-16), el contexto
+  expone `authFetch()`, que además reintenta una vez tras refrescar el token si la petición
+  da 401.
 
-- **T-12 · ⏸ EN PAUSA — Reescribir `auth-context` con Keycloak real.** Sustituir el actual
-  (cookies + status 480-490 + Firebase + `setTimeout(300)` "para Safari") por el flujo
-  Keycloak. Rol admin desde `GET /profile` (`UserProfile.role === 'ADMIN'`) o desde el claim
-  del token, no desde `/auth/is-admin`. Reescribir `login`, `logout`, `register`
-  (`/public/auth/create`), reset (`/public/auth/reset-password`), cambio de contraseña
-  (`/auth/change-password`). Actualizar `login-form.new.tsx`, `register-form.tsx`,
-  `nav-user.tsx`. **Cuando se retome, sustituye la implementación de T-13 detrás de la misma
-  interfaz — el resto de la app no debería enterarse del cambio.**
+- **T-12 · ✅ RESUELTO (PR #195 + integración) — `auth-context` con Keycloak real.**
+  `contexts/auth-context.tsx` ahora expone **dos implementaciones** detrás de la misma
+  interfaz pública, elegidas por `NEXT_PUBLIC_AUTH_MODE` (`lib/env.ts`, default `"mock"`):
+  - `"keycloak"`: `KeycloakAuthProvider` (envuelve `SessionProvider` de `next-auth/react`).
+    `login()`/`register()`/`changePassword()` ya no toman `credentials`, redirigen a
+    Keycloak (`signIn('keycloak', ...)`, `signIn('keycloak-register', ...)`,
+    `kc_action: 'UPDATE_PASSWORD'`). `login-form.new.tsx`/`register-form.tsx` se
+    simplificaron a botones (sin campos de email/password) que llaman a estos métodos —
+    **cambio de UX real**, ya no hay formulario local de email/contraseña.
+  - `"mock"`: `MockAuthProvider`, la implementación de T-13 (ver más abajo), adaptada a la
+    misma interfaz nueva (`login()`/`register()` ya no reciben `credentials`; en mock
+    simplemente adoptan la identidad "usuario" y navegan, igual que antes por email).
+  - Campos `identity`/`setIdentity` (del mock) pasan a ser **opcionales** en el tipo — solo
+    existen en modo mock; `components/nav-user.tsx` los usa condicionalmente (el selector
+    "Modo de prueba" solo se muestra en modo mock; en modo keycloak se muestra un botón real
+    de "Iniciar sesión" cuando no hay sesión).
+  - `lib/firebase.ts` **eliminado** (con él, el login con Google por Firebase); Google ahora
+    entra por Keycloak (`login({ idpHint: 'google' })`, brokering de identidad en Keycloak).
+  - `app/auth/pwd-email-sent/page.tsx` eliminada (ya no hace falta: el cambio/recuperación de
+    contraseña lo gestiona la UI de Keycloak).
 
 - **T-13 · ✅ HECHO — Mock de auth local (auth vigente hasta que exista Keycloak).**
   Reescrito `contexts/auth-context.tsx`: ya **no llama a ningún endpoint de auth del
@@ -296,10 +318,40 @@ types/               # solo tipos NO derivables del OpenAPI
 > `API-REQUESTS.md` §10. `/public/auth/login` y `/public/auth/create` reales devuelven 401/500
 > hoy (§11 de `API-REQUESTS.md`) — confirma que mockear el auth (T-13) era lo correcto.
 
-- **T-14 · ⏸ EN PAUSA — Protección de rutas por middleware.** `useProtectedRoute`/`useAdminRoute`
-  hoy solo protegen en cliente y `proxy.ts` no hace nada; con el mock de T-13 esto es
-  suficiente por ahora. Mover la protección a **middleware** (`middleware.ts`) y eliminar
-  Firebase (`lib/firebase.ts`) se retoma junto con T-12, cuando Keycloak sea real.
+- **T-14 · ✅ RESUELTO EN MODO KEYCLOAK (PR #195 + integración) — Protección de rutas por
+  middleware.** `proxy.ts` ahora se ramifica por `AUTH_MODE`:
+  - En modo **keycloak**, importa dinámicamente `lib/auth/keycloak-middleware.ts`
+    (`protectRoutes`, basado en `auth()` de Auth.js) y protege `/dashboard/admin/*` (rol
+    admin), `/dashboard/profile` (sesión) y redirige fuera de `/auth/login`/`/auth/register`
+    si ya hay sesión.
+  - En modo **mock** (default), el middleware es un simple passthrough — **no importa
+    `@/auth` en absoluto**, así que no hace falta ninguna variable `AUTH_SECRET`/`KEYCLOAK_*`
+    para desarrollar sin Keycloak levantado. La protección la siguen dando los hooks de
+    cliente `useProtectedRoute`/`useAdminRoute`, como antes de T-14.
+
+> **✅ Resumen del merge `origin/dev-restore` → `feat-192` (2026-09-26):**
+> Se fusionó el PR #195 (Keycloak real, mergeado en `dev-restore` por un compañero) con el
+> trabajo de esta rama (T-01..T-09, T-13 mock). Piezas nuevas de esa fusión:
+> - `NEXT_PUBLIC_AUTH_MODE` (`.env.example`, `lib/env.ts`): `"mock"` (default) o `"keycloak"`.
+>   **Los dos modos comparten exactamente la misma interfaz `useAuth()`** — nada más en la
+>   app necesita saber cuál está activo, salvo `nav-user.tsx` (para mostrar el selector de
+>   prueba o el botón de login real) y `proxy.ts` (para no cargar Keycloak en modo mock).
+> - `dashboard/page.tsx`, `admin/pdfs/page.tsx`, `PDFAccordionCard.tsx`: se mantuvo **nuestra**
+>   versión (T-08/T-09, ya migrada a `lib/api/*` + TanStack Query); el pequeño parche del
+>   compañero sobre la versión antigua (`fetch` → `authFetch`) quedó superado y no se aplicó
+>   — en su lugar, el token se inyecta centralizadamente en `lib/api/client.ts` (T-11).
+> - `admin/users/page.tsx`, `contact-us/page.tsx`, `profile/page.tsx`, `chat-widget.tsx`,
+>   `login-form.new.tsx`, `register-form.tsx`: se tomó **la versión del compañero** (todavía
+>   no estaban migrados a `lib/api/*` en esta rama, así que su patch de `authFetch` sí aporta).
+>   `admin/users/page.tsx` sigue llamando a `/auth/change-role`, que no existe en el backend
+>   — eso es un problema previo sin relación con este merge, pendiente de T-19.
+> - `package.json`: añadido `next-auth`, quitado `firebase`; el resto de dependencias de esta
+>   rama (TanStack Query, openapi-fetch/typescript, react-hook-form, zod) se conservan.
+>   `package-lock.json` regenerado con `npm install` en vez de fusionado a mano.
+> - Verificado: `npm run build` pasa limpio **en modo mock sin ninguna variable de entorno
+>   configurada** (el objetivo pedido: no depender de Keycloak para el entorno de pruebas) y
+>   también con `NEXT_PUBLIC_AUTH_MODE=keycloak` sin `KEYCLOAK_*` configuradas (no revienta el
+>   build, solo fallaría en tiempo de request si de verdad se usa). `npx tsc --noEmit` limpio.
 
 ### Fase 3 — Contenido y funcionalidad nueva
 
@@ -354,22 +406,26 @@ types/               # solo tipos NO derivables del OpenAPI
    autenticado sin esperar a Keycloak.
 3. ~~**Fase 1** (T-06…T-09: Subjects/Units + PDFs)~~ ✅ Hecho — sobre el API tal cual está hoy
    en `api-docs.json` (sin S3, eso es T-20/Fase 4 y sigue sin tocarse).
-4. **Fase 2 real (T-10, T-11, T-12, T-14)** — **en pausa**, se retoma cuando el responsable de
-   Keycloak lo aborde en el backend. No es parte del trabajo activo actual.
+4. ~~**Fase 2 real (T-10, T-11, T-12, T-14)**~~ ✅ Resuelta vía PR #195 (Keycloak real) +
+   integración del selector `NEXT_PUBLIC_AUTH_MODE` (fusionado en `feat-192`). Mock (T-13) y
+   Keycloak real conviven detrás de la misma interfaz — ver el resumen del merge más arriba.
 5. **Fase 3** (perfil, contenido, quizzes, admin de asignaturas/usuarios) sobre la base ya
    migrada. La taxonomía de Subjects/Units se construye con los endpoints que ya existen en
    `api-docs.json`; los campos extra de `API-REQUESTS.md` (contadores, etc.) son mejoras
-   futuras, no bloquean nada de esto.
+   futuras, no bloquean nada de esto. T-18 (admin de asignaturas) y T-19 (admin de usuarios,
+   ver más abajo) son las siguientes candidatas naturales.
 6. **Fase 4** (S3, chatbot, mail) al final o cuando el backend exponga esas piezas.
 
 ## 6. Decisiones abiertas (para backend/producto)
-- **T-10:** modelo Keycloak (directo vs BFF; ubicación de tokens; refresh). **Diferido**:
-  lo resolverá quien implemente Keycloak; hasta entonces el frontend usa el mock de T-13.
-- **T-19:** ¿cómo se cambian roles ahora? (`/auth/change-role` ya no existe).
+- ~~**T-10:** modelo Keycloak~~ **Resuelto** (PR #195): directo (Auth.js + provider Keycloak),
+  cliente público + PKCE, ver T-10 arriba.
+- **T-19:** ¿cómo se cambian roles ahora? (`/auth/change-role` ya no existe en `api-docs.json`,
+  pero `admin/users/page.tsx` lo sigue llamando — seguirá fallando hasta que se resuelva esto
+  o se haga T-19). ¿Se gestiona desde la consola de Keycloak, o hace falta un endpoint puente?
 - **T-20:** mecanismo exacto de servido de PDFs desde S3 (presigned vs proxy; embebido). **No
   se toca todavía** — los PDFs se siguen sirviendo como `link` directo, tal cual lo modela
   `PDFDto` en `api-docs.json` hoy.
-- Google login: ¿se mantiene? Si va por Keycloak, retirar Firebase. Mientras tanto, con el
-  mock de T-13 el botón de Google puede quedar deshabilitado/oculto.
-- `/public/auth/login` devuelve `200` sin body tipado en el OpenAPI: confirmar qué devuelve
-  (token en body vs cookie) — afecta a T-11/T-12 cuando se retomen.
+- `/public/auth/login`/`/public/auth/create` (los del backend, no Keycloak) quedan sin uso
+  ahora que el login real pasa por Keycloak directamente — confirmar con backend si se
+  retiran del OpenAPI o si tienen otro propósito (¿sincronizar el `UserAccountDto` local del
+  backend con el usuario de Keycloak en el primer login, vía `GET /me`?).

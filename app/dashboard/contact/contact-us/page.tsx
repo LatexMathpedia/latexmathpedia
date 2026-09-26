@@ -7,11 +7,11 @@ import { Label } from "@/components/ui/label"
 import { Mail, MessageSquare, Github, Instagram, Twitter } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
-import { API_URL } from "@/lib/env"
-
-const apiUrl = API_URL;
+import { useAuth } from "@/contexts/auth-context";
+import { API_URL } from "@/lib/env";
 
 export default function ContactUsPage() {
+    const { authFetch } = useAuth();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -36,7 +36,7 @@ export default function ContactUsPage() {
             subject: `[MathTexPedia] ${formData.subject}`,
             body: `Nombre: ${formData.name}\nEmail: ${formData.email}\n\nMensaje:\n${formData.message}`
         }
-        await fetch(`${apiUrl}/mail/send`, {
+        await authFetch(`${API_URL}/mail/send`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

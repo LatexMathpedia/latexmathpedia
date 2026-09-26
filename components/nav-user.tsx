@@ -23,7 +23,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Button } from "@/components/ui/button"
 import { useAuth, type MockIdentity } from "@/contexts/auth-context"
+import { AUTH_MODE } from "@/lib/env"
 import Link from "next/link"
 
 const TEST_MODE_OPTIONS: { value: MockIdentity; label: string }[] = [
@@ -41,7 +43,27 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const { isAuthenticated, logout, identity, setIdentity } = useAuth();
+  const { isAuthenticated, login, logout, identity, setIdentity } = useAuth();
+  // El selector "Modo de prueba" solo tiene sentido en modo mock (setIdentity no existe
+  // en modo keycloak). En modo keycloak, sin sesión mostramos el botón de login real.
+  const isMockMode = AUTH_MODE !== "keycloak" && Boolean(setIdentity)
+
+  if (!isMockMode && !isAuthenticated) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <Button
+            variant="outline"
+            className="w-full cursor-pointer"
+            onClick={() => login()}
+          >
+            Iniciar sesión
+          </Button>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    )
+  }
+
   const avatar = isAuthenticated
     ? (user.name.charAt(0).toUpperCase() + (user.name.charAt(1) ?? "").toUpperCase())
     : "??";
@@ -110,21 +132,25 @@ export function NavUser({
                 <DropdownMenuSeparator />
               </>
             )}
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Modo de prueba
-            </DropdownMenuLabel>
-            <DropdownMenuGroup>
-              {TEST_MODE_OPTIONS.map((option) => (
-                <DropdownMenuItem
-                  key={option.value}
-                  className="cursor-pointer justify-between"
-                  onClick={() => setIdentity(option.value)}
-                >
-                  <span>{option.label}</span>
-                  {identity === option.value && <Check className="size-4" />}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuGroup>
+            {isMockMode && setIdentity && (
+              <>
+                <DropdownMenuLabel className="text-xs text-muted-foreground">
+                  Modo de prueba
+                </DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  {TEST_MODE_OPTIONS.map((option) => (
+                    <DropdownMenuItem
+                      key={option.value}
+                      className="cursor-pointer justify-between"
+                      onClick={() => setIdentity(option.value)}
+                    >
+                      <span>{option.label}</span>
+                      {identity === option.value && <Check className="size-4" />}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </>
+            )}
             {isAuthenticated && (
               <>
                 <DropdownMenuSeparator />
