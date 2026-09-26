@@ -5,6 +5,17 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { QuizDifficultyBadge } from "@/components/ui/quiz-difficulty-badge";
 import type { QuizDto } from "@/lib/api/quizzes";
 
+function formatDate(iso?: string): string {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
+
 export function QuizCard({ quiz }: { quiz: QuizDto }) {
   return (
     <Link href={`/dashboard/quizzes/${quiz.id}`}>
@@ -20,20 +31,23 @@ export function QuizCard({ quiz }: { quiz: QuizDto }) {
             <p className="text-sm text-muted-foreground line-clamp-2">{quiz.description}</p>
           )}
         </CardContent>
-        {(quiz.subject?.name || quiz.subjectUnit?.name) && (
-          <CardFooter className="p-4 pt-0 flex flex-wrap gap-2">
-            {quiz.subject?.name && (
-              <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                {quiz.subject.name}
-              </span>
-            )}
-            {quiz.subjectUnit?.name && (
-              <span className="text-xs bg-secondary/10 text-primary px-2 py-0.5 rounded-full">
-                {quiz.subjectUnit.name}
-              </span>
-            )}
-          </CardFooter>
-        )}
+        <CardFooter className="p-4 pt-0 flex flex-col items-start gap-2">
+          {(quiz.subject?.name || quiz.subjectUnit?.name) && (
+            <div className="flex flex-wrap gap-2">
+              {quiz.subject?.name && (
+                <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                  {quiz.subject.name}
+                </span>
+              )}
+              {quiz.subjectUnit?.name && (
+                <span className="text-xs bg-secondary/10 text-primary px-2 py-0.5 rounded-full">
+                  {quiz.subjectUnit.name}
+                </span>
+              )}
+            </div>
+          )}
+          <span className="text-xs text-muted-foreground">{formatDate(quiz.lastTimeEdited)}</span>
+        </CardFooter>
       </Card>
     </Link>
   );

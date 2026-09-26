@@ -365,6 +365,33 @@ Todos son compatibles con el `components.json` ya configurado (`style: new-york`
 7. **Confirmaciones de borrado (`AlertDialog`) en todo el admin** — transversal, se puede
    hacer en cualquier momento a partir de la fase 4.
 
+**Estado de la fase 3 (feed mixto): ✅ HECHO.**
+- `lib/content/types.ts` define `ContentItem`/`DisplayPdf` (movido desde `dashboard-feed.tsx`
+  para que `registry.ts`/`content-card.tsx` lo compartan sin redefinirlo). `lib/content/registry.ts`
+  centraliza `label`/`icon`/`accentClass`/`href` por `kind`.
+- `components/content-card.tsx` es el despachador (`PDFCard`/`BlogCard`/`QuizCard` según
+  `kind`), con la insignia de tipo superpuesta en la esquina superior izquierda vía el
+  registro, sin tocar el layout interno de las 3 tarjetas. `QuizCard` (ya existía desde
+  T-17) se amplió con una fecha en el pie para igualar el patrón visual de `PDFCard`/`BlogCard`.
+- `components/dashboard-feed.tsx` usa `Tabs` (Todo/PDFs/Cuestionarios/Blog) sobre un
+  `ContentItem[]` combinado; **no se movió el filtro a query params (§5.1)** — se mantuvo
+  `FilterContext`/`SearchContext` tal cual, ya que no se pidió en esta ronda y hubiera sido
+  un cambio de alcance mayor sin necesidad directa para las pestañas.
+- **Filtro asignatura/tema**: aplica a PDFs y Cuestionarios (ambos tienen
+  `subject`/`subjectUnit`); el Blog nunca se filtra por asignatura (ver §10 — no se inventó
+  un campo `subject` en el frontmatter). Dentro de "Todo", si hay filtro de
+  asignatura/tema activo, el blog se excluye de la mezcla (comentado en el código); la
+  pestaña "Blog" propia siempre muestra todos los posts.
+- **Búsqueda vs. filtro**: se mantuvo la precedencia que ya tenía el feed de PDFs
+  (mutuamente excluyentes) — al escribir en el buscador se ignora el filtro de
+  asignatura/tema y se busca sobre el universo completo de cada tipo; sin búsqueda activa,
+  aplica el filtro. Aplica a los 3 tipos (`DisplayPdf.title`, `QuizDto.name`,
+  `BlogPostMeta.title`) reutilizando `normalizeText`.
+- **Se eliminó el recorte "últimos 8 PDFs"** que tenía la vista anterior sin pestañas
+  (`pageTitle` fijo "Últimos apuntes"): con pestañas dedicadas, cada una lista todo lo que
+  matchea el filtro/búsqueda activos, ordenado por fecha descendente; no se ha añadido
+  paginación (fuera de alcance de esta ronda).
+
 ---
 
 ## 10. Decisiones para producto (no técnicas)
