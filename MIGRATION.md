@@ -374,14 +374,49 @@ types/               # solo tipos NO derivables del OpenAPI
   - Admin: CRUD de `Quiz`/`Question`/`Option`, más import/export JSON (`/quiz/{id}/export`,
     `/quiz/import?subjectId=`). Es la mayor pieza nueva; dividir en subtareas al abordarla.
 
-- **T-18 · Admin de asignaturas/temas.** CRUD `Subject`/`SubjectUnit`
-  (`/subject/create`, `/subject/update/{id}`, `/subject/delete/{id}`, `/subject/{id}/unit/create`, …).
-  No existe UI hoy.
+- **T-18 · ✅ HECHO — Admin de asignaturas/temas.** CRUD completo de `Subject`/`SubjectUnit`
+  sobre `lib/api/subjects.ts` (ampliado con `createSubject`/`updateSubject`/`deleteSubject`/
+  `createSubjectUnit`/`updateSubjectUnit`/`deleteSubjectUnit`, todos vía `apiClient`) y sus
+  mutaciones TanStack Query correspondientes en `hooks/api/use-subjects.ts`, cada una
+  invalidando `queryKeys.subjects.all()` (crear/borrar asignatura) o
+  `queryKeys.subjects.units(subjectId)` (crear/editar/borrar tema).
+  - Nueva página `app/dashboard/admin/subjects/page.tsx`: mismo patrón visual que
+    `admin/pdfs/page.tsx` (protegida con `useAdminRoute`, formulario de alta con
+    react-hook-form + zod, buscador, tarjetas expandibles vía `useSubjects()`).
+  - Nuevo `components/ui/SubjectAccordionCard.tsx` (mismo patrón que `PDFAccordionCard`):
+    nombre/descripción editables inline, y dentro, la lista de Temas de esa asignatura
+    (`useSubjectUnits`) cada uno editable (nombre, posición) y borrable, más un formulario
+    para añadir un tema nuevo. **Decisión de implementación:** los temas de una asignatura
+    solo se piden (`useSubjectUnits`) cuando su tarjeta está expandida (`isOpen`), no de
+    forma eager para todas las asignaturas del catálogo a la vez — a diferencia de la
+    sidebar (T-07), aquí el listado puede crecer y no todas las tarjetas están abiertas.
+  - Los 409 de conflicto (asignatura con temas / tema con PDFs) se distinguen del resto de
+    errores por el **status HTTP de la respuesta**, no por el cuerpo: el `api-docs.json`
+    reutiliza (por error, aparentemente) el mismo DTO de éxito como schema de los 409/401, así
+    que se añadió una clase `ApiError` en `lib/api/subjects.ts` que lleva `status` y se lanza
+    en las mutaciones nuevas; la UI hace `error instanceof ApiError && error.status === 409`
+    para mostrar el `toast.error` de conflicto correcto.
+  - Confirmaciones de borrado (asignatura y tema) con el nuevo `AlertDialog` de shadcn
+    (`npx shadcn@latest add alert-dialog` — el generador escribió por error
+    `import { cn } from "cn"` en vez de `@/lib/utils` como el resto de `components/ui/*`;
+    se corrigió y se desinstaló la dependencia `cn` que había quedado sin uso). No se ha
+    retro-aplicado a los borrados de PDFs existentes (T-06..T-09), tal y como pedía el
+    enunciado de T-18.
+  - Enlazada desde `dataAdminPanel.adminPanel` en `components/app-sidebar.tsx` ("Asignaturas")
+    y como tercera tarjeta en `app/dashboard/admin/page.tsx`.
 
-- **T-19 · Admin de usuarios.** `app/dashboard/admin/users/page.tsx` usa `/auth/change-role`,
-  que **no aparece** en el OpenAPI nuevo. Confirmar con backend cómo se cambian roles (¿desde
-  Keycloak?) y adaptar. `GET /auth/all-users` → `UserDTO` (shape distinto: `username`, `firstName`,
-  `lastName`, `enabled`).
+- **T-19 · ✅ HECHO — Admin de usuarios (adaptado, no reescrito de cero).**
+  `app/dashboard/admin/users/page.tsx` ya no llama a `/auth/change-role` (no existe en
+  `api-docs.json`) ni mantiene el shape viejo `{email, role}`. Nuevo `lib/api/users.ts`
+  (`getAllUsers` → `GET /auth/all-users`, vía `apiClient`, no `authFetch` — el token ya se
+  inyecta solo) + hook `useAllUsers()` en `hooks/api/use-users.ts`
+  (`queryKeys.users.all()`, añadida a `lib/query/keys.ts`). La tabla ahora muestra las
+  columnas de `UserDTO`: usuario (`username`), correo, nombre completo (`firstName`+
+  `lastName`), rol, estado activo/inactivo (`enabled`) y fecha de alta (`createdAt`).
+  **Decisión de implementación:** el rol pasa a ser un `Badge` de solo lectura con un
+  `Tooltip` ("La gestión de roles se hace desde Keycloak") en vez del combobox que llamaba
+  al endpoint inexistente; no se ha inventado ningún endpoint puente. Esto resuelve la
+  pregunta abierta de la §6 de más abajo.
 
 ### Fase 4 — PDFs vía S3 y pulido
 
@@ -412,16 +447,17 @@ types/               # solo tipos NO derivables del OpenAPI
 5. **Fase 3** (perfil, contenido, quizzes, admin de asignaturas/usuarios) sobre la base ya
    migrada. La taxonomía de Subjects/Units se construye con los endpoints que ya existen en
    `api-docs.json`; los campos extra de `API-REQUESTS.md` (contadores, etc.) son mejoras
-   futuras, no bloquean nada de esto. T-18 (admin de asignaturas) y T-19 (admin de usuarios,
-   ver más abajo) son las siguientes candidatas naturales.
+   futuras, no bloquean nada de esto. ~~T-18 (admin de asignaturas) y T-19 (admin de
+   usuarios)~~ ✅ Hechos — quedan T-15/T-16/T-17 como siguientes candidatas de Fase 3.
 6. **Fase 4** (S3, chatbot, mail) al final o cuando el backend exponga esas piezas.
 
 ## 6. Decisiones abiertas (para backend/producto)
 - ~~**T-10:** modelo Keycloak~~ **Resuelto** (PR #195): directo (Auth.js + provider Keycloak),
   cliente público + PKCE, ver T-10 arriba.
-- **T-19:** ¿cómo se cambian roles ahora? (`/auth/change-role` ya no existe en `api-docs.json`,
-  pero `admin/users/page.tsx` lo sigue llamando — seguirá fallando hasta que se resuelva esto
-  o se haga T-19). ¿Se gestiona desde la consola de Keycloak, o hace falta un endpoint puente?
+- ~~**T-19:** ¿cómo se cambian roles ahora?~~ **Resuelto** (T-19): el frontend ya no cambia
+  roles (se quitó el combobox que llamaba a `/auth/change-role`, inexistente); se muestra
+  como `Badge` de solo lectura con nota de que se gestiona desde Keycloak. Sigue abierto si
+  hace falta un endpoint puente en el futuro, pero no bloquea nada hoy.
 - **T-20:** mecanismo exacto de servido de PDFs desde S3 (presigned vs proxy; embebido). **No
   se toca todavía** — los PDFs se siguen sirviendo como `link` directo, tal cual lo modela
   `PDFDto` en `api-docs.json` hoy.

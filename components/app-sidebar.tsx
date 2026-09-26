@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+  BookOpen,
   Bot,
   Command,
   Frame,
@@ -74,6 +75,12 @@ const dataAdminPanel = {
       title: "PDFs",
       url: "/dashboard/admin/pdfs",
       icon: Command,
+      isActive: false,
+    },
+    {
+      title: "Asignaturas",
+      url: "/dashboard/admin/subjects",
+      icon: BookOpen,
       isActive: false,
     },
     {

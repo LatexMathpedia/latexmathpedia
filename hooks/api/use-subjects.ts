@@ -1,7 +1,21 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { getSubjectPdfs, getSubjects, getSubjectUnits } from "@/lib/api/subjects";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createSubject,
+  createSubjectUnit,
+  deleteSubject,
+  deleteSubjectUnit,
+  getSubjectPdfs,
+  getSubjects,
+  getSubjectUnits,
+  updateSubject,
+  updateSubjectUnit,
+  type CreateSubjectDto,
+  type CreateSubjectUnitDto,
+  type UpdateSubjectDto,
+  type UpdateSubjectUnitDto,
+} from "@/lib/api/subjects";
 import { queryKeys } from "@/lib/query/keys";
 
 export function useSubjects() {
@@ -24,5 +38,67 @@ export function useSubjectPdfs(subjectId: number | null | undefined) {
     queryKey: queryKeys.subjects.pdfs(subjectId ?? -1),
     queryFn: () => getSubjectPdfs(subjectId as number),
     enabled: subjectId != null,
+  });
+}
+
+export function useCreateSubject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: CreateSubjectDto) => createSubject(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.all() });
+    },
+  });
+}
+
+export function useUpdateSubject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, body }: { id: number; body: UpdateSubjectDto }) => updateSubject(id, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.all() });
+    },
+  });
+}
+
+export function useDeleteSubject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => deleteSubject(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.all() });
+    },
+  });
+}
+
+export function useCreateSubjectUnit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ subjectId, body }: { subjectId: number; body: CreateSubjectUnitDto }) =>
+      createSubjectUnit(subjectId, body),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.units(variables.subjectId) });
+    },
+  });
+}
+
+export function useUpdateSubjectUnit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, body }: { id: number; subjectId: number; body: UpdateSubjectUnitDto }) =>
+      updateSubjectUnit(id, body),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.units(variables.subjectId) });
+    },
+  });
+}
+
+export function useDeleteSubjectUnit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id }: { id: number; subjectId: number }) => deleteSubjectUnit(id),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subjects.units(variables.subjectId) });
+    },
   });
 }

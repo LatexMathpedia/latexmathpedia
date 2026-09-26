@@ -12,4 +12,7 @@ export const queryKeys = {
     all: () => ["pdfs"] as const,
     publicNoLink: () => ["pdfs", "public-no-link"] as const,
   },
+  users: {
+    all: () => ["users"] as const,
+  },
 } as const;
