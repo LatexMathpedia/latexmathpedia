@@ -28,8 +28,8 @@ import {
 } from "@/components/ui/popover"
 import { useToast } from "@/hooks/use-toast"
 import { useAdminRoute } from "@/hooks/use-protected-route"
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+import { useAuth } from "@/contexts/auth-context";
+import { API_URL } from "@/lib/env";
 
 // Tipos para los usuarios
 type User = {
@@ -50,12 +50,12 @@ export default function UsersPage() {
 
   // Proteger esta ruta de administración
   const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
+  const { authFetch } = useAuth();
 
   async function fetchUsers() {
     try {
-      const response = await fetch(`${apiUrl}/auth/all-users`, {
+      const response = await authFetch(`${API_URL}/auth/all-users`, {
         method: 'GET',
-        credentials: 'include',
       });
       if (!response.ok) {
         throw new Error('Error al obtener los usuarios');
@@ -105,12 +105,11 @@ export default function UsersPage() {
 
   const updateUserRole = async (userEmail: string, newRole: string) => {
     try {
-      const response = await fetch(`${apiUrl}/auth/change-role`, {
+      const response = await authFetch(`${API_URL}/auth/change-role`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           email: userEmail,
           role: newRole
