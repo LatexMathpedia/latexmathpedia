@@ -4,13 +4,13 @@
 // .env.example). Ambos exponen exactamente la misma interfaz pública (`useAuth()`), así
 // que ningún componente necesita saber en qué modo está la app.
 //
-// - "mock" (por defecto, MIGRATION.md T-13): sin backend/Keycloak. Tres identidades
-//   locales fijas (admin/usuario/anónimo) alternables desde `nav-user.tsx`, persistidas en
-//   localStorage. Como no hay JWT real, las llamadas a endpoints protegidos del backend
-//   devolverán 401 real aunque `isAuthenticated`/`isAdmin` sean `true` aquí — es un límite
-//   conocido y aceptado mientras no haya Keycloak (ver MIGRATION.md).
-// - "keycloak" (MIGRATION.md T-10/T-11/T-12): auth real vía Auth.js + Keycloak (ver
-//   auth.ts). El access token se sincroniza automáticamente con `lib/api/client.ts` para
+// - "mock" (por defecto): sin backend/Keycloak. Tres identidades locales fijas
+//   (admin/usuario/anónimo) alternables desde `nav-user.tsx`, persistidas en localStorage.
+//   Como no hay JWT real, las llamadas a endpoints protegidos del backend devolverán 401
+//   real aunque `isAuthenticated`/`isAdmin` sean `true` aquí — es un límite conocido y
+//   aceptado mientras no haya Keycloak.
+// - "keycloak": auth real vía Auth.js + Keycloak (ver auth.ts). El access token se
+//   sincroniza automáticamente con `lib/api/client.ts` para
 //   que todas las llamadas hechas con `apiClient` (TanStack Query) lleven el Bearer.
 
 import { createContext, useContext, useCallback, useEffect, useMemo, useState, PropsWithChildren } from 'react';

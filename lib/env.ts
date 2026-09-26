@@ -26,7 +26,7 @@ function resolveApiUrl(): string {
 
 export const API_URL = resolveApiUrl();
 
-// Selector de modo de autenticación (ver contexts/auth-context.tsx y MIGRATION.md T-13):
+// Selector de modo de autenticación (ver contexts/auth-context.tsx):
 // - "mock" (por defecto): auth 100% local, sin Keycloak, para poder desarrollar/probar
 //   sin depender de un servidor Keycloak levantado.
 // - "keycloak": auth real vía Auth.js + Keycloak (ver auth.ts), requiere las variables

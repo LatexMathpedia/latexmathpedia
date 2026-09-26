@@ -4,13 +4,13 @@ import { AUTH_MODE } from '@/lib/env'
 
 // En modo "keycloak" la protección real de rutas vive en `lib/auth/keycloak-middleware.ts`
 // (sesión de Auth.js + rol de Keycloak). Se importa de forma dinámica y solo en ese modo:
-// así, en modo "mock" (por defecto, ver MIGRATION.md T-13) este fichero nunca evalúa
+// así, en modo "mock" (por defecto) este fichero nunca evalúa
 // `auth.ts`/Keycloak, y no hace falta tener AUTH_SECRET/KEYCLOAK_* configuradas para
 // desarrollar sin un servidor Keycloak levantado.
 //
 // En modo mock, la identidad de prueba vive en localStorage (solo accesible en cliente,
 // no aquí), así que la protección de /dashboard/admin y compañía la siguen haciendo los
-// hooks de cliente `useProtectedRoute`/`useAdminRoute` mientras tanto (ver MIGRATION.md T-14).
+// hooks de cliente `useProtectedRoute`/`useAdminRoute` mientras tanto.
 export default async function proxy(request: NextRequest) {
   if (AUTH_MODE === 'keycloak') {
     const { protectRoutes } = await import('@/lib/auth/keycloak-middleware')

@@ -1,9 +1,10 @@
 # Reestructuración visual y de arquitectura de información
 
-Escrito para: agentes/desarrolladores que implementen la nueva navegación y vistas del
-frontend una vez migrada la capa de datos (ver `MIGRATION.md`).
+Escrito para: agentes/desarrolladores que implementen o extiendan la navegación y vistas del
+frontend sobre la capa de datos ya migrada (Subjects/Units, PDFs, Quizzes vía TanStack Query
++ tipos generados del OpenAPI).
 
-> Este documento **no** trata de refactor de código (eso está en `MIGRATION.md`), sino de
+> Este documento **no** trata de refactor de código, sino de
 > **qué páginas existen, cómo se navega entre ellas y cómo se organiza visualmente el
 > contenido** ahora que el catálogo deja de ser "PDFs con un tag" y pasa a ser
 > **Asignaturas → Temas → {PDFs, Cuestionarios, Blog, (futuro: lo que sea)}**.
@@ -64,8 +65,8 @@ const CONTENT_TYPES: Record<ContentItem["kind"], ContentTypeMeta> = { ... };
 entrada aquí + un componente de tarjeta + (si aplica) un hook de datos — no tocar el feed,
 la barra lateral ni el buscador, que iteran sobre `ContentItem[]` de forma genérica.
 
-Esto se apoya en la capa de datos de `MIGRATION.md` (TanStack Query + tipos generados del
-OpenAPI); este documento asume que esa capa existe para Subjects/PDFs/Quizzes.
+Esto se apoya en la capa de datos ya migrada (TanStack Query + tipos generados del OpenAPI)
+para Subjects/PDFs/Quizzes.
 
 ---
 
@@ -322,13 +323,15 @@ La UX actual (buscador, combobox de categoría/subcategoría, tarjetas expandibl
 mantiene tal cual; solo cambia la **fuente de datos** de los combobox: en vez del objeto
 `categories` hardcodeado, se listan `Subject` y, al elegir uno, sus `SubjectUnit`
 (`useSubjects()`/`useSubjectUnits()`, los mismos hooks que usa la sidebar y la ficha de
-asignatura — una sola fuente de verdad para toda la app). Ver `MIGRATION.md` T-09.
+asignatura — una sola fuente de verdad para toda la app).
 
 ### 7.5 Usuarios (`/dashboard/admin/users`) — adaptar
 
 Mismo layout de tabla + combobox de rol. Cambia el shape (`UserDTO`: `username`,
 `firstName`, `lastName`, `enabled`, ya no un simple `{email, role}`) y el mecanismo de
-cambio de rol depende de la decisión de Keycloak (`MIGRATION.md` T-19). Añadir columna
+cambio de rol depende de la decisión de Keycloak (resuelto: se gestiona desde Keycloak, ver
+[mathtexpedia-backend#94](https://github.com/PabloGarPe/mathtexpedia-backend/issues/94)).
+Añadir columna
 `enabled` con un toggle si el backend expone activar/desactivar usuarios.
 
 ### 7.6 Gap de UX transversal en todo el admin: falta confirmación de borrado
@@ -358,12 +361,12 @@ Todos son compatibles con el `components.json` ya configurado (`style: new-york`
 
 ---
 
-## 9. Fases de implementación (ligadas a `MIGRATION.md`)
+## 9. Fases de implementación (completadas)
 
-1. **Cimientos compartidos** (paralelo a Fase 0-1 de `MIGRATION.md`): registro de tipos de
-   contenido (§2), componentes shadcn nuevos (§8), mover filtros a URL (§5.1).
+1. **Cimientos compartidos**: registro de tipos de contenido (§2), componentes shadcn
+   nuevos (§8), mover filtros a URL (§5.1).
 2. **Sidebar dinámica + catálogo de asignaturas** (`/dashboard/subjects*`) — depende de
-   `useSubjects`/`useSubjectUnits` (`MIGRATION.md` T-06/T-07). Sustituye el filtro por tags.
+   `useSubjects`/`useSubjectUnits`. Sustituye el filtro por tags.
    **✅ HECHO** (catálogo de asignaturas — la sidebar dinámica ya estaba hecha de antes):
    - `/dashboard/subjects`: grid simple de `SubjectDto` (nombre + descripción), enlaza a la
      ficha. Pública, sin auth.
@@ -394,7 +397,7 @@ Todos son compatibles con el `components.json` ya configurado (`style: new-york`
    el contrato nuevo (T-08).
 4. **Admin de Asignaturas** (`/dashboard/admin/subjects`) y **PDFs adaptado** (T-09).
 5. **Cuestionarios de usuario** (catálogo, ficha, intento, resultado, histórico en perfil) —
-   depende de `MIGRATION.md` T-17 (capa de datos de quizzes).
+   depende de la capa de datos de quizzes (ya migrada).
 6. **Admin de Cuestionarios** (editor de preguntas/opciones) — depende de 5.
 7. **Confirmaciones de borrado (`AlertDialog`) en todo el admin** — transversal, se puede
    hacer en cualquier momento a partir de la fase 4.
@@ -432,9 +435,8 @@ admin"): ✅ HECHO.**
   `Permissions-Policy`, `Cross-Origin-Opener-Policy`) — eran headers de respuesta que solo
   tendrían sentido puestos por el backend, no por este propio Next.js sirviendo sus propias
   páginas. Queda solo `poweredByHeader: false`, `serverExternalPackages` e `images`. Ver
-  T-05 en `MIGRATION.md` (marcada ✅ HECHO) para el detalle de la verificación en
-  `AUTH_MODE=mock`/`keycloak`. `proxy.ts` no se ha tocado (ya resuelto en el merge de
-  Keycloak).
+  Verificado que login/logout siguen funcionando igual en `AUTH_MODE=mock`/`keycloak` tras
+  quitarlos. `proxy.ts` no se ha tocado (ya resuelto en el merge de Keycloak).
 - `components/nav-projects.tsx` borrado (sin otro consumidor) junto con `data.projects` de
   `app-sidebar.tsx`; sustituido por una entrada "Blog" → `/dashboard/blog` con `NavMain`,
   mismo patrón visual que "Asignaturas"/"Cuestionarios".
