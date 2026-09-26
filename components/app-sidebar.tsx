@@ -3,7 +3,6 @@
 import * as React from "react"
 import {
   BookOpen,
-  Bot,
   ClipboardList,
   Command,
   LifeBuoy,
@@ -97,12 +96,6 @@ const dataAdminPanel = {
       icon: ClipboardList,
       isActive: false,
     },
-    {
-      title: "Usuarios",
-      url: "/dashboard/admin/users",
-      icon: Bot,
-      isActive: false,
-    }
   ],
 }
 

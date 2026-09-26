@@ -91,7 +91,6 @@ para Subjects/PDFs/Quizzes.
 /dashboard/admin/pdfs                       CRUD PDFs (adaptado a Subject/Unit)
 /dashboard/admin/quizzes                    Listado de cuestionarios (+ crear, + importar)
 /dashboard/admin/quizzes/[quizId]           Editor de cuestionario (metadatos + preguntas + opciones)
-/dashboard/admin/users                      CRUD/roles de usuarios (ya existe, adaptar shape)
 ```
 
 Notas de diseño de rutas:
@@ -136,7 +135,6 @@ Soporte / Feedback               (igual que hoy)
   Asignaturas   → /dashboard/admin/subjects
   PDFs          → /dashboard/admin/pdfs
   Cuestionarios → /dashboard/admin/quizzes
-  Usuarios      → /dashboard/admin/users
 ──────────────────────────
 [Usuario / avatar]
 ```
@@ -325,14 +323,11 @@ mantiene tal cual; solo cambia la **fuente de datos** de los combobox: en vez de
 (`useSubjects()`/`useSubjectUnits()`, los mismos hooks que usa la sidebar y la ficha de
 asignatura — una sola fuente de verdad para toda la app).
 
-### 7.5 Usuarios (`/dashboard/admin/users`) — adaptar
+### 7.5 Usuarios — eliminado
 
-Mismo layout de tabla + combobox de rol. Cambia el shape (`UserDTO`: `username`,
-`firstName`, `lastName`, `enabled`, ya no un simple `{email, role}`) y el mecanismo de
-cambio de rol depende de la decisión de Keycloak (resuelto: se gestiona desde Keycloak, ver
+El listado de usuarios del admin se ha retirado: la gestión de usuarios y roles se hace
+directamente desde Keycloak (ver
 [mathtexpedia-backend#94](https://github.com/PabloGarPe/mathtexpedia-backend/issues/94)).
-Añadir columna
-`enabled` con un toggle si el backend expone activar/desactivar usuarios.
 
 ### 7.6 Gap de UX transversal en todo el admin: falta confirmación de borrado
 
