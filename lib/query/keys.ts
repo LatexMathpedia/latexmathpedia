@@ -15,4 +15,16 @@ export const queryKeys = {
   users: {
     all: () => ["users"] as const,
   },
+  quizzes: {
+    all: () => ["quizzes"] as const,
+    detail: (quizId: number) => ["quizzes", quizId] as const,
+    attempt: (quizId: number) => ["quizzes", quizId, "attempt"] as const,
+  },
+  attempts: {
+    all: () => ["attempts"] as const,
+    page: (page: number, size: number) => ["attempts", page, size] as const,
+  },
+  profile: {
+    me: () => ["profile", "me"] as const,
+  },
 } as const;

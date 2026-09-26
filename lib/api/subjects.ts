@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api/client";
 import type { components } from "@/lib/api/schema";
+import { ApiError } from "@/lib/api/errors";
 
 export type SubjectDto = components["schemas"]["SubjectDto"];
 export type SubjectUnitDto = components["schemas"]["SubjectUnitDto"];
@@ -8,18 +9,10 @@ export type UpdateSubjectDto = components["schemas"]["UpdateSubjectDto"];
 export type CreateSubjectUnitDto = components["schemas"]["CreateSubjectUnitDto"];
 export type UpdateSubjectUnitDto = components["schemas"]["UpdateSubjectUnitDto"];
 
-// El body de error que documenta api-docs.json para los 409/401 de este recurso reutiliza
-// por error el DTO de éxito; lo único fiable para distinguir el caso "conflicto" es el
-// status HTTP de la respuesta, así que lo llevamos en la excepción.
-export class ApiError extends Error {
-  status: number;
-
-  constructor(status: number, message: string) {
-    super(message);
-    this.name = "ApiError";
-    this.status = status;
-  }
-}
+// Re-exportada por compatibilidad: el resto del código (SubjectAccordionCard, admin/pdfs,
+// admin/subjects) la importa desde aquí. La definición vive en lib/api/errors.ts para que
+// otros recursos (quizzes, profile) puedan usarla sin depender de este módulo.
+export { ApiError };
 
 export async function getSubjects() {
   const { data, error } = await apiClient.GET("/subject");

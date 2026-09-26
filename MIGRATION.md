@@ -362,17 +362,59 @@ types/               # solo tipos NO derivables del OpenAPI
   fuente para que `dashboard/page.tsx`, `nav-projects.tsx` y `blog/page.tsx` lean del mismo sitio
   (leer frontmatter en vez de duplicar títulos/fechas).
 
-- **T-16 · Perfil de usuario.** Nuevo en el backend: `GET/PUT /me` (`UserAccountDto`,
-  `UpdateUserAccountDto`), flag `profileCompletedAt`. Reescribir `app/dashboard/profile/page.tsx`
-  para leer/editar el perfil real (nombre, estado, fechas) y borrar cuenta (`DELETE /auth/delete-account`).
+- **T-16 · ✅ HECHO — Perfil de usuario.** Nuevo `lib/api/profile.ts` (`getMe` → `GET /me`,
+  `updateMe` → `PUT /me`, con `ApiError` de `lib/api/errors.ts` para distinguir el 400/401
+  por status) + hooks `useMe()`/`useUpdateMe()` en `hooks/api/use-profile.ts`
+  (`queryKeys.profile.me()`, nueva en `lib/query/keys.ts`). `app/dashboard/profile/page.tsx`
+  reescrito: muestra nombre (editable con un form react-hook-form + zod que llama a
+  `useUpdateMe()`), email, estado (`status`, como `Badge`) y fecha de alta (`createdAt`).
+  Si `profileCompletedAt` es `null` se muestra un `Alert` opcional "Completa tu perfil"
+  (no bloquea nada). Borrar cuenta y logout se mantienen tal cual estaban (ya usaban
+  `authFetch`/`useAuth`, no tocado). **Decisión de implementación:** la página se dividió en
+  dos pestañas con el nuevo `Tabs` de shadcn — "Perfil" (todo lo anterior) y "Mis
+  cuestionarios" (histórico de intentos, ver T-17 parte 1 más abajo, que vive en esta misma
+  página tal y como pide `UI-RESTRUCTURE.md` §6.3).
 
-- **T-17 · Cuestionarios (feature nueva completa).** No existe en el frontend. Construir:
-  - Listado público (`GET /public/quiz`) y por asignatura/tema (`/subject/{id}/quizzes`, `/subject/unit/{id}/quizzes`).
-  - Resolución: `GET /quiz/{id}/attempt` (`QuizForAttemptDto`, sin respuestas correctas) →
-    `POST /quiz/{id}/submit` (`SubmitQuizAttemptDto`) → mostrar `QuizAttemptResultDto`.
-  - Historial: `GET /attempts` (paginado, `Pageable`) y `GET /quiz/{id}/attempts`.
-  - Admin: CRUD de `Quiz`/`Question`/`Option`, más import/export JSON (`/quiz/{id}/export`,
-    `/quiz/import?subjectId=`). Es la mayor pieza nueva; dividir en subtareas al abordarla.
+- **T-17 (parte 1 de 2) · ✅ HECHO — Cuestionarios: cara de usuario.** Falta la parte 2
+  (administración: crear/editar preguntas y opciones, import/export JSON) — se deja para
+  otra ronda tal y como pedía el enunciado de esta.
+  - Nuevo `lib/api/quizzes.ts` + `hooks/api/use-quizzes.ts` + `queryKeys.quizzes.*` /
+    `queryKeys.attempts.*` en `lib/query/keys.ts`: `getPublicQuizzes` (`GET /public/quiz`,
+    anónimo), `getQuiz` (`GET /quiz/{id}`, autenticado no-admin), `getQuizForAttempt`
+    (`GET /quiz/{id}/attempt`), `submitQuizAttempt` (`POST /quiz/{id}/submit`, con
+    `ApiError`) y `getMyAttempts` (`GET /attempts`, paginado).
+  - `/dashboard/quizzes`: catálogo público (grid de `QuizCard`, nuevo
+    `components/quiz-card.tsx`), con badge de dificultad (`components/ui/quiz-difficulty-badge.tsx`,
+    verde/ámbar/rojo) y filtro por asignatura (`Select` de shadcn, alimentado por
+    `useSubjects()`).
+  - `/dashboard/quizzes/[quizId]`: ficha (protegida con `useProtectedRoute`, `GET /quiz/{id}`
+    no es público) con botón "Empezar cuestionario".
+  - `/dashboard/quizzes/[quizId]/attempt`: todas las preguntas en scroll continuo (no wizard),
+    `RadioGroup` de shadcn por pregunta, barra `Progress` con preguntas respondidas. Al
+    enviar, **reemplaza el contenido de la misma página** por el resultado (mismo
+    `QuizAttemptResultDto`, sin navegar): puntuación grande, y por pregunta la opción
+    marcada, la correcta si falló, y la `explanation` en un `Alert`. **Decisión:** el envío
+    se deshabilita solo si no se ha respondido nada (0 de N); con al menos una respuesta se
+    permite enviar parcial, ya que el propio `QuizAttemptResultDto` expone
+    `unansweredQuestions` (el backend ya lo tolera, confirmado en `api-docs.json`).
+  - Histórico en el perfil (pestaña "Mis cuestionarios", `useMyAttempts()` + nuevo
+    `Pagination` de shadcn). **Limitación conocida:** `QuizAttemptDto` solo trae `quizId`,
+    no el nombre del cuestionario (gap ya anotado en `API-REQUESTS.md` §3/§9); se resuelve
+    cruzando con la caché de `usePublicQuizzes()` y, si no se encuentra, se muestra
+    "Cuestionario #id" en vez de fallar.
+  - Añadida entrada "Cuestionarios" en `components/app-sidebar.tsx` (grupo propio, junto a
+    "Apuntes", sin tocar el grupo "Blogs" que es de T-15).
+  - Se instalaron con `npx shadcn@latest add tabs radio-group progress pagination select`
+    (y también `alert-dialog` había quedado con el mismo problema): **el generador de shadcn
+    en esta versión escribe `import { cn } from "cn"` en vez de `@/lib/utils`** en todos los
+    componentes nuevos — se corrigió en los 6 ficheros afectados
+    (`alert-dialog.tsx`, `tabs.tsx`, `radio-group.tsx`, `progress.tsx`, `pagination.tsx`,
+    `select.tsx`) y se desinstaló la dependencia `cn` (quedaba sin uso). `select.tsx` existía
+    pero estaba vacío (0 bytes, ya roto antes de esta ronda) — se regeneró con `--overwrite`.
+  - Pendiente para la parte 2 (otra ronda): admin de cuestionarios
+    (`/dashboard/admin/quizzes`, `/dashboard/admin/quizzes/[quizId]`) — CRUD de
+    `Quiz`/`Question`/`Option` e import/export JSON, tal y como describe `UI-RESTRUCTURE.md`
+    §7.3.
 
 - **T-18 · ✅ HECHO — Admin de asignaturas/temas.** CRUD completo de `Subject`/`SubjectUnit`
   sobre `lib/api/subjects.ts` (ampliado con `createSubject`/`updateSubject`/`deleteSubject`/
@@ -448,7 +490,9 @@ types/               # solo tipos NO derivables del OpenAPI
    migrada. La taxonomía de Subjects/Units se construye con los endpoints que ya existen en
    `api-docs.json`; los campos extra de `API-REQUESTS.md` (contadores, etc.) son mejoras
    futuras, no bloquean nada de esto. ~~T-18 (admin de asignaturas) y T-19 (admin de
-   usuarios)~~ ✅ Hechos — quedan T-15/T-16/T-17 como siguientes candidatas de Fase 3.
+   usuarios)~~ ✅ Hechos. ~~T-16 (perfil)~~ ✅ Hecho. ~~T-17 parte 1 (cuestionarios: cara de
+   usuario)~~ ✅ Hecho — queda T-15 (contenido estático) y T-17 parte 2 (admin de
+   cuestionarios) como siguientes candidatas de Fase 3.
 6. **Fase 4** (S3, chatbot, mail) al final o cuando el backend exponga esas piezas.
 
 ## 6. Decisiones abiertas (para backend/producto)

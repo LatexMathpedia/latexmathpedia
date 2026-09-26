@@ -7,6 +7,7 @@ import {
   Command,
   Frame,
   LifeBuoy,
+  ListChecks,
   Map,
   PieChart,
   Send,
@@ -31,6 +32,17 @@ import { useFilter } from "@/contexts/filter-context"
 import { useSearch } from "@/contexts/search-context"
 import Link from "next/link"
 import logo from '@/public/icon.png'
+
+const dataQuizzes = {
+  quizzes: [
+    {
+      title: "Cuestionarios",
+      url: "/dashboard/quizzes",
+      icon: ListChecks,
+      isActive: false,
+    },
+  ],
+}
 
 const data = {
   navSecondary: [
@@ -133,6 +145,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavSubjects title="Apuntes" />
+        <NavMain items={dataQuizzes.quizzes} title="Cuestionarios" />
         <NavProjects projects={data.projects} />
         {/* Solo mostrar admin panel si está autenticado y es admin */}
         {isAuthenticated && isAdmin && (
