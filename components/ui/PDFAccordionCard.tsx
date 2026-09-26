@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/popover"
 import { useToast } from "@/hooks/use-toast"
 import { renameCategory, renameCategoryInverted } from "@/lib/utils";
+import { useAuth } from "@/contexts/auth-context";
+import { API_URL } from "@/lib/env";
 
 const categories = {
   "Matemáticas": [
@@ -57,8 +59,6 @@ type PDFProps = {
   pdfTag?: string; // Código de categoría que viene de la base de datos
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-
 // Función para identificar la categoría principal a partir de la subcategoría
 const getCategoryFromSubcategory = (subcategory: string): string => {
   for (const [category, subcategories] of Object.entries(categories)) {
@@ -78,6 +78,7 @@ const PDFAccordionCard = ({
   onUpdate?: (updatedPdf: PDFProps) => void,
   onDelete?: (pdfId: string) => void
 }) => {
+  const { authFetch } = useAuth();
   const [isOpen, setIsOpen] = useState(false)
   const [pdfData, setPdfData] = useState<PDFProps>(pdf)
   const toast = useToast();
@@ -107,12 +108,11 @@ const PDFAccordionCard = ({
     };
 
     try {
-      const response = await fetch(`${apiUrl}/pdfs/update?pdfId=${pdfData.id}`, {
+      const response = await authFetch(`${API_URL}/pdfs/update?pdfId=${pdfData.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           name: updatedPdf.name,
           link: updatedPdf.link,
@@ -140,9 +140,8 @@ const PDFAccordionCard = ({
     toast.info("Eliminando PDF...");
 
     try {
-      const response = await fetch(`${apiUrl}/pdfs/delete?pdfName=${pdf.name}`, {
+      const response = await authFetch(`${API_URL}/pdfs/delete?pdfName=${pdf.name}`, {
         method: 'DELETE',
-        credentials: 'include'
       });
 
       if (response.ok) {

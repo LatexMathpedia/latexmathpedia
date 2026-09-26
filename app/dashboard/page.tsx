@@ -7,6 +7,7 @@ import { useFilter } from "@/contexts/filter-context";
 import { useSearch } from "@/contexts/search-context"; // Importar el contexto de búsqueda
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import { API_URL } from "@/lib/env";
 
 type PDFDocument = {
   title: string;
@@ -475,8 +476,6 @@ const sampleDataBlog = [
   },
 ];
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-
 function selectBests(pdfs: ExtendedPDFDocument[]): ExtendedPDFDocument[] {
   return pdfs
     .sort((a, b) => {
@@ -497,7 +496,7 @@ function WelcomePage() {
   const [allPDFs, setAllPDFs] = useState<ExtendedPDFDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState("Últimos apuntes");
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading, authFetch } = useAuth();
 
   function convertApiPdfToDocument(
     apiPdf: APIPDFDocument,
@@ -517,14 +516,13 @@ function WelcomePage() {
     try {
       let response;
       if (isAuthenticated) {
-        response = await fetch(`${apiUrl}/pdfs`, {
-          credentials: "include",
+        response = await authFetch(`${API_URL}/pdfs`, {
           headers: {
             "Content-Type": "application/json",
           },
         });
       } else {
-        response = await fetch(`${apiUrl}/pdfs/no-link`, {
+        response = await fetch(`${API_URL}/pdfs/no-link`, {
           headers: {
             "Content-Type": "application/json",
           },

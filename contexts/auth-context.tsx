@@ -1,210 +1,115 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, PropsWithChildren } from 'react';
+import { createContext, useContext, useCallback, PropsWithChildren } from 'react';
+import { SessionProvider, signIn, signOut, useSession } from 'next-auth/react';
 
-type CredentialsDTO = {
-    email: string;
-    password: string;
-}
+type LoginOptions = {
+  // URL a la que volver tras autenticarse
+  redirectTo?: string;
+  // Alias del Identity Provider configurado en Keycloak (p. ej. 'google')
+  idpHint?: string;
+};
 
-const AuthContext = createContext({
-    isAuthenticated: false,
-    loading: true,
-    isAdmin: false,
-    email: '',
-    login: async (_credentials: CredentialsDTO) => false,
-    loginWithGoogle: async (_idToken: any) => false,
-    logout: async () => {},
-    checkAuth: async () => {},
-});
+type AuthContextValue = {
+  isAuthenticated: boolean;
+  loading: boolean;
+  isAdmin: boolean;
+  email: string;
+  accessToken?: string;
+  login: (options?: LoginOptions) => Promise<void>;
+  register: (options?: Pick<LoginOptions, 'redirectTo'>) => Promise<void>;
+  changePassword: (options?: Pick<LoginOptions, 'redirectTo'>) => Promise<void>;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+  authFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+};
 
-export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [email, setEmail] = useState('');
+const AuthContext = createContext<AuthContextValue | null>(null);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+const AuthStateProvider = ({ children }: PropsWithChildren) => {
+  const { data: session, status, update } = useSession();
 
-  // Función helper para crear opciones de fetch optimizadas para Safari
-  const createFetchOptions = (method: string, body?: any): RequestInit => {
-    const options: RequestInit = {
-      method,
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-      cache: 'no-store',
-    };
+  // Si Keycloak rechazó el refresh token la sesión ya no es válida
+  const isAuthenticated = status === 'authenticated' && !session?.error;
+  const accessToken = isAuthenticated ? session?.accessToken : undefined;
 
-    if (body) {
-      options.body = JSON.stringify(body);
-    }
+  const login = async ({ redirectTo = '/dashboard', idpHint }: LoginOptions = {}) => {
+    await signIn('keycloak', { redirectTo }, idpHint ? { kc_idp_hint: idpHint } : undefined);
+  };
 
-    return options;
+  // Provider que abre directamente el formulario de registro de Keycloak (ver auth.ts)
+  const register = async ({ redirectTo = '/dashboard' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
+    await signIn('keycloak-register', { redirectTo });
+  };
+
+  // Application Initiated Action: Keycloak muestra el formulario de cambio de
+  // contraseña y vuelve a la app al terminar
+  const changePassword = async ({ redirectTo = '/dashboard/profile' }: Pick<LoginOptions, 'redirectTo'> = {}) => {
+    await signIn('keycloak', { redirectTo }, { kc_action: 'UPDATE_PASSWORD' });
+  };
+
+  const logout = async () => {
+    await signOut({ redirect: false });
   };
 
   const checkAuth = async () => {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-      const res = await fetch(`${apiUrl}/auth/validate`, { 
-        ...createFetchOptions('GET'),
-        signal: controller.signal,
-      });
-      
-      clearTimeout(timeoutId);
-      
-      if (res.ok) {
-        const data = await res.json();
-        setIsAuthenticated(true);
-        setEmail(data.email);
-        await isAdminUser();
-      } else {
-        setIsAuthenticated(false);
-        setEmail('');
-        setIsAdmin(false);
-      }
-    } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.warn('Auth check timed out - server may be slow');
-      } else {
-        console.error("Auth check error:", error);
-      }
-      setIsAuthenticated(false);
-      setEmail('');
-      setIsAdmin(false);
-    } finally {
-      setLoading(false);
-    }
+    await update();
   };
 
-  const login = async (credentials:CredentialsDTO) => {
-    if (
-      !credentials.email ||
-      !credentials.password ||
-      credentials.email.trim() === '' ||
-      credentials.password.trim() === ''
-    ) {
-      throw new Error('Email and password are required');
-    }
-
-    try {
-      const response = await fetch(`${apiUrl}/auth/login`, createFetchOptions('POST', credentials));
-
-      if (!response.ok) {
-        checkError(response.status);
-      }
-
-      // Importante: Esperar un poco para que Safari procese la cookie
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      setIsAuthenticated(true);
-      await isAdminUser();
-      await checkAuth();
-      return true;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
-  };
-
-  const loginWithGoogle = async (idToken: any) => {
-    try {
-      const response = await fetch(`${apiUrl}/auth/google-login`, createFetchOptions('POST', { idToken }));
-      if (!response.ok) {
-        checkError(response.status);
-      }
-      // Importante: Esperar un poco para que Safari procese la cookie
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setIsAuthenticated(true);
-      await isAdminUser();
-      await checkAuth();
-      return true;
-    } catch (error) {
-      console.error('Google Login error:', error);
-      throw error;
-    }
-  }
-
-  const checkError = (error: any) => {
-    switch (error) {
-          case 480:
-            throw new Error('Email inválido. Por favor, introduce un email correcto.');
-          case 481:
-            throw new Error('Usuario no encontrado. Revisa tus credenciales.');
-          case 483:
-            throw new Error('Contraseña incorrecta. Inténtalo de nuevo.');
-          case 484:
-            throw new Error('El email ya está en uso. Prueba con otro.');
-          case 485:
-            throw new Error('Error en la verificación del email. Prueba de nuevo.');
-          case 486:
-            throw new Error('La contraseña es demasiado débil. Usa al menos 6 caracteres.');
-          case 490:
-            throw new Error('Error en la autenticación. Pruebe de nuevo.');
-          case 500:
-            throw new Error('Error del servidor. Por favor, inténtalo más tarde.');
-          default:
-            throw new Error('Error desconocido. Por favor, inténtalo de nuevo.');
+  // fetch que envía el JWT de Keycloak como 'Authorization: Bearer' al backend
+  const authFetch = useCallback(
+    async (input: RequestInfo | URL, init: RequestInit = {}) => {
+      const withToken = (token?: string) => {
+        const headers = new Headers(init.headers);
+        if (token) {
+          headers.set('Authorization', `Bearer ${token}`);
         }
-  }
+        return fetch(input, { ...init, headers });
+      };
 
-  const logout = async () => {
-    try {
-      await fetch(`${apiUrl}/auth/logout`, createFetchOptions('POST'));
-      
-      // Esperar un poco para que Safari procese el logout
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setIsAuthenticated(false);
-      setEmail('');
-      setIsAdmin(false);
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Aún así limpiar el estado local
-      setIsAuthenticated(false);
-      setEmail('');
-      setIsAdmin(false);
-    }
-  };
-
-  const isAdminUser = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/auth/is-admin`, createFetchOptions('GET'));
-      
-      if (response.ok) {
-        const data = await response.json();
-        setIsAdmin(data);
-        return data;
-      } else {
-        setIsAdmin(false);
-        return false;
+      const response = await withToken(accessToken);
+      if (response.status !== 401 || !accessToken) {
+        return response;
       }
-    } catch (error) {
-      console.error("isAdmin check error:", error);
-      setIsAdmin(false);
-      return false;
-    }
-  };
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+      // El token del cliente puede haber caducado: pedir la sesión otra vez hace
+      // que el servidor lo renueve con el refresh token, y se reintenta una vez
+      const refreshed = await update();
+      if (!refreshed?.accessToken || refreshed.error || refreshed.accessToken === accessToken) {
+        return response;
+      }
+      return withToken(refreshed.accessToken);
+    },
+    [accessToken, update]
+  );
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, isAdmin, email, login, loginWithGoogle, logout, checkAuth }}
+      value={{
+        isAuthenticated,
+        loading: status === 'loading',
+        isAdmin: isAuthenticated && (session?.isAdmin ?? false),
+        email: isAuthenticated ? session?.user?.email ?? '' : '',
+        accessToken,
+        login,
+        register,
+        changePassword,
+        logout,
+        checkAuth,
+        authFetch,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const AuthProvider = ({ children }: PropsWithChildren) => (
+  // Refrescar la sesión periódicamente para que el access token no caduque en el cliente
+  <SessionProvider refetchInterval={4 * 60} refetchOnWindowFocus>
+    <AuthStateProvider>{children}</AuthStateProvider>
+  </SessionProvider>
+);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

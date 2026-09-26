@@ -25,6 +25,8 @@ import {
 import { renameCategory } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast";
 import { useAdminRoute } from "@/hooks/use-protected-route"
+import { useAuth } from "@/contexts/auth-context";
+import { API_URL } from "@/lib/env";
 
 const categories = {
   "Matemáticas": [
@@ -45,8 +47,6 @@ const categories = {
     "Redes y Seguridad"
   ]
 }
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
 type PDFFetchResponse = {
   pdf_id: string;
@@ -89,12 +89,12 @@ export default function WelcomePage() {
 
   // Proteger esta ruta de administración
   const { isAuthenticated, isAdmin, loading: authLoading } = useAdminRoute();
+  const { authFetch } = useAuth();
 
   async function fetchExistingPDFs() {
     try {
-      const response = await fetch(`${apiUrl}/pdfs`, {
+      const response = await authFetch(`${API_URL}/pdfs`, {
         method: 'GET',
-        credentials: 'include',
       });
       if (!response.ok) {
         throw new Error('Error al obtener los PDFs existentes');
@@ -177,12 +177,11 @@ export default function WelcomePage() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${apiUrl}/pdfs/create`, {
+      const response = await authFetch(`${API_URL}/pdfs/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           name: title,
           link: pdfUrl,
